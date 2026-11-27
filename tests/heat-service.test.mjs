@@ -5,7 +5,7 @@ import {
   validateFuelDatabase, validateItemHeatDatabase, energyRequired,
   temperatureAfterEnergy, evaluateMetalWorkState, classifyTemperature,
   targetDeviceTemperature, advanceDeviceTemperature, advanceFuelBurnTicks,
-  advanceItemTemperature, coolItemTemperature
+  advanceItemTemperature, coolItemTemperature, consumeFuelForElapsedTicks
 } from "../packs/behavior_pack/scripts/core/heat-service.mjs";
 
 const fuels = JSON.parse(await readFile(new URL("../packs/behavior_pack/data/fuels.json", import.meta.url)));
@@ -95,4 +95,29 @@ test("item heating and passive cooling use heat capacity", () => {
     coolingModifier: 1, heatingModifier: 1
   }), 101);
   assert.ok(Math.abs(coolItemTemperature(100, copper, 10, 1) - (100 - 10 / 2.857)) < 1e-9);
+});
+
+test("elapsed fuel catch-up preserves remaining burn and consumes queued fuels", () => {
+  const alreadyBurning = consumeFuelForElapsedTicks({
+    elapsedTicks: 3, burnTicks: 5, burnTemperatureC: 900, fuelQueue: ["coal"]
+  }, fuels);
+  assert.deepEqual(alreadyBurning, {
+    burnTicks: 2, burnTemperatureC: 900, fuelQueue: ["coal"], unprocessedTicks: 0
+  });
+
+  const crossedFuelBoundary = consumeFuelForElapsedTicks({
+    elapsedTicks: 2505, burnTicks: 0, burnTemperatureC: 0, fuelQueue: ["peat", "coal"]
+  }, fuels);
+  assert.deepEqual(crossedFuelBoundary, {
+    burnTicks: 2195, burnTemperatureC: 1415, fuelQueue: [], unprocessedTicks: 0
+  });
+});
+
+test("elapsed fuel catch-up leaves non-fuel entries untouched", () => {
+  const result = consumeFuelForElapsedTicks({
+    elapsedTicks: 10, burnTicks: 5, burnTemperatureC: 0, fuelQueue: ["not_a_fuel", "peat"]
+  }, fuels);
+  assert.deepEqual(result, {
+    burnTicks: 2495, burnTemperatureC: 600, fuelQueue: ["not_a_fuel"], unprocessedTicks: 0
+  });
 });
