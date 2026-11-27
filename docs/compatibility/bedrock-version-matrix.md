@@ -24,8 +24,8 @@ Microsoft Learnの安定版changelogに掲載されているバージョン：
 |---|---|---|---|
 | minecraft:surface_builder | format version 1.26.30以上 | 表層・海底・地下深部の材質指定 | 基礎地形の高さそのものを任意生成する機能ではない |
 | minecraft:subsurface_builder | format version 1.26.30以上 | 通常地表より下の高さ帯にSurface Builderを適用 | 既存Builderは地下高さ帯に未最適化の場合があり、公式に予期しない結果への注意あり |
-| Feature / Feature Rule | BedrockのWorld Generation機能 | 地形補正、露頭、鉱脈、植物、河川周辺の配置 | 基礎地形生成パスそのものを置き換えるものではない |
-| query.noise | Molang query | ワールド座標に基づくノイズ参照 | 基礎地形ジェネレーターの差し替えではない |
+| Feature / Feature Rule | BedrockのWorld Generation機能。placement_passにはfirst_pass等がある | 初期生成段階の地形再構成、露頭、鉱脈、植物など | 独自の地形密度場やgenerator typeを登録する機能とは異なる。配置順・既存地形との相互作用を実機確認する |
+| query.noise | Molang query。X/Zの2引数でPerlin Noise Mapを参照 | 独自の連続地形フィールドの計算 | 基礎地形ジェネレーターの差し替えではない。seed依存性・再現性は未検証 |
 | query.heightmap | Molang query | 既存地形の高さ取得 | 参照する地形は既に生成された地形 |
 | query.above_top_solid | Molang query | 最上部の固体ブロックの上の高さ取得 | 既存地形の形状参照に使う |
 
@@ -40,6 +40,8 @@ Microsoft LearnのWorld Generation Overviewでは、Bedrockの生成は概ね次
 6. Final pass
 
 同資料はTerrain pass自体のカスタマイズ範囲が限定的と説明している。高さ範囲の変更は地形を切り取るような影響を与える可能性があり、Behavior Packで範囲を指定した場合に新規エリアが空洞生成になるケースも記載されている。TFC-Bedrookではheight range変更を安易に採用しない。
+
+重要：minecraft:overworld_heightはCaves & Cliffs以前のコンポーネントであり、Microsoft Learnの現行リファレンスは「オーバーワールドの高さを変更せず、現在はマップアイテム描画にのみ影響する」と明記している。noise_typeにmountains / lowlands等があっても、これを地形の高さ制御に使えると見なしてはならない。
 
 TFC Java 1.20.xのWorld Preset Documentationは、独自generator type、独自biome source、continentalness、温度・降雨スケール、rock_layer_settingsなどを持つ。Bedrockアドオンに同等の独自ワールドジェネレーター登録手段があることは、今回参照した公式Creator資料から確認できていない。
 
@@ -68,6 +70,9 @@ TFC Java 1.20.xのWorld Preset Documentationは、独自generator type、独自b
 - [Surface Builder](https://learn.microsoft.com/en-us/minecraft/creator/reference/content/biomesreference/examples/components/minecraftbiomes_surface_builder?view=minecraft-bedrock-stable)
 - [Subsurface Builder](https://learn.microsoft.com/en-us/minecraft/creator/reference/content/biomesreference/examples/components/minecraftbiomes_subsurface_builder?view=minecraft-bedrock-stable)
 - [Molang Query Functions](https://learn.microsoft.com/en-us/minecraft/creator/reference/content/molangreference/examples/molangconcepts/queryfunctions?view=minecraft-bedrock-stable)
+- [query.noise](https://learn.microsoft.com/en-us/minecraft/creator/reference/content/molangreference/examples/molangconcepts/queryfunctions/query_noise?view=minecraft-bedrock-stable)
+- [query.heightmap](https://learn.microsoft.com/en-us/minecraft/creator/reference/content/molangreference/examples/molangconcepts/queryfunctions/query_heightmap?view=minecraft-bedrock-stable)
+- [overworld_height](https://learn.microsoft.com/en-us/minecraft/creator/reference/content/biomesreference/examples/components/minecraftbiomes_overworld_height?view=minecraft-bedrock-stable)
 - [Script API Changelog](https://learn.microsoft.com/en-us/minecraft/creator/scriptapi/minecraft/server/changelog?view=minecraft-bedrock-stable)
 - [Script UI Changelog](https://learn.microsoft.com/en-us/minecraft/creator/scriptapi/minecraft/server-ui/changelog?view=minecraft-bedrock-stable)
 - [26.60 Update Notes](https://learn.microsoft.com/en-us/minecraft/creator/documents/update1.26.60?view=minecraft-bedrock-stable)
