@@ -30,6 +30,7 @@ Minecraft Bedrock Edition 向けに TerraFirmaCraft（TFC）Java 1.20.1-3.2.26 �
 - [TFC金属・合金データベース](docs/spec/tfc-metal-alloy-database.md)
 - [Bedrock互換性・API基準](docs/compatibility/bedrock-version-matrix.md)
 - [Bedrock実装アーキテクチャ](docs/architecture/bedrock-implementation-architecture.md)
+- [ランタイム状態・セーブデータ設計](docs/architecture/runtime-state-model.md)
 
 ## 検証環境
 
