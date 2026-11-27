@@ -5,7 +5,7 @@ import {
   validateFuelDatabase, validateItemHeatDatabase, energyRequired,
   temperatureAfterEnergy, evaluateMetalWorkState, classifyTemperature,
   targetDeviceTemperature, advanceDeviceTemperature, advanceFuelBurnTicks,
-  advanceItemTemperature, coolItemTemperature, consumeFuelForElapsedTicks
+  advanceItemTemperature, coolItemTemperature, consumeFuelForElapsedTicks, TFC_HEAT_DEFAULTS
 } from "../packs/behavior_pack/scripts/core/heat-service.mjs";
 
 const fuels = JSON.parse(await readFile(new URL("../packs/behavior_pack/data/fuels.json", import.meta.url)));
@@ -120,4 +120,17 @@ test("elapsed fuel catch-up leaves non-fuel entries untouched", () => {
   assert.deepEqual(result, {
     burnTicks: 2495, burnTemperatureC: 600, fuelQueue: ["not_a_fuel"], unprocessedTicks: 0
   });
+});
+
+test("TFC v3.2.26 server heat defaults are explicit and applied", () => {
+  assert.deepEqual(TFC_HEAT_DEFAULTS, {
+    deviceHeatingModifier: 1, itemHeatingModifier: 1,
+    itemCoolingModifier: 0.8, ticksBeforeItemCool: 10
+  });
+  assert.equal(advanceDeviceTemperature(500, 1000), 501);
+  const copper = profiles.profiles.find(p => p.id === "copper_ingot");
+  const expectedItem = 100 + (0.8 - 1 + 3) / copper.heatCapacity;
+  assert.ok(Math.abs(advanceItemTemperature(copper, 100, 500) - expectedItem) < 1e-9);
+  const expectedCool = 100 - 10 * 0.8 / copper.heatCapacity;
+  assert.ok(Math.abs(coolItemTemperature(100, copper, 10) - expectedCool) < 1e-9);
 });
