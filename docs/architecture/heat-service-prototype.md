@@ -16,7 +16,7 @@ TFC 1.20.x（Minecraft 1.20.1 / TFC 3.x）の公式Documentationと公式リポ�
 ## 収録データ
 
 - 燃料29種：全てTFC v3.2.26の公式fuel JSONから取得
-- 金属インゴットの加熱プロファイル4種：Copper / Bismuth Bronze / Steel / Wrought Iron
+- 金属インゴット・ダブルインゴットの加熱プロファイル47種：TFC v3.2.26公式データから抽出
 - 燃料の燃焼時間はtick、燃焼温度は°C。
 - アイテム熱容量はTFC DocumentationのEnergy / °Cという単位に従う。
 
