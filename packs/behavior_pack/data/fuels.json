@@ -180,6 +180,43 @@
       "purity": 0.95
     },
     {
+      "id": "oak_log",
+      "ingredient": [
+        "tfc:wood/log/oak",
+        "tfc:wood/wood/oak",
+        "tfc:wood/stripped_wood/oak",
+        "tfc:wood/stripped_log/oak"
+      ],
+      "duration": 2250,
+      "temperatureC": 728,
+      "purity": 0.95
+    },
+    {
+      "id": "palm_log",
+      "ingredient": [
+        "tfc:wood/log/palm",
+        "tfc:wood/wood/palm",
+        "tfc:wood/stripped_wood/palm",
+        "tfc:wood/stripped_log/palm"
+      ],
+      "duration": 1250,
+      "temperatureC": 730,
+      "purity": 0.95
+    },
+    {
+      "id": "paper",
+      "ingredient": [
+        "minecraft:paper",
+        "minecraft:book",
+        "minecraft:enchanted_book",
+        "minecraft:written_book",
+        "minecraft:writable_book"
+      ],
+      "duration": 150,
+      "temperatureC": 199,
+      "purity": 0.7
+    },
+    {
       "id": "peat",
       "ingredient": [
         "tfc:peat"
@@ -187,6 +224,51 @@
       "duration": 2500,
       "temperatureC": 600,
       "purity": 0.7
+    },
+    {
+      "id": "pine_log",
+      "ingredient": [
+        "tfc:wood/log/pine",
+        "tfc:wood/wood/pine",
+        "tfc:wood/stripped_wood/pine",
+        "tfc:wood/stripped_log/pine"
+      ],
+      "duration": 1250,
+      "temperatureC": 627,
+      "purity": 0.6
+    },
+    {
+      "id": "pinecone",
+      "ingredient": [
+        "tfc:groundcover/pinecone"
+      ],
+      "duration": 220,
+      "temperatureC": 150,
+      "purity": 0.15
+    },
+    {
+      "id": "rosewood_log",
+      "ingredient": [
+        "tfc:wood/log/rosewood",
+        "tfc:wood/wood/rosewood",
+        "tfc:wood/stripped_wood/rosewood",
+        "tfc:wood/stripped_log/rosewood"
+      ],
+      "duration": 1500,
+      "temperatureC": 640,
+      "purity": 0.95
+    },
+    {
+      "id": "sequoia_log",
+      "ingredient": [
+        "tfc:wood/log/sequoia",
+        "tfc:wood/wood/sequoia",
+        "tfc:wood/stripped_wood/sequoia",
+        "tfc:wood/stripped_log/sequoia"
+      ],
+      "duration": 1750,
+      "temperatureC": 612,
+      "purity": 0.95
     }
   ]
 }
