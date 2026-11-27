@@ -13,7 +13,7 @@ const metalIds = new Set(metals.metals.map(m => m.id));
 
 test("official reference fuel and heat profile data validate", () => {
   assert.equal(validateFuelDatabase(fuels).fuelCount, 29);
-  assert.equal(validateItemHeatDatabase(profiles, metalIds).profileCount, 4);
+  assert.equal(validateItemHeatDatabase(profiles, metalIds).profileCount, 47);
 });
 
 test("energy required follows documented heat capacity", () => {
@@ -56,4 +56,11 @@ test("wood fuel data preserves source-specific temperature and burn duration", (
   assert.equal(hickory.duration, 2000);
   assert.equal(hickory.temperatureC, 762);
   assert.equal(hickory.purity, 0.95);
+});
+
+test("single and double ingots retain their distinct source heat capacities", () => {
+  const copper = profiles.profiles.find(p => p.id === "copper_ingot");
+  const doubleCopper = profiles.profiles.find(p => p.id === "copper_double_ingot");
+  assert.equal(copper.heatCapacity, 2.857);
+  assert.equal(doubleCopper.heatCapacity, 5.714);
 });
