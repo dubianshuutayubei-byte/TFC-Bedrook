@@ -374,11 +374,58 @@
       "ingredientTag": "forge:ingots/weak_blue_steel"
     },
     {
+      "id": "weak_red_steel_ingot",
+      "metalId": "weak_red_steel",
+      "itemType": "ingot",
+      "heatCapacity": 2.857,
+      "forgingTemperatureC": 924,
+      "weldingTemperatureC": 1232,
+      "ingredientTag": "forge:ingots/weak_red_steel"
+    },
+    {
+      "id": "weak_steel_ingot",
+      "metalId": "weak_steel",
+      "itemType": "ingot",
+      "heatCapacity": 2.857,
+      "forgingTemperatureC": 924,
+      "weldingTemperatureC": 1232,
+      "ingredientTag": "forge:ingots/weak_steel"
+    },
+    {
+      "id": "wrought_iron_double_ingot",
+      "metalId": "wrought_iron",
+      "itemType": "double_ingot",
+      "heatCapacity": 5.714,
+      "forgingTemperatureC": 921,
+      "weldingTemperatureC": 1228,
+      "ingredientTag": "forge:double_ingots/wrought_iron"
+    },
+    {
       "id": "wrought_iron_ingot",
       "metalId": "wrought_iron",
+      "itemType": "ingot",
       "heatCapacity": 2.857,
       "forgingTemperatureC": 921,
-      "weldingTemperatureC": 1228
+      "weldingTemperatureC": 1228,
+      "ingredientTag": "forge:ingots/wrought_iron"
+    },
+    {
+      "id": "zinc_double_ingot",
+      "metalId": "zinc",
+      "itemType": "double_ingot",
+      "heatCapacity": 9.524,
+      "forgingTemperatureC": 252,
+      "weldingTemperatureC": 336,
+      "ingredientTag": "forge:double_ingots/zinc"
+    },
+    {
+      "id": "zinc_ingot",
+      "metalId": "zinc",
+      "itemType": "ingot",
+      "heatCapacity": 4.762,
+      "forgingTemperatureC": 252,
+      "weldingTemperatureC": 336,
+      "ingredientTag": "forge:ingots/zinc"
     }
   ]
 }
