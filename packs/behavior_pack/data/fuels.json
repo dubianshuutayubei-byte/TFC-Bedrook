@@ -94,12 +94,90 @@
       "temperatureC": 1415
     },
     {
+      "id": "douglas_fir_log",
+      "ingredient": [
+        "tfc:wood/log/douglas_fir",
+        "tfc:wood/wood/douglas_fir",
+        "tfc:wood/stripped_wood/douglas_fir",
+        "tfc:wood/stripped_log/douglas_fir"
+      ],
+      "duration": 1500,
+      "temperatureC": 707,
+      "purity": 0.95
+    },
+    {
+      "id": "driftwood",
+      "ingredient": [
+        "tfc:groundcover/driftwood"
+      ],
+      "duration": 400,
+      "temperatureC": 650,
+      "purity": 0.4
+    },
+    {
+      "id": "fallen_leaves",
+      "ingredient": [
+        "tfc:fallen_leaves"
+      ],
+      "duration": 600,
+      "temperatureC": 100,
+      "purity": 0.25
+    },
+    {
+      "id": "hickory_log",
+      "ingredient": [
+        "tfc:wood/log/hickory",
+        "tfc:wood/wood/hickory",
+        "tfc:wood/stripped_wood/hickory",
+        "tfc:wood/stripped_log/hickory"
+      ],
+      "duration": 2000,
+      "temperatureC": 762,
+      "purity": 0.95
+    },
+    {
+      "id": "kapok_log",
+      "ingredient": [
+        "tfc:wood/log/kapok",
+        "tfc:wood/wood/kapok",
+        "tfc:wood/stripped_wood/kapok",
+        "tfc:wood/stripped_log/kapok"
+      ],
+      "duration": 1000,
+      "temperatureC": 645,
+      "purity": 0.95
+    },
+    {
       "id": "lignite",
       "ingredient": [
         "tfc:ore/lignite"
       ],
       "duration": 2200,
       "temperatureC": 1350
+    },
+    {
+      "id": "mangrove_log",
+      "ingredient": [
+        "tfc:wood/log/mangrove",
+        "tfc:wood/wood/mangrove",
+        "tfc:wood/stripped_wood/mangrove",
+        "tfc:wood/stripped_log/mangrove"
+      ],
+      "duration": 1000,
+      "temperatureC": 655,
+      "purity": 0.95
+    },
+    {
+      "id": "maple_log",
+      "ingredient": [
+        "tfc:wood/log/maple",
+        "tfc:wood/wood/maple",
+        "tfc:wood/stripped_wood/maple",
+        "tfc:wood/stripped_log/maple"
+      ],
+      "duration": 2000,
+      "temperatureC": 745,
+      "purity": 0.95
     },
     {
       "id": "peat",
