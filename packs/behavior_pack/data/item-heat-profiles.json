@@ -320,6 +320,60 @@
       "ingredientTag": "forge:ingots/steel"
     },
     {
+      "id": "sterling_silver_double_ingot",
+      "metalId": "sterling_silver",
+      "itemType": "double_ingot",
+      "heatCapacity": 5.714,
+      "forgingTemperatureC": 570,
+      "weldingTemperatureC": 760,
+      "ingredientTag": "forge:double_ingots/sterling_silver"
+    },
+    {
+      "id": "sterling_silver_ingot",
+      "metalId": "sterling_silver",
+      "itemType": "ingot",
+      "heatCapacity": 2.857,
+      "forgingTemperatureC": 570,
+      "weldingTemperatureC": 760,
+      "ingredientTag": "forge:ingots/sterling_silver"
+    },
+    {
+      "id": "tin_double_ingot",
+      "metalId": "tin",
+      "itemType": "double_ingot",
+      "heatCapacity": 14.286,
+      "forgingTemperatureC": 138,
+      "weldingTemperatureC": 184,
+      "ingredientTag": "forge:double_ingots/tin"
+    },
+    {
+      "id": "tin_ingot",
+      "metalId": "tin",
+      "itemType": "ingot",
+      "heatCapacity": 7.143,
+      "forgingTemperatureC": 138,
+      "weldingTemperatureC": 184,
+      "ingredientTag": "forge:ingots/tin"
+    },
+    {
+      "id": "unknown_ingot",
+      "metalId": "unknown",
+      "itemType": "ingot",
+      "heatCapacity": 2,
+      "forgingTemperatureC": 240,
+      "weldingTemperatureC": 320,
+      "ingredientTag": "forge:ingots/unknown"
+    },
+    {
+      "id": "weak_blue_steel_ingot",
+      "metalId": "weak_blue_steel",
+      "itemType": "ingot",
+      "heatCapacity": 2.857,
+      "forgingTemperatureC": 924,
+      "weldingTemperatureC": 1232,
+      "ingredientTag": "forge:ingots/weak_blue_steel"
+    },
+    {
       "id": "wrought_iron_ingot",
       "metalId": "wrought_iron",
       "heatCapacity": 2.857,
