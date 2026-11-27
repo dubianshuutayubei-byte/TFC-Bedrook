@@ -77,6 +77,7 @@ TFC-Bedrook の地形生成方式を決めるため、ユーザー提供の BioS
 default subpackの実JSONから、地形計算のより正確な構造も確認した。
 
 - terrain.json は scatter_feature で terrain__per_chunk_math を呼ぶ。
+- default subpackのterrain__always_cold / terrain__cold_120 / terrain__cold_160 / terrain__cold_200 / terrain__desert / terrain__dry_rocks / terrain__jungle / terrain__moderate / terrain__mushrooms / terrain__troublemaker のFeature Ruleはすべて placement_pass = first_pass。各Ruleはバイオームタグで対象領域を選ぶ。
 - terrain__per_chunk_math は x/z の fixed_grid を step_size 16、extent 0～15で設定し、各チャンク内の16×16座標で terrain__per_block_math を呼ぶ。
 - terrain__per_block_math の Molang は q.noise(x, z) の2引数形式を複数スケールで使い、v.worldx / v.worldzからriver、sand、path、death_hole、normal、mesa、main、pillar、wallなどの値を算出する。
 - terrain.main.noise_val は確認したdefault JSONでは、概ね 140 ×（バイオームグループ別の地形係数）× clamp(q.noise(world座標を1500で縮尺した値)+0.5, 0, 1) + 30 の形。
@@ -109,7 +110,7 @@ default subpackの実JSONから、地形計算のより正確な構造も確認�
 7. terrain_optional_column_selector は q.heightmap と q.above_top_solid を参照し、既存地形と目標値の差を調べて処理対象を選ぶ。
 8. terrain_mountain は表層と地下側の Feature を組み合わせ、地表・地下のブロック列を配置する。
 
-この方式は、任意の地形密度場を直接生成する仕組みではなく、BedrockのFeature配置を使って既存地形を補正する方式として理解するのが安全。
+TerraSphereの地形Feature Ruleはdefault subpackでplacement_passをfirst_passに指定している。したがって単純な「地形完成後の装飾Feature」ではなく、初期生成段階にFeatureを差し込んで地形を再構成する方式として分析する必要がある。ただし、任意の地形密度場を直接定義する独自generator typeではなく、Featureによるブロック配置で地形を形成・補正する方式である。
 
 ## TFC-Bedrookに活かせる設計上の示唆
 
