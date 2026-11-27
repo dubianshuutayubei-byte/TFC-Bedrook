@@ -1,0 +1,45 @@
+name: Build TFC-Bedrook Addon
+
+on:
+  push:
+    branches: [main, addon/bootstrap-26.60]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate-and-package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate pack manifests and references
+        run: npm run validate
+      - name: Run unit tests
+        run: npm test
+      - name: Check JavaScript syntax
+        shell: bash
+        run: |
+          mapfile -t files < <(find packs tools -type f \( -name '*.js' -o -name '*.mjs' -o -name '*.cjs' \))
+          for file in "${files[@]}"; do
+            node --check "$file"
+          done
+      - name: Package development addon
+        run: |
+          mkdir -p dist
+          cd packs
+          zip -r ../dist/TFC-Bedrook-dev.mcaddon behavior_pack resource_pack
+      - name: Upload development addon
+        uses: actions/upload-artifact@v4
+        with:
+          name: TFC-Bedrook-dev-mcaddon
+          path: dist/TFC-Bedrook-dev.mcaddon
+          if-no-files-found: error
+          retention-days: 14
