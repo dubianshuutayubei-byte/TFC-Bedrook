@@ -5,18 +5,155 @@
   "energyUnit": "TFC relative energy",
   "profiles": [
     {
+      "id": "bismuth_bronze_double_ingot",
+      "metalId": "bismuth_bronze",
+      "itemType": "double_ingot",
+      "heatCapacity": 5.714,
+      "forgingTemperatureC": 591,
+      "weldingTemperatureC": 788,
+      "ingredientTag": "forge:double_ingots/bismuth_bronze"
+    },
+    {
+      "id": "bismuth_bronze_ingot",
+      "metalId": "bismuth_bronze",
+      "itemType": "ingot",
+      "heatCapacity": 2.857,
+      "forgingTemperatureC": 591,
+      "weldingTemperatureC": 788,
+      "ingredientTag": "forge:ingots/bismuth_bronze"
+    },
+    {
+      "id": "bismuth_double_ingot",
+      "metalId": "bismuth",
+      "itemType": "double_ingot",
+      "heatCapacity": 14.286,
+      "forgingTemperatureC": 162,
+      "weldingTemperatureC": 216,
+      "ingredientTag": "forge:double_ingots/bismuth"
+    },
+    {
+      "id": "bismuth_ingot",
+      "metalId": "bismuth",
+      "itemType": "ingot",
+      "heatCapacity": 7.143,
+      "forgingTemperatureC": 162,
+      "weldingTemperatureC": 216,
+      "ingredientTag": "forge:ingots/bismuth"
+    },
+    {
+      "id": "black_bronze_double_ingot",
+      "metalId": "black_bronze",
+      "itemType": "double_ingot",
+      "heatCapacity": 5.714,
+      "forgingTemperatureC": 642,
+      "weldingTemperatureC": 856,
+      "ingredientTag": "forge:double_ingots/black_bronze"
+    },
+    {
+      "id": "black_bronze_ingot",
+      "metalId": "black_bronze",
+      "itemType": "ingot",
+      "heatCapacity": 2.857,
+      "forgingTemperatureC": 642,
+      "weldingTemperatureC": 856,
+      "ingredientTag": "forge:ingots/black_bronze"
+    },
+    {
+      "id": "black_steel_double_ingot",
+      "metalId": "black_steel",
+      "itemType": "double_ingot",
+      "heatCapacity": 5.714,
+      "forgingTemperatureC": 891,
+      "weldingTemperatureC": 1188,
+      "ingredientTag": "forge:double_ingots/black_steel"
+    },
+    {
+      "id": "black_steel_ingot",
+      "metalId": "black_steel",
+      "itemType": "ingot",
+      "heatCapacity": 2.857,
+      "forgingTemperatureC": 891,
+      "weldingTemperatureC": 1188,
+      "ingredientTag": "forge:ingots/black_steel"
+    },
+    {
+      "id": "blue_steel_double_ingot",
+      "metalId": "blue_steel",
+      "itemType": "double_ingot",
+      "heatCapacity": 5.714,
+      "forgingTemperatureC": 924,
+      "weldingTemperatureC": 1232,
+      "ingredientTag": "forge:double_ingots/blue_steel"
+    },
+    {
+      "id": "blue_steel_ingot",
+      "metalId": "blue_steel",
+      "itemType": "ingot",
+      "heatCapacity": 2.857,
+      "forgingTemperatureC": 924,
+      "weldingTemperatureC": 1232,
+      "ingredientTag": "forge:ingots/blue_steel"
+    },
+    {
+      "id": "brass_double_ingot",
+      "metalId": "brass",
+      "itemType": "double_ingot",
+      "heatCapacity": 5.714,
+      "forgingTemperatureC": 558,
+      "weldingTemperatureC": 744,
+      "ingredientTag": "forge:double_ingots/brass"
+    },
+    {
+      "id": "brass_ingot",
+      "metalId": "brass",
+      "itemType": "ingot",
+      "heatCapacity": 2.857,
+      "forgingTemperatureC": 558,
+      "weldingTemperatureC": 744,
+      "ingredientTag": "forge:ingots/brass"
+    },
+    {
+      "id": "bronze_double_ingot",
+      "metalId": "bronze",
+      "itemType": "double_ingot",
+      "heatCapacity": 5.714,
+      "forgingTemperatureC": 570,
+      "weldingTemperatureC": 760,
+      "ingredientTag": "forge:double_ingots/bronze"
+    },
+    {
+      "id": "bronze_ingot",
+      "metalId": "bronze",
+      "itemType": "ingot",
+      "heatCapacity": 2.857,
+      "forgingTemperatureC": 570,
+      "weldingTemperatureC": 760,
+      "ingredientTag": "forge:ingots/bronze"
+    },
+    {
+      "id": "cast_iron_double_ingot",
+      "metalId": "cast_iron",
+      "itemType": "double_ingot",
+      "heatCapacity": 5.714,
+      "forgingTemperatureC": 921,
+      "weldingTemperatureC": 1228,
+      "ingredientTag": "forge:double_ingots/cast_iron"
+    },
+    {
+      "id": "cast_iron_ingot",
+      "metalId": "cast_iron",
+      "itemType": "ingot",
+      "heatCapacity": 2.857,
+      "forgingTemperatureC": 921,
+      "weldingTemperatureC": 1228,
+      "ingredientTag": "forge:ingots/cast_iron"
+    },
+    {
       "id": "copper_ingot",
       "metalId": "copper",
       "heatCapacity": 2.857,
       "forgingTemperatureC": 648,
       "weldingTemperatureC": 864
-    },
-    {
-      "id": "bismuth_bronze_ingot",
-      "metalId": "bismuth_bronze",
-      "heatCapacity": 2.857,
-      "forgingTemperatureC": 591,
-      "weldingTemperatureC": 788
     },
     {
       "id": "steel_ingot",
