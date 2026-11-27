@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "source": "TerraFirmaCraft/TerraFirmaCraft branch 1.20.x (Minecraft 1.20.1, TFC 3.x)",
+  "source": "TerraFirmaCraft/TerraFirmaCraft tag v3.2.26; commit 51388b52ecf1f876d74184d9e60e9ea03f7ba3a6",
   "temperatureUnit": "C",
   "energyUnit": "TFC relative energy",
   "profiles": [
