@@ -1,0 +1,151 @@
+{
+  "schemaVersion": 1,
+  "source": "TerraFirmaCraft/TerraFirmaCraft tag v3.2.26",
+  "recipes": [
+    {
+      "id": "bismuth_bronze",
+      "components": {
+        "copper": [
+          0.5,
+          0.65
+        ],
+        "zinc": [
+          0.2,
+          0.3
+        ],
+        "bismuth": [
+          0.1,
+          0.2
+        ]
+      }
+    },
+    {
+      "id": "black_bronze",
+      "components": {
+        "copper": [
+          0.5,
+          0.7
+        ],
+        "silver": [
+          0.1,
+          0.25
+        ],
+        "gold": [
+          0.1,
+          0.25
+        ]
+      }
+    },
+    {
+      "id": "brass",
+      "components": {
+        "copper": [
+          0.88,
+          0.92
+        ],
+        "zinc": [
+          0.08,
+          0.12
+        ]
+      }
+    },
+    {
+      "id": "bronze",
+      "components": {
+        "copper": [
+          0.88,
+          0.92
+        ],
+        "tin": [
+          0.08,
+          0.12
+        ]
+      }
+    },
+    {
+      "id": "rose_gold",
+      "components": {
+        "copper": [
+          0.15,
+          0.3
+        ],
+        "gold": [
+          0.7,
+          0.85
+        ]
+      }
+    },
+    {
+      "id": "sterling_silver",
+      "components": {
+        "copper": [
+          0.2,
+          0.4
+        ],
+        "silver": [
+          0.6,
+          0.8
+        ]
+      }
+    },
+    {
+      "id": "weak_blue_steel",
+      "components": {
+        "black_steel": [
+          0.5,
+          0.55
+        ],
+        "steel": [
+          0.2,
+          0.25
+        ],
+        "bismuth_bronze": [
+          0.1,
+          0.15
+        ],
+        "sterling_silver": [
+          0.1,
+          0.15
+        ]
+      }
+    },
+    {
+      "id": "weak_red_steel",
+      "components": {
+        "black_steel": [
+          0.5,
+          0.55
+        ],
+        "steel": [
+          0.2,
+          0.25
+        ],
+        "brass": [
+          0.1,
+          0.15
+        ],
+        "rose_gold": [
+          0.1,
+          0.15
+        ]
+      }
+    },
+    {
+      "id": "weak_steel",
+      "components": {
+        "steel": [
+          0.5,
+          0.7
+        ],
+        "nickel": [
+          0.15,
+          0.25
+        ],
+        "black_bronze": [
+          0.15,
+          0.25
+        ]
+      }
+    }
+  ]
+}
