@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "source": "TerraFirmaCraft/TerraFirmaCraft branch 1.20.x (Minecraft 1.20.1, TFC 3.x)",
+  "temperatureUnit": "C",
+  "energyUnit": "TFC relative energy",
+  "profiles": [
+    {
+      "id": "copper_ingot",
+      "metalId": "copper",
+      "heatCapacity": 2.857,
+      "forgingTemperatureC": 648,
+      "weldingTemperatureC": 864
+    },
+    {
+      "id": "bismuth_bronze_ingot",
+      "metalId": "bismuth_bronze",
+      "heatCapacity": 2.857,
+      "forgingTemperatureC": 591,
+      "weldingTemperatureC": 788
+    },
+    {
+      "id": "steel_ingot",
+      "metalId": "steel",
+      "heatCapacity": 2.857,
+      "forgingTemperatureC": 924,
+      "weldingTemperatureC": 1232
+    },
+    {
+      "id": "wrought_iron_ingot",
+      "metalId": "wrought_iron",
+      "heatCapacity": 2.857,
+      "forgingTemperatureC": 921,
+      "weldingTemperatureC": 1228
+    }
+  ]
+}
