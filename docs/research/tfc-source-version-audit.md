@@ -74,6 +74,28 @@ BioScape / TerraSphere等の第三者アドオンのライセンスは、TFC公�
 
 上記は一部ファイルの例であり、TFC全データを抽出済みという意味ではない。
 
+### v3.2.26 World Presetの実数値
+
+直接取得したoverworld.jsonから確認：
+- spawn_center_x = 0
+- spawn_center_z = 0
+- spawn_distance = 4000
+- temperature_scale = 20000
+- rainfall_scale = 20000
+- flat_bedrock = false
+- continentalness = 0.5
+- noise settings = minecraft:overworld
+
+このWorld Presetでは、OverworldだけがTFC独自generator / biome_sourceを使う。NetherとEndは通常のMinecraft generator設定になっている。
+
+### 追加で確認した正確なデータ値
+- Copper metal：tier 1、melt_temperature 1080°C、specific_heat_capacity 0.00857。
+- Barley Bread：hunger 4、saturation 1、decay_modifier 1、grain 1.5。
+- Cow fauna：min_temperature -10°C、max_temperature 35°C、min_rainfall 250mm。
+- Bone Meal fertilizer：phosphorus 0.1。
+- Cinnabar vein：rarity 14、density 0.6、min_y -70、max_y 10、size 18。置換対象はQuartzite / Phyllite / Gneiss / Schistのraw rock。
+
+
 ## 5. 次にソースから抽出するデータ
 
 - World Preset全体と岩石層の設定
