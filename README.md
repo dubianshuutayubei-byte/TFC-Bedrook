@@ -33,10 +33,11 @@ Minecraft Bedrock Edition 向けに TerraFirmaCraft（TFC）Java 1.20.1-3.2.26 �
 - [ランタイム状態・セーブデータ設計](docs/architecture/runtime-state-model.md)
 - [気候サービス試作](docs/architecture/climate-service-prototype.md)
 - [金属・合金サービス試作](docs/architecture/metal-service-prototype.md)
+- [熱・燃料サービス試作](docs/architecture/heat-service-prototype.md)
 
 ## 検証環境
 
-GitHub ActionsでJSON・manifestの静的検査、JavaScript構文検査、Node.js単体テストを実行する。気候計算と金属・合金判定の純粋関数プロトタイプを追加済み。Behavior Pack / Resource Packのmanifestやゲーム内機能はまだ未実装。
+GitHub ActionsでJSON・manifestの静的検査、JavaScript構文検査、Node.js単体テストを実行する。気候計算、金属・合金判定、熱・燃料の基礎計算に関する純粋関数プロトタイプを追加済み。Behavior Pack / Resource Packのmanifestやゲーム内機能はまだ未実装。
 
 - [静的検査ツール](tools/validate-pack.mjs)
 - [気候計算モジュール](packs/behavior_pack/scripts/core/climate-service.mjs)
@@ -45,6 +46,10 @@ GitHub ActionsでJSON・manifestの静的検査、JavaScript構文検査、Node.
 - [合金比率データ](packs/behavior_pack/data/alloys.json)
 - [金属・合金計算モジュール](packs/behavior_pack/scripts/core/metal-service.mjs)
 - [金属・合金テスト](tests/metal-service.test.mjs)
+- [燃料データ](packs/behavior_pack/data/fuels.json)
+- [アイテム熱プロファイル](packs/behavior_pack/data/item-heat-profiles.json)
+- [熱・燃料計算モジュール](packs/behavior_pack/scripts/core/heat-service.mjs)
+- [熱・燃料テスト](tests/heat-service.test.mjs)
 - [GitHub Actions workflow](.github/workflows/static-validation.yml)
 
 静的検査はゲーム内検証の代わりにはならない。地形生成・設備動作・セーブデータ・端末負荷はMinecraft実機で確認する。
