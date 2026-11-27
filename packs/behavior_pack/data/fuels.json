@@ -5,12 +5,84 @@
   "durationUnit": "ticks",
   "fuels": [
     {
+      "id": "acacia_log",
+      "ingredient": [
+        "tfc:wood/log/acacia",
+        "tfc:wood/wood/acacia",
+        "tfc:wood/stripped_wood/acacia",
+        "tfc:wood/stripped_log/acacia"
+      ],
+      "duration": 1000,
+      "temperatureC": 650,
+      "purity": 0.95
+    },
+    {
+      "id": "ash_log",
+      "ingredient": [
+        "tfc:wood/log/ash",
+        "tfc:wood/wood/ash",
+        "tfc:wood/stripped_wood/ash",
+        "tfc:wood/stripped_log/ash"
+      ],
+      "duration": 1250,
+      "temperatureC": 696,
+      "purity": 0.95
+    },
+    {
+      "id": "aspen_log",
+      "ingredient": [
+        "tfc:wood/log/aspen",
+        "tfc:wood/wood/aspen",
+        "tfc:wood/stripped_wood/aspen",
+        "tfc:wood/stripped_log/aspen"
+      ],
+      "duration": 1000,
+      "temperatureC": 611,
+      "purity": 0.95
+    },
+    {
+      "id": "birch_log",
+      "ingredient": [
+        "tfc:wood/log/birch",
+        "tfc:wood/wood/birch",
+        "tfc:wood/stripped_wood/birch",
+        "tfc:wood/stripped_log/birch"
+      ],
+      "duration": 1750,
+      "temperatureC": 652,
+      "purity": 0.95
+    },
+    {
+      "id": "blackwood_log",
+      "ingredient": [
+        "tfc:wood/log/blackwood",
+        "tfc:wood/wood/blackwood",
+        "tfc:wood/stripped_wood/blackwood",
+        "tfc:wood/stripped_log/blackwood"
+      ],
+      "duration": 1750,
+      "temperatureC": 720,
+      "purity": 0.95
+    },
+    {
       "id": "charcoal",
       "ingredient": [
         "minecraft:charcoal"
       ],
       "duration": 1800,
       "temperatureC": 1350
+    },
+    {
+      "id": "chestnut_log",
+      "ingredient": [
+        "tfc:wood/log/chestnut",
+        "tfc:wood/wood/chestnut",
+        "tfc:wood/stripped_wood/chestnut",
+        "tfc:wood/stripped_log/chestnut"
+      ],
+      "duration": 1500,
+      "temperatureC": 651,
+      "purity": 0.95
     },
     {
       "id": "coal",
