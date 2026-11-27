@@ -149,11 +149,58 @@
       "ingredientTag": "forge:ingots/cast_iron"
     },
     {
+      "id": "copper_double_ingot",
+      "metalId": "copper",
+      "itemType": "double_ingot",
+      "heatCapacity": 5.714,
+      "forgingTemperatureC": 648,
+      "weldingTemperatureC": 864,
+      "ingredientTag": "forge:double_ingots/copper"
+    },
+    {
       "id": "copper_ingot",
       "metalId": "copper",
+      "itemType": "ingot",
       "heatCapacity": 2.857,
       "forgingTemperatureC": 648,
-      "weldingTemperatureC": 864
+      "weldingTemperatureC": 864,
+      "ingredientTag": "forge:ingots/copper"
+    },
+    {
+      "id": "gold_double_ingot",
+      "metalId": "gold",
+      "itemType": "double_ingot",
+      "heatCapacity": 3.333,
+      "forgingTemperatureC": 636,
+      "weldingTemperatureC": 848,
+      "ingredientTag": "forge:double_ingots/gold"
+    },
+    {
+      "id": "gold_ingot",
+      "metalId": "gold",
+      "itemType": "ingot",
+      "heatCapacity": 1.667,
+      "forgingTemperatureC": 636,
+      "weldingTemperatureC": 848,
+      "ingredientTag": "forge:ingots/gold"
+    },
+    {
+      "id": "high_carbon_black_steel_ingot",
+      "metalId": "high_carbon_black_steel",
+      "itemType": "ingot",
+      "heatCapacity": 2.857,
+      "forgingTemperatureC": 924,
+      "weldingTemperatureC": 1232,
+      "ingredientTag": "forge:ingots/high_carbon_black_steel"
+    },
+    {
+      "id": "high_carbon_blue_steel_ingot",
+      "metalId": "high_carbon_blue_steel",
+      "itemType": "ingot",
+      "heatCapacity": 2.857,
+      "forgingTemperatureC": 924,
+      "weldingTemperatureC": 1232,
+      "ingredientTag": "forge:ingots/high_carbon_blue_steel"
     },
     {
       "id": "steel_ingot",
