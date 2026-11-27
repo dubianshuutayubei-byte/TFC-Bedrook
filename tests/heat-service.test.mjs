@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import {
   validateFuelDatabase, validateItemHeatDatabase, energyRequired,
-  temperatureAfterEnergy, evaluateMetalWorkState
+  temperatureAfterEnergy, evaluateMetalWorkState, classifyTemperature
 } from "../packs/behavior_pack/scripts/core/heat-service.mjs";
 
 const fuels = JSON.parse(await readFile(new URL("../packs/behavior_pack/data/fuels.json", import.meta.url)));
@@ -40,4 +40,13 @@ test("invalid heat capacities and negative energy are rejected", () => {
   const profile = { heatCapacity: 0 };
   assert.throws(() => energyRequired(profile, 20, 100), RangeError);
   assert.throws(() => temperatureAfterEnergy({ heatCapacity: 1 }, 20, -1), RangeError);
+});
+
+test("temperature colors follow TFC Field Guide bands", () => {
+  assert.equal(classifyTemperature(0), "unheated");
+  assert.equal(classifyTemperature(1), "warming");
+  assert.equal(classifyTemperature(80), "hot");
+  assert.equal(classifyTemperature(480), "faint_red");
+  assert.equal(classifyTemperature(930), "orange");
+  assert.equal(classifyTemperature(1500), "brilliant_white");
 });
