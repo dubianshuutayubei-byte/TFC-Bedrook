@@ -4,7 +4,7 @@
 
 ## 参照基準
 
-TFC 1.20.x（Minecraft 1.20.1 / TFC 3.x）の公式Documentationと公式リポジトリのデータを参照する。
+TFC 1.20.x（Minecraft 1.20.1 / TFC 3.x）の公式Documentationと公式リポジトリのデータを参照する。ソースはtag v3.2.26に固定する。
 
 - [Custom Data: Fuels](https://terrafirmacraft.github.io/Documentation/1.20.x/custom/#fuels)
 - [Custom Data: Item Heats](https://terrafirmacraft.github.io/Documentation/1.20.x/custom/#item-heats)
@@ -15,7 +15,7 @@ TFC 1.20.x（Minecraft 1.20.1 / TFC 3.x）の公式Documentationと公式リポ�
 
 ## 収録データ
 
-- 燃料4種：Charcoal / Coal / Lignite / Peat
+- 燃料29種：全てTFC v3.2.26の公式fuel JSONから取得
 - 金属インゴットの加熱プロファイル4種：Copper / Bismuth Bronze / Steel / Wrought Iron
 - 燃料の燃焼時間はtick、燃焼温度は°C。
 - アイテム熱容量はTFC DocumentationのEnergy / °Cという単位に従う。
