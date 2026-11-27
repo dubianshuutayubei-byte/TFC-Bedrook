@@ -59,9 +59,10 @@ for (const file of manifests) {
     continue;
   }
   const headerUuid = data.header.uuid;
-  if (!isUuid(headerUuid)) errors.push(`Invalid header UUID: ${rel}`);
-  else manifestByUuid.set(headerUuid, { file, rel, data });
-  else {
+  if (!isUuid(headerUuid)) {
+    errors.push(`Invalid header UUID: ${rel}`);
+  } else {
+    manifestByUuid.set(headerUuid, { file, rel, data });
     if (packHeaderUuids.has(headerUuid)) errors.push(`Duplicate pack header UUID: ${headerUuid}`);
     packHeaderUuids.add(headerUuid);
   }
