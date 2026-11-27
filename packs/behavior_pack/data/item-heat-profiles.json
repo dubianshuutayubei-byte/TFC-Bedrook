@@ -203,6 +203,51 @@
       "ingredientTag": "forge:ingots/high_carbon_blue_steel"
     },
     {
+      "id": "high_carbon_red_steel_ingot",
+      "metalId": "high_carbon_red_steel",
+      "itemType": "ingot",
+      "heatCapacity": 2.857,
+      "forgingTemperatureC": 924,
+      "weldingTemperatureC": 1232,
+      "ingredientTag": "forge:ingots/high_carbon_red_steel"
+    },
+    {
+      "id": "high_carbon_steel_ingot",
+      "metalId": "high_carbon_steel",
+      "itemType": "ingot",
+      "heatCapacity": 2.857,
+      "forgingTemperatureC": 924,
+      "weldingTemperatureC": 1232,
+      "ingredientTag": "forge:ingots/high_carbon_steel"
+    },
+    {
+      "id": "nickel_double_ingot",
+      "metalId": "nickel",
+      "itemType": "double_ingot",
+      "heatCapacity": 4.167,
+      "forgingTemperatureC": 872,
+      "weldingTemperatureC": 1162,
+      "ingredientTag": "forge:double_ingots/nickel"
+    },
+    {
+      "id": "nickel_ingot",
+      "metalId": "nickel",
+      "itemType": "ingot",
+      "heatCapacity": 2.083,
+      "forgingTemperatureC": 872,
+      "weldingTemperatureC": 1162,
+      "ingredientTag": "forge:ingots/nickel"
+    },
+    {
+      "id": "pig_iron_ingot",
+      "metalId": "pig_iron",
+      "itemType": "ingot",
+      "heatCapacity": 2.857,
+      "forgingTemperatureC": 921,
+      "weldingTemperatureC": 1228,
+      "ingredientTag": "forge:ingots/pig_iron"
+    },
+    {
       "id": "steel_ingot",
       "metalId": "steel",
       "heatCapacity": 2.857,
