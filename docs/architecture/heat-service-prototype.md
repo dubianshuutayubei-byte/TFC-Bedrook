@@ -12,6 +12,8 @@ TFC 1.20.x（Minecraft 1.20.1 / TFC 3.x）の公式Documentationと公式リポ�
 - [Heating Field Guide](https://terrafirmacraft.github.io/Field-Guide/20/en_us/mechanics/heating.html)
 - [Official source: fuels](https://github.com/TerraFirmaCraft/TerraFirmaCraft/tree/v3.2.26/src/main/resources/data/tfc/tfc/fuels)
 - [Official source: item heats](https://github.com/TerraFirmaCraft/TerraFirmaCraft/tree/v3.2.26/src/main/resources/data/tfc/tfc/item_heats/metal)
+- [Official source: heat configuration](https://github.com/TerraFirmaCraft/TerraFirmaCraft/blob/v3.2.26/src/main/java/net/dries007/tfc/config/ServerConfig.java)
+- [Official source: HeatCapability](https://github.com/TerraFirmaCraft/TerraFirmaCraft/blob/v3.2.26/src/main/java/net/dries007/tfc/common/capabilities/heat/HeatCapability.java)
 
 ## 収録データ
 
