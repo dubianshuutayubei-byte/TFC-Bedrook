@@ -47,6 +47,8 @@ for (const file of allJson) {
 
 const seenUuids = new Map();
 const packHeaderUuids = new Set();
+const manifestByUuid = new Map();
+
 for (const file of manifests) {
   let data;
   try { data = JSON.parse(await fs.readFile(file, "utf8")); }
@@ -58,6 +60,7 @@ for (const file of manifests) {
   }
   const headerUuid = data.header.uuid;
   if (!isUuid(headerUuid)) errors.push(`Invalid header UUID: ${rel}`);
+  else manifestByUuid.set(headerUuid, { file, rel, data });
   else {
     if (packHeaderUuids.has(headerUuid)) errors.push(`Duplicate pack header UUID: ${headerUuid}`);
     packHeaderUuids.add(headerUuid);
@@ -71,9 +74,24 @@ for (const file of manifests) {
   for (const dependency of data.dependencies ?? []) {
     if (dependency.uuid && !isUuid(dependency.uuid)) {
       errors.push(`Invalid dependency UUID in ${rel}: ${dependency.uuid}`);
+    } else if (dependency.uuid && !manifestByUuid.has(dependency.uuid)) {
+      // Pack dependencies can be declared before their target manifest is visited.
+      // Resolve all UUID references in a second pass below.
     }
     if (dependency.module_name && !dependency.version) {
       errors.push(`Module dependency has no version in ${rel}: ${dependency.module_name}`);
+    }
+  }
+  for (const module of data.modules) {
+    if (module.type === "script") {
+      if (typeof module.entry !== "string" || !module.entry.endsWith(".js")) {
+        errors.push(`Script module must declare a .js entry point: ${rel}`);
+      } else {
+        const packRoot = path.dirname(file);
+        try { await fs.access(path.join(packRoot, module.entry)); }
+        catch { errors.push(`Missing script entry ${module.entry}: ${rel}`); }
+      }
+      if (module.language !== "javascript") errors.push(`Script module language must be javascript: ${rel}`);
     }
   }
   if (data.header.min_engine_version && !Array.isArray(data.header.min_engine_version)) {
@@ -90,6 +108,22 @@ function registerUuid(uuid, source) {
   const prior = seenUuids.get(uuid);
   if (prior) errors.push(`Duplicate UUID ${uuid}: ${prior} and ${source}`);
   else seenUuids.set(uuid, source);
+}
+
+for (const file of manifests) {
+  let data;
+  try { data = JSON.parse(await fs.readFile(file, "utf8")); } catch { continue; }
+  for (const dependency of data.dependencies ?? []) {
+    if (dependency.uuid && isUuid(dependency.uuid) && !manifestByUuid.has(dependency.uuid)) {
+      errors.push(`Unresolved pack dependency UUID in ${path.relative(root, file)}: ${dependency.uuid}`);
+    }
+  }
+}
+
+for (const dir of packRoots) {
+  const manifestPath = path.join(dir, "manifest.json");
+  try { await fs.access(manifestPath); }
+  catch { errors.push(`Missing root manifest: ${path.relative(root, manifestPath)}`); }
 }
 
 console.log(`JSON files checked: ${allJson.length}`);
