@@ -62,6 +62,30 @@ TFC-Bedrook の地形生成方式を決めるため、ユーザー提供の BioS
 
 **採用判断：** 機能の着想・Bedrock実装例を調べる参考資料。内部資産の出所・ライセンスを個別確認せずに移植しない。現状の大規模CombinedパックをTFC-Bedrookの土台にはしない。
 
+## 追加の静的再確認
+
+2026-11-27に提供アーカイブを再度直接集計し、Feature / Feature Rule数を修正した。JSONファイル数は以下の通り。
+
+| Subpack | Feature JSON | Feature Rule JSON |
+|---|---:|---:|
+| default | 806 | 51 |
+| high | 820 | 64 |
+| ultra | 950 | 90 |
+
+バイオーム定義はBP直下に40個。上記Feature数には植生・装飾・地形・その他のFeatureが含まれ、すべてが地形生成専用ではない。
+
+default subpackの実JSONから、地形計算のより正確な構造も確認した。
+
+- terrain.json は scatter_feature で terrain__per_chunk_math を呼ぶ。
+- terrain__per_chunk_math は x/z の fixed_grid を step_size 16、extent 0～15で設定し、各チャンク内の16×16座標で terrain__per_block_math を呼ぶ。
+- terrain__per_block_math の Molang は q.noise(x, z) の2引数形式を複数スケールで使い、v.worldx / v.worldzからriver、sand、path、death_hole、normal、mesa、main、pillar、wallなどの値を算出する。
+- terrain.main.noise_val は確認したdefault JSONでは、概ね 140 ×（バイオームグループ別の地形係数）× clamp(q.noise(world座標を1500で縮尺した値)+0.5, 0, 1) + 30 の形。
+- terrain_optional_column_selector は q.heightmap と q.above_top_solid を読み、目標値との差が1以上の場合にterrain_mountainへ進む分岐を選択する。
+- terrain_mountain は terrain_mountain_surface_layer と terrain_mountain_below_surface_layer のaggregate_feature。
+- 表層Featureは計算したbottomからtarget heightまでを1ブロック刻みでscatterし、surfaces Featureへ接続する。
+
+これはJSONの静的読解結果であり、ゲーム内での実際の配置順やチャンク境界での結果を確認したものではない。式の係数・ノイズ値・変数名はTerraSphere固有の実装であり、TFC-Bedrookへコピーしない。
+
 ## TerraSphereで確認した地形生成パターン
 
 確認対象は default subpack の以下のJSON。
