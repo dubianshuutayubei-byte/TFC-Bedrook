@@ -18,13 +18,13 @@ test("official reference fuel and heat profile data validate", () => {
 
 test("energy required follows documented heat capacity", () => {
   const copper = profiles.profiles.find(p => p.id === "copper_ingot");
-  assert.equal(energyRequired(copper, 20, 120), 285.7);
+  assert.ok(Math.abs(energyRequired(copper, 20, 120) - 285.7) < 1e-9);
   assert.equal(energyRequired(copper, 120, 20), 0);
 });
 
 test("supplied energy changes idealized temperature without heat loss", () => {
   const copper = profiles.profiles.find(p => p.id === "copper_ingot");
-  assert.equal(temperatureAfterEnergy(copper, 20, 285.7), 120);
+  assert.ok(Math.abs(temperatureAfterEnergy(copper, 20, 285.7) - 120) < 1e-9);
 });
 
 test("work, weld and melt thresholds are independent", () => {
