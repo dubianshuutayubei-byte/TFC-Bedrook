@@ -269,6 +269,63 @@
       "duration": 1750,
       "temperatureC": 612,
       "purity": 0.95
+    },
+    {
+      "id": "spruce_log",
+      "ingredient": [
+        "tfc:wood/log/spruce",
+        "tfc:wood/wood/spruce",
+        "tfc:wood/stripped_wood/spruce",
+        "tfc:wood/stripped_log/spruce"
+      ],
+      "duration": 1500,
+      "temperatureC": 608,
+      "purity": 0.95
+    },
+    {
+      "id": "stick_bundle",
+      "ingredient": [
+        "tfc:stick_bundle"
+      ],
+      "duration": 600,
+      "temperatureC": 900,
+      "purity": 0.8
+    },
+    {
+      "id": "sycamore_log",
+      "ingredient": [
+        "tfc:wood/log/sycamore",
+        "tfc:wood/wood/sycamore",
+        "tfc:wood/stripped_wood/sycamore",
+        "tfc:wood/stripped_log/sycamore"
+      ],
+      "duration": 1750,
+      "temperatureC": 653,
+      "purity": 0.95
+    },
+    {
+      "id": "white_cedar_log",
+      "ingredient": [
+        "tfc:wood/log/white_cedar",
+        "tfc:wood/wood/white_cedar",
+        "tfc:wood/stripped_wood/white_cedar",
+        "tfc:wood/stripped_log/white_cedar"
+      ],
+      "duration": 1500,
+      "temperatureC": 625,
+      "purity": 0.95
+    },
+    {
+      "id": "willow_log",
+      "ingredient": [
+        "tfc:wood/log/willow",
+        "tfc:wood/wood/willow",
+        "tfc:wood/stripped_wood/willow",
+        "tfc:wood/stripped_log/willow"
+      ],
+      "duration": 1000,
+      "temperatureC": 603,
+      "purity": 0.95
     }
   ]
 }
