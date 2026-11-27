@@ -31,12 +31,15 @@ Minecraft Bedrock Edition 向けに TerraFirmaCraft（TFC）Java 1.20.1-3.2.26 �
 - [Bedrock互換性・API基準](docs/compatibility/bedrock-version-matrix.md)
 - [Bedrock実装アーキテクチャ](docs/architecture/bedrock-implementation-architecture.md)
 - [ランタイム状態・セーブデータ設計](docs/architecture/runtime-state-model.md)
+- [気候サービス試作](docs/architecture/climate-service-prototype.md)
 
 ## 検証環境
 
-GitHub ActionsでJSON・manifestの静的検査とJavaScript構文検査を実行するための基盤を用意している。現段階ではパック本体のソースはまだ追加していない。
+GitHub ActionsでJSON・manifestの静的検査、JavaScript構文検査、Node.js単体テストを実行する。気候計算の純粋関数プロトタイプを追加済み。Behavior Pack / Resource Packのmanifestやゲーム内機能はまだ未実装。
 
 - [静的検査ツール](tools/validate-pack.mjs)
+- [気候計算モジュール](packs/behavior_pack/scripts/core/climate-service.mjs)
+- [気候計算テスト](tests/climate-service.test.mjs)
 - [GitHub Actions workflow](.github/workflows/static-validation.yml)
 
 静的検査はゲーム内検証の代わりにはならない。地形生成・設備動作・セーブデータ・端末負荷はMinecraft実機で確認する。
@@ -49,4 +52,4 @@ GitHub ActionsでJSON・manifestの静的検査とJavaScript構文検査を実�
 
 ## 現在の状態
 
-調査・仕様整理・検証基盤の準備段階。完成アドオンや実機検証済みビルドはまだ存在しない。
+調査・仕様整理に加え、気候計算の最初の実行可能プロトタイプを追加した段階。完成アドオンや実機検証済みビルドはまだ存在しない。
