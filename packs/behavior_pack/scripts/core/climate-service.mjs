@@ -113,12 +113,8 @@ export function evaluateFaunaHabitat(profile, environment) {
     if (!predicate(finite(limit, `profile.${limitKey}`), actual)) failures.push(limitKey);
   }
 
-  if (profile.minForestType && environment.forestType !== profile.minForestType) {
-    failures.push("minForestType");
-  }
-  if (profile.maxForestType && environment.forestType !== profile.maxForestType) {
-    failures.push("maxForestType");
-  }
+  // ForestType ordering is intentionally not inferred here. TFC's edge/normal
+  // labels need an explicit source-enum mapping before min/max are evaluated.
   if (profile.waterType && environment.waterType !== profile.waterType) {
     failures.push("waterType");
   }
