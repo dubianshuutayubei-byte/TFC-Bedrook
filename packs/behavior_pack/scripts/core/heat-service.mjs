@@ -155,3 +155,44 @@ export function coolItemTemperature(currentC, profile, ticksSinceUpdate, cooling
   if (capacity <= 0 || cooling < 0) throw new RangeError("invalid heat capacity or cooling modifier");
   return Math.max(0, current - ticksSinceUpdate * cooling / capacity);
 }
+
+/**
+ * Catch-up fuel consumption for elapsed ticks, matching TFC's
+ * HeatCapability.consumeFuelForTicks behavior. fuelQueue contains one ID per
+ * inventory stack entry, not an assumed count of items inside a stack.
+ */
+export function consumeFuelForElapsedTicks({
+  elapsedTicks, burnTicks, burnTemperatureC, fuelQueue
+}, fuelDatabase) {
+  if (!Number.isInteger(elapsedTicks) || elapsedTicks < 0) throw new RangeError("elapsedTicks must be a non-negative integer");
+  if (!Number.isInteger(burnTicks) || burnTicks < 0) throw new RangeError("burnTicks must be a non-negative integer");
+  finite(burnTemperatureC, "burnTemperatureC");
+  if (!Array.isArray(fuelQueue)) throw new TypeError("fuelQueue must be an array");
+  const fuels = new Map(fuelDatabase.fuels.map(fuel => [fuel.id, fuel]));
+  let remainingTicks = elapsedTicks;
+  let remainingBurnTicks = burnTicks;
+  let remainingBurnTemperatureC = burnTemperatureC;
+  const queue = [...fuelQueue];
+
+  if (remainingBurnTicks > remainingTicks) {
+    remainingBurnTicks -= remainingTicks;
+    return { burnTicks: remainingBurnTicks, burnTemperatureC: remainingBurnTemperatureC, fuelQueue: queue, unprocessedTicks: 0 };
+  }
+  remainingTicks -= remainingBurnTicks;
+  remainingBurnTicks = 0;
+
+  while (true) {
+    const index = queue.findIndex(id => fuels.has(id));
+    if (index < 0) {
+      return { burnTicks: remainingBurnTicks, burnTemperatureC: remainingBurnTemperatureC, fuelQueue: queue, unprocessedTicks: remainingTicks };
+    }
+    const [id] = queue.splice(index, 1);
+    const fuel = fuels.get(id);
+    if (fuel.duration > remainingTicks) {
+      remainingBurnTicks = fuel.duration - remainingTicks;
+      remainingBurnTemperatureC = fuel.temperatureC;
+      return { burnTicks: remainingBurnTicks, burnTemperatureC: remainingBurnTemperatureC, fuelQueue: queue, unprocessedTicks: 0 };
+    }
+    remainingTicks -= fuel.duration;
+  }
+}
