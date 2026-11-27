@@ -212,3 +212,113 @@ Animal Husbandry、Anvils、Aqueducts、Armor、Armor Trims、Barrels、Bellows�
 - [Fertilizers](https://terrafirmacraft.github.io/Field-Guide/20/en_us/mechanics/fertilizers.html)
 - [Armor](https://terrafirmacraft.github.io/Field-Guide/20/en_us/mechanics/armor.html)
 - [Damage Types](https://terrafirmacraft.github.io/Field-Guide/20/en_us/mechanics/damage_types.html)
+
+
+## 11. 加工設備・生活系の追加詳細
+
+### 11.1 Quern
+- BaseとHandstoneで構成する粉砕設備。
+- 手動ではHandstoneを回して処理する。
+- 粉末、染料、宝石粉、Flour、Fluxなどを作る。
+- Mechanical PowerのAxleを接続すると自動化でき、回転速度が高いほど粉砕が速い。
+
+### 11.2 Dairy / Cheese
+- Dairy AnimalsのMilkは飲用でき、Jugで扱う。
+- MilkはVinegarと9:1でBarrelに入れてMilk Vinegarを作る。
+- DairyはFood Nutritionの独立カテゴリ。
+- Milkを飲むだけでなく、チーズ加工や食事との組み合わせが必要。
+
+### 11.3 Bowls / Salads / Sandwiches
+- Ceramic Bowlは粘土をKnappingして焼成する。Wooden Bowlも別工程で作れる。
+- BowlはSalad / Soup / Salted Meat / Glass Powderの用途を持つ。
+- Saladは最大5個のFruit / Vegetable / Cooked MeatをBowlでまとめる。
+- SandwichはBread 2個とVegetable / Cooked Meat / Cheeseなど3素材をWorkbenchで組み合わせる。
+- SandwichのNutritionはBread分50%、具材分80%として合算される。材料は作成時に腐敗していない必要がある。完成品は新しい食品として腐敗を開始する。
+
+### 11.4 Jarring
+- JarはGlassworkingで作る。
+- Tin製Jar LidをAnvilで加工し、Jarと組み合わせる。
+- PotでSugarとFruitを煮て、蓋付きJarで封をしてJamを保存する。
+- JamはSandwichの具材にもなる。
+- Jarは固体面に置け、Jar Shelfへ配置できる。
+
+### 11.5 Glassworking
+- Glass Batchは砂の色・種類に応じてSilica / Hematitic / Olivine / Volcanicの系統がある。
+- Batchには砂、Lime、Potash系素材を使う。
+- Blowpipeを中心にBlow / Stretch / Flatten / Pinch / Saw / Rollの操作を行う。
+- Paddle、Jacks、Gem Saw、Wool Clothなどの補助工具が工程ごとに必要。
+- Table PourでGlass Pane、Basin PourでGlass Blockを作る。
+- Jar、Lamp Glass、Bottle、Lensなどにもつながる。
+
+### 11.6 Weaving / Sewing / Papermaking
+- Wooly Animalsから得るWoolはSpindleでWool Yarnへ加工し、LoomでClothにする。
+- Silk ClothはStringからLoomで作れる。
+- Sewing TableはCloth / Yarn / Needleを使い、配置と縫い目をUI上で操作して成果物を作る。
+- PapyrusはKnifeでStripにし、浸水・Loomでの編み込み・Log上でのScrapingを経てPaperになる。
+- ParchmentはScraped HideをPumiceなどで処理して作る。
+- PaperはBooksやMapsなどの書き物素材に使われる。
+
+### 11.7 Minecarts
+- プレイヤー、Entity、大型ブロックを運搬する。
+- Anvil、Crucible、Large Vessel、Barrel、Powderkegなど、通常プレイヤーが持つと負担になる設備を搭載できる。
+- Chest Minecartは通常TFC Chest相当の18スロットで、LogsなどのVery Largeアイテムは収納できない。
+- 運搬・収納制限はItem Size / Weightシステムと連動する。
+
+### 11.8 Crankshaft / Pump
+- Crankshaftは回転動力を往復運動に変換する。
+- BellowsやWater Pumpを駆動できる。
+- Steel Pump / Steel Pipeは水・塩水・温泉水などの液体を運ぶ。
+- PumpはCrankshaftとMechanical Powerを必要とし、最大16ブロック先から液体を移送できる。閉じた領域を最大32ブロックまで水源で満たせる。
+
+### 11.9 Lamps / Light Sources
+- Lampsは液体燃料を使う長期光源で、Olive Oil / Tallowなどを燃料とする。
+- Lampは破壊しても燃料を保持する。
+- Torches、Candles、Jack 'o Lanternsは寿命を持ち、時間経過で消えるか別状態へ変化する。
+- 光源を単なる永続的なバニラTorchへ統合しない。
+
+### 11.10 Dye
+- 花・植物・鉱石粉末などをQuern等で加工して16色のDyeを得る。
+- Dye Itemを水とPotで煮てDye Fluidを作り、Barrelで染色に使う。
+- DyeはGlassworkingの色付けにも関係する。
+
+### 11.11 Support / Collapse
+- 採掘・Chiselingと地質支持状態が連動する。
+- Support Beamは水平梁と垂直柱を組み合わせる。
+- 落盤は単なる演出ではなく、岩石・鉱石の落下と鉱石品位低下を伴う。
+- 実装時はプレイヤー周辺の局所範囲だけを評価し、全地下を常時走査しない。
+
+## 12. 実装優先度の提案（設計上の判断）
+
+以下は公式ガイドの順番そのものではなく、Bedrockで依存関係を組むための提案。
+
+1. **基礎データ層**：Climate / Geology / ItemProfile / Metal / Heat / Food / Crop / Fauna
+2. **序盤の必須進行**：採集、Knapping、陶器、Pit Kiln、Small Vessel、Casting、Primitive Anvil
+3. **資源獲得**：地表小鉱石、鉱脈、Prospecting、Panning、Sluice
+4. **鉄・金属加工**：Charcoal Pit、Forge、Bloomery、Crucible、Anvil、Blast Furnace、Steel
+5. **生活システム**：Thirst、Nutrition、Decay、Cooking、Preservation、Farming、Animal Husbandry
+6. **加工拡張**：Leather、Quern、Barrel、Glass、Weaving、Papermaking、Jarring
+7. **建築・探索補助**：Support / Collapse、Aqueduct、Pump、Minecart、Lighting
+8. **動力・自動化**：Windmill、Water Wheel、Axle、Gearbox、Clutch、Crankshaft、Trip Hammer
+
+この順番は「小出しに完成品を配布する」ためではなく、全機能の依存関係と統合テストの順番を管理するための内部ロードマップである。
+
+## 13. 追加参照元
+- [Quern](https://terrafirmacraft.github.io/Field-Guide/20/en_us/mechanics/quern.html)
+- [Dairy Products](https://terrafirmacraft.github.io/Field-Guide/20/en_us/mechanics/dairy.html)
+- [Bowls](https://terrafirmacraft.github.io/Field-Guide/20/en_us/mechanics/bowls.html)
+- [Salads](https://terrafirmacraft.github.io/Field-Guide/20/en_us/mechanics/salad.html)
+- [Sandwiches](https://terrafirmacraft.github.io/Field-Guide/20/en_us/mechanics/sandwiches.html)
+- [Jarring](https://terrafirmacraft.github.io/Field-Guide/20/en_us/mechanics/jarring.html)
+- [Glassworking](https://terrafirmacraft.github.io/Field-Guide/20/en_us/mechanics/glassworking.html)
+- [Glass Products](https://terrafirmacraft.github.io/Field-Guide/20/en_us/mechanics/glassworking_applications.html)
+- [Weaving](https://terrafirmacraft.github.io/Field-Guide/20/en_us/mechanics/weaving.html)
+- [Sewing Table](https://terrafirmacraft.github.io/Field-Guide/20/en_us/mechanics/sewing_table.html)
+- [Papermaking](https://terrafirmacraft.github.io/Field-Guide/20/en_us/mechanics/papermaking.html)
+- [Minecarts](https://terrafirmacraft.github.io/Field-Guide/20/en_us/mechanics/minecarts.html)
+- [Crankshafts](https://terrafirmacraft.github.io/Field-Guide/20/en_us/mechanics/crankshaft.html)
+- [Pumps](https://terrafirmacraft.github.io/Field-Guide/20/en_us/mechanics/pumps.html)
+- [Lamps](https://terrafirmacraft.github.io/Field-Guide/20/en_us/mechanics/lamps.html)
+- [Light Sources](https://terrafirmacraft.github.io/Field-Guide/20/en_us/mechanics/lighting.html)
+- [Dye](https://terrafirmacraft.github.io/Field-Guide/20/en_us/mechanics/dye.html)
+- [Composter](https://terrafirmacraft.github.io/Field-Guide/20/en_us/mechanics/composter.html)
+- [Fertilizers](https://terrafirmacraft.github.io/Field-Guide/20/en_us/mechanics/fertilizers.html)
