@@ -3,7 +3,9 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import {
   validateFuelDatabase, validateItemHeatDatabase, energyRequired,
-  temperatureAfterEnergy, evaluateMetalWorkState, classifyTemperature
+  temperatureAfterEnergy, evaluateMetalWorkState, classifyTemperature,
+  targetDeviceTemperature, advanceDeviceTemperature, advanceFuelBurnTicks,
+  advanceItemTemperature, coolItemTemperature
 } from "../packs/behavior_pack/scripts/core/heat-service.mjs";
 
 const fuels = JSON.parse(await readFile(new URL("../packs/behavior_pack/data/fuels.json", import.meta.url)));
@@ -63,4 +65,34 @@ test("single and double ingots retain their distinct source heat capacities", ()
   const doubleCopper = profiles.profiles.find(p => p.id === "copper_double_ingot");
   assert.equal(copper.heatCapacity, 2.857);
   assert.equal(doubleCopper.heatCapacity, 5.714);
+});
+
+test("bellows and rain modify device target using TFC rules", () => {
+  assert.equal(targetDeviceTemperature(1000, 100, false), 1400);
+  assert.equal(targetDeviceTemperature(1000, 100, true), 1100);
+  assert.equal(targetDeviceTemperature(100, 100, true), 0);
+});
+
+test("device temperature moves toward target with bellows speed modifiers", () => {
+  assert.equal(advanceDeviceTemperature(500, 1000, { deviceHeatingModifier: 10 }), 510);
+  assert.equal(advanceDeviceTemperature(500, 1000, { airTicks: 5, deviceHeatingModifier: 10 }), 520);
+  assert.equal(advanceDeviceTemperature(500, 0, { airTicks: 5, deviceHeatingModifier: 10 }), 495);
+});
+
+test("fuel burns twice as fast with bellows or rain", () => {
+  assert.equal(advanceFuelBurnTicks(10), 9);
+  assert.equal(advanceFuelBurnTicks(10, { airTicks: 1 }), 8);
+  assert.equal(advanceFuelBurnTicks(10, { isRaining: true }), 8);
+});
+
+test("item heating and passive cooling use heat capacity", () => {
+  const copper = profiles.profiles.find(p => p.id === "copper_ingot");
+  const heated = advanceItemTemperature(copper, 100, 500, {
+    coolingModifier: 1, heatingModifier: 1
+  });
+  assert.ok(Math.abs(heated - (100 + 3 / 2.857)) < 1e-9);
+  assert.equal(advanceItemTemperature(copper, 100, 101, {
+    coolingModifier: 1, heatingModifier: 1
+  }), 101);
+  assert.ok(Math.abs(coolItemTemperature(100, copper, 10, 1) - (100 - 10 / 2.857)) < 1e-9);
 });
