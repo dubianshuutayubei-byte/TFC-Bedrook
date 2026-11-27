@@ -22,7 +22,7 @@ jobs:
       - name: Check JavaScript syntax
         shell: bash
         run: |
-          mapfile -t files < <(find packs -type f \( -name '*.js' -o -name '*.mjs' -o -name '*.cjs' \) 2>/dev/null || true)
+          mapfile -t files < <(find packs tools -type f \( -name '*.js' -o -name '*.mjs' -o -name '*.cjs' \) 2>/dev/null || true)
           if [ "${#files[@]}" -eq 0 ]; then
             echo "No addon scripts found yet; syntax check will run when scripts are added."
           else
