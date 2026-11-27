@@ -35,6 +35,14 @@ Minecraft Bedrock Edition 向けに TerraFirmaCraft（TFC）Java 1.20.1-3.2.26 �
 - [金属・合金サービス試作](docs/architecture/metal-service-prototype.md)
 - [熱・燃料サービス試作](docs/architecture/heat-service-prototype.md)
 
+## アドオン本体の現状
+
+- Behavior Pack / Resource Packのmanifestと相互依存関係を追加済み。
+- Behavior PackのJavaScriptエントリーポイントを追加済み。
+- 日本語・英語の言語ファイルを追加済み。
+- 現在は起動確認用の最小ブートストラップ段階。TFCのゲームプレイ機能・独自地形生成はまだ接続していない。
+- `min_engine_version` はN-1方針で `[1, 26, 50]`、Script APIはBedrock 26.60で安定版となった `@minecraft/server` 2.11.0を指定。実機ロード確認は未実施。
+
 ## 検証環境
 
 GitHub ActionsでJSON・manifestの静的検査、JavaScript構文検査、Node.js単体テストを実行する。気候計算、金属・合金判定、熱・燃料の基礎計算に関する純粋関数プロトタイプを追加済み。Behavior Pack / Resource Packのmanifestやゲーム内機能はまだ未実装。
