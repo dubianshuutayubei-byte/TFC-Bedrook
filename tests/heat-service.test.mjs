@@ -12,7 +12,7 @@ const metals = JSON.parse(await readFile(new URL("../packs/behavior_pack/data/me
 const metalIds = new Set(metals.metals.map(m => m.id));
 
 test("official reference fuel and heat profile data validate", () => {
-  assert.equal(validateFuelDatabase(fuels).fuelCount, 4);
+  assert.equal(validateFuelDatabase(fuels).fuelCount, 29);
   assert.equal(validateItemHeatDatabase(profiles, metalIds).profileCount, 4);
 });
 
@@ -49,4 +49,11 @@ test("temperature colors follow TFC Field Guide bands", () => {
   assert.equal(classifyTemperature(480), "faint_red");
   assert.equal(classifyTemperature(930), "orange");
   assert.equal(classifyTemperature(1500), "brilliant_white");
+});
+
+test("wood fuel data preserves source-specific temperature and burn duration", () => {
+  const hickory = fuels.fuels.find(f => f.id === "hickory_log");
+  assert.equal(hickory.duration, 2000);
+  assert.equal(hickory.temperatureC, 762);
+  assert.equal(hickory.purity, 0.95);
 });
