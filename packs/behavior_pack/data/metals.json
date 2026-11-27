@@ -1,0 +1,175 @@
+{
+  "schemaVersion": 1,
+  "source": "TerraFirmaCraft/TerraFirmaCraft tag v3.2.26",
+  "temperatureUnit": "C",
+  "metals": [
+    {
+      "id": "bismuth",
+      "tier": 1,
+      "meltTemperatureC": 270,
+      "specificHeatCapacity": 0.02143
+    },
+    {
+      "id": "bismuth_bronze",
+      "tier": 2,
+      "meltTemperatureC": 985,
+      "specificHeatCapacity": 0.00857
+    },
+    {
+      "id": "black_bronze",
+      "tier": 2,
+      "meltTemperatureC": 1070,
+      "specificHeatCapacity": 0.00857
+    },
+    {
+      "id": "black_steel",
+      "tier": 5,
+      "meltTemperatureC": 1485,
+      "specificHeatCapacity": 0.00857
+    },
+    {
+      "id": "blue_steel",
+      "tier": 6,
+      "meltTemperatureC": 1540,
+      "specificHeatCapacity": 0.00857
+    },
+    {
+      "id": "brass",
+      "tier": 2,
+      "meltTemperatureC": 930,
+      "specificHeatCapacity": 0.00857
+    },
+    {
+      "id": "bronze",
+      "tier": 2,
+      "meltTemperatureC": 950,
+      "specificHeatCapacity": 0.00857
+    },
+    {
+      "id": "cast_iron",
+      "tier": 1,
+      "meltTemperatureC": 1535,
+      "specificHeatCapacity": 0.00857
+    },
+    {
+      "id": "copper",
+      "tier": 1,
+      "meltTemperatureC": 1080,
+      "specificHeatCapacity": 0.00857
+    },
+    {
+      "id": "gold",
+      "tier": 1,
+      "meltTemperatureC": 1060,
+      "specificHeatCapacity": 0.005
+    },
+    {
+      "id": "high_carbon_black_steel",
+      "tier": 4,
+      "meltTemperatureC": 1540,
+      "specificHeatCapacity": 0.00857
+    },
+    {
+      "id": "high_carbon_blue_steel",
+      "tier": 5,
+      "meltTemperatureC": 1540,
+      "specificHeatCapacity": 0.00857
+    },
+    {
+      "id": "high_carbon_red_steel",
+      "tier": 5,
+      "meltTemperatureC": 1540,
+      "specificHeatCapacity": 0.00857
+    },
+    {
+      "id": "high_carbon_steel",
+      "tier": 3,
+      "meltTemperatureC": 1540,
+      "specificHeatCapacity": 0.00857
+    },
+    {
+      "id": "nickel",
+      "tier": 1,
+      "meltTemperatureC": 1453,
+      "specificHeatCapacity": 0.00625
+    },
+    {
+      "id": "pig_iron",
+      "tier": 3,
+      "meltTemperatureC": 1535,
+      "specificHeatCapacity": 0.00857
+    },
+    {
+      "id": "red_steel",
+      "tier": 6,
+      "meltTemperatureC": 1540,
+      "specificHeatCapacity": 0.00857
+    },
+    {
+      "id": "rose_gold",
+      "tier": 1,
+      "meltTemperatureC": 960,
+      "specificHeatCapacity": 0.00857
+    },
+    {
+      "id": "silver",
+      "tier": 1,
+      "meltTemperatureC": 961,
+      "specificHeatCapacity": 0.00625
+    },
+    {
+      "id": "steel",
+      "tier": 4,
+      "meltTemperatureC": 1540,
+      "specificHeatCapacity": 0.00857
+    },
+    {
+      "id": "sterling_silver",
+      "tier": 1,
+      "meltTemperatureC": 950,
+      "specificHeatCapacity": 0.00857
+    },
+    {
+      "id": "tin",
+      "tier": 1,
+      "meltTemperatureC": 230,
+      "specificHeatCapacity": 0.02143
+    },
+    {
+      "id": "unknown",
+      "tier": 0,
+      "meltTemperatureC": 400,
+      "specificHeatCapacity": 0.006
+    },
+    {
+      "id": "weak_blue_steel",
+      "tier": 5,
+      "meltTemperatureC": 1540,
+      "specificHeatCapacity": 0.00857
+    },
+    {
+      "id": "weak_red_steel",
+      "tier": 5,
+      "meltTemperatureC": 1540,
+      "specificHeatCapacity": 0.00857
+    },
+    {
+      "id": "weak_steel",
+      "tier": 4,
+      "meltTemperatureC": 1540,
+      "specificHeatCapacity": 0.00857
+    },
+    {
+      "id": "wrought_iron",
+      "tier": 3,
+      "meltTemperatureC": 1535,
+      "specificHeatCapacity": 0.00857
+    },
+    {
+      "id": "zinc",
+      "tier": 1,
+      "meltTemperatureC": 420,
+      "specificHeatCapacity": 0.01429
+    }
+  ]
+}
