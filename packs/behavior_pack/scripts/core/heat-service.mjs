@@ -72,3 +72,20 @@ export function evaluateMetalWorkState(itemProfile, metalProfile, temperatureC) 
     meltMarginC: temperature - metalProfile.meltTemperatureC,
   };
 }
+
+/** Temperature color bands documented by the TFC 1.20.1 Field Guide. */
+export function classifyTemperature(temperatureC) {
+  const temperature = finite(temperatureC, "temperatureC");
+  if (temperature <= 0) return "unheated";
+  if (temperature < 80) return "warming";
+  if (temperature < 210) return "hot";
+  if (temperature < 480) return "very_hot";
+  if (temperature < 580) return "faint_red";
+  if (temperature < 730) return "dark_red";
+  if (temperature < 930) return "bright_red";
+  if (temperature < 1100) return "orange";
+  if (temperature < 1300) return "yellow";
+  if (temperature < 1400) return "yellow_white";
+  if (temperature < 1500) return "white";
+  return "brilliant_white";
+}
