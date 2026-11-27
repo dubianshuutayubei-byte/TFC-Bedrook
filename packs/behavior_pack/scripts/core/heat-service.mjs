@@ -89,3 +89,69 @@ export function classifyTemperature(temperatureC) {
   if (temperature < 1500) return "white";
   return "brilliant_white";
 }
+
+/**
+ * TFC device target temperature:
+ * bellows add min(4 * airTicks, 600, 50% of base target), then rain removes 300 C.
+ */
+export function targetDeviceTemperature(baseTargetC, airTicks = 0, isRaining = false) {
+  const base = finite(baseTargetC, "baseTargetC");
+  if (!Number.isInteger(airTicks) || airTicks < 0) throw new RangeError("airTicks must be a non-negative integer");
+  let target = base;
+  if (airTicks > 0) target += Math.min(4 * airTicks, 600, target * 0.5);
+  if (isRaining) target = Math.max(0, target - 300);
+  return target;
+}
+
+/**
+ * One TFC device tick. deviceHeatingModifier is the server config value;
+ * it is required rather than guessed. Bellows alter heating/cooling speed.
+ */
+export function advanceDeviceTemperature(currentC, baseTargetC, {
+  airTicks = 0, isRaining = false, deviceHeatingModifier
+} = {}) {
+  const current = finite(currentC, "currentC");
+  const modifier = finite(deviceHeatingModifier, "deviceHeatingModifier");
+  if (modifier < 0) throw new RangeError("deviceHeatingModifier cannot be negative");
+  const target = targetDeviceTemperature(baseTargetC, airTicks, isRaining);
+  if (current < target) return Math.min(current + modifier * (airTicks > 0 ? 2 : 1), target);
+  if (current > target) return Math.max(current - modifier * (airTicks > 0 ? 0.5 : 1), target);
+  return target;
+}
+
+/** TFC fuel burn rate: one burn tick normally, two with active bellows or rain. */
+export function advanceFuelBurnTicks(remainingTicks, { airTicks = 0, isRaining = false } = {}) {
+  if (!Number.isInteger(remainingTicks) || remainingTicks < 0) throw new RangeError("remainingTicks must be a non-negative integer");
+  if (!Number.isInteger(airTicks) || airTicks < 0) throw new RangeError("airTicks must be a non-negative integer");
+  return Math.max(0, remainingTicks - (airTicks > 0 || isRaining ? 2 : 1));
+}
+
+/**
+ * TFC item heating step. The server config modifiers are explicit inputs.
+ * This function models the HeatCapability.addTemp formula; it does not guess
+ * config defaults. TFC only raises the item temperature here, capped by target.
+ */
+export function advanceItemTemperature(profile, currentC, targetC, {
+  coolingModifier, heatingModifier, modifier = 3
+} = {}) {
+  const capacity = finite(profile.heatCapacity, "heatCapacity");
+  const current = finite(currentC, "currentC");
+  const target = finite(targetC, "targetC");
+  const cooling = finite(coolingModifier, "coolingModifier");
+  const heating = finite(heatingModifier, "heatingModifier");
+  const heatModifier = finite(modifier, "modifier");
+  if (capacity <= 0) throw new RangeError("heatCapacity must be positive");
+  if (cooling < 0 || heating < 0 || heatModifier < 0) throw new RangeError("heat modifiers cannot be negative");
+  const next = current + (cooling - 1 + heatModifier * heating) / capacity;
+  return Math.max(current, Math.min(next, target));
+}
+
+/** Passive item cooling after a time skip, matching TFC's heat decay formula. */
+export function coolItemTemperature(currentC, profile, ticksSinceUpdate, coolingModifier) {
+  const current = finite(currentC, "currentC");
+  const capacity = finite(profile.heatCapacity, "heatCapacity");
+  const cooling = finite(coolingModifier, "coolingModifier");
+  if (!Number.isInteger(ticksSinceUpdate) || ticksSinceUpdate < 0) throw new RangeError("ticksSinceUpdate must be a non-negative integer");
+  if (capacity <= 0 || cooling < 0) throw new RangeError("invalid heat capacity or cooling modifier");
+  return Math.max(0, current - ticksSinceUpdate * cooling / capacity);
+}
