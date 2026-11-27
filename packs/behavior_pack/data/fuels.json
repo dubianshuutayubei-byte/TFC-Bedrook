@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "source": "TerraFirmaCraft/TerraFirmaCraft branch 1.20.x (Minecraft 1.20.1, TFC 3.x)",
+  "temperatureUnit": "C",
+  "durationUnit": "ticks",
+  "fuels": [
+    {
+      "id": "charcoal",
+      "ingredient": [
+        "minecraft:charcoal"
+      ],
+      "duration": 1800,
+      "temperatureC": 1350
+    },
+    {
+      "id": "coal",
+      "ingredient": [
+        "minecraft:coal",
+        "tfc:ore/bituminous_coal"
+      ],
+      "duration": 2200,
+      "temperatureC": 1415
+    },
+    {
+      "id": "lignite",
+      "ingredient": [
+        "tfc:ore/lignite"
+      ],
+      "duration": 2200,
+      "temperatureC": 1350
+    },
+    {
+      "id": "peat",
+      "ingredient": [
+        "tfc:peat"
+      ],
+      "duration": 2500,
+      "temperatureC": 600,
+      "purity": 0.7
+    }
+  ]
+}
