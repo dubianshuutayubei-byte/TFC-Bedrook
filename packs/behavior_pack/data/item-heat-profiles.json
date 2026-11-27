@@ -248,11 +248,76 @@
       "ingredientTag": "forge:ingots/pig_iron"
     },
     {
-      "id": "steel_ingot",
-      "metalId": "steel",
+      "id": "red_steel_double_ingot",
+      "metalId": "red_steel",
+      "itemType": "double_ingot",
+      "heatCapacity": 5.714,
+      "forgingTemperatureC": 924,
+      "weldingTemperatureC": 1232,
+      "ingredientTag": "forge:double_ingots/red_steel"
+    },
+    {
+      "id": "red_steel_ingot",
+      "metalId": "red_steel",
+      "itemType": "ingot",
       "heatCapacity": 2.857,
       "forgingTemperatureC": 924,
-      "weldingTemperatureC": 1232
+      "weldingTemperatureC": 1232,
+      "ingredientTag": "forge:ingots/red_steel"
+    },
+    {
+      "id": "rose_gold_double_ingot",
+      "metalId": "rose_gold",
+      "itemType": "double_ingot",
+      "heatCapacity": 5.714,
+      "forgingTemperatureC": 576,
+      "weldingTemperatureC": 768,
+      "ingredientTag": "forge:double_ingots/rose_gold"
+    },
+    {
+      "id": "rose_gold_ingot",
+      "metalId": "rose_gold",
+      "itemType": "ingot",
+      "heatCapacity": 2.857,
+      "forgingTemperatureC": 576,
+      "weldingTemperatureC": 768,
+      "ingredientTag": "forge:ingots/rose_gold"
+    },
+    {
+      "id": "silver_double_ingot",
+      "metalId": "silver",
+      "itemType": "double_ingot",
+      "heatCapacity": 4.167,
+      "forgingTemperatureC": 577,
+      "weldingTemperatureC": 769,
+      "ingredientTag": "forge:double_ingots/silver"
+    },
+    {
+      "id": "silver_ingot",
+      "metalId": "silver",
+      "itemType": "ingot",
+      "heatCapacity": 2.083,
+      "forgingTemperatureC": 577,
+      "weldingTemperatureC": 769,
+      "ingredientTag": "forge:ingots/silver"
+    },
+    {
+      "id": "steel_double_ingot",
+      "metalId": "steel",
+      "itemType": "double_ingot",
+      "heatCapacity": 5.714,
+      "forgingTemperatureC": 924,
+      "weldingTemperatureC": 1232,
+      "ingredientTag": "forge:double_ingots/steel"
+    },
+    {
+      "id": "steel_ingot",
+      "metalId": "steel",
+      "itemType": "ingot",
+      "heatCapacity": 2.857,
+      "forgingTemperatureC": 924,
+      "weldingTemperatureC": 1232,
+      "ingredientTag": "forge:ingots/steel"
     },
     {
       "id": "wrought_iron_ingot",
