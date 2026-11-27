@@ -3,6 +3,13 @@
  * Energy = heatCapacity * temperatureDelta, following TFC's documented
  * Energy / °C heat-capacity unit. This is not a tick-by-tick forge simulation.
  */
+export const TFC_HEAT_DEFAULTS = Object.freeze({
+  deviceHeatingModifier: 1,
+  itemHeatingModifier: 1,
+  itemCoolingModifier: 0.8,
+  ticksBeforeItemCool: 10,
+});
+
 function finite(value, name) {
   if (typeof value !== "number" || !Number.isFinite(value)) throw new TypeError(`${name} must be finite`);
   return value;
@@ -108,7 +115,7 @@ export function targetDeviceTemperature(baseTargetC, airTicks = 0, isRaining = f
  * it is required rather than guessed. Bellows alter heating/cooling speed.
  */
 export function advanceDeviceTemperature(currentC, baseTargetC, {
-  airTicks = 0, isRaining = false, deviceHeatingModifier
+  airTicks = 0, isRaining = false, deviceHeatingModifier = TFC_HEAT_DEFAULTS.deviceHeatingModifier
 } = {}) {
   const current = finite(currentC, "currentC");
   const modifier = finite(deviceHeatingModifier, "deviceHeatingModifier");
@@ -132,7 +139,7 @@ export function advanceFuelBurnTicks(remainingTicks, { airTicks = 0, isRaining =
  * config defaults. TFC only raises the item temperature here, capped by target.
  */
 export function advanceItemTemperature(profile, currentC, targetC, {
-  coolingModifier, heatingModifier, modifier = 3
+  coolingModifier = TFC_HEAT_DEFAULTS.itemCoolingModifier, heatingModifier = TFC_HEAT_DEFAULTS.itemHeatingModifier, modifier = 3
 } = {}) {
   const capacity = finite(profile.heatCapacity, "heatCapacity");
   const current = finite(currentC, "currentC");
@@ -147,7 +154,7 @@ export function advanceItemTemperature(profile, currentC, targetC, {
 }
 
 /** Passive item cooling after a time skip, matching TFC's heat decay formula. */
-export function coolItemTemperature(currentC, profile, ticksSinceUpdate, coolingModifier) {
+export function coolItemTemperature(currentC, profile, ticksSinceUpdate, coolingModifier = TFC_HEAT_DEFAULTS.itemCoolingModifier) {
   const current = finite(currentC, "currentC");
   const capacity = finite(profile.heatCapacity, "heatCapacity");
   const cooling = finite(coolingModifier, "coolingModifier");
