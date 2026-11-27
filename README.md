@@ -21,6 +21,7 @@ Minecraft Bedrock Edition 向けに TerraFirmaCraft（TFC）Java 1.20.1-3.2.26 �
 - [TFC公式ソース・バージョン監査](docs/research/tfc-source-version-audit.md)
 - [TFC公式データ資産インベントリ](docs/research/tfc-data-inventory.md)
 - [TFC鉱脈生成データベース](docs/spec/tfc-ore-vein-database.md)
+- [TFC作物・果樹気候データベース](docs/spec/tfc-crop-plant-climate-database.md)
 - [Bedrock互換性・API基準](docs/compatibility/bedrock-version-matrix.md)
 - [Bedrock実装アーキテクチャ](docs/architecture/bedrock-implementation-architecture.md)
 
