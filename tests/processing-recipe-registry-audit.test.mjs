@@ -49,3 +49,18 @@ test("every food profile maps to a registered food item",()=>{
  const missing=database.foods.map(food=>"tfc:"+(fileIds[food.id]??food.id)).filter(id=>!itemIds.has(id));
  assert.deepEqual(missing,[]);
 });
+
+test("every processing recipe station has a matching interactive block",()=>{
+ const stations=Object.keys(PROCESSING_RECIPES);
+ const missing=[];
+ for(const station of stations){
+  const path=join(root,"packs/behavior_pack/blocks",station+".json");
+  let block;
+  try{block=JSON.parse(readFileSync(path,"utf8"))["minecraft:block"];}catch{missing.push(station+": missing block definition");continue;}
+  const components=block.components??{};
+  if(block.description?.identifier!=="tfc:"+station)missing.push(station+": block identifier mismatch");
+  if(components["tfc:station_ui"]?.station!==station)missing.push(station+": station UI is not connected");
+  if(["firepit","pit_kiln","crucible"].includes(station)&&!components["tfc:heated_station_tick"])missing.push(station+": heated station tick is missing");
+ }
+ assert.deepEqual(missing,[]);
+});
