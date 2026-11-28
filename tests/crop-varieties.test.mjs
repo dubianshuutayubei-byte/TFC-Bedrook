@@ -1,4 +1,5 @@
 import test from "node:test";
+import { CROP_PROFILES } from "../packs/behavior_pack/scripts/core/crop-profiles.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { resolve, dirname, join } from "node:path";
