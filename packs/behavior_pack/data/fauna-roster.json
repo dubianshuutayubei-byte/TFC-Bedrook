@@ -1,18 +1,42 @@
 {
   "source": {
     "project": "TerraFirmaCraft",
-    "version": "3.2.26",
-    "kind": "official fauna profile roster",
-    "sourceUrl": "https://github.com/TerraFirmaCraft/TerraFirmaCraft/tree/v3.2.26/src/main/resources/data/tfc/tfc/fauna",
-    "count": 63
+    "version": "Java 1.21.x source branch (target audit: 1.21.1-4.2.16)",
+    "kind": "official Faunas.java + Fish.java entity roster",
+    "sourceUrl": "https://github.com/TerraFirmaCraft/TerraFirmaCraft/tree/1.21.x/src/main/java/net/dries007/tfc/common/entities",
+    "count": 78
   },
-  "note": "This is the full species coverage target, not a claim that all Bedrock entities are implemented. Entity assets, spawn rules, behavior, breeding, products and drops are tracked separately.",
+  "note": "This is the official Java entity roster target (78 registered fauna species including freshwater fish). Bedrock implementation status is tracked separately; not all entries are implemented.",
   "species": [
     {
       "id": "alpaca",
       "group": "mammal",
       "status": "custom_entity_scaffold",
       "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+    },
+    {
+      "id": "arctic_char",
+      "group": "aquatic",
+      "status": "not_implemented",
+      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
+    },
+    {
+      "id": "armadillo",
+      "group": "reptile",
+      "status": "not_implemented",
+      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
+    },
+    {
+      "id": "bactrian_camel",
+      "group": "mammal",
+      "status": "not_implemented",
+      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
+    },
+    {
+      "id": "bison",
+      "group": "mammal",
+      "status": "not_implemented",
+      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
     },
     {
       "id": "black_bear",
@@ -37,6 +61,12 @@
       "group": "mammal",
       "status": "custom_entity_scaffold",
       "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+    },
+    {
+      "id": "burbot",
+      "group": "aquatic",
+      "status": "not_implemented",
+      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
     },
     {
       "id": "caribou",
@@ -109,6 +139,12 @@
       "group": "mammal",
       "status": "native_entity_state_adapter",
       "note": "Runtime tracks sex, age, needs, health and familiarity. Vanilla entity AI/breeding remains in use where applicable; TFC-specific ecology, natural spawn, full life cycle and species assets are not yet complete."
+    },
+    {
+      "id": "dromedary_camel",
+      "group": "mammal",
+      "status": "not_implemented",
+      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
     },
     {
       "id": "duck",
@@ -195,6 +231,12 @@
       "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
+      "id": "leopard_seal",
+      "group": "aquatic",
+      "status": "not_implemented",
+      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
+    },
+    {
       "id": "lion",
       "group": "mammal",
       "status": "custom_entity_scaffold",
@@ -219,6 +261,12 @@
       "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
+      "id": "muksun",
+      "group": "aquatic",
+      "status": "not_implemented",
+      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
+    },
+    {
       "id": "mule",
       "group": "mammal",
       "status": "native_entity_state_adapter",
@@ -229,6 +277,12 @@
       "group": "mammal",
       "status": "custom_entity_scaffold",
       "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+    },
+    {
+      "id": "northern_pike",
+      "group": "aquatic",
+      "status": "not_implemented",
+      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
     },
     {
       "id": "ocelot",
@@ -249,6 +303,12 @@
       "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
+      "id": "pacu",
+      "group": "aquatic",
+      "status": "not_implemented",
+      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
+    },
+    {
       "id": "panda",
       "group": "mammal",
       "status": "native_entity_state_adapter",
@@ -259,6 +319,12 @@
       "group": "mammal",
       "status": "custom_entity_scaffold",
       "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+    },
+    {
+      "id": "peacock_bass",
+      "group": "aquatic",
+      "status": "not_implemented",
+      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
     },
     {
       "id": "peafowl",
@@ -291,6 +357,12 @@
       "note": "Runtime tracks sex, age, needs, health and familiarity. Vanilla entity AI/breeding remains in use where applicable; TFC-specific ecology, natural spawn, full life cycle and species assets are not yet complete."
     },
     {
+      "id": "pond_turtle",
+      "group": "reptile",
+      "status": "not_implemented",
+      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
+    },
+    {
       "id": "pufferfish",
       "group": "aquatic",
       "status": "native_entity_state_adapter",
@@ -313,6 +385,12 @@
       "group": "aquatic",
       "status": "custom_entity_scaffold",
       "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+    },
+    {
+      "id": "red_piranha",
+      "group": "aquatic",
+      "status": "not_implemented",
+      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
     },
     {
       "id": "sabertooth",
@@ -339,6 +417,12 @@
       "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
+      "id": "spotted_gudgeon",
+      "group": "aquatic",
+      "status": "not_implemented",
+      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
+    },
+    {
       "id": "squid",
       "group": "aquatic",
       "status": "native_entity_state_adapter",
@@ -349,6 +433,12 @@
       "group": "mammal",
       "status": "custom_entity_scaffold",
       "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+    },
+    {
+      "id": "tilapia",
+      "group": "aquatic",
+      "status": "not_implemented",
+      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
     },
     {
       "id": "tropical_fish",
