@@ -4,7 +4,7 @@ import { deserializePlayerState, serializePlayerState } from "./core/player-stat
 import { consumeFood, advanceFoodDecay, ticksToHours } from "./core/food-service.mjs";
 import { createFireState, addFuel, advanceFire, canProcessAtTemperature } from "./core/firepit-service.mjs";
 import { createSoilState, applySoilCompost, advanceSoilHydration, evaluateCropGrowth, applyFertilizer, applyCropNutrientEffects, inferSoilTypeFromBlockId, inferSoilFertilityClassFromBiomeId, advanceCropGrowthProgress } from "./core/agriculture-service.mjs";
-import { createAnimalState, advanceAnimalNeeds, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct } from "./core/fauna-service.mjs";
+import { createAnimalState, syncAnimalHealth, advanceAnimalNeeds, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct } from "./core/fauna-service.mjs";
 import { getStationRecipes } from "./core/processing-recipes.mjs";
 import { isStationJobDue, getPendingStationOutputs, markStationOutputDelivered, markStationJobRecoverable } from "./core/station-job-service.mjs";
 import { normalizeDimensionId, normalizeWeather, getRainfallMm } from "./core/environment-service.mjs";
@@ -196,7 +196,9 @@ function animalState(entity){try{const raw=entity.getDynamicProperty("tfc:animal
 function saveAnimal(entity,state){try{entity.setDynamicProperty("tfc:animal_state",JSON.stringify(state));}catch(error){console.warn("[TFC-Bedrook] animal state save:",error);}}
 function animalTick(entity){
  const profile=ANIMAL_PROFILES[entity.typeId];if(!profile)return;
- let state=animalState(entity);state=advanceAnimalNeeds(state,0.05);
+ let state=animalState(entity);
+  try{const health=entity.getComponent("minecraft:health");if(health)state=syncAnimalHealth(state,health.currentValue,health.effectiveMax);}catch{}
+  state=advanceAnimalNeeds(state,0.05);
  try{
   const base={x:Math.floor(entity.location.x),y:Math.floor(entity.location.y),z:Math.floor(entity.location.z)};
   let waterNearby=false,forageNearby=false;
