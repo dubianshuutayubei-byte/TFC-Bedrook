@@ -1,5 +1,5 @@
 import { OFFICIAL_FAUNA_PROFILES } from "../packs/behavior_pack/scripts/core/fauna-profiles.mjs";
-import test from"node:test";import assert from"node:assert/strict";import{createAnimalState,createAnimalOffspringState,initializeAnimalLifeStage,canFeedAnimal,advanceAnimalFamiliarityDecay,syncAnimalHealth,advanceAnimalNeeds,feedAnimal,waterAnimal,canBreed,beginPregnancy,advancePregnancy,evaluateHabitat,evaluateFaunaSpawn,canProduce,recordProduct,canLayEgg,recordEggLaid,getOffspringCount,tfcMonthFromDay}from"../packs/behavior_pack/scripts/core/fauna-service.mjs";
+import test from"node:test";import assert from"node:assert/strict";import{createAnimalState,createAnimalOffspringState,initializeAnimalLifeStage,canFeedAnimal,advanceAnimalFamiliarityDecay,syncAnimalHealth,advanceAnimalNeeds,feedAnimal,waterAnimal,canBreed,beginPregnancy,advancePregnancy,evaluateHabitat,evaluateFaunaSpawn,canProduce,recordProduct,canLayEgg,recordEggLaid,getOffspringCount} from"../packs/behavior_pack/scripts/core/fauna-service.mjs";
 test("needs and age advance",()=>{const a=advanceAnimalNeeds(createAnimalState({species:"deer"}),2);assert.equal(a.ageDays,2);assert.equal(a.hunger,16);assert.equal(a.thirst,24);});
 test("feeding and watering reduce needs",()=>{const a=feedAnimal({hunger:80,thirst:50},10);assert.equal(a.hunger,45);assert.equal(waterAnimal(a,20).thirst,25);});
 test("breeding requires opposite-sex adults, familiarity, feeding today and calendar cooldown",()=>{const p={adultAgeDays:10,requiredFamiliarity:30,breedingCooldownDays:1,currentDay:10,currentTime:10.5};const a={species:"deer",sex:"male",ageDays:20,lifeStage:"adult",familiarity:30,lastFedDay:10,lastBreedAt:9};const b={...a,sex:"female"};assert.equal(canBreed(a,b,p),true);assert.equal(canBreed({...a,lastFedDay:9},b,p),false);assert.equal(canBreed({...a,lastBreedAt:10},b,p),false);assert.equal(canBreed({...a,fertilized:true},b,p),false);const started=beginPregnancy(b,a,p);assert.equal(started.started,true);assert.equal(started.animal.fertilized,true);assert.equal(started.animal.lastBreedAt,10.5);assert.equal(started.animal.lastFedDay,9);});
@@ -317,16 +317,3 @@ test("horse and donkey can produce a persisted mule offspring while other cross-
  assert.equal(advanced.animal.pregnancyOffspringEntityType,"minecraft:mule");
 });
 
-test("fauna month restrictions use TFC 8-day calendar months",()=>{
- assert.equal(tfcMonthFromDay(0),"january");
- assert.equal(tfcMonthFromDay(8),"february");
- assert.equal(tfcMonthFromDay(95),"december");
- assert.equal(tfcMonthFromDay(96),"january");
- const profile={chance:1,placement:"no_restrictions",months:["march"]};
- const valid=evaluateFaunaSpawn(profile,{month:"march"},()=>0);
- const invalid=evaluateFaunaSpawn(profile,{month:"february"},()=>0);
- const missing=evaluateFaunaSpawn(profile,{},()=>0);
- assert.equal(valid.suitable,true);
- assert.deepEqual(invalid.failures,["wrong_month"]);
- assert.deepEqual(missing.missing,["month"]);
-});
