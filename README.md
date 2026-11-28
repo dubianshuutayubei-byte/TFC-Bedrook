@@ -46,6 +46,7 @@ GitHub ActionsでJSON・manifestの静的検査、JavaScript構文検査、Node.
 - [プレイヤー状態サービス](packs/behavior_pack/scripts/core/player-state-service.mjs)
 - [農業・土壌サービス](packs/behavior_pack/scripts/core/agriculture-service.mjs)
 - [食品・腐敗サービス](packs/behavior_pack/scripts/core/food-service.mjs)
+- [食品プロファイルデータ](packs/behavior_pack/data/food-profiles.json)
 - [動物・畜産サービス](packs/behavior_pack/scripts/core/fauna-service.mjs)
 - [加工工程サービス](packs/behavior_pack/scripts/core/processing-service.mjs)
 - [地質サービス](packs/behavior_pack/scripts/core/geology-service.mjs)
@@ -78,4 +79,4 @@ GitHub ActionsでJSON・manifestの静的検査、JavaScript構文検査、Node.
 
 ## 現在の状態
 
-調査・仕様整理に加え、気候、金属・合金、熱・燃料、プレイヤー状態、加工工程、農業・土壌、食品腐敗、動物・畜産、地質・地形プロファイルの基礎モジュールとNode単体テストを追加。Behavior Packのmanifest、プレイヤー参加時の状態初期化、`/scriptevent tfc:menu` で開く日本語UIを追加した。内部アイテムIDカタログと地形生成プロトタイプも追加済み。ただし、カタログはBedrock登録済みアイテムではなく、地形プロトタイプもMinecraftの地形生成へ未接続。完成アドオンやMinecraft実機検証済みビルドはまだ存在しない。
+調査・仕様整理に加え、気候、金属・合金、熱・燃料、プレイヤー状態、加工工程（抽象インベントリの原子的処理を含む）、農業・土壌（水分収支・成長ポイント）、食品腐敗（鮮度区分・保存・栄養プロファイル）、動物・畜産（妊娠・産出クールダウン）、地質・地形プロファイルの基礎モジュールとNode単体テストを追加。Behavior Packのmanifest、プレイヤー参加時の状態初期化、`/scriptevent tfc:menu` で開く日本語UIを追加した。内部アイテムIDカタログと地形生成プロトタイプも追加済み。ただし、カタログはBedrock登録済みアイテムではなく、地形プロトタイプもMinecraftの地形生成へ未接続。完成アドオンやMinecraft実機検証済みビルドはまだ存在しない。
