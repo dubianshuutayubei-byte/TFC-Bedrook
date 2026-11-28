@@ -10,7 +10,7 @@
         "default": "textures/entity/tfc_fauna_atlas"
       },
       "geometry": {
-        "default": "geometry.tfc.fauna.turkey"
+        "default": "geometry.tfc.turkey"
       },
       "render_controllers": [
         "controller.render.tfc_fauna"

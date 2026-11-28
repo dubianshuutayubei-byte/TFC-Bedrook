@@ -10,7 +10,7 @@
         "default": "textures/entity/tfc_fauna_atlas"
       },
       "geometry": {
-        "default": "geometry.tfc.lobster"
+        "default": "geometry.tfc.fauna.lobster"
       },
       "render_controllers": [
         "controller.render.tfc_fauna"

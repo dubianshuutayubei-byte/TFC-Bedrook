@@ -2,7 +2,7 @@
   "format_version": "1.26.60",
   "minecraft:item": {
     "description": {
-      "identifier": "tfc:orca_spawn_egg",
+      "identifier": "tfc:smallmouth_bass_spawn_egg",
       "menu_category": {
         "category": "items"
       }
@@ -10,11 +10,11 @@
     "components": {
       "minecraft:icon": "tfc_deer",
       "minecraft:display_name": {
-        "value": "orcaの召喚アイテム"
+        "value": "コクチバスの召喚アイテム"
       },
       "minecraft:max_stack_size": 64,
       "minecraft:entity_placer": {
-        "entity": "tfc:orca"
+        "entity": "tfc:smallmouth_bass"
       }
     }
   }

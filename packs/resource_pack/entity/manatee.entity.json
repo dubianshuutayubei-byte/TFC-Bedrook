@@ -10,7 +10,7 @@
         "default": "textures/entity/tfc_fauna_atlas"
       },
       "geometry": {
-        "default": "geometry.tfc.manatee"
+        "default": "geometry.tfc.fauna.manatee"
       },
       "render_controllers": [
         "controller.render.tfc_fauna"

@@ -10,7 +10,7 @@
         "default": "textures/entity/tfc_fauna_atlas"
       },
       "geometry": {
-        "default": "geometry.tfc.fauna.yak"
+        "default": "geometry.tfc.yak"
       },
       "render_controllers": [
         "controller.render.tfc_fauna"
