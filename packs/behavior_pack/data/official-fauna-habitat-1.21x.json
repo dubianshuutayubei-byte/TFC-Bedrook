@@ -17,7 +17,8 @@
       "src/main/java/net/dries007/tfc/util/climate/OverworldClimateModel.java": "ed0c53f52b87be990269476e333184db00d474eb",
       "src/main/java/net/dries007/tfc/util/climate/ClimateModel.java": "200efb9bb06e47eeb901dad0dec8eed2175a96cf",
       "src/main/java/net/dries007/tfc/util/EnvironmentHelpers.java": "61bc2c05873251d9f45e60a87fb18c4b8ac42c6a",
-      "src/main/java/net/dries007/tfc/world/TFCChunkGenerator.java": "a325b293552dcdec15d91727ddb8facd8cdd39d9"
+      "src/main/java/net/dries007/tfc/world/TFCChunkGenerator.java": "a325b293552dcdec15d91727ddb8facd8cdd39d9",
+      "src/main/java/net/dries007/tfc/world/chunkdata/RegionChunkDataGenerator.java": "66606e74639f5552002443bbee5a3dffe779614b"
     }
   },
   "units": {
