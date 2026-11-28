@@ -11,7 +11,7 @@ const profiles=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/food-
 
 test("adult female dairy animals produce milk bottles with a per-animal cooldown",()=>{
   assert.match(runtime,/profile\.dairy&&held\.typeId==="minecraft:glass_bottle"/);
-  assert.match(runtime,/canProduce\(state,\{requiredFamiliarity:profile\.productFamiliarityMin\?\?0,cooldownDays:profile\.productCooldownDays\?\?1,currentDay,requiredSex:"female",minimumAgeDays:profile\.adultAgeDays,minimumHealth:40,maximumHunger:60,maximumThirst:60,maxUses:profile\.maxUses\?\?Infinity\}\)/);
+  assert.match(runtime,/canProduce\(state,\{requiredFamiliarity:minimumFamiliarity,cooldownDays:cooldown,currentDay,requiredSex:"female",minimumAgeDays:profile\.adultAgeDays,minimumHealth:40,maximumHunger:60,maximumThirst:60,maxUses:profile\.maxUses\?\?Infinity\}\)/);
   assert.match(runtime,/state\.sex!=="female"/);
   assert.match(runtime,/recordProduct\(state,currentDay,\{maxUses:profile\.maxUses\?\?Infinity,oldDayDelay:1\+Math\.floor\(Math\.random\(\)\*5\)\}\)/);
 });
