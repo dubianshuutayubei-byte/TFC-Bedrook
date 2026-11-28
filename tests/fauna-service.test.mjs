@@ -361,6 +361,15 @@ test("legacy distanceBelowSeaLevel profiles remain backward compatible",()=>{
  assert.ok(result.failures.includes("too_high_above_depth_limit"));
 });
 
+test("milk and wool production remain available during the scheduled old-age grace period",()=>{
+ const rules={requiredFamiliarity:0,cooldownDays:0,currentDay:12,minimumAgeDays:1,maxUses:3};
+ const scheduled={species:"cow",lifeStage:"adult",ageDays:200,health:100,hunger:0,thirst:0,familiarity:50,uses:3,oldDay:14,lastProductAt:12};
+ assert.equal(canProduce(scheduled,rules),true);
+ assert.equal(canProduce({...scheduled,currentDay:14}, {...rules,currentDay:14}),true);
+ assert.equal(canProduce({...scheduled,lifeStage:"old"},rules),false);
+ assert.equal(canProduce({...scheduled,oldDay:11},rules),false);
+});
+
 test("animal production rejects individuals that reached their lifetime use limit",()=>{
  const rules={requiredFamiliarity:0,cooldownDays:0,currentDay:20,minimumAgeDays:1,maxUses:3};
  const eligible={species:"cow",lifeStage:"adult",ageDays:200,health:100,hunger:0,thirst:0,familiarity:50,uses:2,lastProductAt:20};
