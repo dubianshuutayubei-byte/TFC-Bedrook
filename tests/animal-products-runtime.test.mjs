@@ -68,5 +68,5 @@ test("dairy collection reports familiarity, regrowth, and animal-condition block
  assert.match(runtime,/なつき度を.*以上にしてください/);
  assert.match(runtime,/次回の乳採取まであと/);
  assert.match(runtime,/乳畜の健康・空腹・渇きを回復させてください/);
- assert.match(runtime,/生涯の乳産出上限に達しています/);
+ assert.match(runtime,/老齢化し、乳を産出できません/);
 });
