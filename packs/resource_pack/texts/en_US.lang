@@ -16,3 +16,10 @@ item.tfc:crucible.name=Crucible
 item.tfc:anvil.name=Anvil
 item.tfc:deer_spawn_egg.name=Deer Spawn Egg
 entity.tfc:deer.name=Deer
+
+tile.tfc:firepit.name=Firepit
+tile.tfc:pit_kiln.name=Pit Kiln
+tile.tfc:crucible.name=Crucible
+tile.tfc:anvil.name=Anvil
+tile.tfc:farmland.name=TFC Farmland
+tile.tfc:crop.name=TFC Crop
