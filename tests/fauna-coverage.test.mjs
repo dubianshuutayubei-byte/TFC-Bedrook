@@ -49,3 +49,15 @@ test("species-specific work remains explicitly tracked instead of being marked c
   assert.ok(remaining.length > 0, "Species-specific implementation must not be silently marked complete");
   assert.ok(coverage.requiresSpeciesImplementation.length > 0);
 });
+
+test("custom freshwater fish expose Bedrock bucket capture", () => {
+  const archetypes = readJson("../packs/behavior_pack/data/fauna-archetypes.json");
+  const customFish = archetypes.species.filter(
+    (entry) => entry.archetype === "freshwater_fish" && entry.bedrockStatus === "custom_entity_scaffold"
+  );
+  assert.equal(customFish.length, 15);
+  for (const fish of customFish) {
+    const entity = readJson(`../packs/behavior_pack/entities/${fish.id}.json`);
+    assert.deepEqual(entity["minecraft:entity"]?.components?.["minecraft:bucketable"], {});
+  }
+});
