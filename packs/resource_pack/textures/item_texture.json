@@ -303,7 +303,7 @@
       "textures": "textures/items/tfc_pottery"
     },
     "tfc_wool": {
-      "textures": "textures/items/tfc_pottery"
+      "textures": "textures/items/tfc_wool"
     }
   }
 }
