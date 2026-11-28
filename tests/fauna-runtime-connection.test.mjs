@@ -217,3 +217,10 @@ test("custom TFC livestock alpaca, musk ox and yak use official reproduction and
  assert.match(runtime,/const birthEvent=entity\.typeId\.startsWith\("tfc:"\)\?"tfc:spawn_baby":"minecraft:entity_born"/);
  assert.match(runtime,/baby\.triggerEvent\("tfc:spawn_baby"\)/);
 });
+
+test("horse and donkey crossbreeding persists mule entity and species through birth",()=>{
+ assert.match(runtime,/isMulePair=\(state\.species==="horse"&&other\.species==="donkey"\)\|\|\(state\.species==="donkey"&&other\.species==="horse"\)/);
+ assert.match(runtime,/compatibleSpeciesPairs:\[\["horse","donkey"\]\],offspringSpecies:"mule",offspringEntityType:"minecraft:mule"/);
+ assert.match(runtime,/state\.pregnancyOffspringEntityType\?\?entity\.typeId/);
+ assert.match(runtime,/state\.pregnancyOffspringSpecies\?\?profile\.speciesId/);
+});
