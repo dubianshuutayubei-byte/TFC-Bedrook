@@ -64,9 +64,11 @@ async function station(player,id,block){
  const fuel=id==="anvil"?null:(held?FUELS[held.typeId]:null);
  if(fuel){if(!take(player,held.typeId,1)){player.sendMessage("§c燃料を取り出せません。");return;}writeWorldState(posKey(block,"fire"),addFuel(state,fuel));player.sendMessage("§a燃料投入: "+Math.round(fuel.duration/20)+"秒分");return;}
  const status=id==="anvil"?"\n金床は燃料を使いません。加熱済み素材を加工します。":"\n温度: "+Math.floor(state.temperatureC)+"°C\n燃料残り: "+Math.ceil(state.burnTicks/20)+"秒";
- const form=new ActionFormData().title(recipe.title).body(recipe.description+status+"\n必要温度: "+recipe.minimumTemperatureC+"°C\n所要時間: "+Math.ceil(recipe.durationTicks/20)+"秒").button("加工開始").button("閉じる");
+ const buttons=id==="anvil"?["加工開始","水で冷却","閉じる"]:["加工開始","閉じる"];const form=new ActionFormData().title(recipe.title).body(recipe.description+status+"\n必要温度: "+recipe.minimumTemperatureC+"°C\n所要時間: "+Math.ceil(recipe.durationTicks/20)+"秒").button(buttons[0]);if(id==="anvil")form.button(buttons[1]);form.button(buttons[buttons.length-1]);
  let response;try{response=await form.show(player);}catch{player.sendMessage("§c設備UIを開けませんでした。");return;}
- if(response.canceled||response.selection!==0)return;
+ if(response.canceled)return;
+ if(id==="anvil"&&response.selection===1){const heldNow=inv(player)?.getItem(player.selectedSlotIndex);let water=false;for(let x=-2;x<=2&&!water;x++)for(let z=-2;z<=2&&!water;z++)for(const y of [0,1]){try{const b=block.dimension.getBlock({x:block.location.x+x,y:block.location.y+y,z:block.location.z+z});if(b&&(b.typeId==="minecraft:water"||b.typeId==="minecraft:flowing_water")){water=true;break;}}catch{}}if(!water){player.sendMessage("§c近くに水が必要です。");return;}if(heldNow?.typeId!=="tfc:heated_copper_ingot"||!take(player,"tfc:heated_copper_ingot",1)){player.sendMessage("§c冷却する加熱済み銅インゴットを手に持ってください。");return;}give(player,"tfc:copper_ingot",1);player.sendMessage("§b銅インゴットを水で冷却しました。");return;}
+ if(response.selection!==0)return;
  if(id!=="anvil"&&!canProcessAtTemperature(state,recipe.minimumTemperatureC)){player.sendMessage("§c温度不足です。");return;}
  for(const [itemId,amount] of Object.entries(recipe.inputs)){if(count(player,itemId)<amount){player.sendMessage("§c材料不足: "+itemId+" ×"+amount);return;}}
  for(const [itemId,amount] of Object.entries(recipe.inputs)){if(!take(player,itemId,amount)){player.sendMessage("§c材料を取り出せませんでした。処理を中止しました。");return;}}
