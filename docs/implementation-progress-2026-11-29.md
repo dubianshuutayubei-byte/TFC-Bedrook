@@ -151,3 +151,22 @@
 ### CI
 - [Static Pack Validation](https://github.com/dubianshuutayubei-byte/TFC-Bedrook/actions/runs/46167253313)：成功。
 - Node.jsユニットテスト：439件成功、失敗0件。
+
+
+## 追加修正：給餌・繁殖判定をTFCの24時間時計へ統一
+
+公式 `TFCAnimalProperties.isHungry()` と `CommonAnimalBehavior` を照合し、カレンダー日付ベースだった給餌判定を修正。
+
+- 個体状態に小数日単位の `lastFedAt` を追加。旧セーブの `lastFedDay` からも読み替える。
+- 再給餌は前回給餌から24時間を超えた後に許可。日付変更だけでは再給餌できない。
+- 繁殖は両親が空腹でないことを条件にし、前回給餌から24時間以内かを小数日で判定。
+- 交配成立時は雌雄ともに「前回給餌を1日前」に更新し、TFC同様に次の給餌を要求。
+- 卵の産出条件から「当日給餌」を削除。TFCの卵産出は成体・なつき度・産出間隔などで判定し、手動給餌の当日条件を要求しない。
+- 巣箱の受精判定も日付一致ではなく、24時間以内の給餌状態を参照。
+- 手動給餌、ドロップ餌の摂取、採食処理で小数日タイムスタンプを保存。
+- 日本語説明書の「1ゲーム日1回」「当日給餌」表記を24時間基準へ訂正。
+
+### CI
+- [Static Pack Validation](https://github.com/dubianshuutayubei-byte/TFC-Bedrook/actions/runs/46167592795)：成功。
+- JSON/manifest検証、JavaScript構文検査、Node.jsユニットテスト成功。
+- Node.jsテスト：439件成功、失敗0件。
