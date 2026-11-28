@@ -15,6 +15,6 @@ test("custom deer has explicit juvenile and adult transition events",()=>{
 });
 test("deer birth creates a juvenile entity with inherited familiarity",()=>{
  assert.match(runtime,/baby\.triggerEvent\("tfc:spawn_baby"\)/);
- assert.match(runtime,/familiarity:inheritedFamiliarity,lifeStage:"juvenile"/);
+ assert.match(runtime,/saveAnimal\(baby,createAnimalOffspringState\(state,profile\.speciesId/);
  assert.match(runtime,/entity\.triggerEvent\("tfc:grow_up"\)/);
 });
