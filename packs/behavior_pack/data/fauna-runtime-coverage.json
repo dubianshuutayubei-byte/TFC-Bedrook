@@ -125,7 +125,7 @@
     "yak"
   ],
   "remainingCount": 55,
-  "caveat": "The official Java 1.21.x registry contains 78 fauna species including 16 freshwater fish. All 78 now have source-derived spawn placement types (29 in_water, 48 on_ground, 1 no_restrictions). Climate constraints remain source-backed for only 63 species from the v3.2.26 fauna JSON baseline; the other 15 intentionally have placement only and no invented climate values. The legacy 63-species implementation remains runtime tracked. The existing 40 custom entities still use shared archetype models and generic AI; exact per-species TFC behavior, diets, breeding, products, drops, genetics, spawn climate/density and in-game validation remain incomplete.",
+  "caveat": "The official Java 1.21.x BuiltinFauna data provider contains habitat constraints for all 78 registered fauna. These include temperature, groundwater (or average rainfall when ignoreRivers=true), forest density, seasonal months, depth, brightness and spawn chance. All 78 also have source-derived placement types. The older v3.2.26 fauna JSON baseline contains 63 climate profiles and is retained separately for provenance comparison. Bedrock's environment sampler does not yet supply all required TFC inputs (notably groundwater, rain variance and hemispheric month), so source-complete data must not be mistaken for runtime-complete natural spawning. The legacy 63-species implementation remains runtime tracked; species-specific AI, diet, breeding, products, drops, genetics and in-game validation remain incomplete.",
   "customEntitySpecies": [
     "alpaca",
     "black_bear",
@@ -254,5 +254,7 @@
     "no_restrictions": 1,
     "on_ground": 48
   },
-  "officialClimateProfileCount": 63
+  "officialClimateProfileCount": 78,
+  "legacyClimateJsonProfileCount": 63,
+  "officialHabitatProfileCount": 78
 }
