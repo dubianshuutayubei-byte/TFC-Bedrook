@@ -24,7 +24,7 @@ test("drying rack is passive and does not accept fuel",()=>{
  assert.match(runtime,/id==="drying_rack"\?"乾燥棚"/);
  assert.match(runtime,/常温・時間式乾燥です。燃料は必要ありません。/);
  const recipes=getStationRecipes("drying_rack");
- assert.equal(recipes.length,20);
+ assert.equal(recipes.length,21);
  assert.ok(recipes.every(r=>r.minimumTemperatureC===0&&r.durationTicks>=18000));
 });
 
