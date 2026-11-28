@@ -23,6 +23,7 @@
       "tfc:station_ui": {
         "station": "firepit"
       },
+      "tfc:heated_station_tick": {},
       "minecraft:display_name": "tile.tfc:firepit.name",
       "minecraft:light_emission": 10,
       "minecraft:tick": {
