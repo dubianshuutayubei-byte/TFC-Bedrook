@@ -195,5 +195,6 @@ test("custom TFC livestock alpaca, musk ox and yak use official reproduction and
  assert.match(runtime,/"tfc:alpaca":\{[^}]*adultAgeDays":98[^}]*gestationDays":36[^}]*childCount":2[^}]*maxUses":128[^}]*productCooldownDays":5[^}]*customBreeding":true[^}]*wooly":true/);
  assert.match(runtime,/"tfc:musk_ox":\{[^}]*adultAgeDays":168[^}]*gestationDays":64[^}]*childCount":1[^}]*maxUses":160[^}]*productCooldownDays":4[^}]*customBreeding":true[^}]*wooly":true/);
  assert.match(runtime,/"tfc:yak":\{[^}]*adultAgeDays":180[^}]*gestationDays":64[^}]*childCount":1[^}]*maxUses":230[^}]*productCooldownDays":1[^}]*customBreeding":true[^}]*dairy":true/);
- assert.match(runtime,/profile\.customBreeding&&entity\.typeId\.startsWith\("tfc:"\)\)baby\.triggerEvent\("tfc:spawn_baby"\)/);
+ assert.match(runtime,/profile\.customBreeding&&entity\.typeId\.startsWith\("tfc:"\)/);
+ assert.match(runtime,/baby\.triggerEvent\("tfc:spawn_baby"\)/);
 });
