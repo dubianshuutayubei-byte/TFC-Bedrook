@@ -199,6 +199,29 @@ function recoverPlayerStationJobs(player){
 function scheduleStationJob(key,dimension,location,delayTicks){
  system.runTimeout(()=>{try{completeStationJob(key,dimension,location);}catch(error){console.warn("[TFC-Bedrook] station job completion:",error);}},Math.max(1,Math.ceil(delayTicks)));
 }
+async function processQuernManually(player,block,recipe){
+ const held=inv(player)?.getItem(player.selectedSlotIndex);
+ if(held?.typeId!=="tfc:handstone"){player.sendMessage("§e上臼石を手に持って石臼を操作してください。");return;}
+ const missing=Object.entries(recipe.inputs).filter(([itemId,amount])=>count(player,itemId)<amount);
+ if(missing.length){player.sendMessage("§c材料不足: "+missing.map(([id,n])=>(ITEM_LABELS[id]??id)+" ×"+n).join("、"));return;}
+ for(let turn=0;turn<3;turn++){
+  const form=new ActionFormData().title("石臼").body("穀物を挽いています。\n手動回転: "+(turn+1)+" / 3\n上臼石を回してください。").button("上臼を回す").button("中止");
+  const response=await form.show(player);
+  if(response.canceled||response.selection!==0){player.sendMessage("§e粉挽きを中止しました。材料は消費されていません。");return;}
+  const current=inv(player)?.getItem(player.selectedSlotIndex);
+  if(current?.typeId!=="tfc:handstone"||block.typeId!=="tfc:quern"){player.sendMessage("§c石臼か上臼石が手元からなくなりました。");return;}
+ }
+ const removed=[];
+ for(const [itemId,amount] of Object.entries(recipe.inputs)){
+  if(!take(player,itemId,amount)){
+   for(const [restoreId,restoreAmount] of removed)give(player,restoreId,restoreAmount);
+   player.sendMessage("§c材料を取り出せませんでした。取り出し済みの材料は返却しました。");return;
+  }
+  removed.push([itemId,amount]);
+ }
+ for(const [itemId,amount] of Object.entries(recipe.outputs))give(player,itemId,amount);
+ player.sendMessage("§a粉挽き完了: "+recipe.title);
+}
 async function station(player,id,block){
  const recipes=getStationRecipes(id);if(!recipes.length)return;
  const key=stationJobKey(block),existing=readWorldState(key,null);
@@ -214,7 +237,7 @@ async function station(player,id,block){
  const held=inv(player)?.getItem(player.selectedSlotIndex),fuel=(id==="anvil"||id==="drying_rack"||id==="composter"||id==="quern")?null:(held?FUELS[held.typeId]:null);
  if(fuel){if(!take(player,held.typeId,1)){player.sendMessage("§c燃料を取り出せません。");return;}writeWorldState(posKey(block,"fire"),addFuel(state,fuel));player.sendMessage("§a燃料投入: "+Math.round(fuel.duration/20)+"秒分");return;}
  const tempLabels={unheated:"未加熱",warming:"暖まり中",hot:"熱い",very_hot:"非常に熱い",faint_red:"かすかな赤熱",dark_red:"暗赤色",bright_red:"明るい赤熱",orange:"橙熱",yellow:"黄色熱",yellow_white:"黄白色",white:"白熱",brilliant_white:"強白熱"};
- const body=recipes.map((r,i)=>{const inputs=Object.entries(r.inputs).map(([itemId,amount])=>(count(player,itemId)>=amount?"§a":"§c")+(ITEM_LABELS[itemId]??itemId)+" ×"+amount+"§r").join("、");const outputs=Object.entries(r.outputs).map(([itemId,amount])=>(ITEM_LABELS[itemId]??itemId)+" ×"+amount).join("、");return(i+1)+". "+r.title+"\n   "+(id==="drying_rack"||id==="composter"||id==="quern"?"所要時間 "+Math.ceil(r.durationTicks/20)+"秒":"必要温度 "+r.minimumTemperatureC+"°C / "+Math.ceil(r.durationTicks/20)+"秒")+"\n   材料: "+inputs+"\n   完成品: "+outputs;}).join("\n\n");
+ const body=recipes.map((r,i)=>{const inputs=Object.entries(r.inputs).map(([itemId,amount])=>(count(player,itemId)>=amount?"§a":"§c")+(ITEM_LABELS[itemId]??itemId)+" ×"+amount+"§r").join("、");const outputs=Object.entries(r.outputs).map(([itemId,amount])=>(ITEM_LABELS[itemId]??itemId)+" ×"+amount).join("、");return(i+1)+". "+r.title+"\n   "+(id==="quern"?"手動回転 3回":id==="drying_rack"||id==="composter"?"所要時間 "+Math.ceil(r.durationTicks/20)+"秒":"必要温度 "+r.minimumTemperatureC+"°C / "+Math.ceil(r.durationTicks/20)+"秒")+"\n   材料: "+inputs+"\n   完成品: "+outputs;}).join("\n\n");
  const heldTemperature=Number(held?.getDynamicProperty(ITEM_TEMPERATURE_KEY)??0);const status=id==="quern"?"\n\n上臼石を材料と一緒に投入し、手動回転で穀物を挽きます。燃料・熱源は不要です。":id==="drying_rack"?"\n\n常温・時間式乾燥です。燃料は必要ありません。":id==="composter"?"\n\n常温で約10日間発酵させます。緑の素材と茶色の素材が必要です。":id==="anvil"?"\n\n手持ち金属温度: "+Math.floor(heldTemperature)+"°C（"+tempLabels[classifyTemperature(heldTemperature)]+"）\n鍛造温度に達した加熱インゴットが必要です。":"\n\n現在温度: "+Math.floor(state.temperatureC)+"°C（"+tempLabels[classifyTemperature(state.temperatureC)]+"）\n燃料残り: "+Math.ceil(state.burnTicks/20)+"秒";
  const form=new ActionFormData().title(id==="anvil"?"金床":id==="drying_rack"?"乾燥棚":id==="composter"?"コンポスター":id==="quern"?"石臼":"加工設備").body(body+status);
  for(const recipe of recipes)form.button(recipe.title);
@@ -231,6 +254,7 @@ async function station(player,id,block){
  }
  if(response.selection>=recipes.length)return;
  const recipe=recipes[response.selection];
+ if(id==="quern"){await processQuernManually(player,block,recipe);return;}
  if(id==="anvil"){const requiredId=Object.keys(recipe.inputs)[0],heldNow=inv(player)?.getItem(player.selectedSlotIndex),profile=HEATED_METAL_PROFILES[requiredId],temperature=Number(heldNow?.getDynamicProperty(ITEM_TEMPERATURE_KEY)??0);if(!profile||heldNow?.typeId!==requiredId||temperature<profile.forgingTemperatureC){player.sendMessage("§c手持ちの加熱インゴットが鍛造温度に達していません。必要温度: "+(profile?.forgingTemperatureC??0)+"°C");return;}}
  if(recipe.alloyId){const matches=findMatchingAlloys(recipe.metalInputs,{recipes:[{id:recipe.alloyId,components:recipe.alloyComponents}]});if(!matches.includes(recipe.alloyId)){player.sendMessage("§c合金の配合比が範囲外です。");return;}}
  if(!["anvil","drying_rack","composter","quern"].includes(id)&&!canProcessAtTemperature(state,recipe.minimumTemperatureC)){player.sendMessage("§c温度不足です。");return;}
