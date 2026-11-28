@@ -1,0 +1,13 @@
+{
+  "format_version":"1.26.60",
+  "minecraft:recipe_shaped":{
+    "description":{"identifier":"tfc:quern"},
+    "tags":["crafting_table"],
+    "pattern":["SSS","CCC"],
+    "key":{
+      "S":{"item":"minecraft:smooth_stone"},
+      "C":{"item":"minecraft:cobblestone"}
+    },
+    "result":{"item":"tfc:quern","count":1}
+  }
+}
