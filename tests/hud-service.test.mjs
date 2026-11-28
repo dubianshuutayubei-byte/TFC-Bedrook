@@ -9,6 +9,27 @@ test("formats Japanese calendar data as a compact HUD line", () => {
   );
 });
 
+test("adds live hydration without inventing other needs", () => {
+  assert.equal(
+    formatSurvivalHud(
+      { year: 1, season: "winter", dayOfYearNumber: 1 },
+      { hydration: 76.4 }
+    ),
+    "§6TFC§r  第1年  §e冬§r  1日目  §b水分 76%§r"
+  );
+});
+
+test("clamps displayed hydration and rejects invalid values", () => {
+  assert.match(
+    formatSurvivalHud({ year: 1, season: "spring", dayOfYearNumber: 1 }, { hydration: 150 }),
+    /水分 100%/
+  );
+  assert.throws(
+    () => formatSurvivalHud({ year: 1, season: "spring", dayOfYearNumber: 1 }, { hydration: "bad" }),
+    TypeError
+  );
+});
+
 test("supports every season", () => {
   for (const [season, label] of Object.entries({
     winter: "冬", spring: "春", summer: "夏", autumn: "秋"
