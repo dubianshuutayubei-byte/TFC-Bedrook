@@ -7,7 +7,7 @@ export function ticksToHours(ticks) {
   return Number.isFinite(value) && value > 0 ? value / 72000 : 0;
 }
 const NUTRITION_CATEGORIES = Object.freeze(["grain", "fruit", "vegetables", "protein", "dairy"]);
-const PRESERVATION_MULTIPLIERS = Object.freeze({ none: 1, cooked: 0.8, salted: 0.35, pickled: 0.25, sealed: 0.5 });
+const PRESERVATION_MULTIPLIERS = Object.freeze({ none: 1, cooked: 0.8, dried: 0.2, salted: 0.35, pickled: 0.25, sealed: 0.5 });
 
 export function validateFoodDatabase(database) {
   if (!database || !Array.isArray(database.foods)) throw new TypeError("database.foods is required");
@@ -15,6 +15,9 @@ export function validateFoodDatabase(database) {
   for (const profile of database.foods) {
     if (!profile.id || ids.has(profile.id)) throw new Error(`missing or duplicate food id: ${profile.id}`);
     ids.add(profile.id);
+    if (profile.preservation !== undefined && !Object.hasOwn(PRESERVATION_MULTIPLIERS, profile.preservation)) {
+      throw new Error(`unknown preservation method in ${profile.id}: ${profile.preservation}`);
+    }
     for (const [category, amount] of Object.entries(profile.nutrition ?? {})) {
       if (!NUTRITION_CATEGORIES.includes(category)) throw new Error(`unknown nutrition category in ${profile.id}: ${category}`);
       if (!Number.isFinite(amount) || amount < 0 || amount > 100) throw new RangeError(`invalid nutrition amount: ${profile.id}.${category}`);
