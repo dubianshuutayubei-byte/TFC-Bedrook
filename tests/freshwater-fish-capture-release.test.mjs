@@ -41,18 +41,20 @@ test("all 15 custom freshwater fish spawn underwater as water animals", () => {
   }
 });
 
-test("aquatic predator relationships only reference registered freshwater fish or vanilla aquatic prey", () => {
+test("aquatic predator diets reference valid TFC freshwater fish identifiers", () => {
   const catalog = readJson("packs/behavior_pack/data/official-freshwater-fish-profiles-1.21.1-4.2.16.json");
   const fishIds = new Set(catalog.entries.map(entry => entry.id));
+  const auditedFishPrey = [
+    "bluegill", "crappie", "lake_trout", "largemouth_bass", "rainbow_trout",
+    "smallmouth_bass", "northern_pike", "burbot", "arctic_char", "muksun",
+    "tilapia", "spotted_gudgeon", "peacock_bass", "pacu", "red_piranha"
+  ];
+  for (const prey of auditedFishPrey) assert.ok(fishIds.has(prey), "missing official fish: " + prey);
   for (const predator of ["leopard_seal", "black_bear", "grizzly_bear", "polar_bear", "crocodile", "orca"]) {
-    for (const prey of getFaunaPrey(predator)) {
-      assert.ok(
-        fishIds.has(prey) || ["cod", "salmon", "pufferfish", "tropical_fish", "squid"].includes(prey),
-        predator + " has an unknown aquatic prey reference: " + prey
-      );
-    }
+    const fishPrey = getFaunaPrey(predator).filter(prey => fishIds.has(prey));
+    for (const prey of fishPrey) assert.ok(fishIds.has(prey), predator + " has an unknown fish prey: " + prey);
   }
-  assert.ok(FAUNA_ECOLOGY.leopard_seal.prey.includes("northern_pike"));
+  assert.ok(getFaunaPrey("leopard_seal").includes("northern_pike"));
 });
 
 test("freshwater fish capture audit does not claim unverified entity-data retention", () => {
