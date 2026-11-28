@@ -53,7 +53,8 @@ export function evaluateOfficialFaunaHabitat(profile,environment){
  checkRange("y",p.minElevation,p.maxElevation,"elevation_low","elevation_high");
  if(p.distanceBelowSeaLevel!==undefined&&p.distanceBelowSeaLevel!==-1){
   const y=number("y"),sea=number("seaLevel");
-  if(y===null||sea===null)missing.push("seaLevel");
+  if(y===null)missing.push("y");
+  if(sea===null)missing.push("seaLevel");
   else if(y>sea-p.distanceBelowSeaLevel)failures.push("water_too_shallow");
  }
  if(p.maxBrightness!==undefined&&p.maxBrightness!==-1){
@@ -61,7 +62,10 @@ export function evaluateOfficialFaunaHabitat(profile,environment){
   if(brightness===null)missing.push("brightness");
   else if(brightness>p.maxBrightness)failures.push("brightness_high");
  }
- if(p.solidGround===true&&e.solidGround!==true)failures.push("solid_ground_required");
+ if(p.solidGround===true){
+  if(e.solidGround===undefined||e.solidGround===null)missing.push("solidGround");
+  else if(e.solidGround!==true)failures.push("solid_ground_required");
+ }
  if(Array.isArray(p.months)&&p.months.length){
   if(e.month===undefined||e.month===null)missing.push("month");
   else if(!p.months.includes(String(e.month).toUpperCase()))failures.push("out_of_season");
