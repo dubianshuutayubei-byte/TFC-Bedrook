@@ -101,3 +101,10 @@ test("TFC dairy production supports adult female goats as well as cows",()=>{
  assert.match(runtime,/entity\.hasComponent\("minecraft:is_baby"\)\|\|\(profile\.adultAgeDays!=null&&state\.ageDays<profile\.adultAgeDays\)/);
  assert.match(runtime,/const products=profile\.dairy/);
 });
+
+test("animals do not consume dropped feed when they are not hungry",()=>{
+ const start=runtime.indexOf("function consumeDroppedAnimalFood");
+ const end=runtime.indexOf("function animalTick",start);
+ const pickup=runtime.slice(start,end);
+ assert.match(pickup,/if\(!profile\.feedItems\?\.length\|\|state\.hunger<25\)return state/);
+});
