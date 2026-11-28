@@ -538,6 +538,8 @@ export const OFFICIAL_LIVESTOCK_LIFECYCLE = Object.freeze({
   musk_ox: Object.freeze({ adultAgeDays: 168, maxUses: 160, gestationDays: 64, childCount: 1, productCooldownDays: 4 }),
   dromedary_camel: Object.freeze({ adultAgeDays: 80, maxUses: 60, gestationDays: 19, childCount: 1 }),
   bactrian_camel: Object.freeze({ adultAgeDays: 80, maxUses: 80, gestationDays: 24, childCount: 1, productCooldownDays: 7 }),
+  cat: Object.freeze({ adultAgeDays: 50, maxUses: 60, gestationDays: 19, childCount: 6 }),
+  dog: Object.freeze({ adultAgeDays: 50, maxUses: 60, gestationDays: 19, childCount: 2 }),
   chicken: Object.freeze({ adultAgeDays: 24, maxUses: 100, eggLayCooldownDays: 30 / 24, hatchDays: 8 }),
   duck: Object.freeze({ adultAgeDays: 32, maxUses: 72, eggLayCooldownDays: 32 / 24, hatchDays: 8 }),
   quail: Object.freeze({ adultAgeDays: 22, maxUses: 48, eggLayCooldownDays: 28 / 24, hatchDays: 8 })
