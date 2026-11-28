@@ -28,6 +28,8 @@ test("TFC oviparous runtime deposits eggs and hatches the matching custom specie
  assert.match(runtime,/const entityType="tfc:"\+egg\.species/);
  assert.match(runtime,/baby\.triggerEvent\("tfc:spawn_baby"\)/);
  assert.match(runtime,/advanceNestBoxIncubation\(stored,elapsed\)/);
+ assert.match(runtime,/getDynamicProperty\("tfc:hatched_egg_id"\)/);
+ assert.match(runtime,/setDynamicProperty\("tfc:hatched_egg_id",egg\.id\)/);
 });
 
 test("TFC chicken client entity reuses the vanilla chicken render assets",()=>{
