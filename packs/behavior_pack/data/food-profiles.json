@@ -323,6 +323,28 @@
       "hydration": 4,
       "baseDecayPerHour": 0.1,
       "cooked": false
+    },
+    {
+      "id": "salted_meat",
+      "displayName": "塩漬け肉",
+      "nutrition": {
+        "protein": 18
+      },
+      "hydration": 0,
+      "baseDecayPerHour": 0.025,
+      "cooked": false,
+      "preservation": "salted"
+    },
+    {
+      "id": "smoked_meat",
+      "displayName": "燻製肉",
+      "nutrition": {
+        "protein": 20
+      },
+      "hydration": 0,
+      "baseDecayPerHour": 0.05,
+      "cooked": true,
+      "preservation": "cooked"
     }
   ],
   "notes": [
