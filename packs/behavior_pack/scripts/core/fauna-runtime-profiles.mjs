@@ -94,7 +94,9 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
     ],
     "predationDamage": 6,
     "diurnal": true,
-    "territorial": true
+    "territorial": true,
+    "attackPlayers": true,
+    "pacifiesAfterHunt": true
   },
   "tfc:bluegill": {
     "speciesId": "bluegill",
@@ -274,7 +276,9 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
     ],
     "predationDamage": 6,
     "diurnal": false,
-    "territorial": true
+    "territorial": true,
+    "attackPlayers": true,
+    "pacifiesAfterHunt": true
   },
   "tfc:crappie": {
     "speciesId": "crappie",
@@ -385,7 +389,9 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
     ],
     "predationDamage": 6,
     "diurnal": false,
-    "territorial": true
+    "territorial": true,
+    "attackPlayers": true,
+    "pacifiesAfterHunt": true
   },
   "tfc:direwolf": {
     "speciesId": "direwolf",
@@ -448,7 +454,9 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
     ],
     "predationDamage": 6,
     "diurnal": false,
-    "territorial": true
+    "territorial": true,
+    "attackPlayers": true,
+    "pacifiesAfterHunt": true
   },
   "tfc:duck": {
     "speciesId": "duck",
@@ -581,7 +589,9 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
     ],
     "predationDamage": 6,
     "diurnal": true,
-    "territorial": true
+    "territorial": true,
+    "attackPlayers": true,
+    "pacifiesAfterHunt": true
   },
   "tfc:grouse": {
     "speciesId": "grouse",
@@ -698,7 +708,9 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
     ],
     "predationDamage": 6,
     "diurnal": false,
-    "territorial": true
+    "territorial": true,
+    "attackPlayers": true,
+    "pacifiesAfterHunt": true
   },
   "tfc:isopod": {
     "speciesId": "isopod",
@@ -857,7 +869,9 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
     ],
     "predationDamage": 6,
     "diurnal": false,
-    "territorial": true
+    "territorial": true,
+    "attackPlayers": true,
+    "pacifiesAfterHunt": true
   },
   "tfc:lobster": {
     "speciesId": "lobster",
@@ -1033,7 +1047,9 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "smallmouth_bass"
     ],
     "predationDamage": 9,
-    "territorial": false
+    "territorial": false,
+    "attackPlayers": false,
+    "pacifiesAfterHunt": false
   },
   "tfc:panther": {
     "speciesId": "panther",
@@ -1096,7 +1112,9 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
     ],
     "predationDamage": 6,
     "diurnal": false,
-    "territorial": true
+    "territorial": true,
+    "attackPlayers": true,
+    "pacifiesAfterHunt": true
   },
   "tfc:peafowl": {
     "speciesId": "peafowl",
@@ -1312,7 +1330,9 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
     ],
     "predationDamage": 6,
     "diurnal": false,
-    "territorial": true
+    "territorial": true,
+    "attackPlayers": true,
+    "pacifiesAfterHunt": true
   },
   "tfc:smallmouth_bass": {
     "speciesId": "smallmouth_bass",
@@ -1399,7 +1419,9 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
     ],
     "predationDamage": 6,
     "diurnal": false,
-    "territorial": true
+    "territorial": true,
+    "attackPlayers": true,
+    "pacifiesAfterHunt": true
   },
   "tfc:turkey": {
     "speciesId": "turkey",
