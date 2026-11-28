@@ -697,7 +697,24 @@ function animalTick(entity){
   }
  }catch{}
  try{const hp=entity.getComponent("minecraft:health");if(hp)hp.setCurrentValue(Math.max(0,hp.effectiveMax*state.health/100));}catch{}
- if(profile.customBreeding&&state.pregnancyDays>0){const result=advancePregnancy(state,elapsedAgeDays,profile.gestationDays);state=result.animal;if(result.birthReady){if(state.birthsRemaining===0){state.birthsRemaining=Math.max(1,Math.floor(profile.childCount??1));saveAnimal(entity,state);}while(state.birthsRemaining>0){try{const offset=Math.max(0,Math.floor(profile.childCount??1))-state.birthsRemaining;const baby=entity.dimension.spawnEntity(entity.typeId,{x:entity.location.x+1+(offset%2)*0.8,y:entity.location.y,z:entity.location.z+Math.floor(offset/2)*0.8});if(profile.customBreeding&&entity.typeId.startsWith("tfc:"))baby.triggerEvent("tfc:spawn_baby");state.birthsRemaining-=1;saveAnimal(entity,state);saveAnimal(baby,createAnimalOffspringState(state,profile.speciesId,Math.random()<0.5?"male":"female"));}catch(error){console.warn("[TFC-Bedrook] animal birth deferred:",error);break;}}if(state.birthsRemaining===0){state.pregnancyDays=0;state.fertilized=false;}}}
+ if(profile.customBreeding&&state.pregnancyDays>0){
+  const result=advancePregnancy(state,elapsedAgeDays,profile.gestationDays);state=result.animal;
+  if(result.birthReady){
+   if(state.birthsRemaining===0){state.birthsRemaining=Math.max(1,Math.floor(profile.childCount??1));saveAnimal(entity,state);}
+   while(state.birthsRemaining>0){
+    try{
+     const offset=Math.max(0,Math.floor(profile.childCount??1))-state.birthsRemaining;
+     const baby=entity.dimension.spawnEntity(entity.typeId,{x:entity.location.x+1+(offset%2)*0.8,y:entity.location.y,z:entity.location.z+Math.floor(offset/2)*0.8});
+     if(profile.customBreeding&&entity.typeId.startsWith("tfc:")){
+      try{baby.triggerEvent("tfc:spawn_baby");}catch(error){console.warn("[TFC-Bedrook] juvenile event unavailable for",profile.speciesId,error);}
+     }
+     state.birthsRemaining-=1;saveAnimal(entity,state);
+     saveAnimal(baby,createAnimalOffspringState(state,profile.speciesId,Math.random()<0.5?"male":"female"));
+    }catch(error){console.warn("[TFC-Bedrook] animal birth deferred:",error);break;}
+   }
+   if(state.birthsRemaining===0){state.pregnancyDays=0;state.fertilized=false;}
+  }
+ }
  if(["tfc:deer","tfc:duck","tfc:quail","tfc:alpaca","tfc:musk_ox","tfc:yak"].includes(entity.typeId)&&state.lifeStage==="juvenile"&&profile.adultAgeDays!=null&&state.ageDays>=profile.adultAgeDays){try{entity.triggerEvent("tfc:grow_up");state.lifeStage="adult";}catch(error){console.warn("[TFC-Bedrook] fauna growth event failed:",error);}}
  if(state.sex==="unknown")state.sex=Math.random()<0.5?"male":"female";
  state=layAnimalEgg(entity,state,profile,currentDay);
