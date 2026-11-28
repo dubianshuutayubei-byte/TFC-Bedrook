@@ -801,7 +801,7 @@ function shearAnimal(player,entity){
  if(!player||!entity)return;
  const profile=ANIMAL_PROFILES[entity.typeId];if(!profile?.wooly)return;
  const state=animalState(entity),currentDay=currentAnimalDay(),minimumFamiliarity=profile.productFamiliarityMin??16,cooldown=profile.productCooldownDays??7;
- if(state.lifeStage==="old"||state.uses>=(profile.maxUses??Infinity)){player.sendMessage("§eこの動物は生涯の羊毛産出上限に達しています。");return;}
+ if(state.lifeStage==="old"||(state.oldDay>=0&&currentDay>state.oldDay)){player.sendMessage("§eこの動物は老齢化し、羊毛を産出できません。");return;}
  if(state.ageDays<(profile.adultAgeDays??0)){player.sendMessage("§eこの動物はまだ成熟していません。");return;}
  if(state.familiarity<=minimumFamiliarity){player.sendMessage("§e羊毛を採取するには、なつき度を"+(minimumFamiliarity+1)+"以上にしてください。");return;}
  const remaining=cooldown-(currentDay-state.lastProductAt);
@@ -833,7 +833,7 @@ async function animalInteract(player,entity){
   if(state.sex!=="female"){player.sendMessage("§e乳を生産できるのはメスの乳畜だけです。");return;}
   if(entity.hasComponent("minecraft:is_baby")||(profile.adultAgeDays!=null&&state.ageDays<profile.adultAgeDays)){player.sendMessage("§eこの動物はまだ成長中です。");return;}
   const currentDay=currentAnimalDay(),minimumFamiliarity=profile.productFamiliarityMin??0,cooldown=profile.productCooldownDays??1;
-  if(state.lifeStage==="old"||state.uses>=(profile.maxUses??Infinity)){player.sendMessage("§eこの乳畜は生涯の乳産出上限に達しています。");return;}
+  if(state.lifeStage==="old"||(state.oldDay>=0&&currentDay>state.oldDay)){player.sendMessage("§eこの乳畜は老齢化し、乳を産出できません。");return;}
   if(state.familiarity<=minimumFamiliarity){player.sendMessage("§e乳を採取するには、なつき度を"+(minimumFamiliarity+1)+"以上にしてください。");return;}
   const remaining=cooldown-(currentDay-state.lastProductAt);
   if(state.uses>0&&remaining>0){player.sendMessage("§e次回の乳採取まであと"+remaining.toFixed(1)+"日です。");return;}
