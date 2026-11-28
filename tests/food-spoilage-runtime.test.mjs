@@ -5,7 +5,7 @@ import { resolve, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
-const ids=["raw_meat","cooked_meat","grain","maize","potato","vegetable","fruit","milk_bottle"];
+const ids=["raw_meat","cooked_meat","grain","maize","potato","vegetable","fruit","milk_bottle","dried_meat","dried_fruit","dried_vegetables"];
 test("inventory food freshness uses food decay service and persists per player",()=>{
  assert.match(runtime,/import \{ consumeFood, advanceFoodDecay \}/);
  assert.match(runtime,/function tickFoodFreshness\(player,nowTick\)/);
