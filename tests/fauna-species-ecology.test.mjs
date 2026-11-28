@@ -63,7 +63,7 @@ test("native fox, panda, rabbit and chicken adapters forage from world blocks",(
  assert.match(runtime,/"minecraft:rabbit":\{[^}]*grazeBlocks:\["minecraft:carrots","minecraft:dandelion"/);
  assert.match(runtime,/"minecraft:chicken":\{[^}]*grazeBlocks:\["minecraft:grass_block"/);
  assert.match(runtime,/forage\.typeId==="minecraft:sweet_berry_bush"/);
- assert.match(runtime,/forage\.typeId==="minecraft:bamboo"/);
+ assert.match(runtime,/"minecraft:bamboo","minecraft:carrots"/);
 });
 
 test("birds, herbivores and manatees have natural forage sources",()=>{
