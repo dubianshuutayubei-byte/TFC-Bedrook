@@ -1,13 +1,23 @@
 const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
 const finiteOr = (value, fallback) => Number.isFinite(Number(value)) ? Number(value) : fallback;
 
+export const SOIL_FERTILITY_MULTIPLIERS = Object.freeze({
+  entisol: 1.0, andisol: 1.1, fluvisol: 1.1, alfisol: 1.1,
+  mollisol: 1.2, podzol: 0.9, aridisol: 0.9, oxisol: 0.8
+});
+
+export function getSoilFertilityMultiplier(soilInput = {}) {
+  return SOIL_FERTILITY_MULTIPLIERS[soilInput.fertilityClass] ?? 1.0;
+}
+
 export function createSoilState(input = {}) {
   return {
     hydration: clamp(finiteOr(input.hydration, 50), 0, 100),
     nitrogen: clamp(finiteOr(input.nitrogen, 50), 0, 100),
     phosphorus: clamp(finiteOr(input.phosphorus, 50), 0, 100),
     potassium: clamp(finiteOr(input.potassium, 50), 0, 100),
-    soilType: input.soilType ?? "loam"
+    soilType: input.soilType ?? "loam",
+    fertilityClass: Object.hasOwn(SOIL_FERTILITY_MULTIPLIERS, input.fertilityClass) ? input.fertilityClass : "entisol"
   };
 }
 
@@ -18,20 +28,26 @@ export function evaluateCropGrowth(profile, environment, soilInput) {
   const maxT = finiteOr(profile.maxTemperatureC, Infinity);
   const minH = finiteOr(profile.minHydration, 0);
   const maxH = finiteOr(profile.maxHydration, 100);
-  const preferred = profile.preferredNutrient ?? "nitrogen";
-  const nutrient = soil[preferred] ?? 0;
   const failures = [];
   if (temperature < minT || temperature > maxT) failures.push("temperature");
   if (soil.hydration < minH || soil.hydration > maxH) failures.push("hydration");
-  if (nutrient < finiteOr(profile.minPreferredNutrient, 0)) failures.push(preferred);
-  if (profile.soilTypes && !profile.soilTypes.includes(soil.soilType)) failures.push("soilType");
 
+  const nutrientDemand = profile.nutrientDemand ??
+    (profile.preferredNutrient ? { [profile.preferredNutrient]: finiteOr(profile.optimalNutrient, 50) } : {});
+  const nutrientFactors = Object.entries(nutrientDemand).map(([nutrient, demand]) =>
+    clamp((soil[nutrient] ?? 0) / Math.max(1, finiteOr(demand, 1)), 0, 1)
+  );
+  const nutrientFactor = nutrientFactors.length
+    ? nutrientFactors.reduce((sum, value) => sum + value, 0) / nutrientFactors.length
+    : 1;
   const suitable = failures.length === 0;
-  const nutrientFactor = clamp(nutrient / Math.max(1, finiteOr(profile.optimalNutrient, 50)), 0, 1);
   const hydrationMidpoint = (minH + maxH) / 2;
-  const hydrationFactor = suitable ? clamp(1 - Math.abs(soil.hydration - hydrationMidpoint) / Math.max(1, maxH - minH), 0.5, 1) : 0;
-  const growthMultiplier = suitable ? (0.5 + 0.5 * nutrientFactor) * hydrationFactor : 0;
-  return { suitable, failures, growthMultiplier, soil };
+  const hydrationFactor = suitable
+    ? clamp(1 - Math.abs(soil.hydration - hydrationMidpoint) / Math.max(1, maxH - minH), 0.5, 1)
+    : 0;
+  // Nutrients improve growth rate but do not prevent growth when depleted.
+  const growthMultiplier = suitable ? (0.35 + 0.65 * nutrientFactor) * hydrationFactor : 0;
+  return { suitable, failures, growthMultiplier, nutrientFactor, soil };
 }
 
 export function advanceSoilHydration(soilInput, elapsedHours, {
@@ -77,7 +93,7 @@ export function calculateCropGrowthPoints(profile, environment, soilInput, elaps
 }
 
 export function advanceSoilDay(input,{rainfallMm=0,evaporation=2,nutrientLeaching=0.2}={}){const soil=createSoilState(input);soil.hydration=clamp(soil.hydration+Math.max(0,finiteOr(rainfallMm,0))-Math.max(0,finiteOr(evaporation,0)),0,100);for(const key of ["nitrogen","phosphorus","potassium"])soil[key]=clamp(soil[key]-Math.max(0,finiteOr(nutrientLeaching,0)),0,100);return soil;}
-export function applySoilCompost(input,{nitrogen=15,phosphorus=8,potassium=12}={}){return applyFertilizer(input,{nitrogen,phosphorus,potassium});}
+export function applySoilCompost(input,{nitrogen=20,phosphorus=0,potassium=20}={}){return applyFertilizer(input,{nitrogen,phosphorus,potassium});}
 
 const SOIL_TYPE_BY_BLOCK = Object.freeze({
   "minecraft:clay": "clay",
