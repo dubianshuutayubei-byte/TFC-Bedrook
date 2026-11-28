@@ -74,6 +74,22 @@
               "value": "tfc_livestock"
             },
             "max_dist": 16
+          },
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "tfc_fish"
+            },
+            "max_dist": 16
+          },
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "tfc_shellfish"
+            },
+            "max_dist": 12
           }
         ]
       },
