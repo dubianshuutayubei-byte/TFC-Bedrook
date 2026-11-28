@@ -1,7 +1,15 @@
 /** Canonical runtime station recipe registry. */
 export const PROCESSING_RECIPES = Object.freeze({
  firepit:Object.freeze([
-  Object.freeze({id:"tfc:cooked_meat",station:"firepit",title:"肉を焼く",description:"生肉を加熱調理します。",inputs:Object.freeze({"tfc:raw_meat":1}),outputs:Object.freeze({"tfc:cooked_meat":1}),minimumTemperatureC:180,durationTicks:100})
+  Object.freeze({id:"tfc:cooked_meat",station:"firepit",title:"肉を焼く",description:"生肉を加熱調理します。",inputs:Object.freeze({"tfc:raw_meat":1}),outputs:Object.freeze({"tfc:cooked_meat":1}),minimumTemperatureC:180,durationTicks:100}),
+  Object.freeze({id:"tfc:bread",station:"firepit",title:"パンを焼く",description:"水と混ぜた穀物粉の生地を焼きます。",inputs:Object.freeze({"tfc:dough":1}),outputs:Object.freeze({"tfc:bread":1}),minimumTemperatureC:180,durationTicks:300})
+ ]),
+ quern:Object.freeze([
+  Object.freeze({id:"tfc:flour_from_grain",station:"quern",title:"穀物を挽く",description:"穀物を粉にします。上臼石は加工後に戻ります。",inputs:Object.freeze({"tfc:grain":1,"tfc:handstone":1}),outputs:Object.freeze({"tfc:flour":1,"tfc:handstone":1}),minimumTemperatureC:0,durationTicks:200}),
+  Object.freeze({id:"tfc:flour_from_maize",station:"quern",title:"トウモロコシを挽く",description:"トウモロコシを粉にします。上臼石は加工後に戻ります。",inputs:Object.freeze({"tfc:maize":1,"tfc:handstone":1}),outputs:Object.freeze({"tfc:flour":1,"tfc:handstone":1}),minimumTemperatureC:0,durationTicks:200}),
+  Object.freeze({id:"tfc:flour_from_barley",station:"quern",title:"大麦を挽く",description:"大麦を粉にします。上臼石は加工後に戻ります。",inputs:Object.freeze({"tfc:barley":1,"tfc:handstone":1}),outputs:Object.freeze({"tfc:flour":1,"tfc:handstone":1}),minimumTemperatureC:0,durationTicks:200}),
+  Object.freeze({id:"tfc:flour_from_oat",station:"quern",title:"オーツ麦を挽く",description:"オーツ麦を粉にします。上臼石は加工後に戻ります。",inputs:Object.freeze({"tfc:oat":1,"tfc:handstone":1}),outputs:Object.freeze({"tfc:flour":1,"tfc:handstone":1}),minimumTemperatureC:0,durationTicks:200}),
+  Object.freeze({id:"tfc:flour_from_rye",station:"quern",title:"ライ麦を挽く",description:"ライ麦を粉にします。上臼石は加工後に戻ります。",inputs:Object.freeze({"tfc:rye":1,"tfc:handstone":1}),outputs:Object.freeze({"tfc:flour":1,"tfc:handstone":1}),minimumTemperatureC:0,durationTicks:200})
  ]),
  pit_kiln:Object.freeze([
   Object.freeze({id:"tfc:fired_vessel",station:"pit_kiln",title:"土器を焼く",description:"粘土容器を焼成します。",inputs:Object.freeze({"tfc:clay_vessel":1}),outputs:Object.freeze({"tfc:fired_vessel":1}),minimumTemperatureC:550,durationTicks:600}),
