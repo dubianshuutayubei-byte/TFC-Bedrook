@@ -574,7 +574,7 @@ function nearbyBreedingPair(block,entityType){
   for(const entity of nearby){
    let state=animalState(entity);
    if(state.sex==="unknown"){state.sex=Math.random()<0.5?"male":"female";saveAnimal(entity,state);}
-   if(state.lifeStage!=="adult"||state.ageDays<(profile?.adultAgeDays??0))continue;
+   if(state.lifeStage!=="adult"||state.ageDays<(profile?.adultAgeDays??0)||state.familiarity<30||state.lastFedDay<world.getDay())continue;
    if(state.sex==="male")male=true;
    if(state.sex==="female")female=true;
   }
@@ -751,7 +751,7 @@ async function animalInteract(player,entity){
  const held=inv(player)?.getItem(player.selectedSlotIndex);
  if(!held){
   const names=Object.fromEntries(Object.entries(ANIMAL_PROFILES).map(([id,p])=>[id,p.displayName]));
-  const products=profile.dairy?(entity.typeId==="minecraft:goat"?"\n産出: 山羊乳（メスの成体・健康/空腹/渇き条件を満たすと空き瓶で採取、1日間隔）":"\n産出: 牛乳（メスの成体・健康/空腹/渇き条件を満たすと空き瓶で採取、1日間隔）"):entity.typeId==="minecraft:sheep"?"\n産出: 羊毛（TFC式のハサミ操作、7日間隔）\n再生待ち: "+(state.uses>0?Math.max(0,profile.productCooldownDays-(currentAnimalDay()-state.lastProductAt)).toFixed(1)+"日":"なし"):profile.eggSpecies?"\n産出: 卵（巣箱へ自動産卵）\n産卵間隔: "+(profile.eggLayCooldownDays??0)+"日":" ";
+  const products=profile.dairy?(entity.typeId==="minecraft:goat"?"\n産出: 山羊乳（メスの成体・健康/空腹/渇き条件を満たすと空き瓶で採取、1日間隔）":"\n産出: 牛乳（メスの成体・健康/空腹/渇き条件を満たすと空き瓶で採取、1日間隔）"):entity.typeId==="minecraft:sheep"?"\n産出: 羊毛（TFC式のハサミ操作、7日間隔）\n再生待ち: "+(state.uses>0?Math.max(0,profile.productCooldownDays-(currentAnimalDay()-state.lastProductAt)).toFixed(1)+"日":"なし"):profile.eggSpecies?"\n産出: 卵（巣箱へ自動産卵）\n産卵間隔: "+(profile.eggLayCooldownDays??0)+"日":"";
   const usesInfo=profile.productCooldownDays!=null||profile.eggLayCooldownDays!=null?"\n産出回数: "+state.uses+"/"+profile.maxUses+(state.lifeStage==="old"?"（老齢）":state.oldDay>=0?"（老齢化予定: "+state.oldDay+"日）":""):"";\n  const status="性別: "+(state.sex==="female"?"メス":"オス")+"\n年齢: "+state.ageDays.toFixed(1)+"日 / 成熟目安: "+(profile.adultAgeDays==null?"未設定":profile.adultAgeDays+"日")+"\n空腹: "+Math.floor(state.hunger)+" / 100\n渇き: "+Math.floor(state.thirst)+" / 100\n健康: "+Math.floor(state.health)+" / 100\nなつき度: "+Math.floor(state.familiarity)+" / 100"+usesInfo+(state.pregnancyDays>0?"\n妊娠: "+Math.floor(state.pregnancyDays)+"日":"")+products;
   const feedHint=profile.feedItems.length?"給餌可能: "+profile.feedItems.map(id=>ITEM_LABELS[id]??id).join(" / ")+"\n餌を手に持ってもう一度操作してください。":"この種への手動給餌は未対応です。";
   const form=new ActionFormData().title((names[entity.typeId]??entity.typeId)+"の状態").body(status+"\n\n"+feedHint).button("閉じる");
