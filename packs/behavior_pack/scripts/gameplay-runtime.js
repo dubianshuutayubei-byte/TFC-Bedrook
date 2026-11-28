@@ -37,7 +37,8 @@ const key=posKey(block,"fire"),state=createFireState(readWorldState(key,{}));
 const held=inv(player)?.getItem(player.selectedSlotIndex);
 const fuel=id==="anvil"?null:(held?FUELS[held.typeId]:null);
 if(fuel){if(!take(player,held.typeId,1)){player.sendMessage("§c燃料を取り出せません。");return;}writeWorldState(key,addFuel(state,fuel));player.sendMessage("§a燃料を投入しました。燃焼時間: "+Math.round(fuel.duration/20)+"秒");return;}
-const form=new ActionFormData().title(recipe.title).body(recipe.description+"\n\n温度: "+Math.floor(state.temperatureC)+"°C\n燃料残り: "+Math.ceil(state.burnTicks/20)+"秒\n必要温度: "+recipe.minTemp+"°C").button("加工を開始").button("閉じる");
+const stationStatus=id==="anvil"?"\\n金床は加熱済み素材を加工します。":"\\n温度: "+Math.floor(state.temperatureC)+"°C\\n燃料残り: "+Math.ceil(state.burnTicks/20)+"秒\\n必要温度: "+recipe.minTemp+"°C";
+const form=new ActionFormData().title(recipe.title).body(recipe.description+stationStatus).button("加工を開始").button("閉じる");
 let response;try{response=await form.show(player);}catch(e){player.sendMessage("§c設備UIを開けませんでした。");return;}
 if(response.canceled||response.selection!==0)return;
 if(id!=="anvil"&&!canProcessAtTemperature(state,recipe.minTemp)){player.sendMessage("§c温度不足です。燃料を追加して加熱してください。");return;}
