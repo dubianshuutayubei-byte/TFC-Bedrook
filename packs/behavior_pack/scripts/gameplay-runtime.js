@@ -128,10 +128,10 @@ const ANIMAL_PROFILES={
 for(const [id,profile] of Object.entries(CUSTOM_FAUNA_PROFILES))ANIMAL_PROFILES[id]={...ANIMAL_PROFILES[id],...profile};
 for(const id of ["minecraft:cow","minecraft:sheep","minecraft:pig","minecraft:goat","minecraft:horse","minecraft:donkey"])if(ANIMAL_PROFILES[id]?.gestationDays)ANIMAL_PROFILES[id].customBreeding=true;
 for(const [id,override] of Object.entries({
- "minecraft:wolf":{predatorDiet:["rabbit","fox","turtle","penguin","frog","deer","bongo","panda","grouse","pheasant","turkey","ocelot","caribou","gazelle","peafowl","pig","cow","goat","yak","alpaca","sheep","musk_ox","chicken","duck","quail","horse","mule","donkey"],predationDamage:5},
- "minecraft:polar_bear":{predatorDiet:["rabbit","fox","turtle","penguin","frog","deer","bongo","panda","grouse","pheasant","turkey","ocelot","caribou","gazelle","peafowl","pig","cow","goat","yak","alpaca","sheep","musk_ox","chicken","duck","quail","horse","mule","donkey"],predationDamage:8},
- "minecraft:ocelot":{predatorDiet:["rabbit","fox","turtle","penguin","frog","deer","bongo","panda","grouse","pheasant","turkey","ocelot","caribou","gazelle","peafowl","pig","cow","goat","yak","alpaca","sheep","musk_ox","chicken","duck","quail","horse","mule","donkey"],predationDamage:3},
- "minecraft:dolphin":{predatorDiet:["isopod","lobster","crayfish","cod","tropical_fish","horseshoe_crab","bluegill","crappie","lake_trout","largemouth_bass","rainbow_trout","salmon","smallmouth_bass"],predationDamage:7},
+ "minecraft:wolf":{territorial:true,predatorDiet:["rabbit","fox","turtle","penguin","frog","deer","bongo","panda","grouse","pheasant","turkey","ocelot","caribou","gazelle","peafowl","pig","cow","goat","yak","alpaca","sheep","musk_ox","chicken","duck","quail","horse","mule","donkey"],predationDamage:5},
+ "minecraft:polar_bear":{territorial:true,predatorDiet:["rabbit","fox","turtle","penguin","frog","deer","bongo","panda","grouse","pheasant","turkey","ocelot","caribou","gazelle","peafowl","pig","cow","goat","yak","alpaca","sheep","musk_ox","chicken","duck","quail","horse","mule","donkey"],predationDamage:8},
+ "minecraft:ocelot":{territorial:true,predatorDiet:["rabbit","fox","turtle","penguin","frog","deer","bongo","panda","grouse","pheasant","turkey","ocelot","caribou","gazelle","peafowl","pig","cow","goat","yak","alpaca","sheep","musk_ox","chicken","duck","quail","horse","mule","donkey"],predationDamage:3},
+ "minecraft:dolphin":{territorial:false,predatorDiet:["isopod","lobster","crayfish","cod","tropical_fish","horseshoe_crab","bluegill","crappie","lake_trout","largemouth_bass","rainbow_trout","salmon","smallmouth_bass"],predationDamage:7},
  "tfc:orca":{predatorDiet:["isopod","lobster","crayfish","cod","tropical_fish","horseshoe_crab","bluegill","crappie","lake_trout","largemouth_bass","rainbow_trout","salmon","smallmouth_bass"],predationDamage:9}
 }))ANIMAL_PROFILES[id]={...ANIMAL_PROFILES[id],...override};
 const inv=p=>p.getComponent("minecraft:inventory")?.container;
@@ -599,9 +599,9 @@ function tickPredation(entity,profile,state,currentDay){
  // A successful hunt pacifies TFC predators for half a day.
  if(state.lastHuntAt>=0&&currentDay-state.lastHuntAt<=0.5)return state;
  if(profile.diurnal!==undefined){const daytime=world.getTimeOfDay()>=0&&world.getTimeOfDay()<12000;if(daytime!==profile.diurnal)return state;}
- if(state.homeX===null||state.homeY===null||state.homeZ===null){state.homeX=entity.location.x;state.homeY=entity.location.y;state.homeZ=entity.location.z;}
- const homeDx=entity.location.x-state.homeX,homeDy=entity.location.y-state.homeY,homeDz=entity.location.z-state.homeZ;
- if(homeDx*homeDx+homeDy*homeDy+homeDz*homeDz>6400)return state;
+ if(profile.territorial){if(state.homeX===null||state.homeY===null||state.homeZ===null){state.homeX=entity.location.x;state.homeY=entity.location.y;state.homeZ=entity.location.z;}
+  const homeDx=entity.location.x-state.homeX,homeDy=entity.location.y-state.homeY,homeDz=entity.location.z-state.homeZ;
+  if(homeDx*homeDx+homeDy*homeDy+homeDz*homeDz>6400)return state;}
  if(currentDay-state.lastPlayerAttackAt>=0.05){
   try{for(const player of entity.dimension.getEntities({type:"minecraft:player",location:entity.location,maxDistance:2.2})){
    if(typeof player.applyDamage==="function"){player.applyDamage(profile.playerAttackDamage??3);state.lastPlayerAttackAt=currentDay;break;}
