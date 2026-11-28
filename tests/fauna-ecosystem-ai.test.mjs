@@ -42,3 +42,5 @@ test("deer is included in the shared prey ecosystem family",()=>{
  assert.ok(deer);
  assert.ok(familyOf(deer).includes("tfc_prey"));
 });
+
+test("leopard seal ecology follows the official TFC small-fish prey tag",()=>{const prey=getFaunaPrey("leopard_seal");for(const id of ["cod","pufferfish","tropical_fish","salmon","rainbow_trout","lake_trout","bluegill","largemouth_bass","smallmouth_bass","crappie","arctic_char","burbot","peacock_bass","pacu","red_piranha","northern_pike","muksun","tilapia","spotted_gudgeon"])assert.ok(prey.includes(id),id);});
