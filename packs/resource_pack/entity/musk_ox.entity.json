@@ -10,7 +10,7 @@
         "default": "textures/entity/tfc_fauna_atlas"
       },
       "geometry": {
-        "default": "geometry.tfc.fauna.musk_ox"
+        "default": "geometry.tfc.musk_ox"
       },
       "render_controllers": [
         "controller.render.tfc_fauna"

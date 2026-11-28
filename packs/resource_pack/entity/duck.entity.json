@@ -10,7 +10,7 @@
         "default": "textures/entity/tfc_fauna_atlas"
       },
       "geometry": {
-        "default": "geometry.tfc.duck"
+        "default": "geometry.tfc.fauna.duck"
       },
       "render_controllers": [
         "controller.render.tfc_fauna"

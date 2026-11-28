@@ -3,12 +3,17 @@
   "minecraft:spawn_rules": {
     "description": {
       "identifier": "tfc:direwolf",
-      "population_control": "monster"
+      "population_control": "animal"
     },
     "conditions": [
       {
+        "minecraft:brightness_filter": {
+          "min": 0,
+          "max": 15,
+          "adjust_for_weather": true
+        },
         "minecraft:weight": {
-          "default": 2
+          "default": 1
         },
         "minecraft:herd": {
           "min_size": 1,
@@ -18,28 +23,22 @@
           "any_of": [
             {
               "test": "has_biome_tag",
-              "value": "taiga"
-            },
-            {
-              "test": "has_biome_tag",
-              "value": "snowy"
-            },
-            {
-              "test": "has_biome_tag",
-              "value": "mountain"
-            },
-            {
-              "test": "has_biome_tag",
+              "operator": "==",
               "value": "forest"
+            },
+            {
+              "test": "has_biome_tag",
+              "operator": "==",
+              "value": "plains"
+            },
+            {
+              "test": "has_biome_tag",
+              "operator": "==",
+              "value": "taiga"
             }
           ]
         },
-        "minecraft:spawns_on_surface": {},
-        "minecraft:brightness_filter": {
-          "min": 0,
-          "max": 15,
-          "adjust_for_weather": true
-        }
+        "minecraft:spawns_on_surface": {}
       }
     ]
   }

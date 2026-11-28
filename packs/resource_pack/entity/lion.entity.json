@@ -10,7 +10,7 @@
         "default": "textures/entity/tfc_fauna_atlas"
       },
       "geometry": {
-        "default": "geometry.tfc.fauna.lion"
+        "default": "geometry.tfc.lion"
       },
       "render_controllers": [
         "controller.render.tfc_fauna"

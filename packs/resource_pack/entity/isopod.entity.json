@@ -10,7 +10,7 @@
         "default": "textures/entity/tfc_fauna_atlas"
       },
       "geometry": {
-        "default": "geometry.tfc.isopod"
+        "default": "geometry.tfc.fauna.isopod"
       },
       "render_controllers": [
         "controller.render.tfc_fauna"

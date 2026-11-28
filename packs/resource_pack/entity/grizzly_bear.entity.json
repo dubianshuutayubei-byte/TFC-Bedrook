@@ -10,7 +10,7 @@
         "default": "textures/entity/tfc_fauna_atlas"
       },
       "geometry": {
-        "default": "geometry.tfc.grizzly_bear"
+        "default": "geometry.tfc.fauna.grizzly_bear"
       },
       "render_controllers": [
         "controller.render.tfc_fauna"

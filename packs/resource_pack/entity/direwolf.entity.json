@@ -10,7 +10,7 @@
         "default": "textures/entity/tfc_fauna_atlas"
       },
       "geometry": {
-        "default": "geometry.tfc.direwolf"
+        "default": "geometry.tfc.fauna.direwolf"
       },
       "render_controllers": [
         "controller.render.tfc_fauna"

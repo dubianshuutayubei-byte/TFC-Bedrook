@@ -3,39 +3,37 @@
   "minecraft:spawn_rules": {
     "description": {
       "identifier": "tfc:horseshoe_crab",
-      "population_control": "animal"
+      "population_control": "water_animal"
     },
     "conditions": [
       {
+        "minecraft:brightness_filter": {
+          "min": 0,
+          "max": 15,
+          "adjust_for_weather": true
+        },
         "minecraft:weight": {
           "default": 4
         },
         "minecraft:herd": {
-          "min_size": 2,
-          "max_size": 4
+          "min_size": 3,
+          "max_size": 8
         },
         "minecraft:biome_filter": {
           "any_of": [
             {
               "test": "has_biome_tag",
+              "operator": "==",
               "value": "ocean"
             },
             {
               "test": "has_biome_tag",
+              "operator": "==",
               "value": "river"
-            },
-            {
-              "test": "has_biome_tag",
-              "value": "beach"
             }
           ]
         },
-        "minecraft:spawns_underwater": {},
-        "minecraft:brightness_filter": {
-          "min": 0,
-          "max": 15,
-          "adjust_for_weather": true
-        }
+        "minecraft:spawns_underwater": {}
       }
     ]
   }

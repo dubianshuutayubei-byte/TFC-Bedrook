@@ -10,7 +10,7 @@
         "default": "textures/entity/tfc_fauna_atlas"
       },
       "geometry": {
-        "default": "geometry.tfc.grouse"
+        "default": "geometry.tfc.fauna.grouse"
       },
       "render_controllers": [
         "controller.render.tfc_fauna"

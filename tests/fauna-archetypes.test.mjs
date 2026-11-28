@@ -31,7 +31,7 @@ test("all 63 fauna are runtime-tracked while 40 still need species-specific TFC 
  const remaining=new Set(coverage.requiresSpeciesImplementation);
  assert.equal(tracked.size,63);
  assert.equal(remaining.size,40);
- for(const id of tracked){assert.ok(roster.species.some(x=>x.id===id),id);assert.ok(runtime.includes('speciesId:"'+id+'"'),id);}
+ for(const id of tracked){assert.ok(roster.species.some(x=>x.id===id),id);assert.ok(runtime.includes('"speciesId":"'+id+'"')||runtime.includes('speciesId:"'+id+'"'),id);}
  for(const id of remaining){assert.ok(roster.species.some(x=>x.id===id),id);assert.ok(tracked.has(id),id);}
  for(const x of roster.species)assert.ok(tracked.has(x.id),x.id);
 });

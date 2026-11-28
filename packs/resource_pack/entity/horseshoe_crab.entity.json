@@ -10,7 +10,7 @@
         "default": "textures/entity/tfc_fauna_atlas"
       },
       "geometry": {
-        "default": "geometry.tfc.horseshoe_crab"
+        "default": "geometry.tfc.fauna.horseshoe_crab"
       },
       "render_controllers": [
         "controller.render.tfc_fauna"
