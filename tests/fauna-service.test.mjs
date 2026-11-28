@@ -422,3 +422,16 @@ test("predator-prey runtime uses per-animal throttling and bounded local searche
  assert.match(section,/getFaunaPrey\(species\)/);
  assert.match(section,/getFaunaPredators\(species\)/);
 });
+
+test("breeding cooldown does not consume lifetime milk wool or egg production uses",()=>{
+ const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
+ const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
+ const start=runtime.indexOf("if(profile.customBreeding&&state.sex===\"female\"");
+ const end=runtime.indexOf("\n saveAnimal(entity,state);",start);
+ assert.ok(start>=0&&end>start,"custom breeding block must exist");
+ const section=runtime.slice(start,end);
+ assert.match(section,/other\.lastBreedAt=breedingTime/);
+ assert.match(section,/other\.lastFedDay=breedingDay-1/);
+ assert.doesNotMatch(section,/other\.uses\s*=/,"breeding must not consume product lifetime uses");
+ assert.doesNotMatch(section,/other\.oldDay\s*=/,"breeding must not trigger product old-age limits");
+});
