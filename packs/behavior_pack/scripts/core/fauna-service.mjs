@@ -1,80 +1,13 @@
-const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
-const finiteOr = (value, fallback) => Number.isFinite(Number(value)) ? Number(value) : fallback;
-
-export function createAnimalState(input = {}) {
-  return {
-    species: input.species ?? "unknown",
-    sex: input.sex ?? "unknown",
-    ageDays: Math.max(0, finiteOr(input.ageDays, 0)),
-    familiarity: clamp(finiteOr(input.familiarity, 0), 0, 100),
-    pregnancyDays: Math.max(0, finiteOr(input.pregnancyDays, 0)),
-    health: clamp(finiteOr(input.health, 100), 0, 100),
-    lastProductAt: Math.max(0, finiteOr(input.lastProductAt, 0))
-  };
-}
-
-export function evaluateHabitat(profile, environment) {
-  const failures = [];
-  if (profile.minTemperatureC != null && environment.temperatureC < profile.minTemperatureC) failures.push("temperature_low");
-  if (profile.maxTemperatureC != null && environment.temperatureC > profile.maxTemperatureC) failures.push("temperature_high");
-  if (profile.minRainfall != null && environment.rainfall < profile.minRainfall) failures.push("rainfall_low");
-  if (profile.maxRainfall != null && environment.rainfall > profile.maxRainfall) failures.push("rainfall_high");
-  if (profile.waterType && profile.waterType !== environment.waterType) failures.push("waterType");
-  if (profile.terrain && !profile.terrain.includes(environment.terrain)) failures.push("terrain");
-  return { suitable: failures.length === 0, failures };
-}
-
-export function feedAnimal(input, familiarityGain = 5, healthGain = 0) {
-  const animal = createAnimalState(input);
-  animal.familiarity = clamp(animal.familiarity + Math.max(0, finiteOr(familiarityGain, 0)), 0, 100);
-  animal.health = clamp(animal.health + Math.max(0, finiteOr(healthGain, 0)), 0, 100);
-  return animal;
-}
-
-export function advanceAnimalAge(input, elapsedDays) {
-  const animal = createAnimalState(input);
-  animal.ageDays += Math.max(0, finiteOr(elapsedDays, 0));
-  return animal;
-}
-
-export function canBreed(firstInput, secondInput, profile) {
-  const a = createAnimalState(firstInput);
-  const b = createAnimalState(secondInput);
-  const adultAge = finiteOr(profile.adultAgeDays, 0);
-  const requiredFamiliarity = finiteOr(profile.requiredFamiliarity, 0);
-  const validSexPair = (a.sex === "male" && b.sex === "female") || (a.sex === "female" && b.sex === "male");
-  return a.species === b.species && validSexPair &&
-    a.ageDays >= adultAge && b.ageDays >= adultAge &&
-    a.health > 0 && b.health > 0 &&
-    a.familiarity >= requiredFamiliarity && b.familiarity >= requiredFamiliarity &&
-    a.pregnancyDays === 0 && b.pregnancyDays === 0;
-}
-
-export function beginPregnancy(input, partnerInput, profile) {
-  if (!canBreed(input, partnerInput, profile)) return { started: false, animal: createAnimalState(input), reason: "breeding_requirements_not_met" };
-  const animal = createAnimalState(input);
-  animal.pregnancyDays = 0.001;
-  return { started: true, animal };
-}
-
-export function advancePregnancy(input, elapsedDays, gestationDays) {
-  const animal = createAnimalState(input);
-  if (animal.pregnancyDays <= 0) return { animal, birthReady: false, progress: 0 };
-  const duration = finiteOr(gestationDays, 0);
-  if (duration <= 0) throw new RangeError("gestationDays must be positive");
-  animal.pregnancyDays += Math.max(0, finiteOr(elapsedDays, 0));
-  return { animal, birthReady: animal.pregnancyDays >= duration, progress: clamp(animal.pregnancyDays / duration, 0, 1) };
-}
-
-export function canProduce(input, { requiredFamiliarity = 0, cooldownDays = 0, currentDay = 0 } = {}) {
-  const animal = createAnimalState(input);
-  return animal.health > 0 && animal.ageDays > 0 &&
-    animal.familiarity >= requiredFamiliarity &&
-    currentDay - animal.lastProductAt >= cooldownDays;
-}
-
-export function recordProduct(input, currentDay) {
-  const animal = createAnimalState(input);
-  animal.lastProductAt = Math.max(animal.lastProductAt, finiteOr(currentDay, animal.lastProductAt));
-  return animal;
-}
+const clamp=(v,min,max)=>Math.min(max,Math.max(min,v));
+const finiteOr=(v,f)=>Number.isFinite(Number(v))?Number(v):f;
+export function createAnimalState(i={}){return{species:i.species??"unknown",sex:i.sex??"unknown",ageDays:Math.max(0,finiteOr(i.ageDays,0)),familiarity:clamp(finiteOr(i.familiarity,0),0,100),pregnancyDays:Math.max(0,finiteOr(i.pregnancyDays,0)),health:clamp(finiteOr(i.health,100),0,100),hunger:clamp(finiteOr(i.hunger,0),0,100),thirst:clamp(finiteOr(i.thirst,0),0,100),lastProductAt:Math.max(0,finiteOr(i.lastProductAt,0)),lastBreedAt:Math.max(0,finiteOr(i.lastBreedAt,0))};}
+export function evaluateHabitat(p,e){const failures=[];if(p.minTemperatureC!=null&&e.temperatureC<p.minTemperatureC)failures.push("temperature_low");if(p.maxTemperatureC!=null&&e.temperatureC>p.maxTemperatureC)failures.push("temperature_high");if(p.minRainfall!=null&&e.rainfall<p.minRainfall)failures.push("rainfall_low");if(p.maxRainfall!=null&&e.rainfall>p.maxRainfall)failures.push("rainfall_high");if(p.waterType&&p.waterType!==e.waterType)failures.push("waterType");if(p.terrain&&!p.terrain.includes(e.terrain))failures.push("terrain");return{suitable:failures.length===0,failures};}
+export function feedAnimal(i,g=5,h=0){const a=createAnimalState(i);a.familiarity=clamp(a.familiarity+Math.max(0,finiteOr(g,0)),0,100);a.health=clamp(a.health+Math.max(0,finiteOr(h,0)),0,100);a.hunger=clamp(a.hunger-35,0,100);a.thirst=clamp(a.thirst-5,0,100);return a;}
+export function waterAnimal(i,n=30){const a=createAnimalState(i);a.thirst=clamp(a.thirst-Math.max(0,finiteOr(n,0)),0,100);return a;}
+export function advanceAnimalAge(i,d){const a=createAnimalState(i);a.ageDays+=Math.max(0,finiteOr(d,0));return a;}
+export function advanceAnimalNeeds(i,d,{hungerPerDay=8,thirstPerDay=12,healthLossPerDay=2}={}){const a=createAnimalState(i),days=Math.max(0,finiteOr(d,0));a.ageDays+=days;a.hunger=clamp(a.hunger+days*hungerPerDay,0,100);a.thirst=clamp(a.thirst+days*thirstPerDay,0,100);const stress=Math.max(0,a.hunger-75)+Math.max(0,a.thirst-75);a.health=clamp(a.health-days*healthLossPerDay*(stress/50),0,100);return a;}
+export function canBreed(x,y,p){const a=createAnimalState(x),b=createAnimalState(y),adult=finiteOr(p.adultAgeDays,0),f=finiteOr(p.requiredFamiliarity,0),cool=finiteOr(p.breedingCooldownDays,0);return a.species===b.species&&((a.sex==="male"&&b.sex==="female")||(a.sex==="female"&&b.sex==="male"))&&a.ageDays>=adult&&b.ageDays>=adult&&a.health>0&&b.health>0&&a.hunger<70&&b.hunger<70&&a.thirst<70&&b.thirst<70&&a.familiarity>=f&&b.familiarity>=f&&a.pregnancyDays===0&&b.pregnancyDays===0&&a.ageDays-a.lastBreedAt>=cool&&b.ageDays-b.lastBreedAt>=cool;}
+export function beginPregnancy(i,p,profile){if(!canBreed(i,p,profile))return{started:false,animal:createAnimalState(i),reason:"breeding_requirements_not_met"};const a=createAnimalState(i);a.pregnancyDays=.001;a.lastBreedAt=a.ageDays;return{started:true,animal:a};}
+export function advancePregnancy(i,d,g){const a=createAnimalState(i);if(a.pregnancyDays<=0)return{animal:a,birthReady:false,progress:0};const duration=finiteOr(g,0);if(duration<=0)throw new RangeError("gestationDays must be positive");a.pregnancyDays+=Math.max(0,finiteOr(d,0));return{animal:a,birthReady:a.pregnancyDays>=duration,progress:clamp(a.pregnancyDays/duration,0,1)};}
+export function canProduce(i,{requiredFamiliarity=0,cooldownDays=0,currentDay=0}={}){const a=createAnimalState(i);return a.health>0&&a.ageDays>0&&a.familiarity>=requiredFamiliarity&&currentDay-a.lastProductAt>=cooldownDays;}
+export function recordProduct(i,d){const a=createAnimalState(i);a.lastProductAt=Math.max(a.lastProductAt,finiteOr(d,a.lastProductAt));return a;}
