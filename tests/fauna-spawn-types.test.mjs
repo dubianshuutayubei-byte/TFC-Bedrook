@@ -9,7 +9,7 @@ const spawn=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/fauna-sp
 test("official TFC spawn placement is recorded for all 63 fauna",()=>{
  assert.equal(spawn.total,63);
  assert.equal(spawn.species.length,63);
- assert.deepEqual(new Set(spawn.species.map(x=>x.id)),new Set(roster.species.map(x=>x.id)));
+ for(const item of spawn.species)assert.ok(roster.species.some(x=>x.id===item.id),item.id+" must remain in the expanded target roster");
  assert.equal(spawn.placementCounts.in_water,20);
  assert.equal(spawn.placementCounts.no_restrictions,1);
  assert.equal(spawn.placementCounts.on_ground,42);
