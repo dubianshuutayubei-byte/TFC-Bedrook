@@ -1,0 +1,18 @@
+{
+  "format_version": "1.26.60",
+  "minecraft:item": {
+    "description": {
+      "identifier": "tfc:red_bell_pepper_seed",
+      "menu_category": {
+        "category": "items"
+      }
+    },
+    "components": {
+      "minecraft:icon": "tfc_red_bell_pepper_seed",
+      "minecraft:display_name": {
+        "value": "赤パプリカの種"
+      },
+      "minecraft:max_stack_size": 64
+    }
+  }
+}
