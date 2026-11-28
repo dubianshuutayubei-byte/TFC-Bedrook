@@ -10,6 +10,7 @@ const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const itemDir=join(root,"packs/behavior_pack/items");
 const itemIds=new Set(readdirSync(itemDir).filter(name=>name.endsWith(".json")).map(name=>JSON.parse(readFileSync(join(itemDir,name),"utf8"))["minecraft:item"].description.identifier));
 const foodDb=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/food-profiles.json"),"utf8"));
+const foodAliases={milk_bottle:"milk"};
 const foodIds=new Set(foodDb.foods.map(food=>"tfc:"+food.id));
 const edibleIds=new Set(readdirSync(itemDir).filter(name=>name.endsWith(".json")).map(name=>JSON.parse(readFileSync(join(itemDir,name),"utf8"))["minecraft:item"]).filter(item=>item.components?.["tfc:consume_food"]).map(item=>item.description.identifier));
 
@@ -28,7 +29,7 @@ test("all canonical crop profiles have registered seed and harvest items and val
 });
 
 test("every edible crop harvest item has a matching canonical freshness and nutrition profile",()=>{
- const missing=[...edibleIds].filter(id=>id.startsWith("tfc:")&&!foodIds.has(id));
+ const missing=[...edibleIds].filter(id=>id.startsWith("tfc:")&&!foodIds.has("tfc:"+(foodAliases[id.slice(4)]??id.slice(4))));
  assert.deepEqual(missing,[]);
 });
 
