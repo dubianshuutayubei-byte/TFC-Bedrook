@@ -213,5 +213,13 @@ event.blockComponentRegistry.registerCustomComponent("tfc:crop_growth",{onTick:a
 system.runInterval(()=>{for(const dimensionId of ["overworld","nether","the_end"]){try{const dimension=world.getDimension(dimensionId);for(const type of Object.keys(ANIMAL_PROFILES))for(const entity of dimension.getEntities({type}))animalTick(entity);}catch(error){}}},1200);
 system.runInterval(()=>{for(const player of world.getAllPlayers()){try{tickFoodFreshness(player,system.currentTick);}catch(error){console.warn("[TFC-Bedrook] food freshness tick failed:",error);}}},1200);
 });
-world.afterEvents.playerInteractWithEntity.subscribe(event=>{if(ANIMAL_PROFILES[event.target?.typeId])animalInteract(event.player,event.target);});world.afterEvents.playerSpawn.subscribe(event=>{if(event.player)recoverPlayerStationJobs(event.player);});
+world.afterEvents.playerInteractWithEntity.subscribe(event=>{if(ANIMAL_PROFILES[event.target?.typeId])animalInteract(event.player,event.target);});
+world.afterEvents.playerInteractWithBlock.subscribe(event=>{
+ if(!event.isFirstEvent)return;
+ const held=event.beforeItemStack??event.itemStack;
+ if(!held?.typeId?.endsWith("_hoe"))return;
+ const block=event.block;
+ if(!["minecraft:dirt","minecraft:grass_block","minecraft:coarse_dirt","minecraft:rooted_dirt","minecraft:farmland"].includes(block.typeId))return;
+ try{block.setType("tfc:farmland");const soil=readSoil(block);writeWorldState(soilKey(block),soil);event.player.sendMessage("§a耕作土を作りました。種を持って操作すると植えられます。");}catch(error){console.warn("[TFC-Bedrook] farmland conversion failed:",error);}
+});world.afterEvents.playerSpawn.subscribe(event=>{if(event.player)recoverPlayerStationJobs(event.player);});
 }
