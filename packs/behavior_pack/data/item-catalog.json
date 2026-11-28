@@ -72,11 +72,6 @@
     "tfc:anvil",
     "tfc:farmland",
     "tfc:deer_spawn_egg",
-    "tfc:firepit_block",
-    "tfc:pit_kiln_block",
-    "tfc:crucible_block",
-    "tfc:anvil_block",
-    "tfc:farmland_block",
-    "tfc:crop_block"
+    "tfc:crop"
   ]
 }
