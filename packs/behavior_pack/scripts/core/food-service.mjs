@@ -36,7 +36,10 @@ export function preserveFood(foodInput, method) {
 export function consumeFood(playerState, foodInput) {
   const food = createFoodState(foodInput);
   if (food.spoiled) return { consumed: false, reason: "spoiled", playerState };
-  const next = structuredClone(playerState);
+  const next = {
+    ...playerState,
+    nutrition: { ...(playerState.nutrition ?? {}) }
+  };
   for (const [category, amount] of Object.entries(food.nutrition)) {
     if (category in next.nutrition) next.nutrition[category] = clamp(next.nutrition[category] + Number(amount || 0), 0, 100);
   }
