@@ -11,7 +11,9 @@
       "nitrogen": -1,
       "phosphorus": 0.3,
       "potassium": 0.3
-    }
+    },
+    "seed": "tfc:crop_seed",
+    "harvest": "tfc:grain"
   },
   "maize": {
     "minTemperatureC": -7,
@@ -25,7 +27,10 @@
       "nitrogen": -0.9,
       "phosphorus": 0.25,
       "potassium": 0.25
-    }
+    },
+    "seed": "tfc:maize_seed",
+    "harvest": "tfc:maize",
+    "twoBlock": true
   },
   "potato": {
     "minTemperatureC": -7,
@@ -41,7 +46,9 @@
       "nitrogen": -0.4,
       "phosphorus": -0.2,
       "potassium": -0.6
-    }
+    },
+    "seed": "tfc:potato_seed",
+    "harvest": "tfc:potato"
   },
   "barley": {
     "minTemperatureC": -7,
@@ -55,7 +62,9 @@
       "nitrogen": -0.75,
       "phosphorus": 0.2,
       "potassium": 0.2
-    }
+    },
+    "seed": "tfc:barley_seed",
+    "harvest": "tfc:barley"
   },
   "oat": {
     "minTemperatureC": -7,
@@ -69,7 +78,9 @@
       "nitrogen": -1,
       "phosphorus": 0.4,
       "potassium": 0.3
-    }
+    },
+    "seed": "tfc:oat_seed",
+    "harvest": "tfc:oat"
   },
   "rye": {
     "minTemperatureC": -7,
@@ -83,7 +94,9 @@
       "nitrogen": -1,
       "phosphorus": 0.2,
       "potassium": 0.4
-    }
+    },
+    "seed": "tfc:rye_seed",
+    "harvest": "tfc:rye"
   },
   "beet": {
     "minTemperatureC": -10,
@@ -99,7 +112,9 @@
       "nitrogen": -0.4,
       "phosphorus": -0.3,
       "potassium": -0.5
-    }
+    },
+    "seed": "tfc:beet_seed",
+    "harvest": "tfc:beet"
   },
   "cabbage": {
     "minTemperatureC": -10,
@@ -115,7 +130,9 @@
       "nitrogen": -0.5,
       "phosphorus": -0.2,
       "potassium": -0.4
-    }
+    },
+    "seed": "tfc:cabbage_seed",
+    "harvest": "tfc:cabbage"
   },
   "carrot": {
     "minTemperatureC": -10,
@@ -131,7 +148,9 @@
       "nitrogen": -0.5,
       "phosphorus": -0.3,
       "potassium": -0.4
-    }
+    },
+    "seed": "tfc:carrot_seed",
+    "harvest": "tfc:carrot"
   },
   "garlic": {
     "minTemperatureC": -3,
@@ -147,7 +166,9 @@
       "nitrogen": -0.4,
       "phosphorus": -0.2,
       "potassium": -0.5
-    }
+    },
+    "seed": "tfc:garlic_seed",
+    "harvest": "tfc:garlic"
   },
   "onion": {
     "minTemperatureC": -5,
@@ -163,7 +184,9 @@
       "nitrogen": -0.4,
       "phosphorus": -0.4,
       "potassium": -0.4
-    }
+    },
+    "seed": "tfc:onion_seed",
+    "harvest": "tfc:onion"
   },
   "squash": {
     "minTemperatureC": -7,
@@ -179,7 +202,9 @@
       "nitrogen": -0.25,
       "phosphorus": -0.45,
       "potassium": -0.5
-    }
+    },
+    "seed": "tfc:squash_seed",
+    "harvest": "tfc:squash"
   },
   "lentils": {
     "minTemperatureC": -5,
@@ -194,7 +219,9 @@
       "nitrogen": 0.8,
       "phosphorus": -0.2,
       "potassium": -0.2
-    }
+    },
+    "seed": "tfc:lentils_seed",
+    "harvest": "tfc:lentils"
   },
   "soybean": {
     "minTemperatureC": -7,
@@ -209,7 +236,9 @@
       "nitrogen": 0.8,
       "phosphorus": -0.6,
       "potassium": -0.3
-    }
+    },
+    "seed": "tfc:soybean_seed",
+    "harvest": "tfc:soybean"
   },
   "peanuts": {
     "minTemperatureC": 11,
@@ -224,7 +253,9 @@
       "nitrogen": 0.9,
       "phosphorus": -0.5,
       "potassium": -0.5
-    }
+    },
+    "seed": "tfc:peanuts_seed",
+    "harvest": "tfc:peanuts"
   },
   "rice": {
     "minTemperatureC": 8,
