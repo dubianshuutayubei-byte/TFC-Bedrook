@@ -35,7 +35,7 @@ test("forest density and elevation use the official numeric ranges",()=>{
 test("season, deep-water and brightness constraints are independently enforced",()=>{
  const fish=evaluateOfficialFaunaHabitat(byId.arctic_char,{temperatureC:5,averageRainfall:250,month:"NOVEMBER"});
  assert.ok(fish.failures.includes("out_of_season"));
- const squid=evaluateOfficialFaunaHabitat(byId.octopoteuthis,{y:20,seaLevel:63,brightness:1});
+ const squid=evaluateOfficialFaunaHabitat(byId.octopoteuthis,{y:30,seaLevel:63,brightness:1});
  assert.ok(squid.failures.includes("water_too_shallow"));
  assert.ok(squid.failures.includes("brightness_high"));
 });
