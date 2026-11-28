@@ -1,0 +1,64 @@
+{
+  "format_version": "1.21.0",
+  "minecraft:entity": {
+    "description": {
+      "identifier": "tfc:burbot",
+      "is_spawnable": true,
+      "is_summonable": true,
+      "is_experimental": false
+    },
+    "components": {
+      "minecraft:type_family": {
+        "family": [
+          "animal",
+          "mob",
+          "tfc_aquatic",
+          "tfc_fauna_burbot"
+        ]
+      },
+      "minecraft:nameable": {},
+      "minecraft:health": {
+        "value": 10,
+        "max": 10
+      },
+      "minecraft:collision_box": {
+        "width": 0.7,
+        "height": 0.4
+      },
+      "minecraft:movement": {
+        "value": 0.16
+      },
+      "minecraft:physics": {},
+      "minecraft:pushable": {
+        "is_pushable": true,
+        "is_pushable_by_piston": true
+      },
+      "minecraft:behavior.float": {
+        "priority": 0
+      },
+      "minecraft:behavior.look_at_player": {
+        "priority": 7,
+        "look_distance": 8
+      },
+      "minecraft:behavior.random_look_around": {
+        "priority": 8
+      },
+      "minecraft:navigation.swim": {
+        "can_path_over_water": true
+      },
+      "minecraft:movement.swim": {},
+      "minecraft:behavior.swim_wander": {
+        "priority": 6,
+        "interval": 120,
+        "look_ahead": 10,
+        "speed_multiplier": 1
+      },
+      "minecraft:breathable": {
+        "total_supply": 15,
+        "suffocate_time": 0,
+        "breathes_air": false,
+        "breathes_water": true
+      }
+    }
+  }
+}
