@@ -364,13 +364,63 @@ function hasCropSupport(block){
 }
 async function farmlandInteract(player,block){if(!player||!block)return;const held=inv(player)?.getItem(player.selectedSlotIndex);const soil=readSoil(block);
 const seedProfile=Object.values(CROP_PROFILES).find(profile=>profile.seed===held?.typeId);
-if(seedProfile){const cropType=Object.keys(CROP_PROFILES).find(key=>CROP_PROFILES[key]===seedProfile);const top=block.above();if(!top?.isAir||(seedProfile.twoBlock&&!top.above()?.isAir)){player.sendMessage(seedProfile.twoBlock?"§cこの作物には2ブロック分の空間が必要です。":"§c耕作土の上に空間が必要です。");return;}if(seedProfile.requiresWater&&!hasFreshWaterAdjacent(block)){player.sendMessage("§cこの作物には近くの淡水が必要です。");return;}if(seedProfile.supportRequired&&!hasCropSupport(block)){player.sendMessage("§cこの作物には隣接する支柱（TFCトレリス）が必要です。");return;}if(take(player,seedProfile.seed,1)){writeWorldState(soilKey(block),soil);top.setType("tfc:crop");top.setPermutation(top.permutation.withState("tfc:crop_type",cropType).withState("tfc:part","lower"));writeWorldState(posKey(top,"crop_progress"),0);writeWorldState(posKey(top,"crop_quality"),1);player.sendMessage("§a"+(({"tfc:grain":"小麦","tfc:maize":"トウモロコシ","tfc:potato":"ジャガイモ","tfc:barley":"大麦","tfc:oat":"オーツ麦","tfc:rye":"ライ麦","tfc:beet":"ビーツ","tfc:cabbage":"キャベツ","tfc:carrot":"ニンジン","tfc:garlic":"ニンニク","tfc:onion":"タマネギ","tfc:squash":"カボチャ","tfc:lentils":"レンズ豆","tfc:soybean":"大豆","tfc:peanuts":"落花生","tfc:rice":"米","tfc:cassava":"キャッサバ","tfc:green_beans":"インゲン","tfc:pumpkin":"カボチャ","tfc:melon":"メロン","tfc:tomato":"トマト","tfc:red_bell_pepper":"赤パプリカ","tfc:yellow_bell_pepper":"黄パプリカ","tfc:alfalfa":"アルファルファ","tfc:canola":"カノーラ","tfc:radish":"ラディッシュ","tfc:sugarcane":"サトウキビ","tfc:jute":"ジュート","tfc:papyrus":"パピルス"}[cropType]??"作物"))+"を植えました。");}return;}
+if(seedProfile){const cropType=Object.keys(CROP_PROFILES).find(key=>CROP_PROFILES[key]===seedProfile);const top=block.above();if(!top?.isAir||(seedProfile.twoBlock&&!top.above()?.isAir)){player.sendMessage(seedProfile.twoBlock?"§cこの作物には2ブロック分の空間が必要です。":"§c耕作土の上に空間が必要です。");return;}if(seedProfile.requiresWater&&!hasFreshWaterAdjacent(block)){player.sendMessage("§cこの作物には近くの淡水が必要です。");return;}if(seedProfile.supportRequired&&!hasCropSupport(block)){player.sendMessage("§cこの作物には隣接する支柱（TFCトレリス）が必要です。");return;}if(take(player,seedProfile.seed,1)){writeWorldState(soilKey(block),soil);top.setType("tfc:crop");top.setPermutation(top.permutation.withState("tfc:crop_type",cropType).withState("tfc:part","lower"));writeWorldState(posKey(top,"crop_progress"),0);writeWorldState(posKey(top,"crop_quality"),1);writeWorldState(posKey(top,"crop_spread_parent"),null);writeWorldState(posKey(top,"crop_spread_used"),false);player.sendMessage("§a"+(({"tfc:grain":"小麦","tfc:maize":"トウモロコシ","tfc:potato":"ジャガイモ","tfc:barley":"大麦","tfc:oat":"オーツ麦","tfc:rye":"ライ麦","tfc:beet":"ビーツ","tfc:cabbage":"キャベツ","tfc:carrot":"ニンジン","tfc:garlic":"ニンニク","tfc:onion":"タマネギ","tfc:squash":"カボチャ","tfc:lentils":"レンズ豆","tfc:soybean":"大豆","tfc:peanuts":"落花生","tfc:rice":"米","tfc:cassava":"キャッサバ","tfc:green_beans":"インゲン","tfc:pumpkin":"カボチャ","tfc:melon":"メロン","tfc:tomato":"トマト","tfc:red_bell_pepper":"赤パプリカ","tfc:yellow_bell_pepper":"黄パプリカ","tfc:alfalfa":"アルファルファ","tfc:canola":"カノーラ","tfc:radish":"ラディッシュ","tfc:sugarcane":"サトウキビ","tfc:jute":"ジュート","tfc:papyrus":"パピルス"}[cropType]??"作物"))+"を植えました。");}return;}
 const fertilizer=FERTILIZER_PROFILES[held?.typeId];if(fertilizer){if(take(player,held.typeId,1)){writeWorldState(soilKey(block),applyFertilizer(soil,fertilizer.nutrients));player.sendMessage("§a"+fertilizer.name+"を混ぜました。"+Object.entries(fertilizer.nutrients).map(([name,value])=>name+" +"+value).join(" / ")+"（土壌肥沃度補正後）");}return;}
 const soilNames={loam:"壌土",silt:"シルト",clay:"粘土質"};const fertilityNames={entisol:"エンティソル",andisol:"アンドソル",fluvisol:"フルビソル",alfisol:"アルフィソル",mollisol:"モリソル",podzol:"ポドゾル",aridisol:"アリディソル",oxisol:"オキシソル"};const form=new ActionFormData().title("土壌状態").body("基質: "+(soilNames[soil.soilType]??soil.soilType)+"\n土壌肥沃度: "+(fertilityNames[soil.fertilityClass]??soil.fertilityClass)+"（肥料効果 ×"+({entisol:1,andisol:1.1,fluvisol:1.1,alfisol:1.1,mollisol:1.2,podzol:0.9,aridisol:0.9,oxisol:0.8}[soil.fertilityClass]??1).toFixed(1)+"）\n推定気温: "+temperatureAt(block.dimension,block.location).toFixed(1)+"°C\n水分: "+Math.floor(soil.hydration)+"%\n窒素: "+Math.floor(soil.nitrogen)+"\nリン: "+Math.floor(soil.phosphorus)+"\nカリウム: "+Math.floor(soil.potassium)+"\n\n骨粉・堆肥・木灰を持って操作すると、土壌肥沃度に応じた肥料効果が得られます。").button("閉じる");try{await form.show(player);}catch{}
 }
 function currentTemperatureC(elevationM=0,biomeId="minecraft:plains"){const profile=getBiomeClimateProfile(biomeId);return calculateAmbientTemperatureC({...profile,dayOfYear:((world.getDay()%96)+96)%96,timeOfDay:world.getTimeOfDay(),elevationM:Math.max(0,elevationM),diurnalAmplitudeC:3});}
 function temperatureAt(dimension,location){let biomeId="minecraft:plains";try{biomeId=dimension.getBiome({x:Math.floor(location.x),y:Math.floor(location.y),z:Math.floor(location.z)}).id;}catch{}return currentTemperatureC(location.y-63,biomeId);}
-function cropTick(block){if(block.permutation.getState("tfc:part")==="upper")return;const age=block.permutation.getState("tfc:age");if(typeof age!=="number"||age>=3)return;const cropType=block.permutation.getState("tfc:crop_type")??"wheat";const profile=CROP_PROFILES[cropType]??CROP_PROFILES.wheat;if(profile.requiresWater&&!hasFreshWaterAdjacent(block.below()))return;if(profile.supportRequired&&!hasCropSupport(block.below()))return;if(profile.twoBlock&&age===1&&!block.above()?.isAir)return;let soil;try{soil=readSoil(block.below());}catch{return;}const evaluation=evaluateCropGrowth(profile,{temperatureC:temperatureAt(block.dimension,block.location)},soil);if(!evaluation.suitable)return;const qualityKey=posKey(block,"crop_quality");const previousQuality=Number(readWorldState(qualityKey,1));writeWorldState(qualityKey,Math.min(previousQuality,evaluation.nutrientFactor));const progressKey=posKey(block,"crop_progress");const growth=advanceCropGrowthProgress(Number(readWorldState(progressKey,0)),evaluation.growthMultiplier);soil.hydration=Math.max(0,soil.hydration-2*evaluation.growthMultiplier);soil=applyCropNutrientEffects(soil,profile.nutrientEffects,evaluation.growthMultiplier);writeWorldState(soilKey(block.below()),soil);writeWorldState(progressKey,growth.progress);if(growth.stageAdvanced){const nextAge=age+1;block.setPermutation(block.permutation.withState("tfc:age",nextAge));if(profile.twoBlock&&nextAge===2){const upper=block.above();if(upper?.isAir){upper.setType("tfc:crop");upper.setPermutation(upper.permutation.withState("tfc:crop_type",cropType).withState("tfc:part","upper").withState("tfc:age",2));}}}}
+function trySpreadCrop(block,cropType){
+ if(readWorldState(posKey(block,"crop_spread_used"),false)||readWorldState(posKey(block,"crop_spread_parent"),null))return false;
+ const origin=block.location;
+ for(const [dx,dz] of [[1,0],[-1,0],[0,1],[0,-1]]){
+  try{
+   const soil=block.dimension.getBlock({x:Math.floor(origin.x)+dx,y:Math.floor(origin.y)-1,z:Math.floor(origin.z)+dz});
+   const target=soil?.above();
+   if(soil?.typeId!=="tfc:farmland"||!target?.isAir)continue;
+   target.setType("tfc:crop");
+   target.setPermutation(target.permutation.withState("tfc:crop_type",cropType).withState("tfc:part","lower").withState("tfc:age",0));
+   writeWorldState(posKey(target,"crop_progress"),0);
+   writeWorldState(posKey(target,"crop_quality"),1);
+   writeWorldState(posKey(target,"crop_spread_parent"),posKey(block,"crop_progress"));
+   writeWorldState(posKey(block,"crop_spread_used"),true);
+   return true;
+  }catch{}
+ }
+ return false;
+}
+function cropTick(block){
+ if(block.permutation.getState("tfc:part")==="upper")return;
+ const age=block.permutation.getState("tfc:age");
+ if(typeof age!=="number")return;
+ const cropType=block.permutation.getState("tfc:crop_type")??"wheat";
+ const profile=CROP_PROFILES[cropType]??CROP_PROFILES.wheat;
+ if(age>=3){if(profile.spreading)trySpreadCrop(block,cropType);return;}
+ if(profile.requiresWater&&!hasFreshWaterAdjacent(block.below()))return;
+ if(profile.supportRequired&&!hasCropSupport(block.below()))return;
+ if(profile.twoBlock&&age===1&&!block.above()?.isAir)return;
+ let soil;try{soil=readSoil(block.below());}catch{return;}
+ const evaluation=evaluateCropGrowth(profile,{temperatureC:temperatureAt(block.dimension,block.location)},soil);
+ if(!evaluation.suitable)return;
+ const qualityKey=posKey(block,"crop_quality");
+ const previousQuality=Number(readWorldState(qualityKey,1));
+ writeWorldState(qualityKey,Math.min(previousQuality,evaluation.nutrientFactor));
+ const progressKey=posKey(block,"crop_progress");
+ const growth=advanceCropGrowthProgress(Number(readWorldState(progressKey,0)),evaluation.growthMultiplier);
+ soil.hydration=Math.max(0,soil.hydration-2*evaluation.growthMultiplier);
+ soil=applyCropNutrientEffects(soil,profile.nutrientEffects,evaluation.growthMultiplier);
+ writeWorldState(soilKey(block.below()),soil);
+ writeWorldState(progressKey,growth.progress);
+ if(growth.stageAdvanced){
+  const nextAge=age+1;
+  block.setPermutation(block.permutation.withState("tfc:age",nextAge));
+  if(profile.twoBlock&&nextAge===2){
+   const upper=block.above();
+   if(upper?.isAir){upper.setType("tfc:crop");upper.setPermutation(upper.permutation.withState("tfc:crop_type",cropType).withState("tfc:part","upper").withState("tfc:age",2));}
+  }
+  if(profile.spreading&&nextAge===3)trySpreadCrop(block,cropType);
+ }
+}
 function fireTick(block){const key=posKey(block,"fire");const state=advanceFire(readWorldState(key,{}),20);writeWorldState(key,state);}
 function animalState(entity){try{const raw=entity.getDynamicProperty("tfc:animal_state");const base=typeof raw==="string"?JSON.parse(raw):{};return createAnimalState({...base,species:entity.typeId.replace(":","_")});}catch{return createAnimalState({species:entity.typeId.replace(":","_")});}}
 function saveAnimal(entity,state){try{entity.setDynamicProperty("tfc:animal_state",JSON.stringify(state));}catch(error){console.warn("[TFC-Bedrook] animal state save:",error);}}
@@ -452,7 +502,7 @@ event.itemComponentRegistry.registerCustomComponent("tfc:drink_water",{onUse:a=>
 event.itemComponentRegistry.registerCustomComponent("tfc:mix_dough",{onUse:a=>{if(a.source?.typeId==="minecraft:player")mixDough(a.source);}});
 event.blockComponentRegistry.registerCustomComponent("tfc:station_ui",{onPlayerInteract:a=>{if(a.player)void station(a.player,a.block.typeId.split(":")[1],a.block);}});event.blockComponentRegistry.registerCustomComponent("tfc:heated_station_tick",{onTick:a=>fireTick(a.block)});
 event.blockComponentRegistry.registerCustomComponent("tfc:farmland_interaction",{onPlayerInteract:a=>void farmlandInteract(a.player,a.block),onTick:a=>soilTick(a.block)});
-event.blockComponentRegistry.registerCustomComponent("tfc:crop_growth",{onTick:a=>cropTick(a.block),onPlayerInteract:a=>{const p=a.player,clicked=a.block;if(!p||!clicked)return;const b=clicked.permutation.getState("tfc:part")==="upper"?clicked.below():clicked;if(!b||b.typeId!=="tfc:crop")return;if(b.permutation.getState("tfc:part")==="upper")return;const cropType=b.permutation.getState("tfc:crop_type")??"wheat";const profile=CROP_PROFILES[cropType]??CROP_PROFILES.wheat;const age=b.permutation.getState("tfc:age");const quality=Number(readWorldState(posKey(b,"crop_quality"),1));if(profile.pickable){if(typeof age!=="number"||age<2){p.sendMessage("§e収穫できる状態まで成長していません。");return;}const yieldCount=calculateCropYield(1,quality);give(p,profile.harvest,yieldCount);b.setPermutation(b.permutation.withState("tfc:age",1));writeWorldState(posKey(b,"crop_progress"),0);writeWorldState(posKey(b,"crop_quality"),1);p.sendMessage("§a実を収穫しました。株は残り、再び成長します。");return;}if(age!==3){p.sendMessage("§e成長中: "+Math.floor(Number(readWorldState(posKey(b,"crop_progress"),0)))+"%");return;}const yieldCount=calculateCropYield(cropType==="potato"?2:3,quality);give(p,profile.harvest,yieldCount);give(p,profile.seed,1);if(profile.twoBlock){const upper=b.above();if(upper?.typeId==="tfc:crop"&&upper.permutation.getState("tfc:part")==="upper")upper.setType("minecraft:air");}b.setPermutation(b.permutation.withState("tfc:age",0));writeWorldState(posKey(b,"crop_progress"),0);writeWorldState(posKey(b,"crop_quality"),1);p.sendMessage("§a収穫しました。収穫量補正: "+Math.floor(quality*100)+"% / "+yieldCount+"個");}});
+event.blockComponentRegistry.registerCustomComponent("tfc:crop_growth",{onTick:a=>cropTick(a.block),onPlayerInteract:a=>{const p=a.player,clicked=a.block;if(!p||!clicked)return;const b=clicked.permutation.getState("tfc:part")==="upper"?clicked.below():clicked;if(!b||b.typeId!=="tfc:crop")return;if(b.permutation.getState("tfc:part")==="upper")return;const cropType=b.permutation.getState("tfc:crop_type")??"wheat";const profile=CROP_PROFILES[cropType]??CROP_PROFILES.wheat;const age=b.permutation.getState("tfc:age");const quality=Number(readWorldState(posKey(b,"crop_quality"),1));if(profile.pickable){if(typeof age!=="number"||age<2){p.sendMessage("§e収穫できる状態まで成長していません。");return;}const yieldCount=calculateCropYield(1,quality);give(p,profile.harvest,yieldCount);b.setPermutation(b.permutation.withState("tfc:age",1));writeWorldState(posKey(b,"crop_progress"),0);writeWorldState(posKey(b,"crop_quality"),1);p.sendMessage("§a実を収穫しました。株は残り、再び成長します。");return;}if(age!==3){p.sendMessage("§e成長中: "+Math.floor(Number(readWorldState(posKey(b,"crop_progress"),0)))+"%");return;}const yieldCount=calculateCropYield(cropType==="potato"?2:3,quality);give(p,profile.harvest,yieldCount);give(p,profile.seed,1);if(profile.twoBlock){const upper=b.above();if(upper?.typeId==="tfc:crop"&&upper.permutation.getState("tfc:part")==="upper")upper.setType("minecraft:air");}b.setPermutation(b.permutation.withState("tfc:age",0));writeWorldState(posKey(b,"crop_progress"),0);writeWorldState(posKey(b,"crop_quality"),1);if(profile.spreading)writeWorldState(posKey(b,"crop_spread_used"),false);p.sendMessage("§a収穫しました。収穫量補正: "+Math.floor(quality*100)+"% / "+yieldCount+"個");}});
 system.runInterval(()=>{for(const dimensionId of ["overworld","nether","the_end"]){try{const dimension=world.getDimension(dimensionId);for(const type of Object.keys(ANIMAL_PROFILES))for(const entity of dimension.getEntities({type}))animalTick(entity);}catch(error){}}},1200);
 system.runInterval(()=>{for(const player of world.getAllPlayers()){try{tickFoodFreshness(player,system.currentTick);}catch(error){console.warn("[TFC-Bedrook] food freshness tick failed:",error);}}},1200);
 system.runInterval(()=>{try{tickTrackedFoodContainers(system.currentTick);}catch(error){console.warn("[TFC-Bedrook] tracked food container tick failed:",error);}},1200);
