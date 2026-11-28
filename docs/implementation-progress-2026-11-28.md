@@ -1336,3 +1336,12 @@
 - 詳細: `docs/research/tfc-neoforge-1.21.1-4.2.16-livestock-audit.md`
 
 **未完了:** Node/CIテスト結果の確認、Java 1.21.1全畜産種とBedrock Entityの完全照合、ラクダ等の不足Entity実装、実機での繁殖/産出/老齢化/孵化/再参加試験。上記コード変更はGitHubへ反映済みだが、Minecraft 26.60実機での動作保証ではない。
+
+## 2026-11-28 高速化・動物カバレッジ検査
+
+- 外部Addon 4種のZIPを静的監査し、再利用可否・ライセンス・用途を記録。詳細は docs/research/addon-reference-reuse-audit-2026-11-28.md。
+- World Animalsは明確なプロジェクトLICENSEがZIP内で確認できないため、コード/モデル/テクスチャの流用を保留。動物構造の参考資料に限定。
+- Wheel of CreationはBehavior側GPL-3.0、Resource側CC BY-SA 4.0と第三者素材の個別条件があるため、農業仕様の比較参照を優先し、コード/素材の取り込みはライセンス適合性確認後に限定。
+- gameplay-runtime.js の自然スポーン環境サンプリングを軽量化。森林密度は公式プロファイルがminForest/maxForestを要求する種に限って走査する。従来は全対象種で最大75ブロック参照を行っていたため、森林条件を持たない種のスポーン検証コストを削減。
+- tests/fauna-coverage.test.mjs を追加。公式78種ロスター、ランタイム追跡、スポーン配置78件、地上48/水中29/制限なし1の内訳、種固有実装残数の整合性を自動検査。
+- この変更はGitHub上のコード・テスト追加。GitHub Actionsの実行結果およびMinecraft 26.60実機でのスポーン挙動は別途確認が必要。
