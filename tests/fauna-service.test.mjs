@@ -474,10 +474,10 @@ test("TFC 1.21.x camel cat and dog defaults match ServerConfig",()=>{
  const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
  const lifecycle=readFileSync(join(root,"packs/behavior_pack/scripts/core/fauna-profiles.mjs"),"utf8");
  const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
- assert.match(lifecycle,/dromedary_camel: Object\\.freeze\\(\\{ adultAgeDays: 80, maxUses: 60, gestationDays: 19, childCount: 1 \\}\\)/);
- assert.match(lifecycle,/bactrian_camel: Object\\.freeze\\(\\{ adultAgeDays: 80, maxUses: 80, gestationDays: 24, childCount: 1, productCooldownDays: 7 \\}\\)/);
- assert.match(lifecycle,/cat: Object\\.freeze\\(\\{ adultAgeDays: 50, maxUses: 60, gestationDays: 19, childCount: 6 \\}\\)/);
- assert.match(lifecycle,/dog: Object\\.freeze\\(\\{ adultAgeDays: 50, maxUses: 60, gestationDays: 19, childCount: 2 \\}\\)/);
+ assert.ok(lifecycle.includes("dromedary_camel: Object.freeze({ adultAgeDays: 80, maxUses: 60, gestationDays: 19, childCount: 1 })"));
+ assert.ok(lifecycle.includes("bactrian_camel: Object.freeze({ adultAgeDays: 80, maxUses: 80, gestationDays: 24, childCount: 1, productCooldownDays: 7 })"));
+ assert.ok(lifecycle.includes("cat: Object.freeze({ adultAgeDays: 50, maxUses: 60, gestationDays: 19, childCount: 6 })"));
+ assert.ok(lifecycle.includes("dog: Object.freeze({ adultAgeDays: 50, maxUses: 60, gestationDays: 19, childCount: 2 })"));
  const dog=runtime.slice(runtime.indexOf('"tfc:dog":'),runtime.indexOf("\\n",runtime.indexOf('"tfc:dog":')));
  assert.match(dog,/"tfc:spoiled_food"/);
  const growth=runtime.slice(runtime.indexOf('if(["tfc:deer"'),runtime.indexOf('state.sex==="unknown"',runtime.indexOf('if(["tfc:deer"')));
