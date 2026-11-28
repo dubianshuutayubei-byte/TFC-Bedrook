@@ -1,4 +1,4 @@
-import test from"node:test";import assert from"node:assert/strict";import{createAnimalState,syncAnimalHealth,advanceAnimalNeeds,feedAnimal,waterAnimal,canBreed,beginPregnancy,advancePregnancy,evaluateHabitat,evaluateFaunaSpawn,canProduce,recordProduct}from"../packs/behavior_pack/scripts/core/fauna-service.mjs";
+import test from"node:test";import assert from"node:assert/strict";import{createAnimalState,initializeAnimalLifeStage,syncAnimalHealth,advanceAnimalNeeds,feedAnimal,waterAnimal,canBreed,beginPregnancy,advancePregnancy,evaluateHabitat,evaluateFaunaSpawn,canProduce,recordProduct}from"../packs/behavior_pack/scripts/core/fauna-service.mjs";
 test("needs and age advance",()=>{const a=advanceAnimalNeeds(createAnimalState({species:"deer"}),2);assert.equal(a.ageDays,2);assert.equal(a.hunger,16);assert.equal(a.thirst,24);});
 test("feeding and watering reduce needs",()=>{const a=feedAnimal({hunger:80,thirst:50},10);assert.equal(a.hunger,45);assert.equal(waterAnimal(a,20).thirst,25);});
 test("breeding requires healthy, fed, adult, familiar pair",()=>{const p={adultAgeDays:10,requiredFamiliarity:20,breedingCooldownDays:2};const a={species:"deer",sex:"male",ageDays:20,familiarity:30,hunger:10,thirst:10};const b={...a,sex:"female"};assert.equal(canBreed(a,b,p),true);assert.equal(canBreed({...a,hunger:90},b,p),false);assert.equal(beginPregnancy(b,a,p).started,true);});
@@ -117,4 +117,19 @@ test("official fauna spawn evaluator validates placement and aquatic fluid requi
  assert.ok(evaluateFaunaSpawn({placement:"in_water"},{inWater:false},()=>0).failures.includes("not_in_water"));
  assert.ok(evaluateFaunaSpawn({placement:"on_ground"},{onGround:false},()=>0).failures.includes("not_on_ground"));
  assert.equal(evaluateFaunaSpawn({placement:"no_restrictions"},{},()=>0).suitable,true);
+});
+
+test("newly encountered adult animals start at their configured maturity age",()=>{
+ const adult=initializeAnimalLifeStage({species:"cow"},{isBaby:false,adultAgeDays:192});
+ assert.equal(adult.ageDays,192);assert.equal(adult.lifeStage,"adult");
+});
+test("baby animals begin at age zero and mature when the Bedrock baby component disappears",()=>{
+ const baby=initializeAnimalLifeStage({species:"cow"},{isBaby:true,adultAgeDays:192});
+ assert.equal(baby.ageDays,0);assert.equal(baby.lifeStage,"juvenile");
+ const adult=initializeAnimalLifeStage(baby,{isBaby:false,adultAgeDays:192});
+ assert.equal(adult.ageDays,192);assert.equal(adult.lifeStage,"adult");
+});
+test("species without verified maturity ages do not receive fabricated ages",()=>{
+ const adult=initializeAnimalLifeStage({species:"wolf"},{isBaby:false,adultAgeDays:null});
+ assert.equal(adult.ageDays,0);assert.equal(adult.lifeStage,"adult");
 });
