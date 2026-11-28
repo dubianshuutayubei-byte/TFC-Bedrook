@@ -6,7 +6,7 @@ import { readStackFreshness, advanceStackFreshness } from "./core/food-stack-ser
 import { createFireState, addFuel, advanceFire, canProcessAtTemperature } from "./core/firepit-service.mjs";
 import { createSoilState, advanceSoilHydration, evaluateCropGrowth, calculateCropYield, applyFertilizer, applyCropNutrientEffects, inferSoilTypeFromBlockId, inferSoilFertilityClassFromBiomeId, advanceCropGrowthProgress } from "./core/agriculture-service.mjs";
 import { CROP_PROFILES } from "./core/crop-profiles.mjs";
-import { createAnimalState, createAnimalOffspringState, initializeAnimalLifeStage, syncAnimalHealth, advanceAnimalNeeds, advanceAnimalFamiliarityDecay, canFeedAnimal, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct, evaluateHabitat, advanceAnimalLifecycle, createEggState, advanceEggIncubation, evaluatePredation, determineOffspringCount } from "./core/fauna-service.mjs";
+import { createAnimalState, createAnimalOffspringState, initializeAnimalLifeStage, syncAnimalHealth, advanceAnimalNeeds, advanceAnimalFamiliarityDecay, canFeedAnimal, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct, recordBreedingUse, evaluateHabitat, advanceAnimalLifecycle, createEggState, advanceEggIncubation, evaluatePredation, determineOffspringCount } from "./core/fauna-service.mjs";
 import { CUSTOM_FAUNA_PROFILES } from "./core/fauna-runtime-profiles.mjs";
 import { OFFICIAL_FAUNA_PROFILES } from "./core/fauna-profiles.mjs";
 import { getStationRecipes } from "./core/processing-recipes.mjs";
@@ -619,7 +619,7 @@ function animalTick(entity){
  state.lastAgeUpdateAt=currentDay;
  state=advanceAnimalNeeds(state,0.05,{hungerPerDay:profile.hungerPerDay??8,thirstPerDay:profile.thirstPerDay??(profile.kind==="aquatic"?0:12),healthLossPerDay:profile.healthLossPerDay??2,ageElapsedDays:elapsedAgeDays});
  state=advanceAnimalFamiliarityDecay(state,currentDay,{decayLimit:30,decayPerDay:2});
- if(profile.maxUses>0&&state.uses>profile.maxUses&&state.oldDay<0)state.oldDay=currentDay+1+Math.floor(Math.random()*5);
+ if(profile.maxUses>0&&state.uses>=profile.maxUses&&state.oldDay<0)state.oldDay=currentDay+1+Math.floor(Math.random()*5);
  if(state.oldDay>=0&&currentDay>state.oldDay&&!state.dead)state.lifeStage="old";
  state=advanceAnimalLifecycle(state,currentDay,{adultAgeDays:profile.adultAgeDays??null,elapsedDays:elapsedAgeDays,oldAgeHealthLossPerDay:profile.oldAgeHealthLossPerDay??0.15});
  if(state.dead){saveAnimal(entity,state);try{const hp=entity.getComponent("minecraft:health");if(hp)hp.setCurrentValue(0);}catch{}return;}
@@ -652,7 +652,7 @@ function animalTick(entity){
  if(state.sex==="unknown")state.sex=Math.random()<0.5?"male":"female";
  const breedingDay=world.getDay(),breedingTime=currentAnimalDay();
  if(profile.customBreeding&&state.sex==="female"&&state.ageDays>=profile.adultAgeDays&&state.familiarity>=profile.requiredFamiliarity&&state.lastFedDay>=breedingDay&&state.pregnancyDays<=0&&!state.fertilized){
-  try{const nearby=entity.dimension.getEntities({type:entity.typeId,location:entity.location,maxDistance:6});for(const partner of nearby){if(partner.id===entity.id)continue;const other=animalState(partner),breedingProfile={...profile,currentDay:breedingDay,currentTime:breedingTime};if(canBreed(state,other,breedingProfile)){const started=beginPregnancy(state,other,breedingProfile);if(started.started){state=started.animal;other.lastBreedAt=breedingTime;other.lastFedDay=breedingDay-1;other.uses=(other.uses??0)+5;if(profile.maxUses>0&&other.uses>profile.maxUses&&other.oldDay<0)other.oldDay=breedingTime+1+Math.floor(Math.random()*5);saveAnimal(partner,other);break;}}}}catch{}
+  try{const nearby=entity.dimension.getEntities({type:entity.typeId,location:entity.location,maxDistance:6});for(const partner of nearby){if(partner.id===entity.id)continue;const other=animalState(partner),breedingProfile={...profile,currentDay:breedingDay,currentTime:breedingTime};if(canBreed(state,other,breedingProfile)){const started=beginPregnancy(state,other,breedingProfile);if(started.started){state=recordBreedingUse(started.animal,breedingTime,{maxBreedUses:profile.maxBreedUses,oldDayDelay:1+Math.floor(Math.random()*5)});other=recordBreedingUse(other,breedingTime,{maxBreedUses:profile.maxBreedUses,oldDayDelay:1+Math.floor(Math.random()*5)});other.lastBreedAt=breedingTime;other.lastFedDay=breedingDay-1;saveAnimal(partner,other);break;}}}}catch{}
  }
  saveAnimal(entity,state);
 }
