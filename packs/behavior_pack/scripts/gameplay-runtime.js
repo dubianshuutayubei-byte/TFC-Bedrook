@@ -502,7 +502,7 @@ async function knap(player){
   const choose=new ActionFormData().title("ナッピング").body("作るものを選んでください。\n\n粘土容器は4か所、石片は3か所を削ります。");
   choose.button("粘土容器（粘土玉×4）");choose.button("石片（火打石×1）");choose.button("閉じる");
   let choice;try{choice=await choose.show(player);}catch{return;}
-  if(choice.canceled||choice.selection>=2)return;
+  if(choice.canceled||choice.selection===undefined||choice.selection>=2)return;
   progress={recipe:choice.selection===0?"clay_vessel":"stone_shard",selected:[]};
  }
  const recipe=progress.recipe,target=recipe==="clay_vessel"?[0,4,20,24]:[0,12,24];
@@ -513,7 +513,7 @@ async function knap(player){
  for(let i=0;i<25;i++)form.button((selected.includes(i)?"§a● ":"§7○ ")+"位置 "+(i+1));
  form.button("成形するものを変更");form.button("閉じる");
  let response;try{response=await form.show(player);}catch{return;}
- if(response.canceled||response.selection===26)return;
+ if(response.canceled||response.selection===undefined||response.selection===26)return;
  if(response.selection===25){player.setDynamicProperty(PROGRESS_KEY,"null");player.sendMessage("§e成形するものを選び直してください。");return;}
  const index=response.selection;
  if(selected.includes(index))selected=selected.filter(v=>v!==index);else if(selected.length<target.length)selected.push(index);
