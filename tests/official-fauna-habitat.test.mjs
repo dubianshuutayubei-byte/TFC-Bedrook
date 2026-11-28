@@ -8,6 +8,9 @@ const habitat=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/offici
 const roster=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/fauna-roster.json"),"utf8"));
 const byId=Object.fromEntries(habitat.species.map(x=>[x.id,x]));
 test("official 1.21.x BuiltinFauna provides exact habitat data for all 78 fauna",()=>{
+ assert.equal(habitat.source.version,"TerraFirmaCraft 1.21.1-4.2.16");
+ assert.equal(habitat.source.tag,"v4.2.16");
+ assert.equal(habitat.source.blobs["src/data/java/net/dries007/tfc/data/providers/BuiltinFauna.java"],"5290c4ef69ff7ba768406e2ee2157052c25ee4b2");
  assert.equal(habitat.count,78);
  assert.equal(habitat.species.length,78);
  assert.equal(new Set(habitat.species.map(x=>x.id)).size,78);
