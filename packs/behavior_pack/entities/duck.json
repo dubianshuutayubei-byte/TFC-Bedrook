@@ -72,6 +72,29 @@
           }
         ]
       }
+    },
+    "component_groups": {
+      "tfc:juvenile": {
+        "minecraft:scale": {
+          "value": 0.55
+        }
+      }
+    },
+    "events": {
+      "tfc:spawn_baby": {
+        "add": {
+          "component_groups": [
+            "tfc:juvenile"
+          ]
+        }
+      },
+      "tfc:grow_up": {
+        "remove": {
+          "component_groups": [
+            "tfc:juvenile"
+          ]
+        }
+      }
     }
   }
 }
