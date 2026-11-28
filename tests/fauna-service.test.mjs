@@ -32,3 +32,37 @@ test("product eligibility checks maturity, sex, health, needs and cooldown",()=>
 test("product eligibility rejects time moving backwards",()=>{
  assert.equal(canProduce({species:"cow",ageDays:200,lastProductAt:10},{currentDay:9}),false);
 });
+
+test("breeding rejects same-sex, immature, unhealthy, thirsty and already pregnant pairs",()=>{
+ const p={adultAgeDays:10,requiredFamiliarity:20,breedingCooldownDays:2};
+ const male={species:"deer",sex:"male",ageDays:20,familiarity:30,hunger:10,thirst:10,health:100};
+ const female={...male,sex:"female"};
+ assert.equal(canBreed(male,{...female,sex:"female"},p),true);
+ assert.equal(canBreed(male,{...female,sex:"male"},p),false);
+ assert.equal(canBreed({...male,ageDays:9},female,p),false);
+ assert.equal(canBreed(male,{...female,health:0},p),false);
+ assert.equal(canBreed(male,{...female,thirst:70},p),false);
+ assert.equal(canBreed(male,{...female,pregnancyDays:1},p),false);
+});
+test("breeding cooldown is enforced independently for both parents",()=>{
+ const p={adultAgeDays:10,requiredFamiliarity:0,breedingCooldownDays:5};
+ const male={species:"deer",sex:"male",ageDays:20,lastBreedAt:16,hunger:0,thirst:0};
+ const female={...male,sex:"female",lastBreedAt:10};
+ assert.equal(canBreed(male,female,p),false);
+ assert.equal(canBreed({...male,lastBreedAt:15},female,p),true);
+});
+test("starting pregnancy records the mother's breeding time and blocks another pregnancy",()=>{
+ const p={adultAgeDays:10,requiredFamiliarity:0,breedingCooldownDays:2};
+ const mother={species:"deer",sex:"female",ageDays:20,hunger:0,thirst:0};
+ const father={...mother,sex:"male"};
+ const started=beginPregnancy(mother,father,p);
+ assert.equal(started.started,true);
+ assert.equal(started.animal.pregnancyDays,0.001);
+ assert.equal(started.animal.lastBreedAt,20);
+ assert.equal(canBreed(father,started.animal,p),false);
+});
+test("pregnancy progress never moves backwards",()=>{
+ const result=advancePregnancy({species:"deer",pregnancyDays:4},-10,10);
+ assert.equal(result.animal.pregnancyDays,4);
+ assert.equal(result.birthReady,false);
+});
