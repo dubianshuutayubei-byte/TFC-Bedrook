@@ -10,6 +10,7 @@ import { isStationJobDue, getPendingStationOutputs, markStationOutputDelivered, 
 import { normalizeDimensionId, normalizeWeather, getRainfallMm } from "./core/environment-service.mjs";
 import { calculateAmbientTemperatureC } from "./core/climate-service.mjs";
 import { findMatchingAlloys } from "./core/metal-service.mjs";
+import { classifyTemperature } from "./core/heat-service.mjs";
 
 const STATE_KEY="tfc:player_state",PROGRESS_KEY="tfc:knapping_progress",FOOD_FRESHNESS_KEY="tfc:food_freshness";
 const FOOD_DECAY_PROFILES={"tfc:raw_meat":0.16,"tfc:cooked_meat":0.12,"tfc:grain":0.025,"tfc:maize":0.025,"tfc:potato":0.1,"tfc:vegetable":0.1,"tfc:fruit":0.11,"tfc:milk_bottle":0.18};
@@ -109,8 +110,9 @@ async function station(player,id,block){
  const state=createFireState(readWorldState(posKey(block,"fire"),{}));
  const held=inv(player)?.getItem(player.selectedSlotIndex),fuel=id==="anvil"?null:(held?FUELS[held.typeId]:null);
  if(fuel){if(!take(player,held.typeId,1)){player.sendMessage("§c燃料を取り出せません。");return;}writeWorldState(posKey(block,"fire"),addFuel(state,fuel));player.sendMessage("§a燃料投入: "+Math.round(fuel.duration/20)+"秒分");return;}
+ const tempLabels={unheated:"未加熱",warming:"暖まり中",hot:"熱い",very_hot:"非常に熱い",faint_red:"かすかな赤熱",dark_red:"暗赤色",bright_red:"明るい赤熱",orange:"橙熱",yellow:"黄色熱",yellow_white:"黄白色",white:"白熱",brilliant_white:"強白熱"};
  const body=recipes.map((r,i)=>(i+1)+". "+r.title+"\n   必要温度 "+r.minimumTemperatureC+"°C / "+Math.ceil(r.durationTicks/20)+"秒").join("\n\n");
- const form=new ActionFormData().title(id==="anvil"?"金床":"加工設備").body(body+"\n\n現在温度: "+Math.floor(state.temperatureC)+"°C\n燃料残り: "+Math.ceil(state.burnTicks/20)+"秒");
+ const form=new ActionFormData().title(id==="anvil"?"金床":"加工設備").body(body+"\n\n現在温度: "+Math.floor(state.temperatureC)+"°C（"+tempLabels[classifyTemperature(state.temperatureC)]+"）\n燃料残り: "+Math.ceil(state.burnTicks/20)+"秒");
  for(const recipe of recipes)form.button(recipe.title);
  if(id==="anvil")form.button("水で冷却");
  form.button("閉じる");
