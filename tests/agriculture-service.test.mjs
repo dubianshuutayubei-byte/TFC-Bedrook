@@ -93,3 +93,11 @@ test("biome proxies infer TFC soil fertility classes",()=>{
  assert.equal(inferSoilFertilityClassFromBiomeId("minecraft:jungle"),"oxisol");
  assert.equal(inferSoilFertilityClassFromBiomeId("minecraft:plains"),"entisol");
 });
+
+test("soil fertility boosts nutrient replenishment but not crop nutrient consumption",()=>{
+ const rich=applyCropNutrientEffects({fertilityClass:"mollisol",nitrogen:50,phosphorus:50},{nitrogen:-2,phosphorus:1},1);
+ assert.equal(rich.nitrogen,48);
+ assert.equal(rich.phosphorus,51.2);
+ const poor=applyCropNutrientEffects({fertilityClass:"oxisol",potassium:50},{potassium:1},1);
+ assert.equal(poor.potassium,50.8);
+});
