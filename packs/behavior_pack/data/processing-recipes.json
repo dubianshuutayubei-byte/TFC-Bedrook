@@ -22,7 +22,7 @@
       "stage": "stone_age",
       "method": "clay_forming",
       "inputs": { "minecraft:clay_ball": 5 },
-      "outputs": { "tfc:unfired_vessel": 1 },
+      "outputs": { "tfc:clay_vessel": 1 },
       "requiresUi": true
     },
     {
@@ -52,8 +52,7 @@
       "minimumTemperatureC": 100,
       "durationSeconds": 30
     }
-  ],
-  "notes": [
+    ,\n    {\n      "id": "tfc:copper_sheet",\n      "stage": "copper",\n      "method": "anvil_working",\n      "inputs": { "tfc:heated_copper_ingot": 1 },\n      "outputs": { "tfc:copper_sheet": 1 },\n      "durationSeconds": 3,\n      "requiresHeat": false\n    }\n  ],\n  "notes": [
     "Prototype recipe registry; quantities and times are balance placeholders unless explicitly sourced from TFC data.",
     "Knapping patterns, heat transfer, and actual inventory consumption are not connected to the runtime yet."
   ]
