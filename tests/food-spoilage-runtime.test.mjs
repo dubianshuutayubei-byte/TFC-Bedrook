@@ -51,3 +51,14 @@ test("runtime decay rates stay synchronized with canonical food profiles",()=>{
  const expected=new Map(database.foods.map(food=>["tfc:"+(aliases[food.id]??food.id),food.baseDecayPerHour]));
  assert.deepEqual([...runtimeRates].sort(([a],[b])=>a.localeCompare(b)),[...expected].sort(([a],[b])=>a.localeCompare(b)));
 });
+
+test("every edible item has a label in the food freshness UI",()=>{
+ const ui=readFileSync(join(root,"packs/behavior_pack/scripts/ui/main-menu.js"),"utf8");
+ const files=readdirSync(join(root,"packs/behavior_pack/items")).filter(name=>name.endsWith(".json"));
+ const missing=[];
+ for(const file of files){
+  const item=JSON.parse(readFileSync(join(root,"packs/behavior_pack/items",file),"utf8"))["minecraft:item"];
+  if(item.components?.["tfc:consume_food"]&&!ui.includes(JSON.stringify(item.description.identifier)))missing.push(item.description.identifier);
+ }
+ assert.deepEqual(missing,[]);
+});
