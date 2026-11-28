@@ -60,7 +60,7 @@ async function showPlayerStatus(player) {
   const freshnessLines = Object.entries(freshness)
     .filter(([id]) => FOOD_LABELS[id])
     .map(([id, value]) => `${FOOD_LABELS[id]}: ${Math.round(value.freshness ?? 100)}%`)
-    .join("\\n");
+    .join("\n");
   await showInfo(player, "プレイヤー情報", [
     `水分: ${Math.round(state.hydration)} / 100`,
     "",
@@ -71,7 +71,7 @@ async function showPlayerStatus(player) {
     freshnessLines || "鮮度計測中 / 対象食品なし",
     "",
     "※食品は時間経過で鮮度が低下し、腐敗すると腐敗食品へ変換されます。鮮度は食品種類ごとにプレイヤー単位で管理する簡易方式です。"
-  ].join("\\n"));
+  ].join("\n"));
 }
 
 async function showSystemOverview(player) {
