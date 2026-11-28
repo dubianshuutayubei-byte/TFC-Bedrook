@@ -320,6 +320,12 @@ world.afterEvents.playerBreakBlock.subscribe(event=>{
  const brokenId=event.brokenBlockPermutation?.type?.id,player=event.player;if(!player)return;
  try{
   if(brokenId==="tfc:firepit")player.dimension.spawnItem(new ItemStack("tfc:wood_ash",1),event.block.location);
+  if(brokenId==="tfc:crop"&&event.brokenBlockPermutation?.getState("tfc:crop_type")==="maize"){
+   const part=event.brokenBlockPermutation.getState("tfc:part")??"lower";
+   const otherLocation={x:event.block.location.x,y:event.block.location.y+(part==="upper"?-1:1),z:event.block.location.z};
+   const other=player.dimension.getBlock(otherLocation);
+   if(other?.typeId==="tfc:crop"&&other.permutation.getState("tfc:crop_type")==="maize")other.setType("minecraft:air");
+  }
   const seeds=WILD_SEED_DROPS[brokenId];
   if(seeds&&Math.random()<0.12){const seed=seeds[Math.floor(Math.random()*seeds.length)];player.dimension.spawnItem(new ItemStack(seed,1),event.block.location);player.sendMessage("§a野生の種を見つけました: "+seed);}
  }catch(error){console.warn("[TFC-Bedrook] block-break drops failed:",error);}
