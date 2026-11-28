@@ -1,0 +1,29 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "TFC-Bedrook Resources",
+    "description": "Japanese item, block and animal visuals for TFC-Bedrook.",
+    "uuid": "9f2b1e4a-7c63-4d1f-8a52-6b0e3d9c1f74",
+    "version": [
+      0,
+      1,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      26,
+      60
+    ]
+  },
+  "modules": [
+    {
+      "type": "resources",
+      "uuid": "a03c2f5b-8d74-4e20-9b63-7c1f4e0d2a85",
+      "version": [
+        0,
+        1,
+        0
+      ]
+    }
+  ]
+}
