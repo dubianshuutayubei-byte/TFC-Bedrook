@@ -120,7 +120,7 @@ test("runtime uses official TFC maturity, gestation and production limits for su
  for(const [entity,age,uses] of [
   ["minecraft:pig",80,60],["minecraft:horse",80,60],["minecraft:donkey",80,60],
   ["minecraft:mule",80,60],["minecraft:rabbit",80,40],["minecraft:cow",192,128],
-  ["minecraft:goat",96,60],["minecraft:sheep",56,60],["minecraft:chicken",24,100]
+  ["minecraft:goat",96,60],["minecraft:sheep",56,60],["tfc:chicken",24,100]
  ]){
   const entry=runtime.match(new RegExp('"'+entity+'":\\{[^}]*\\}'))?.[0]??"";
   assert.match(entry,new RegExp("adultAgeDays:"+age));
