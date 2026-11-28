@@ -1,0 +1,25 @@
+{
+  "format_version": "1.20.10",
+  "minecraft:recipe_shaped": {
+    "description": {
+      "identifier": "tfc:unfired_ingot_mold"
+    },
+    "tags": [
+      "crafting_table"
+    ],
+    "pattern": [
+      "CCC",
+      "C C",
+      "CCC"
+    ],
+    "key": {
+      "C": {
+        "item": "minecraft:clay_ball"
+      }
+    },
+    "result": {
+      "item": "tfc:unfired_ingot_mold",
+      "count": 1
+    }
+  }
+}
