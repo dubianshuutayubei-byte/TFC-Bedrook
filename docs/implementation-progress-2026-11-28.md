@@ -725,5 +725,5 @@
 
 - 食品プロフィールのbaseDecayPerHourと、実際にインベントリ/容器の鮮度更新で参照するFOOD_DECAY_PROFILESを全件照合するテストを追加。ミルクはmilkプロフィールからmilk_bottleアイテムへの既存エイリアスを考慮。
 - 加工レシピに登場する全8設備（焚き火、石臼、Pit Kiln、るつぼ、乾燥棚、燻製設備、コンポスター、金床）について、対応ブロック定義・station UI登録・加熱設備tickの接続を監査するテストを追加。
-- GitHub Actions run 46114492118（commit 9a94970）でJSON/Manifest検証、JavaScript構文検査、Node.jsテスト212件がすべて成功。
+- GitHub Actions run 46114631281（commit e0506b0）でJSON/Manifest検証、JavaScript構文検査、Node.jsテスト214件がすべて成功。食品プロフィール全件の栄養/保存方式検証と、食品鮮度UIの全食品ラベル登録監査も追加。システム概要UIの作物数表記は固定値をやめ、現在の登録数と食い違わない表現へ修正。
 - これはリポジトリ上の静的検査結果。Bedrock 26.60実機での設備UI・加熱・食品Loreの分割/統合・容器保存は引き続き未確認。
