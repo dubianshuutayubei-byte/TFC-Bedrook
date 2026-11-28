@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = (path) => JSON.parse(readFileSync(join(root, path), "utf8"));
 const runtime = readFileSync(join(root, "packs/behavior_pack/scripts/gameplay-runtime.js"), "utf8");
+import { OFFICIAL_LIVESTOCK_LIFECYCLE } from "../packs/behavior_pack/scripts/core/official-livestock-lifecycle.mjs";
 
 test("all custom Java freshwater fish support native bucket pickup and aquatic movement", () => {
   const fish = readJson("packs/behavior_pack/data/official-freshwater-fish-profiles-1.21.1-4.2.16.json");
@@ -43,12 +44,38 @@ test("runtime food decay rates exactly match every registered food profile", () 
     "runtime decay table must not contain untracked food entries");
 });
 
-test("every official 1.21.x livestock lifecycle entry has a runtime species profile", () => {
+test("every official 1.21.x livestock lifecycle entry resolves to a runtime species profile", () => {
+  const lifecycle = readJson("packs/behavior_pack/data/official-animal-lifecycle.json");
+  const profileBlock = runtime.match(/const ANIMAL_PROFILES\\s*=\\s*\\{([\\s\\S]*?)\\n\\};/);
+  assert.ok(profileBlock, "ANIMAL_PROFILES runtime table must exist");
+  const runtimeSpecies = new Set(
+    profileBlock[1].split("\\n").map((line) => line.match(/speciesId"?\\s*:\\s*"([^"]+)"/)?.[1]).filter(Boolean)
+  );
+  for (const species of lifecycle.species) {
+    assert.ok(runtimeSpecies.has(species.id), species.id + " lifecycle data must resolve to an entity runtime profile");
+    assert.ok(OFFICIAL_LIVESTOCK_LIFECYCLE[species.id], species.id + " must have a runtime lifecycle adapter");
+  }
+});
+
+test("runtime livestock lifecycle values match the official 1.21.x source data", () => {
   const lifecycle = readJson("packs/behavior_pack/data/official-animal-lifecycle.json");
   for (const species of lifecycle.species) {
-    const hasProfile = runtime.includes('speciesId:"' + species.id + '"') ||
-      runtime.includes('"speciesId":"' + species.id + '"');
-    assert.equal(hasProfile, true, species.id + " lifecycle data must be connected to an entity runtime profile");
+    const actual = OFFICIAL_LIVESTOCK_LIFECYCLE[species.id];
+    assert.equal(actual.adultAgeDays, species.adulthoodDays, species.id + " adulthood");
+    for (const key of ["gestationDays", "maxUses"]) {
+      if (species[key] !== undefined) assert.equal(actual[key], species[key], species.id + " " + key);
+    }
+    const childCount = species.childCountDefault ?? species.childCount;
+    if (childCount !== undefined) assert.equal(actual.childCount, childCount, species.id + " childCount");
+    if (species.childCountMin !== undefined) assert.equal(actual.childCountMin, species.childCountMin, species.id + " childCountMin");
+    if (species.childCountMax !== undefined) assert.equal(actual.childCountMax, species.childCountMax, species.id + " childCountMax");
+    if (species.product?.kind === "milk" || species.product?.kind === "wool") {
+      assert.equal(actual.productCooldownDays, species.product.cooldownDays, species.id + " product cooldown");
+    }
+    if (species.product?.kind === "egg") {
+      assert.equal(actual.eggLayCooldownDays, species.product.cooldownDays, species.id + " egg cooldown");
+      assert.equal(actual.hatchDays, species.product.hatchDays, species.id + " hatch duration");
+    }
   }
 });
 
