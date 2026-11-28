@@ -1,0 +1,24 @@
+{
+  "format_version": "1.26.60",
+  "minecraft:recipe_shaped": {
+    "description": {
+      "identifier": "tfc:clay_seal"
+    },
+    "tags": [
+      "crafting_table"
+    ],
+    "pattern": [
+      "CC",
+      "CC"
+    ],
+    "key": {
+      "C": {
+        "item": "minecraft:clay_ball"
+      }
+    },
+    "result": {
+      "item": "tfc:clay_seal",
+      "count": 1
+    }
+  }
+}
