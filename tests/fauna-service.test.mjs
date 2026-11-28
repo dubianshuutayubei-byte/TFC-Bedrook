@@ -33,32 +33,34 @@ test("product eligibility rejects time moving backwards",()=>{
  assert.equal(canProduce({species:"cow",ageDays:200,lastProductAt:10},{currentDay:9}),false);
 });
 
-test("breeding rejects same-sex, immature, unhealthy, thirsty and already pregnant pairs",()=>{
- const p={adultAgeDays:10,requiredFamiliarity:20,breedingCooldownDays:2};
- const male={species:"deer",sex:"male",ageDays:20,familiarity:30,hunger:10,thirst:10,health:100};
+test("breeding rejects same-sex, immature, unhealthy, hungry, thirsty and already pregnant pairs",()=>{
+ const p={adultAgeDays:10,requiredFamiliarity:20,breedingCooldownDays:2,currentDay:10,currentTime:10.5};
+ const male={species:"deer",sex:"male",ageDays:20,lifeStage:"adult",familiarity:30,hunger:10,thirst:10,health:100,lastFedDay:10,lastBreedAt:8};
  const female={...male,sex:"female"};
- assert.equal(canBreed(male,{...female,sex:"female"},p),true);
+ assert.equal(canBreed(male,female,p),true);
  assert.equal(canBreed(male,{...female,sex:"male"},p),false);
  assert.equal(canBreed({...male,ageDays:9},female,p),false);
  assert.equal(canBreed(male,{...female,health:0},p),false);
+ assert.equal(canBreed(male,{...female,hunger:70},p),false);
  assert.equal(canBreed(male,{...female,thirst:70},p),false);
  assert.equal(canBreed(male,{...female,pregnancyDays:1},p),false);
 });
 test("breeding cooldown is enforced independently for both parents",()=>{
- const p={adultAgeDays:10,requiredFamiliarity:0,breedingCooldownDays:5};
- const male={species:"deer",sex:"male",ageDays:20,lastBreedAt:16,hunger:0,thirst:0};
+ const p={adultAgeDays:10,requiredFamiliarity:0,breedingCooldownDays:5,currentDay:20,currentTime:20};
+ const male={species:"deer",sex:"male",lifeStage:"adult",ageDays:20,familiarity:1,hunger:0,thirst:0,lastFedDay:20,lastBreedAt:16};
  const female={...male,sex:"female",lastBreedAt:10};
  assert.equal(canBreed(male,female,p),false);
  assert.equal(canBreed({...male,lastBreedAt:15},female,p),true);
 });
 test("starting pregnancy records the mother's breeding time and blocks another pregnancy",()=>{
- const p={adultAgeDays:10,requiredFamiliarity:0,breedingCooldownDays:2};
- const mother={species:"deer",sex:"female",ageDays:20,hunger:0,thirst:0};
+ const p={adultAgeDays:10,requiredFamiliarity:0,breedingCooldownDays:2,currentDay:20,currentTime:20};
+ const mother={species:"deer",sex:"female",lifeStage:"adult",ageDays:20,familiarity:1,hunger:0,thirst:0,lastFedDay:20,lastBreedAt:18};
  const father={...mother,sex:"male"};
  const started=beginPregnancy(mother,father,p);
  assert.equal(started.started,true);
  assert.equal(started.animal.pregnancyDays,0.001);
  assert.equal(started.animal.lastBreedAt,20);
+ assert.equal(started.animal.lastFedDay,19);
  assert.equal(canBreed(father,started.animal,p),false);
 });
 test("pregnancy progress never moves backwards",()=>{
@@ -152,7 +154,7 @@ test("animal initialization restores old age from the persisted old-day marker",
 });
 test("pregnancy state records fertilization",()=>{
  const p={adultAgeDays:10,requiredFamiliarity:0,breedingCooldownDays:0};
- const result=beginPregnancy({species:"deer",sex:"female",ageDays:20},{species:"deer",sex:"male",ageDays:20},p);
+ const result=beginPregnancy({species:"deer",sex:"female",lifeStage:"adult",ageDays:20,familiarity:1,lastFedDay:5,lastBreedAt:5},{species:"deer",sex:"male",lifeStage:"adult",ageDays:20,familiarity:1,lastFedDay:5,lastBreedAt:5},{...p,currentDay:5,currentTime:5});
  assert.equal(result.started,true);
  assert.equal(result.animal.fertilized,true);
 });
