@@ -36,19 +36,21 @@ const FUELS={
 
 function stationJobKey(block){return posKey(block,"station_job");}
 function completeStationJob(key,dimension,location){
- const job=readWorldState(key,null);if(!job||!["running","ready_to_claim"].includes(job.status)||Date.now()<job.endsAt)return false;
+ const job=readWorldState(key,null);if(!job||!["running","ready_to_claim","delivering"].includes(job.status)||Date.now()<job.endsAt)return false;
+ const delivered={...(job.deliveredOutputs??{})};
  try{
-  const player=world.getAllPlayers().find(p=>p.id===job.playerId);
-  if(player){
-   let ok=true;for(const [id,n] of Object.entries(job.outputs))if(!give(player,id,n))ok=false;
-   if(ok){writeWorldState(key,null);player.sendMessage("§a加工完了: "+Object.keys(job.outputs).join(", "));return true;}
+  for(const [id,n] of Object.entries(job.outputs??{})){
+   if(delivered[id])continue;
+   dimension.spawnItem(new ItemStack(id,n),location);
+   delivered[id]=true;
+   writeWorldState(key,{...job,status:"delivering",deliveredOutputs:delivered});
   }
- }catch(error){console.warn("[TFC-Bedrook] station inventory delivery:",error);}
- try{
-  for(const [id,n] of Object.entries(job.outputs))dimension.spawnItem(new ItemStack(id,n),location);
-  writeWorldState(key,null);return true;
+  writeWorldState(key,null);
+  const player=world.getAllPlayers().find(p=>p.id===job.playerId);
+  if(player)player.sendMessage("§a加工完了。完成品を設備の場所に搬出しました。");
+  return true;
  }catch(error){
-  writeWorldState(key,{...job,status:"ready_to_claim"});
+  writeWorldState(key,{...job,status:"ready_to_claim",deliveredOutputs:delivered});
   console.warn("[TFC-Bedrook] output retained for recovery:",error);return false;
  }
 }
@@ -68,7 +70,7 @@ function scheduleStationJob(key,dimension,location,delayTicks){
 async function station(player,id,block){
  const recipes=getStationRecipes(id);if(!recipes.length)return;
  const key=stationJobKey(block),existing=readWorldState(key,null);
- if(existing?.status==="running"){
+ if(existing&&["running","ready_to_claim","delivering"].includes(existing.status)){
   const remaining=Math.max(0,existing.endsAt-Date.now());
   if(remaining<=0){completeStationJob(key,block.dimension,block.location);player.sendMessage("§a保存されていた加工を完了しました。");return;}
   scheduleStationJob(key,block.dimension,block.location,remaining/50);
