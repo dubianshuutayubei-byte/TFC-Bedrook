@@ -28,3 +28,11 @@ test("milk collection uses the exact official TFC minimum familiarity of 0.15",(
  assert.ok(runtime.includes('"minecraft:cow":{adultAgeDays:192,speciesId:"cow",displayName:"ウシ",gestationDays:58,childCount:2,maxUses:128,productCooldownDays:1,productFamiliarityMin:15'));
  assert.ok(runtime.includes('"minecraft:goat":{speciesId:"goat",displayName:"ヤギ",adultAgeDays:96,gestationDays:32,childCount:2,maxUses:60,productCooldownDays:3,productFamiliarityMin:15'));
 });
+
+test("sheep shearing is gated by TFC familiarity, maturity, cooldown and lifetime use limit",()=>{
+ assert.match(runtime,/world\.beforeEvents\.playerInteractWithEntity\.subscribe\(event=>\{/);
+ assert.match(runtime,/event\.itemStack\?\.typeId!=="minecraft:shears"/);
+ assert.match(runtime,/target\.hasComponent\("minecraft:is_sheared"\)/);
+ assert.match(runtime,/canProduce\(state,\{requiredFamiliarity:profile\.productFamiliarityMin\?\?0,cooldownDays:profile\.productCooldownDays\?\?7,currentDay:world\.getDay\(\),minimumAgeDays:profile\.adultAgeDays\?\?0,maxUses:profile\.maxUses\?\?Infinity\}\)/);
+ assert.match(runtime,/state=recordProduct\(state,world\.getDay\(\),\{maxUses:profile\.maxUses\?\?Infinity\}\)/);
+});
