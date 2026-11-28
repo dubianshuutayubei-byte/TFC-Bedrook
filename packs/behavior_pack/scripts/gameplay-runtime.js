@@ -64,7 +64,7 @@ const ANIMAL_PROFILES={
  "tfc:deer":{speciesId:"deer",displayName:"シカ",adultAgeDays:30,requiredFamiliarity:30,breedingCooldownDays:1,gestationDays:210,customBreeding:true,feedItems:["minecraft:wheat","minecraft:wheat_seeds"],grazeBlocks:["minecraft:grass_block","minecraft:tallgrass"],kind:"terrestrial",domestic:false},
  "minecraft:cow":{adultAgeDays:192,speciesId:"cow",displayName:"ウシ",gestationDays:58,childCount:2,maxUses:128,productCooldownDays:1,productFamiliarityMin:15,familiarityCap:35,requiredFamiliarity:30,customBreeding:false,dairy:true,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
  "minecraft:sheep":{adultAgeDays:56,speciesId:"sheep",displayName:"ヒツジ",gestationDays:32,childCount:2,maxUses:60,productCooldownDays:7,productFamiliarityMin:15,familiarityCap:35,requiredFamiliarity:25,customBreeding:false,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
- "minecraft:chicken":{adultAgeDays:24,speciesId:"chicken",displayName:"ニワトリ",eggProduct:true,maxUses:100,productCooldownDays:1.25,productFamiliarityMin:15,familiarityCap:35,hatchDays:8,requiredFamiliarity:20,customBreeding:false,feedItems:["minecraft:wheat_seeds","minecraft:beetroot_seeds","minecraft:melon_seeds","minecraft:pumpkin_seeds"],grazeBlocks:[],kind:"terrestrial",domestic:true},
+ "minecraft:chicken":{adultAgeDays:24,speciesId:"chicken",displayName:"ニワトリ",maxUses:100,productCooldownDays:1.25,productFamiliarityMin:15,familiarityCap:35,hatchDays:8,requiredFamiliarity:20,customBreeding:false,feedItems:["minecraft:wheat_seeds","minecraft:beetroot_seeds","minecraft:melon_seeds","minecraft:pumpkin_seeds"],grazeBlocks:[],kind:"terrestrial",domestic:true},
  "minecraft:pig":{speciesId:"pig",displayName:"ブタ",adultAgeDays:80,gestationDays:19,childCount:10,maxUses:60,familiarityCap:35,requiredFamiliarity:20,customBreeding:false,feedItems:["minecraft:carrot","minecraft:potato","minecraft:beetroot"],grazeBlocks:[],kind:"terrestrial",domestic:true},
  "minecraft:goat":{speciesId:"goat",displayName:"ヤギ",adultAgeDays:96,gestationDays:32,childCount:2,maxUses:60,productCooldownDays:3,productFamiliarityMin:15,familiarityCap:35,requiredFamiliarity:25,customBreeding:false,dairy:true,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
  "minecraft:horse":{speciesId:"horse",displayName:"ウマ",adultAgeDays:80,gestationDays:19,childCount:1,maxUses:60,familiarityCap:35,requiredFamiliarity:25,customBreeding:false,feedItems:["minecraft:wheat","minecraft:apple","minecraft:golden_carrot","minecraft:golden_apple"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
@@ -665,11 +665,12 @@ function eggNestTemperature(block){
 function eggNestInteract(player,block){
  if(!player||!block)return;
  const key=posKey(block,"egg_nest"),stored=readWorldState(key,{egg:null});
- const stack=inv(player)?.getItem(player.selectedSlotIndex),valid=["tfc:chicken_egg","tfc:duck_egg","tfc:quail_egg"];
+ const stack=inv(player)?.getItem(player.selectedSlotIndex),valid=["minecraft:egg","tfc:chicken_egg","tfc:duck_egg","tfc:quail_egg"];
  if(!stack||!valid.includes(stack.typeId)){player.sendMessage(stored?.egg?("§e孵化進捗: "+Math.floor(stored.egg.incubationDays/stored.egg.requiredDays*100)+"% / 生存率: "+Math.floor(stored.egg.viability)+"%"):"§eニワトリ・アヒル・ウズラの卵を手に持って巣を操作してください。");return;}
  if(stored?.egg){player.sendMessage("§eこの巣にはすでに卵があります。");return;}
- const species=stack.typeId.split(":")[1].replace("_egg","");if(!take(player,stack.typeId,1))return;
- const fertilized=Boolean(stack.getDynamicProperty("tfc:egg_fertilized"));
+ const species=stack.typeId==="minecraft:egg"?"chicken":stack.typeId.split(":")[1].replace("_egg","");if(!take(player,stack.typeId,1))return;
+ let fertilized=false;try{fertilized=Boolean(stack.getDynamicProperty("tfc:egg_fertilized"));}catch{}
+ if(stack.typeId==="minecraft:egg"){try{fertilized=block.dimension.getEntities({type:"minecraft:chicken",location:block.location,maxDistance:6}).some(m=>m.id!==undefined&&animalState(m).sex==="male");}catch{}}
  writeWorldState(key,{egg:createEggState({species,fertilized,requiredDays:8,temperatureC:eggNestTemperature(block)}),lastDay:currentAnimalDay()});
  player.sendMessage(fertilized?"§a有精卵を巣に置きました。火の近くで温めてください。":"§e無精卵を巣に置きました。孵化しません。");
 }
