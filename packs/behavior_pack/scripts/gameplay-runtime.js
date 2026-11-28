@@ -590,14 +590,14 @@ async function animalInteract(player,entity){
   return;
  }
  if(profile.dairy&&held.typeId==="minecraft:glass_bottle"){
-  if(state.sex!=="female"){player.sendMessage("§e乳を生産できるのはメスの牛だけです。");return;}
+  if(state.sex!=="female"){player.sendMessage("§e乳を生産できるのはメスの乳畜だけです。");return;}
   if(entity.hasComponent("minecraft:is_baby")||(profile.adultAgeDays!=null&&state.ageDays<profile.adultAgeDays)){player.sendMessage("§eこの動物はまだ成長中です。");return;}
   const currentDay=state.ageDays;
-  if(!canProduce(state,{requiredFamiliarity:0,cooldownDays:1,currentDay,requiredSex:"female",minimumAgeDays:profile.adultAgeDays,minimumHealth:40,maximumHunger:60,maximumThirst:60})){player.sendMessage("§eこの牛は健康・空腹・渇き、または補充時間の条件を満たしていません。");return;}
+  if(!canProduce(state,{requiredFamiliarity:0,cooldownDays:1,currentDay,requiredSex:"female",minimumAgeDays:profile.adultAgeDays,minimumHealth:40,maximumHunger:60,maximumThirst:60})){player.sendMessage("§eこの動物は健康・空腹・渇き、または補充時間の条件を満たしていません。");return;}
   if(!take(player,"minecraft:glass_bottle",1)){player.sendMessage("§c空き瓶を取り出せません。");return;}
   give(player,"tfc:milk_bottle",1);
   saveAnimal(entity,recordProduct(state,currentDay));
-  player.sendMessage("§a牛乳を採取しました。");
+  player.sendMessage("§a乳を採取しました。");
   return;
  }
  if(held.typeId==="tfc:water_vessel"){
