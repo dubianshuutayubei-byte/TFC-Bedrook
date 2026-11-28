@@ -55,5 +55,5 @@ test("saltwater harvesting and smokehouse heating are connected",()=>{
 test("ceramic crucible is shaped, fired, and assembled into the crucible block",()=>{
  const recipes=getStationRecipes("pit_kiln");
  assert.ok(recipes.some(r=>r.inputs["tfc:unfired_crucible"]&&r.outputs["tfc:fired_crucible"]));
- assert.match(runtime,/粘土玉: 8個/);
+ assert.match(runtime,/るつぼ: 8個/);
 });
