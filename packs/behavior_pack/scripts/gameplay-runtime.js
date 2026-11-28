@@ -6,6 +6,7 @@ import { readStackFreshness, advanceStackFreshness } from "./core/food-stack-ser
 import { createFireState, addFuel, advanceFire, canProcessAtTemperature } from "./core/firepit-service.mjs";
 import { createSoilState, advanceSoilHydration, evaluateCropGrowth, calculateCropYield, applyFertilizer, applyCropNutrientEffects, inferSoilTypeFromBlockId, inferSoilFertilityClassFromBiomeId, advanceCropGrowthProgress } from "./core/agriculture-service.mjs";
 import { CROP_PROFILES } from "./core/crop-profiles.mjs";
+import { getFaunaPrey, getFaunaPredators } from "./core/fauna-ecology-service.mjs";
 import { createAnimalState, createAnimalOffspringState, initializeAnimalLifeStage, syncAnimalHealth, advanceAnimalNeeds, advanceAnimalFamiliarityDecay, canFeedAnimal, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct, canLayEgg, recordEggLaid, getOffspringCount, evaluateHabitat, evaluateFaunaSpawn, tfcMonthFromDay } from "./core/fauna-service.mjs";
 import { OFFICIAL_FAUNA_PROFILES } from "./core/fauna-profiles.mjs";
 import { addNestBoxEgg, advanceNestBoxIncubation, takeNestBoxEgg } from "./core/nest-box-service.mjs";
@@ -663,6 +664,53 @@ function layAnimalEgg(entity,state,profile,currentDay){
  if(!writeWorldState(key,next))return state;
  return recordEggLaid(state,currentDay);
 }
+function runFaunaPredatorPreyInteraction(entity,profile,state,currentDay){
+ const species=profile.speciesId??entity.typeId.replace(/^tfc:/,"");
+ const now=system.currentTick;
+ const lastAction=Number(entity.getDynamicProperty("tfc:ecology_action_at")??-100000);
+ if(now-lastAction<100)return state;
+ // Hungry predators make a short-range strike; no pathfinding or world-wide entity scan.
+ const preySpecies=getFaunaPrey(species);
+ if(preySpecies.length&&state.hunger>=40){
+  for(const prey of preySpecies){
+   const preyType=Object.keys(ANIMAL_PROFILES).find(id=>ANIMAL_PROFILES[id].speciesId===prey);
+   if(!preyType)continue;
+   let candidates=[];try{candidates=entity.dimension.getEntities({type:preyType,location:entity.location,maxDistance:1.8});}catch{}
+   const target=candidates.find(candidate=>candidate.id!==entity.id);
+   if(!target)continue;
+   try{
+    const before=target.getComponent("minecraft:health")?.currentValue;
+    target.applyDamage(3);
+    const after=target.getComponent("minecraft:health")?.currentValue;
+    if(Number.isFinite(before)&&Number.isFinite(after)&&after<before){
+     state.hunger=Math.max(0,state.hunger-18);
+     entity.setDynamicProperty("tfc:ecology_action_at",now);
+     saveAnimal(entity,state);
+     return state;
+    }
+   }catch(error){console.warn("[TFC-Bedrook] fauna predation skipped:",species,prey,error);}
+  }
+ }
+ // Prey use a brief knockback when a listed predator is close; throttled per entity.
+ const predators=getFaunaPredators(species);
+ if(predators.length){
+  for(const predator of predators){
+   const predatorType=Object.keys(ANIMAL_PROFILES).find(id=>ANIMAL_PROFILES[id].speciesId===predator);
+   if(!predatorType)continue;
+   let threats=[];try{threats=entity.dimension.getEntities({type:predatorType,location:entity.location,maxDistance:5});}catch{}
+   const threat=threats.find(candidate=>candidate.id!==entity.id);
+   if(!threat)continue;
+   try{
+    const dx=entity.location.x-threat.location.x,dz=entity.location.z-threat.location.z;
+    const length=Math.hypot(dx,dz)||1;
+    entity.applyKnockback(dx/length,dz/length,0.55,0.12);
+    entity.setDynamicProperty("tfc:ecology_action_at",now);
+   }catch(error){console.warn("[TFC-Bedrook] fauna flee response unavailable:",species,predator,error);}
+   break;
+  }
+ }
+ return state;
+}
 function animalTick(entity){
  const profile=ANIMAL_PROFILES[entity.typeId];if(!profile)return;
  let state=animalState(entity);
@@ -675,6 +723,7 @@ function animalTick(entity){
  if(profile.maxUses>0&&state.uses>profile.maxUses&&state.oldDay<0)state.oldDay=currentDay+1+Math.floor(Math.random()*5);
  if(state.oldDay>=0&&currentDay>state.oldDay)state.lifeStage="old";
  state=consumeDroppedAnimalFood(entity,profile,state);
+ state=runFaunaPredatorPreyInteraction(entity,profile,state,currentDay);
  try{
   const base={x:Math.floor(entity.location.x),y:Math.floor(entity.location.y),z:Math.floor(entity.location.z)};
   let waterNearby=false;const forageCandidates=[];
