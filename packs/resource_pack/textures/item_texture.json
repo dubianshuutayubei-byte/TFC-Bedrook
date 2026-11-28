@@ -58,6 +58,24 @@
     },
     "tfc_fruit": {
       "textures": "textures/items/tfc_seed"
+    },
+    "tfc_tin_ore": {
+      "textures": "textures/items/tfc_ingot"
+    },
+    "tfc_heated_tin_ingot": {
+      "textures": "textures/items/tfc_ingot"
+    },
+    "tfc_tin_ingot": {
+      "textures": "textures/items/tfc_ingot"
+    },
+    "tfc_heated_bronze_ingot": {
+      "textures": "textures/items/tfc_ingot"
+    },
+    "tfc_bronze_ingot": {
+      "textures": "textures/items/tfc_ingot"
+    },
+    "tfc_bronze_sheet": {
+      "textures": "textures/items/tfc_ingot"
     }
   }
 }
