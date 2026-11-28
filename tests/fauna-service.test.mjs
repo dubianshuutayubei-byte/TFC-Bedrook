@@ -274,17 +274,20 @@ test("all 63 official fauna profiles can be evaluated with a complete matching h
 
 test("egg laying requires a healthy mature adult female and respects cooldown",()=>{
  const hen={species:"chicken",sex:"female",lifeStage:"adult",ageDays:24,health:90,hunger:20,thirst:20,lastEggAt:10};
- const rules={currentDay:11,cooldownDays:1,minimumAgeDays:24,minimumHealth:30,maximumHunger:70,maximumThirst:70};
+ const rules={currentDay:11,cooldownDays:1,minimumAgeDays:24,minimumFamiliarity:15,minimumHealth:30,maximumHunger:70,maximumThirst:70,maxUses:100};
  assert.equal(canLayEgg(hen,rules),true);
  assert.equal(canLayEgg({...hen,sex:"male"},rules),false);
  assert.equal(canLayEgg({...hen,lifeStage:"juvenile"},rules),false);
  assert.equal(canLayEgg({...hen,health:20},rules),false);
  assert.equal(canLayEgg({...hen,hunger:80},rules),false);
  assert.equal(canLayEgg({...hen,lastEggAt:10.5},rules),false);
+ assert.equal(canLayEgg({...hen,familiarity:15},rules),false);
+ assert.equal(canLayEgg({...hen,uses:100},rules),false);
 });
 
 test("recording an egg laid preserves the last laying day",()=>{
  const hen=recordEggLaid({species:"chicken",sex:"female",lastEggAt:4},7.25);
  assert.equal(hen.lastEggAt,7.25);
+ assert.equal(hen.uses,1);
  assert.equal(recordEggLaid(hen,"invalid").lastEggAt,7.25);
 });
