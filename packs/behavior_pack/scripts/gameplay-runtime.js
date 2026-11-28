@@ -3,7 +3,7 @@ import { ActionFormData } from "@minecraft/server-ui";
 import { deserializePlayerState, serializePlayerState } from "./core/player-state-service.mjs";
 import { consumeFood, advanceFoodDecay, ticksToHours } from "./core/food-service.mjs";
 import { createFireState, addFuel, advanceFire, canProcessAtTemperature } from "./core/firepit-service.mjs";
-import { createSoilState, applySoilCompost, advanceSoilHydration, evaluateCropGrowth, applyFertilizer, applyCropNutrientEffects, inferSoilTypeFromBlockId, inferSoilFertilityClassFromBiomeId, advanceCropGrowthProgress } from "./core/agriculture-service.mjs";
+import { createSoilState, advanceSoilHydration, evaluateCropGrowth, applyFertilizer, applyCropNutrientEffects, inferSoilTypeFromBlockId, inferSoilFertilityClassFromBiomeId, advanceCropGrowthProgress } from "./core/agriculture-service.mjs";
 import { createAnimalState, syncAnimalHealth, advanceAnimalNeeds, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct } from "./core/fauna-service.mjs";
 import { getStationRecipes } from "./core/processing-recipes.mjs";
 import { isStationJobDue, getPendingStationOutputs, markStationOutputDelivered, markStationJobRecoverable } from "./core/station-job-service.mjs";
@@ -44,6 +44,11 @@ function tickMetalHeat(player,nowTick){
  }
 }
 const ITEM_LABELS={"tfc:raw_meat":"生肉","tfc:cooked_meat":"焼いた肉","tfc:clay_vessel":"未焼成土器","tfc:fired_vessel":"焼成土器","tfc:unfired_ingot_mold":"未焼成鋳型","tfc:fired_ingot_mold":"焼成鋳型","tfc:copper_ore":"銅鉱石","tfc:heated_copper_ingot":"加熱銅インゴット","tfc:copper_ingot":"銅インゴット","tfc:tin_ore":"錫鉱石","tfc:heated_tin_ingot":"加熱錫インゴット","tfc:tin_ingot":"錫インゴット","tfc:heated_bronze_ingot":"加熱青銅インゴット","tfc:bronze_ingot":"青銅インゴット","tfc:fruit":"果物","tfc:vegetable":"野菜","tfc:dried_meat":"干し肉","tfc:dried_fruit":"干し果物","tfc:dried_vegetables":"干し野菜","tfc:compost":"堆肥","minecraft:oak_leaves":"落ち葉"};
+const FERTILIZER_PROFILES=Object.freeze({
+ "minecraft:bone_meal":{name:"骨粉",nutrients:{phosphorus:10}},
+ "tfc:compost":{name:"堆肥",nutrients:{nitrogen:20,potassium:20}},
+ "tfc:wood_ash":{name:"木灰",nutrients:{phosphorus:10,potassium:20}}
+});
 const WEATHER_BY_DIMENSION=new Map([["overworld","clear"]]);
 const ANIMAL_PROFILES={
  "tfc:deer":{adultAgeDays:30,requiredFamiliarity:35,breedingCooldownDays:20,gestationDays:210,customBreeding:true,feedItems:["minecraft:wheat","minecraft:wheat_seeds"],grazeBlocks:["minecraft:grass_block","minecraft:tallgrass"]},
@@ -210,9 +215,8 @@ function soilTick(block){const soil=readSoil(block);let nearbyWater=false;for(le
 async function farmlandInteract(player,block){if(!player||!block)return;const held=inv(player)?.getItem(player.selectedSlotIndex);const soil=readSoil(block);
 const seedProfile=Object.values(CROP_PROFILES).find(profile=>profile.seed===held?.typeId);
 if(seedProfile){const top=block.above();if(!top?.isAir){player.sendMessage("§c耕作土の上に空間が必要です。");return;}if(take(player,seedProfile.seed,1)){writeWorldState(soilKey(block),soil);top.setType("tfc:crop");top.setPermutation(top.permutation.withState("tfc:crop_type",Object.keys(CROP_PROFILES).find(key=>CROP_PROFILES[key]===seedProfile)));writeWorldState(posKey(top,"crop_progress"),0);player.sendMessage("§a"+(seedProfile.harvest==="tfc:grain"?"小麦":seedProfile.harvest==="tfc:maize"?"トウモロコシ":"ジャガイモ")+"を植えました。");}return;}
-if(held?.typeId==="tfc:compost"){if(take(player,"tfc:compost",1)){writeWorldState(soilKey(block),applySoilCompost(soil));player.sendMessage("§a堆肥を混ぜました。窒素とカリウムが回復しました。");}return;}
-if(held?.typeId==="minecraft:bone_meal"){if(take(player,"minecraft:bone_meal",1)){writeWorldState(soilKey(block),applyFertilizer(soil,{phosphorus:10}));player.sendMessage("§a骨粉を肥料として混ぜました。リンが回復しました。");}return;}
-const soilNames={loam:"壌土",silt:"シルト",clay:"粘土質"};const fertilityNames={entisol:"エンティソル",andisol:"アンドソル",fluvisol:"フルビソル",alfisol:"アルフィソル",mollisol:"モリソル",podzol:"ポドゾル",aridisol:"アリディソル",oxisol:"オキシソル"};const form=new ActionFormData().title("土壌状態").body("基質: "+(soilNames[soil.soilType]??soil.soilType)+"\n土壌肥沃度: "+(fertilityNames[soil.fertilityClass]??soil.fertilityClass)+"（肥料効果 ×"+({entisol:1,andisol:1.1,fluvisol:1.1,alfisol:1.1,mollisol:1.2,podzol:0.9,aridisol:0.9,oxisol:0.8}[soil.fertilityClass]??1).toFixed(1)+"）\n推定気温: "+currentTemperatureC(block.location.y-63).toFixed(1)+"°C\n水分: "+Math.floor(soil.hydration)+"%\n窒素: "+Math.floor(soil.nitrogen)+"\nリン: "+Math.floor(soil.phosphorus)+"\nカリウム: "+Math.floor(soil.potassium)+"\n\n骨粉を持って操作すると肥料として使えます。").button("閉じる");try{await form.show(player);}catch{}
+const fertilizer=FERTILIZER_PROFILES[held?.typeId];if(fertilizer){if(take(player,held.typeId,1)){writeWorldState(soilKey(block),applyFertilizer(soil,fertilizer.nutrients));player.sendMessage("§a"+fertilizer.name+"を混ぜました。"+Object.entries(fertilizer.nutrients).map(([name,value])=>name+" +"+value).join(" / ")+"（土壌肥沃度補正後）");}return;}
+const soilNames={loam:"壌土",silt:"シルト",clay:"粘土質"};const fertilityNames={entisol:"エンティソル",andisol:"アンドソル",fluvisol:"フルビソル",alfisol:"アルフィソル",mollisol:"モリソル",podzol:"ポドゾル",aridisol:"アリディソル",oxisol:"オキシソル"};const form=new ActionFormData().title("土壌状態").body("基質: "+(soilNames[soil.soilType]??soil.soilType)+"\n土壌肥沃度: "+(fertilityNames[soil.fertilityClass]??soil.fertilityClass)+"（肥料効果 ×"+({entisol:1,andisol:1.1,fluvisol:1.1,alfisol:1.1,mollisol:1.2,podzol:0.9,aridisol:0.9,oxisol:0.8}[soil.fertilityClass]??1).toFixed(1)+"）\n推定気温: "+currentTemperatureC(block.location.y-63).toFixed(1)+"°C\n水分: "+Math.floor(soil.hydration)+"%\n窒素: "+Math.floor(soil.nitrogen)+"\nリン: "+Math.floor(soil.phosphorus)+"\nカリウム: "+Math.floor(soil.potassium)+"\n\n骨粉・堆肥・木灰を持って操作すると、土壌肥沃度に応じた肥料効果が得られます。").button("閉じる");try{await form.show(player);}catch{}
 }
 function currentTemperatureC(elevationM=0){return calculateAmbientTemperatureC({meanAnnualTempC:12,seasonalAmplitudeC:14,dayOfYear:((world.getDay()%96)+96)%96,timeOfDay:world.getTimeOfDay(),elevationM:Math.max(0,elevationM),diurnalAmplitudeC:3});}
 function cropTick(block){const age=block.permutation.getState("tfc:age");if(typeof age!=="number"||age>=3)return;const cropType=block.permutation.getState("tfc:crop_type")??"wheat";const profile=CROP_PROFILES[cropType]??CROP_PROFILES.wheat;let soil;try{soil=readSoil(block.below());}catch{return;}const evaluation=evaluateCropGrowth(profile,{temperatureC:currentTemperatureC(block.location.y-63)},soil);if(!evaluation.suitable)return;const progressKey=posKey(block,"crop_progress");const growth=advanceCropGrowthProgress(Number(readWorldState(progressKey,0)),evaluation.growthMultiplier);soil.hydration=Math.max(0,soil.hydration-2*evaluation.growthMultiplier);soil=applyCropNutrientEffects(soil,profile.nutrientEffects,evaluation.growthMultiplier);writeWorldState(soilKey(block.below()),soil);writeWorldState(progressKey,growth.progress);if(growth.stageAdvanced)block.setPermutation(block.permutation.withState("tfc:age",age+1));}
@@ -280,6 +284,7 @@ system.runInterval(()=>{for(const player of world.getAllPlayers()){try{tickFoodF
 system.runInterval(()=>{for(const player of world.getAllPlayers()){try{tickMetalHeat(player,system.currentTick);}catch(error){console.warn("[TFC-Bedrook] metal heat tick failed:",error);}}},20);
 });
 world.afterEvents.playerInteractWithEntity.subscribe(event=>{if(ANIMAL_PROFILES[event.target?.typeId])animalInteract(event.player,event.target);});
+world.afterEvents.playerBreakBlock.subscribe(event=>{if(event.brokenBlockPermutation?.type?.id!=="tfc:firepit"||!event.player)return;try{event.player.dimension.spawnItem(new ItemStack("tfc:wood_ash",1),event.block.location);}catch(error){console.warn("[TFC-Bedrook] wood ash drop failed:",error);}});
 world.afterEvents.playerInteractWithBlock.subscribe(event=>{
  if(!event.isFirstEvent)return;
  const held=event.beforeItemStack??event.itemStack;
