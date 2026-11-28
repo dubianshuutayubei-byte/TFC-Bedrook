@@ -399,16 +399,24 @@ function animalTick(entity){
   state=advanceAnimalNeeds(state,0.05);
  try{
   const base={x:Math.floor(entity.location.x),y:Math.floor(entity.location.y),z:Math.floor(entity.location.z)};
-  let waterNearby=false,forageNearby=false;
+  let waterNearby=false;const forageCandidates=[];
   for(let x=-1;x<=1;x++)for(let z=-1;z<=1;z++){
    for(const y of [base.y,base.y-1]){
     const b=entity.dimension.getBlock({x:base.x+x,y,z:base.z+z});if(!b)continue;
     if(b.typeId==="minecraft:water"||b.typeId==="minecraft:flowing_water")waterNearby=true;
-    if(profile.grazeBlocks.includes(b.typeId))forageNearby=true;
+    if(profile.grazeBlocks.includes(b.typeId))forageCandidates.push(b);
    }
   }
   if(waterNearby)state=waterAnimal(state,1.5);
-  if(forageNearby)state=grazeAnimal(state,{hungerReduction:2});
+  // Grazing is a real resource interaction: only hungry animals consume one nearby forage block.
+  if(state.hunger>=25&&forageCandidates.length){
+   const forage=forageCandidates[Math.floor(Math.random()*forageCandidates.length)];
+   try{
+    if(forage.typeId==="minecraft:grass_block")forage.setType("minecraft:dirt");
+    else if(forage.typeId==="minecraft:tallgrass"||forage.typeId==="minecraft:short_grass"||forage.typeId==="minecraft:tall_grass")forage.setType("minecraft:air");
+    state=grazeAnimal(state,{hungerReduction:15});
+   }catch(error){console.warn("[TFC-Bedrook] animal grazing failed:",error);}
+  }
  }catch{}
  try{const hp=entity.getComponent("minecraft:health");if(hp)hp.setCurrentValue(Math.max(0,hp.effectiveMax*state.health/100));}catch{}
  if(profile.customBreeding&&state.pregnancyDays>0){const result=advancePregnancy(state,0.05,profile.gestationDays);state=result.animal;if(result.birthReady){let born=false;try{entity.dimension.spawnEntity(entity.typeId,{x:entity.location.x+1,y:entity.location.y,z:entity.location.z});born=true;}catch(error){console.warn("[TFC-Bedrook] animal birth deferred:",error);}if(born)state.pregnancyDays=0;}}
