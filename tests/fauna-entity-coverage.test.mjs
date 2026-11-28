@@ -12,7 +12,7 @@ const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runti
 test("all 63 TFC fauna have shared runtime profiles and entity coverage",()=>{
  assert.equal(coverage.runtimeTrackedCount,63);
  assert.equal(coverage.runtimeTrackedSpecies.length,63);
- for(const species of roster.species)assert.ok(runtime.includes('speciesId:"'+species.id+'"'),species.id+" runtime profile missing");
+ for(const species of roster.species)assert.ok(runtime.includes('"speciesId":"'+species.id+'"')||runtime.includes('speciesId:"'+species.id+'"'),species.id+" runtime profile missing");
 });
 test("all 40 missing species now have behavior, client and spawn definitions",()=>{
  assert.equal(coverage.customEntityDefinitionCount,40);
