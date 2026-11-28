@@ -60,15 +60,15 @@ const FERTILIZER_PROFILES=Object.freeze({
 const WEATHER_BY_DIMENSION=new Map([["overworld","clear"]]);
 const ANIMAL_PROFILES={
  "tfc:deer":{speciesId:"deer",displayName:"シカ",adultAgeDays:30,requiredFamiliarity:35,breedingCooldownDays:20,gestationDays:210,customBreeding:true,feedItems:["minecraft:wheat","minecraft:wheat_seeds"],grazeBlocks:["minecraft:grass_block","minecraft:tallgrass"],kind:"terrestrial",domestic:false},
- "minecraft:cow":{adultAgeDays:192,speciesId:"cow",displayName:"ウシ",requiredFamiliarity:30,customBreeding:false,dairy:true,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
- "minecraft:sheep":{adultAgeDays:56,speciesId:"sheep",displayName:"ヒツジ",requiredFamiliarity:25,customBreeding:false,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
- "minecraft:chicken":{adultAgeDays:24,speciesId:"chicken",displayName:"ニワトリ",requiredFamiliarity:20,customBreeding:false,feedItems:["minecraft:wheat_seeds","minecraft:beetroot_seeds","minecraft:melon_seeds","minecraft:pumpkin_seeds"],grazeBlocks:[],kind:"terrestrial",domestic:true},
- "minecraft:pig":{speciesId:"pig",displayName:"ブタ",adultAgeDays:null,requiredFamiliarity:20,customBreeding:false,feedItems:["minecraft:carrot","minecraft:potato","minecraft:beetroot"],grazeBlocks:[],kind:"terrestrial",domestic:true},
- "minecraft:goat":{speciesId:"goat",displayName:"ヤギ",adultAgeDays:null,requiredFamiliarity:25,customBreeding:false,dairy:true,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
- "minecraft:horse":{speciesId:"horse",displayName:"ウマ",adultAgeDays:null,requiredFamiliarity:25,customBreeding:false,feedItems:["minecraft:wheat","minecraft:apple","minecraft:golden_carrot","minecraft:golden_apple"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
- "minecraft:donkey":{speciesId:"donkey",displayName:"ロバ",adultAgeDays:null,requiredFamiliarity:25,customBreeding:false,feedItems:["minecraft:wheat","minecraft:apple","minecraft:golden_carrot","minecraft:golden_apple"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
- "minecraft:mule":{speciesId:"mule",displayName:"ラバ",adultAgeDays:null,requiredFamiliarity:25,customBreeding:false,feedItems:["minecraft:wheat","minecraft:apple","minecraft:golden_carrot","minecraft:golden_apple"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
- "minecraft:rabbit":{speciesId:"rabbit",displayName:"ウサギ",adultAgeDays:null,requiredFamiliarity:15,customBreeding:false,feedItems:["minecraft:carrot","minecraft:golden_carrot","minecraft:dandelion"],grazeBlocks:[],kind:"terrestrial",domestic:false},
+ "minecraft:cow":{adultAgeDays:192,speciesId:"cow",displayName:"ウシ",gestationDays:58,childCount:2,maxUses:128,productCooldownDays:1,productFamiliarityMin:16,requiredFamiliarity:30,customBreeding:false,dairy:true,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
+ "minecraft:sheep":{adultAgeDays:56,speciesId:"sheep",displayName:"ヒツジ",gestationDays:32,childCount:2,maxUses:60,productCooldownDays:7,productFamiliarityMin:16,requiredFamiliarity:25,customBreeding:false,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
+ "minecraft:chicken":{adultAgeDays:24,speciesId:"chicken",displayName:"ニワトリ",maxUses:100,productCooldownDays:1.25,productFamiliarityMin:16,hatchDays:8,requiredFamiliarity:20,customBreeding:false,feedItems:["minecraft:wheat_seeds","minecraft:beetroot_seeds","minecraft:melon_seeds","minecraft:pumpkin_seeds"],grazeBlocks:[],kind:"terrestrial",domestic:true},
+ "minecraft:pig":{speciesId:"pig",displayName:"ブタ",adultAgeDays:80,gestationDays:19,childCount:10,maxUses:60,requiredFamiliarity:20,customBreeding:false,feedItems:["minecraft:carrot","minecraft:potato","minecraft:beetroot"],grazeBlocks:[],kind:"terrestrial",domestic:true},
+ "minecraft:goat":{speciesId:"goat",displayName:"ヤギ",adultAgeDays:96,gestationDays:32,childCount:2,maxUses:60,productCooldownDays:3,productFamiliarityMin:16,requiredFamiliarity:25,customBreeding:false,dairy:true,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
+ "minecraft:horse":{speciesId:"horse",displayName:"ウマ",adultAgeDays:80,gestationDays:19,childCount:1,maxUses:60,requiredFamiliarity:25,customBreeding:false,feedItems:["minecraft:wheat","minecraft:apple","minecraft:golden_carrot","minecraft:golden_apple"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
+ "minecraft:donkey":{speciesId:"donkey",displayName:"ロバ",adultAgeDays:80,gestationDays:19,childCount:1,maxUses:60,requiredFamiliarity:25,customBreeding:false,feedItems:["minecraft:wheat","minecraft:apple","minecraft:golden_carrot","minecraft:golden_apple"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
+ "minecraft:mule":{speciesId:"mule",displayName:"ラバ",adultAgeDays:80,gestationDays:19,childCount:1,maxUses:60,requiredFamiliarity:25,customBreeding:false,feedItems:["minecraft:wheat","minecraft:apple","minecraft:golden_carrot","minecraft:golden_apple"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
+ "minecraft:rabbit":{speciesId:"rabbit",displayName:"ウサギ",adultAgeDays:80,gestationDays:19,childCount:6,maxUses:40,requiredFamiliarity:15,customBreeding:false,feedItems:["minecraft:carrot","minecraft:golden_carrot","minecraft:dandelion"],grazeBlocks:[],kind:"terrestrial",domestic:false},
  "minecraft:wolf":{speciesId:"wolf",displayName:"オオカミ",adultAgeDays:null,requiredFamiliarity:20,customBreeding:false,feedItems:["minecraft:beef","minecraft:porkchop","minecraft:chicken","minecraft:mutton","minecraft:rabbit"],grazeBlocks:[],kind:"terrestrial",domestic:false},
  "minecraft:fox":{speciesId:"fox",displayName:"キツネ",adultAgeDays:null,requiredFamiliarity:10,customBreeding:false,feedItems:["minecraft:sweet_berries","minecraft:glow_berries"],grazeBlocks:[],kind:"terrestrial",domestic:false},
  "minecraft:polar_bear":{speciesId:"polar_bear",displayName:"ホッキョクグマ",adultAgeDays:null,requiredFamiliarity:0,customBreeding:false,feedItems:["minecraft:cod","minecraft:salmon"],grazeBlocks:[],kind:"terrestrial",domestic:false},
@@ -524,7 +524,7 @@ function cropTick(block){
  }
 }
 function fireTick(block){const key=posKey(block,"fire");const state=advanceFire(readWorldState(key,{}),20);writeWorldState(key,state);}
-function animalState(entity){const profile=ANIMAL_PROFILES[entity.typeId];try{const raw=entity.getDynamicProperty("tfc:animal_state");const base=typeof raw==="string"?JSON.parse(raw):{};const isBaby=entity.hasComponent("minecraft:is_baby");return initializeAnimalLifeStage({...base,species:profile?.speciesId??base.species??entity.typeId.replace(":","_")},{isBaby,adultAgeDays:profile?.adultAgeDays??null});}catch{return initializeAnimalLifeStage({species:profile?.speciesId??entity.typeId.replace(":","_")},{isBaby:false,adultAgeDays:profile?.adultAgeDays??null});}}
+function animalState(entity){const profile=ANIMAL_PROFILES[entity.typeId];try{const raw=entity.getDynamicProperty("tfc:animal_state");const base=typeof raw==="string"?JSON.parse(raw):{};const isBaby=entity.hasComponent("minecraft:is_baby");return initializeAnimalLifeStage({...base,species:profile?.speciesId??base.species??entity.typeId.replace(":","_")},{isBaby,adultAgeDays:profile?.adultAgeDays??null,maxUses:profile?.maxUses??Infinity});}catch{return initializeAnimalLifeStage({species:profile?.speciesId??entity.typeId.replace(":","_")},{isBaby:false,adultAgeDays:profile?.adultAgeDays??null});}}
 function saveAnimal(entity,state){try{entity.setDynamicProperty("tfc:animal_state",JSON.stringify(state));}catch(error){console.warn("[TFC-Bedrook] animal state save:",error);}}
 function consumeDroppedAnimalFood(entity,profile,state){
  if(!profile.feedItems?.length||state.hunger<25)return state;
@@ -593,10 +593,10 @@ async function animalInteract(player,entity){
   if(state.sex!=="female"){player.sendMessage("§e乳を生産できるのはメスの乳畜だけです。");return;}
   if(entity.hasComponent("minecraft:is_baby")||(profile.adultAgeDays!=null&&state.ageDays<profile.adultAgeDays)){player.sendMessage("§eこの動物はまだ成長中です。");return;}
   const currentDay=state.ageDays;
-  if(!canProduce(state,{requiredFamiliarity:0,cooldownDays:1,currentDay,requiredSex:"female",minimumAgeDays:profile.adultAgeDays,minimumHealth:40,maximumHunger:60,maximumThirst:60})){player.sendMessage("§eこの動物は健康・空腹・渇き、または補充時間の条件を満たしていません。");return;}
+  if(!canProduce(state,{requiredFamiliarity:profile.productFamiliarityMin??0,cooldownDays:profile.productCooldownDays??1,currentDay,requiredSex:"female",minimumAgeDays:profile.adultAgeDays,minimumHealth:40,maximumHunger:60,maximumThirst:60,maxUses:profile.maxUses??Infinity})){player.sendMessage("§eこの動物は健康・空腹・渇き、または補充時間の条件を満たしていません。");return;}
   if(!take(player,"minecraft:glass_bottle",1)){player.sendMessage("§c空き瓶を取り出せません。");return;}
   give(player,"tfc:milk_bottle",1);
-  saveAnimal(entity,recordProduct(state,currentDay));
+  saveAnimal(entity,recordProduct(state,currentDay,{maxUses:profile.maxUses??Infinity}));
   player.sendMessage("§a乳を採取しました。");
   return;
  }
