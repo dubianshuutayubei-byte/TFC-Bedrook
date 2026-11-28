@@ -12,6 +12,11 @@ export const PROCESSING_RECIPES = Object.freeze({
   Object.freeze({id:"tfc:heated_tin_ingot",station:"crucible",title:"錫を溶かして鋳造",description:"錫鉱石を溶かして錫インゴットを鋳造します。",inputs:Object.freeze({"tfc:tin_ore":2,"tfc:fired_ingot_mold":1}),outputs:Object.freeze({"tfc:heated_tin_ingot":1,"tfc:fired_ingot_mold":1}),minimumTemperatureC:232,durationTicks:200}),
   Object.freeze({id:"tfc:heated_bronze_ingot",station:"crucible",title:"青銅を合金鋳造",description:"銅9・錫1の割合で青銅を作ります。",inputs:Object.freeze({"tfc:copper_ingot":9,"tfc:tin_ingot":1,"tfc:fired_ingot_mold":1}),outputs:Object.freeze({"tfc:heated_bronze_ingot":1,"tfc:fired_ingot_mold":1}),minimumTemperatureC:950,durationTicks:300,alloyId:"bronze",metalInputs:Object.freeze({copper:9,tin:1}),alloyComponents:Object.freeze({copper:Object.freeze([0.88,0.92]),tin:Object.freeze([0.08,0.12])})})
  ]),
+ drying_rack:Object.freeze([
+  Object.freeze({id:"tfc:dried_meat",station:"drying_rack",title:"肉を乾燥",description:"生肉を時間をかけて乾燥保存します。",inputs:Object.freeze({"tfc:raw_meat":1}),outputs:Object.freeze({"tfc:dried_meat":1}),minimumTemperatureC:0,durationTicks:24000}),
+  Object.freeze({id:"tfc:dried_fruit",station:"drying_rack",title:"果物を乾燥",description:"果物の水分を減らして保存性を高めます。",inputs:Object.freeze({"tfc:fruit":1}),outputs:Object.freeze({"tfc:dried_fruit":1}),minimumTemperatureC:0,durationTicks:18000}),
+  Object.freeze({id:"tfc:dried_vegetables",station:"drying_rack",title:"野菜を乾燥",description:"野菜の水分を減らして保存性を高めます。",inputs:Object.freeze({"tfc:vegetable":1}),outputs:Object.freeze({"tfc:dried_vegetables":1}),minimumTemperatureC:0,durationTicks:18000})
+ ]),
  anvil:Object.freeze([
   Object.freeze({id:"tfc:copper_sheet",station:"anvil",title:"銅板を成形",description:"加熱済み銅インゴットを成形します。",inputs:Object.freeze({"tfc:heated_copper_ingot":1}),outputs:Object.freeze({"tfc:copper_sheet":1}),minimumTemperatureC:0,durationTicks:60}),
   Object.freeze({id:"tfc:bronze_sheet",station:"anvil",title:"青銅板を成形",description:"加熱済み青銅インゴットを成形します。",inputs:Object.freeze({"tfc:heated_bronze_ingot":1}),outputs:Object.freeze({"tfc:bronze_sheet":1}),minimumTemperatureC:0,durationTicks:60})
