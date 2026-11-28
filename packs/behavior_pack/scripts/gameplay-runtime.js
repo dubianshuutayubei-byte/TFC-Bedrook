@@ -111,8 +111,9 @@ async function station(player,id,block){
  const held=inv(player)?.getItem(player.selectedSlotIndex),fuel=(id==="anvil"||id==="drying_rack")?null:(held?FUELS[held.typeId]:null);
  if(fuel){if(!take(player,held.typeId,1)){player.sendMessage("§c燃料を取り出せません。");return;}writeWorldState(posKey(block,"fire"),addFuel(state,fuel));player.sendMessage("§a燃料投入: "+Math.round(fuel.duration/20)+"秒分");return;}
  const tempLabels={unheated:"未加熱",warming:"暖まり中",hot:"熱い",very_hot:"非常に熱い",faint_red:"かすかな赤熱",dark_red:"暗赤色",bright_red:"明るい赤熱",orange:"橙熱",yellow:"黄色熱",yellow_white:"黄白色",white:"白熱",brilliant_white:"強白熱"};
- const body=recipes.map((r,i)=>(i+1)+". "+r.title+"\n   必要温度 "+r.minimumTemperatureC+"°C / "+Math.ceil(r.durationTicks/20)+"秒").join("\n\n");
- const form=new ActionFormData().title(id==="anvil"?"金床":id==="drying_rack"?"乾燥棚":"加工設備").body(body+"\n\n現在温度: "+Math.floor(state.temperatureC)+"°C（"+tempLabels[classifyTemperature(state.temperatureC)]+"）\n燃料残り: "+Math.ceil(state.burnTicks/20)+"秒");
+ const body=recipes.map((r,i)=>(i+1)+". "+r.title+"\n   "+(id==="drying_rack"?"所要時間 "+Math.ceil(r.durationTicks/20)+"秒":"必要温度 "+r.minimumTemperatureC+"°C / "+Math.ceil(r.durationTicks/20)+"秒")).join("\n\n");
+ const status=id==="drying_rack"?"\n\n常温・時間式乾燥です。燃料は必要ありません。":"\n\n現在温度: "+Math.floor(state.temperatureC)+"°C（"+tempLabels[classifyTemperature(state.temperatureC)]+"）\n燃料残り: "+Math.ceil(state.burnTicks/20)+"秒";
+ const form=new ActionFormData().title(id==="anvil"?"金床":id==="drying_rack"?"乾燥棚":"加工設備").body(body+status);
  for(const recipe of recipes)form.button(recipe.title);
  if(id==="anvil")form.button("水で冷却");
  form.button("閉じる");
