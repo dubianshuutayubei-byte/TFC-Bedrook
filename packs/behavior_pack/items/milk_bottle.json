@@ -19,13 +19,14 @@
       },
       "minecraft:use_animation": "drink",
       "minecraft:use_modifiers": {
-        "use_duration": 1.0,
+        "use_duration": 1,
         "movement_modifier": 0.35
       },
       "tfc:consume_food": {
         "hydration": 18,
         "category": "dairy",
-        "nutrition": 14
+        "nutrition": 14,
+        "itemId": "tfc:milk_bottle"
       }
     }
   }
