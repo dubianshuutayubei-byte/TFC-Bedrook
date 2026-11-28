@@ -18,7 +18,7 @@
       "requiresUi": true
     },
     {
-      "id": "tfc:unfired_vessel",
+      "id": "tfc:clay_vessel",
       "stage": "stone_age",
       "method": "clay_forming",
       "inputs": { "minecraft:clay_ball": 5 },
@@ -29,19 +29,29 @@
       "id": "tfc:fired_vessel",
       "stage": "stone_age",
       "method": "pit_kiln",
-      "inputs": { "tfc:unfired_vessel": 1, "minecraft:stick": 8 },
+      "inputs": { "tfc:clay_vessel": 1, "minecraft:stick": 8 },
       "outputs": { "tfc:fired_vessel": 1 },
       "durationSeconds": 600,
       "requiresHeat": true
     },
     {
-      "id": "tfc:copper_ingot",
+      "id": "tfc:heated_copper_ingot",
       "stage": "copper",
-      "method": "casting",
-      "inputs": { "tfc:molten_copper": 100 },
+      "method": "crucible_heating",
+      "inputs": { "tfc:copper_ore": 2 },
       "outputs": { "tfc:heated_copper_ingot": 1 },
       "minimumTemperatureC": 1085,
-      "requiresMold": true
+      "durationSeconds": 10,
+      "requiresMold": false
+    },
+    {
+      "id": "tfc:copper_sheet",
+      "stage": "copper",
+      "method": "anvil_working",
+      "inputs": { "tfc:heated_copper_ingot": 1 },
+      "outputs": { "tfc:copper_sheet": 1 },
+      "durationSeconds": 3,
+      "requiresHeat": false
     },
     {
       "id": "tfc:cooked_meat",
@@ -50,10 +60,12 @@
       "inputs": { "tfc:raw_meat": 1 },
       "outputs": { "tfc:cooked_meat": 1 },
       "minimumTemperatureC": 100,
-      "durationSeconds": 30
+      "durationSeconds": 5
     }
-    ,\n    {\n      "id": "tfc:copper_sheet",\n      "stage": "copper",\n      "method": "anvil_working",\n      "inputs": { "tfc:heated_copper_ingot": 1 },\n      "outputs": { "tfc:copper_sheet": 1 },\n      "durationSeconds": 3,\n      "requiresHeat": false\n    }\n  ],\n  "notes": [
+  ],
+  "notes": [
     "Prototype recipe registry; quantities and times are balance placeholders unless explicitly sourced from TFC data.",
-    "Knapping patterns, heat transfer, and actual inventory consumption are not connected to the runtime yet."
+    "The copper path is currently an approximation: mold casting and molten-fluid storage are not implemented.",
+    "Runtime station recipes are maintained in gameplay-runtime.js and must be kept synchronized with this registry."
   ]
 }
