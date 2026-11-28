@@ -190,6 +190,90 @@
     },
     "tfc_quern": {
       "textures": "textures/items/tfc_pottery"
+    },
+    "tfc_rice_seed": {
+      "textures": "textures/items/tfc_seed"
+    },
+    "tfc_rice": {
+      "textures": "textures/items/tfc_grain"
+    },
+    "tfc_cassava_seed": {
+      "textures": "textures/items/tfc_seed"
+    },
+    "tfc_cassava": {
+      "textures": "textures/items/tfc_grain"
+    },
+    "tfc_green_beans_seed": {
+      "textures": "textures/items/tfc_seed"
+    },
+    "tfc_green_beans": {
+      "textures": "textures/items/tfc_grain"
+    },
+    "tfc_pumpkin_seed": {
+      "textures": "textures/items/tfc_seed"
+    },
+    "tfc_pumpkin": {
+      "textures": "textures/items/tfc_grain"
+    },
+    "tfc_melon_seed": {
+      "textures": "textures/items/tfc_seed"
+    },
+    "tfc_melon": {
+      "textures": "textures/items/tfc_grain"
+    },
+    "tfc_tomato_seed": {
+      "textures": "textures/items/tfc_seed"
+    },
+    "tfc_tomato": {
+      "textures": "textures/items/tfc_grain"
+    },
+    "tfc_red_bell_pepper_seed": {
+      "textures": "textures/items/tfc_seed"
+    },
+    "tfc_yellow_bell_pepper_seed": {
+      "textures": "textures/items/tfc_seed"
+    },
+    "tfc_green_bell_pepper": {
+      "textures": "textures/items/tfc_grain"
+    },
+    "tfc_alfalfa_seed": {
+      "textures": "textures/items/tfc_seed"
+    },
+    "tfc_alfalfa": {
+      "textures": "textures/items/tfc_pottery"
+    },
+    "tfc_canola_seed": {
+      "textures": "textures/items/tfc_seed"
+    },
+    "tfc_canola": {
+      "textures": "textures/items/tfc_pottery"
+    },
+    "tfc_radish_seed": {
+      "textures": "textures/items/tfc_seed"
+    },
+    "tfc_radish": {
+      "textures": "textures/items/tfc_grain"
+    },
+    "tfc_sugarcane_seed": {
+      "textures": "textures/items/tfc_seed"
+    },
+    "tfc_sugarcane": {
+      "textures": "textures/items/tfc_pottery"
+    },
+    "tfc_jute_seed": {
+      "textures": "textures/items/tfc_seed"
+    },
+    "tfc_jute": {
+      "textures": "textures/items/tfc_pottery"
+    },
+    "tfc_papyrus_seed": {
+      "textures": "textures/items/tfc_seed"
+    },
+    "tfc_papyrus": {
+      "textures": "textures/items/tfc_pottery"
+    },
+    "tfc_trellis": {
+      "textures": "textures/items/tfc_pottery"
     }
   }
 }
