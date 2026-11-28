@@ -36,6 +36,9 @@
     },
     "tfc_melon_fruit": {
       "textures": "textures/blocks/tfc_crop"
+    },
+    "tfc_smokehouse": {
+      "textures": "textures/blocks/tfc_pottery"
     }
   }
 }
