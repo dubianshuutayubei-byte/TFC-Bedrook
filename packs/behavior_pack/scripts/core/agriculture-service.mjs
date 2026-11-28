@@ -17,7 +17,8 @@ export function createSoilState(input = {}) {
     phosphorus: clamp(finiteOr(input.phosphorus, 50), 0, 100),
     potassium: clamp(finiteOr(input.potassium, 50), 0, 100),
     soilType: input.soilType ?? "loam",
-    fertilityClass: Object.hasOwn(SOIL_FERTILITY_MULTIPLIERS, input.fertilityClass) ? input.fertilityClass : "entisol"
+    fertilityClass: Object.hasOwn(SOIL_FERTILITY_MULTIPLIERS, input.fertilityClass) ? input.fertilityClass : "entisol",
+    rainfallMultiplier: clamp(finiteOr(input.rainfallMultiplier, 1), 0, 2)
   };
 }
 
