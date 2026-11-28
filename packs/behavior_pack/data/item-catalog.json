@@ -281,7 +281,7 @@
   "audit": {
     "scope": "Behavior Pack内の専用アイテム/ブロック定義ファイルとの照合",
     "registeredItemCount": 110,
-    "registeredBlockCount": 13,
+    "registeredBlockCount": 14,
     "plannedButUnregistered": [
       "tfc:stone",
       "tfc:stick",
