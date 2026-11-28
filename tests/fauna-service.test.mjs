@@ -135,7 +135,7 @@ test("species without verified maturity ages do not receive fabricated ages",()=
 });
 
 test("animal product uses schedule old age only after exceeding the configured limit",()=>{
- const a=recordProduct({species:"cow",lifeStage:"adult",uses:2},10,{maxUses:2,oldDayDelay:2});
+ const a=recordProduct({species:"cow",lifeStage:"adult",familiarity:1,uses:2},10,{maxUses:2,oldDayDelay:2});
  assert.equal(a.uses,3);
  assert.equal(a.oldDay,12);
  assert.equal(a.lifeStage,"adult");
