@@ -23,7 +23,7 @@ test("aquatic, amphibious and terrestrial spawn categories are mapped correctly"
 import { evaluateFaunaSpawn } from "../packs/behavior_pack/scripts/core/fauna-service.mjs";
 const combined=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/official-fauna-spawn-profiles.json"),"utf8"));
 const officialProfiles=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/official-fauna-profiles.json"),"utf8"));
-test("all 63 official fauna spawn profiles combine exact placement and climate constraints",()=>{
+test("legacy 63 official fauna spawn profiles combine exact placement and climate constraints",()=>{
  assert.equal(combined.total,63);
  assert.equal(combined.species.length,63);
  const byId=Object.fromEntries(combined.species.map(x=>[x.id,x]));
