@@ -435,3 +435,24 @@ test("male breeding increments the shared livestock use counter by five as in Ja
  assert.match(section,/other\.uses=\(other\.uses\?\?0\)\+5/,"male breeding must add five uses");
  assert.match(section,/other\.uses>profile\.maxUses/,"the shared use limit must schedule old age");
 });
+
+
+test("Java 1.21 TFC camel cat and dog lifecycle profiles are connected to Bedrock runtime",()=>{
+ const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
+ const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
+ const profiles=runtime.slice(runtime.indexOf("const ANIMAL_PROFILES="),runtime.indexOf("\n};",runtime.indexOf("const ANIMAL_PROFILES=")));
+ for(const id of ["tfc:dromedary_camel","tfc:bactrian_camel","tfc:cat","tfc:dog"]){
+  assert.ok(profiles.includes('"'+id+'":'),id+" runtime profile must exist");
+ }
+ assert.match(profiles,/"tfc:dromedary_camel":\{[^}]*"adultAgeDays":OFFICIAL_LIVESTOCK_LIFECYCLE\.dromedary_camel\.adultAgeDays/);
+ assert.match(profiles,/"tfc:bactrian_camel":\{[^}]*"adultAgeDays":OFFICIAL_LIVESTOCK_LIFECYCLE\.bactrian_camel\.adultAgeDays/);
+ assert.match(profiles,/"tfc:cat":\{[^}]*"gestationDays":19,"childCount":6,"maxUses":60/);
+ assert.match(profiles,/"tfc:dog":\{[^}]*"gestationDays":19,"childCount":2,"maxUses":60/);
+ for(const id of ["tfc:dromedary_camel","tfc:bactrian_camel","tfc:cat","tfc:dog"]){
+  const i=profiles.indexOf('"'+id+'":');
+  const end=profiles.indexOf("\n",i);
+  const entry=profiles.slice(i,end<0?profiles.length:end);
+  assert.match(entry,/"customBreeding":true/);
+  assert.match(entry,/"feedItems":\[/);
+ }
+});
