@@ -107,3 +107,11 @@ test("soil state preserves a bounded regional rainfall multiplier",()=>{
  assert.equal(createSoilState({rainfallMultiplier:9}).rainfallMultiplier,2);
  assert.equal(createSoilState({rainfallMultiplier:-1}).rainfallMultiplier,0);
 });
+
+test("crop harvest yield reflects the weakest nutrient sufficiency",()=>{
+ assert.equal(calculateCropYield(3,1),3);
+ assert.equal(calculateCropYield(3,0.5),2);
+ assert.equal(calculateCropYield(3,0),1);
+ assert.equal(calculateCropYield(2,0),1);
+ assert.equal(calculateCropYield(3,2),3);
+});
