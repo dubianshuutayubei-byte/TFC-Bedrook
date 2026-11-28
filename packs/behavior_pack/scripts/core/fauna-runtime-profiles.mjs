@@ -93,7 +93,8 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "donkey"
     ],
     "predationDamage": 6,
-    "diurnal": true
+    "diurnal": true,
+    "territorial": true
   },
   "tfc:bluegill": {
     "speciesId": "bluegill",
@@ -272,7 +273,8 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "donkey"
     ],
     "predationDamage": 6,
-    "diurnal": false
+    "diurnal": false,
+    "territorial": true
   },
   "tfc:crappie": {
     "speciesId": "crappie",
@@ -382,7 +384,8 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "donkey"
     ],
     "predationDamage": 6,
-    "diurnal": false
+    "diurnal": false,
+    "territorial": true
   },
   "tfc:direwolf": {
     "speciesId": "direwolf",
@@ -444,7 +447,8 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "donkey"
     ],
     "predationDamage": 6,
-    "diurnal": false
+    "diurnal": false,
+    "territorial": true
   },
   "tfc:duck": {
     "speciesId": "duck",
@@ -576,7 +580,8 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "donkey"
     ],
     "predationDamage": 6,
-    "diurnal": true
+    "diurnal": true,
+    "territorial": true
   },
   "tfc:grouse": {
     "speciesId": "grouse",
@@ -692,7 +697,8 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "donkey"
     ],
     "predationDamage": 6,
-    "diurnal": false
+    "diurnal": false,
+    "territorial": true
   },
   "tfc:isopod": {
     "speciesId": "isopod",
@@ -850,7 +856,8 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "donkey"
     ],
     "predationDamage": 6,
-    "diurnal": false
+    "diurnal": false,
+    "territorial": true
   },
   "tfc:lobster": {
     "speciesId": "lobster",
@@ -1025,7 +1032,8 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "salmon",
       "smallmouth_bass"
     ],
-    "predationDamage": 9
+    "predationDamage": 9,
+    "territorial": false
   },
   "tfc:panther": {
     "speciesId": "panther",
@@ -1087,7 +1095,8 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "donkey"
     ],
     "predationDamage": 6,
-    "diurnal": false
+    "diurnal": false,
+    "territorial": true
   },
   "tfc:peafowl": {
     "speciesId": "peafowl",
@@ -1302,7 +1311,8 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "donkey"
     ],
     "predationDamage": 6,
-    "diurnal": false
+    "diurnal": false,
+    "territorial": true
   },
   "tfc:smallmouth_bass": {
     "speciesId": "smallmouth_bass",
@@ -1388,7 +1398,8 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "donkey"
     ],
     "predationDamage": 6,
-    "diurnal": false
+    "diurnal": false,
+    "territorial": true
   },
   "tfc:turkey": {
     "speciesId": "turkey",
