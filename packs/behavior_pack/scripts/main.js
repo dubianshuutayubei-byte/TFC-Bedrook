@@ -1,6 +1,9 @@
 import { world, system } from "@minecraft/server";
 import { showMainMenu } from "./ui/main-menu.js";
+import { initializeGameplay } from "./gameplay-runtime.js";
 import { createPlayerState, deserializePlayerState, serializePlayerState, advancePlayerNeeds } from "./core/player-state-service.mjs";
+
+initializeGameplay();
 
 const MENU_EVENT_ID = "tfc:menu";
 const PLAYER_STATE_KEY = "tfc:player_state";
