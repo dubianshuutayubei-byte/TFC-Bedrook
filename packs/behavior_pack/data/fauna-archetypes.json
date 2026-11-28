@@ -13,25 +13,25 @@
       "id": "arctic_char",
       "archetype": "freshwater_fish",
       "officialJavaClass": "FreshwaterFish",
-      "bedrockStatus": "not_implemented"
+      "bedrockStatus": "custom_entity_scaffold"
     },
     {
       "id": "armadillo",
       "archetype": "armadillo",
       "officialJavaClass": "TFCArmadillo",
-      "bedrockStatus": "not_implemented"
+      "bedrockStatus": "custom_entity_scaffold"
     },
     {
       "id": "bactrian_camel",
       "archetype": "camel",
       "officialJavaClass": "BactrianCamel",
-      "bedrockStatus": "not_implemented"
+      "bedrockStatus": "custom_entity_scaffold"
     },
     {
       "id": "bison",
       "archetype": "ramming_prey",
       "officialJavaClass": "RammingPrey",
-      "bedrockStatus": "not_implemented"
+      "bedrockStatus": "custom_entity_scaffold"
     },
     {
       "id": "black_bear",
@@ -61,7 +61,7 @@
       "id": "burbot",
       "archetype": "freshwater_fish",
       "officialJavaClass": "FreshwaterFish",
-      "bedrockStatus": "not_implemented"
+      "bedrockStatus": "custom_entity_scaffold"
     },
     {
       "id": "caribou",
@@ -139,7 +139,7 @@
       "id": "dromedary_camel",
       "archetype": "camel",
       "officialJavaClass": "DromedaryCamel",
-      "bedrockStatus": "not_implemented"
+      "bedrockStatus": "custom_entity_scaffold"
     },
     {
       "id": "duck",
@@ -229,7 +229,7 @@
       "id": "leopard_seal",
       "archetype": "leopard_seal",
       "officialJavaClass": "LeopardSeal",
-      "bedrockStatus": "not_implemented"
+      "bedrockStatus": "custom_entity_scaffold"
     },
     {
       "id": "lion",
@@ -259,7 +259,7 @@
       "id": "muksun",
       "archetype": "freshwater_fish",
       "officialJavaClass": "FreshwaterFish",
-      "bedrockStatus": "not_implemented"
+      "bedrockStatus": "custom_entity_scaffold"
     },
     {
       "id": "mule",
@@ -277,7 +277,7 @@
       "id": "northern_pike",
       "archetype": "freshwater_fish",
       "officialJavaClass": "FreshwaterFish",
-      "bedrockStatus": "not_implemented"
+      "bedrockStatus": "custom_entity_scaffold"
     },
     {
       "id": "ocelot",
@@ -301,7 +301,7 @@
       "id": "pacu",
       "archetype": "freshwater_fish",
       "officialJavaClass": "FreshwaterFish",
-      "bedrockStatus": "not_implemented"
+      "bedrockStatus": "custom_entity_scaffold"
     },
     {
       "id": "panda",
@@ -319,7 +319,7 @@
       "id": "peacock_bass",
       "archetype": "freshwater_fish",
       "officialJavaClass": "FreshwaterFish",
-      "bedrockStatus": "not_implemented"
+      "bedrockStatus": "custom_entity_scaffold"
     },
     {
       "id": "peafowl",
@@ -355,7 +355,7 @@
       "id": "pond_turtle",
       "archetype": "turtle",
       "officialJavaClass": "TFCTurtle",
-      "bedrockStatus": "not_implemented"
+      "bedrockStatus": "custom_entity_scaffold"
     },
     {
       "id": "pufferfish",
@@ -385,7 +385,7 @@
       "id": "red_piranha",
       "archetype": "freshwater_fish",
       "officialJavaClass": "FreshwaterFish",
-      "bedrockStatus": "not_implemented"
+      "bedrockStatus": "custom_entity_scaffold"
     },
     {
       "id": "sabertooth",
@@ -415,7 +415,7 @@
       "id": "spotted_gudgeon",
       "archetype": "freshwater_fish",
       "officialJavaClass": "FreshwaterFish",
-      "bedrockStatus": "not_implemented"
+      "bedrockStatus": "custom_entity_scaffold"
     },
     {
       "id": "squid",
@@ -433,7 +433,7 @@
       "id": "tilapia",
       "archetype": "freshwater_fish",
       "officialJavaClass": "FreshwaterFish",
-      "bedrockStatus": "not_implemented"
+      "bedrockStatus": "custom_entity_scaffold"
     },
     {
       "id": "tropical_fish",
