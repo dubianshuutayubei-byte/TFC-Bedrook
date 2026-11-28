@@ -71,6 +71,20 @@
             "sprint_speed_multiplier": 1.6
           }
         ]
+      },
+      "minecraft:behavior.play_dead": {
+        "priority": 1,
+        "duration": 4,
+        "random_start_chance": 1,
+        "random_damage_range": {
+          "min": 0,
+          "max": 100
+        },
+        "damage_sources": [
+          "entity_attack",
+          "projectile"
+        ],
+        "apply_regeneration": false
       }
     }
   }
