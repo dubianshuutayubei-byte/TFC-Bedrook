@@ -1,0 +1,18 @@
+{
+  "format_version": "1.26.60",
+  "minecraft:item": {
+    "description": {
+      "identifier": "tfc:jute_seed",
+      "menu_category": {
+        "category": "items"
+      }
+    },
+    "components": {
+      "minecraft:icon": "tfc_jute_seed",
+      "minecraft:display_name": {
+        "value": "ジュートの種"
+      },
+      "minecraft:max_stack_size": 64
+    }
+  }
+}
