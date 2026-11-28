@@ -31,6 +31,7 @@ Minecraft Bedrock Edition 向けに TerraFirmaCraft（TFC）Java 1.20.1-3.2.26 �
 - [Bedrock互換性・API基準](docs/compatibility/bedrock-version-matrix.md)
 - [Bedrock実装アーキテクチャ](docs/architecture/bedrock-implementation-architecture.md)
 - [UI設計・初期実装](docs/architecture/ui-design.md)
+- [2026-11-28 実装進捗（工程1〜8）](docs/implementation-progress-2026-11-28.md)
 - [ランタイム状態・セーブデータ設計](docs/architecture/runtime-state-model.md)
 - [気候サービス試作](docs/architecture/climate-service-prototype.md)
 - [金属・合金サービス試作](docs/architecture/metal-service-prototype.md)
@@ -41,6 +42,19 @@ Minecraft Bedrock Edition 向けに TerraFirmaCraft（TFC）Java 1.20.1-3.2.26 �
 GitHub ActionsでJSON・manifestの静的検査、JavaScript構文検査、Node.js単体テストを実行する。気候計算、金属・合金判定、熱・燃料の基礎計算に関する純粋関数プロトタイプを追加済み。Behavior Packのmanifest・Script API起動点・初期UIは追加済み。Resource Pack、専用ガイドアイテム、ゲーム内各機能との接続は未完成。
 
 - [静的検査ツール](tools/validate-pack.mjs)
+- [プレイヤー状態サービス](packs/behavior_pack/scripts/core/player-state-service.mjs)
+- [農業・土壌サービス](packs/behavior_pack/scripts/core/agriculture-service.mjs)
+- [食品・腐敗サービス](packs/behavior_pack/scripts/core/food-service.mjs)
+- [動物・畜産サービス](packs/behavior_pack/scripts/core/fauna-service.mjs)
+- [加工工程サービス](packs/behavior_pack/scripts/core/processing-service.mjs)
+- [地質サービス](packs/behavior_pack/scripts/core/geology-service.mjs)
+- [地形プロファイル試作](packs/behavior_pack/scripts/core/terrain-profile-service.mjs)
+- [内部アイテムIDカタログ](packs/behavior_pack/data/item-catalog.json)
+- [加工工程レシピ試作](packs/behavior_pack/data/processing-recipes.json)
+- [作物データ](packs/behavior_pack/data/crops.json)
+- [動物データ](packs/behavior_pack/data/fauna.json)
+- [地質プロファイル](packs/behavior_pack/data/geology-profiles.json)
+- [地形プロファイル](packs/behavior_pack/data/terrain-profile.json)
 - [気候計算モジュール](packs/behavior_pack/scripts/core/climate-service.mjs)
 - [気候計算テスト](tests/climate-service.test.mjs)
 - [金属データ](packs/behavior_pack/data/metals.json)
@@ -63,4 +77,4 @@ GitHub ActionsでJSON・manifestの静的検査、JavaScript構文検査、Node.
 
 ## 現在の状態
 
-調査・仕様整理に加え、気候計算、金属・合金、熱・燃料の基礎モジュールと単体テストを追加。Behavior PackのmanifestとScript API起動点、`/scriptevent tfc:menu` で開く日本語の初期UIを追加した。完成アドオンやMinecraft実機検証済みビルドはまだ存在しない。
+調査・仕様整理に加え、気候、金属・合金、熱・燃料、プレイヤー状態、加工工程、農業・土壌、食品腐敗、動物・畜産、地質・地形プロファイルの基礎モジュールとNode単体テストを追加。Behavior Packのmanifest、プレイヤー参加時の状態初期化、`/scriptevent tfc:menu` で開く日本語UIを追加した。内部アイテムIDカタログと地形生成プロトタイプも追加済み。ただし、カタログはBedrock登録済みアイテムではなく、地形プロトタイプもMinecraftの地形生成へ未接続。完成アドオンやMinecraft実機検証済みビルドはまだ存在しない。
