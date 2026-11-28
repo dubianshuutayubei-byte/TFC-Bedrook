@@ -3,12 +3,13 @@ import { ActionFormData } from "@minecraft/server-ui";
 import { deserializePlayerState, serializePlayerState } from "./core/player-state-service.mjs";
 import { consumeFood } from "./core/food-service.mjs";
 import { createFireState, addFuel, advanceFire, canProcessAtTemperature } from "./core/firepit-service.mjs";
-import { createSoilState, applySoilCompost, advanceSoilHydration } from "./core/agriculture-service.mjs";
+import { createSoilState, applySoilCompost, advanceSoilHydration, evaluateCropGrowth, applyNutrientUptake } from "./core/agriculture-service.mjs";
 import { createAnimalState, advanceAnimalNeeds, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal } from "./core/fauna-service.mjs";
 import { getStationRecipes } from "./core/processing-recipes.mjs";
 import { isStationJobDue, getPendingStationOutputs, markStationOutputDelivered, markStationJobRecoverable } from "./core/station-job-service.mjs";
 
 const STATE_KEY="tfc:player_state",PROGRESS_KEY="tfc:knapping_progress";
+const WHEAT_PROFILE={minTemperatureC:5,maxTemperatureC:30,minHydration:25,maxHydration:100,preferredNutrient:"nitrogen",minPreferredNutrient:10,optimalNutrient:60,soilTypes:["loam","silt","clay"]};
 const WEATHER_BY_DIMENSION=new Map([["overworld","Clear"]]);
 const ANIMAL_PROFILES={
  "tfc:deer":{adultAgeDays:30,requiredFamiliarity:35,breedingCooldownDays:20,gestationDays:210,feedItems:["minecraft:wheat","minecraft:wheat_seeds"],grazeBlocks:["minecraft:grass_block","minecraft:tallgrass"]},
@@ -123,7 +124,7 @@ if(held?.typeId==="tfc:crop_seed"){const top=block.above();if(!top?.isAir){playe
 if(held?.typeId==="minecraft:bone_meal"){if(take(player,"minecraft:bone_meal",1)){writeWorldState(soilKey(block),applySoilCompost(soil));player.sendMessage("§a堆肥を混ぜました。土壌養分が回復しました。");}return;}
 const form=new ActionFormData().title("土壌状態").body("水分: "+Math.floor(soil.hydration)+"%\n窒素: "+Math.floor(soil.nitrogen)+"\nリン: "+Math.floor(soil.phosphorus)+"\nカリウム: "+Math.floor(soil.potassium)+"\n\n骨粉を持って操作すると堆肥として使えます。").button("閉じる");try{await form.show(player);}catch{}
 }
-function cropTick(block){const age=block.permutation.getState("tfc:age");if(typeof age!=="number"||age>=3)return;let soil;try{soil=readSoil(block.below());}catch{return;}if(soil.hydration<20||soil.nitrogen<8)return;soil.hydration=Math.max(0,soil.hydration-2);soil.nitrogen=Math.max(0,soil.nitrogen-1.5);writeWorldState(soilKey(block.below()),soil);block.setPermutation(block.permutation.withState("tfc:age",age+1));}
+function cropTick(block){const age=block.permutation.getState("tfc:age");if(typeof age!=="number"||age>=3)return;let soil;try{soil=readSoil(block.below());}catch{return;}const evaluation=evaluateCropGrowth(WHEAT_PROFILE,{temperatureC:15},soil);if(!evaluation.suitable)return;soil.hydration=Math.max(0,soil.hydration-2);soil=applyNutrientUptake(soil,WHEAT_PROFILE.preferredNutrient,1.5);writeWorldState(soilKey(block.below()),soil);block.setPermutation(block.permutation.withState("tfc:age",age+1));}
 function fireTick(block){const key=posKey(block,"fire");const state=advanceFire(readWorldState(key,{}),20);writeWorldState(key,state);}
 function animalState(entity){try{const raw=entity.getDynamicProperty("tfc:animal_state");const base=typeof raw==="string"?JSON.parse(raw):{};return createAnimalState({...base,species:entity.typeId.replace(":","_")});}catch{return createAnimalState({species:entity.typeId.replace(":","_")});}}
 function saveAnimal(entity,state){try{entity.setDynamicProperty("tfc:animal_state",JSON.stringify(state));}catch(error){console.warn("[TFC-Bedrook] animal state save:",error);}}
