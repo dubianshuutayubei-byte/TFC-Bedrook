@@ -142,7 +142,8 @@
       "wood_ash"
     ],
     "animals": [
-      "deer_spawn_egg"
+      "deer_spawn_egg",
+      "wool"
     ]
   },
   "implementationStatus": "partially_registered",
@@ -159,7 +160,8 @@
     "錫の鋳造と銅/錫の青銅合金鋳造を追加。錫鉱石の自然生成は地形工程で実装予定。",
     "緑の素材と落ち葉を約10日発酵させるコンポスター、N/K補給用の堆肥を追加。",
     "焚き火設備を破壊すると木灰を1個取得でき、リン/カリウム肥料として使える。",
-    "石臼で穀物を粉砕し、水入り土器と小麦粉から生地を作り、焚き火でパンを焼く食品加工工程を追加。"
+    "石臼で穀物を粉砕し、水入り土器と小麦粉から生地を作り、焚き火でパンを焼く食品加工工程を追加。",
+    "羊の羊毛をTFC製品アイテムとして登録。"
   ],
   "registeredIdentifiers": [
     "tfc:alfalfa",
@@ -273,11 +275,12 @@
     "tfc:vegetable",
     "tfc:water_vessel",
     "tfc:wood_ash",
-    "tfc:yellow_bell_pepper_seed"
+    "tfc:yellow_bell_pepper_seed",
+    "tfc:wool"
   ],
   "audit": {
     "scope": "Behavior Pack内の専用アイテム/ブロック定義ファイルとの照合",
-    "registeredItemCount": 109,
+    "registeredItemCount": 110,
     "registeredBlockCount": 13,
     "plannedButUnregistered": [
       "tfc:stone",
