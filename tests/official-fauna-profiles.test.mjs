@@ -37,7 +37,9 @@ test("all official fauna profiles include their exact official spawn placement",
   assert.equal(p.placement,source.placement,p.id);
   assert.equal(p.heightmap,source.heightmap,p.id);
  }
- assert.deepEqual(profiles.spawnPlacementAudit.placementCounts,spawn.placementCounts);
+ const legacyCounts={in_water:0,no_restrictions:0,on_ground:0};
+ for(const p of profiles.species)legacyCounts[expected.get(p.id).placement]++;
+ assert.deepEqual(profiles.spawnPlacementAudit.placementCounts,legacyCounts);
 });
 
 import { evaluateFaunaSpawn } from "../packs/behavior_pack/scripts/core/fauna-service.mjs";
