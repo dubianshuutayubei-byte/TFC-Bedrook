@@ -1,0 +1,18 @@
+{
+  "format_version": "1.26.60",
+  "minecraft:item": {
+    "description": {
+      "identifier": "tfc:stone_shard",
+      "menu_category": {
+        "category": "items"
+      }
+    },
+    "components": {
+      "minecraft:icon": "tfc_stone",
+      "minecraft:display_name": {
+        "value": "石片"
+      },
+      "minecraft:max_stack_size": 64
+    }
+  }
+}
