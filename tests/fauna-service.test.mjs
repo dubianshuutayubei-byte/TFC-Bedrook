@@ -209,6 +209,8 @@ test("offspring inherit the official TFC familiarity rule and begin as juveniles
  assert.equal(high.familiarity,85.5);
 });
 test("offspring familiarity decay clock starts at birth and preserves the TFC grace period",()=>{
+ const unspecified=createAnimalOffspringState({familiarity:80},"cow","female");
+ assert.equal(unspecified.lastFamiliarityDecay,-1);
  const newborn=createAnimalOffspringState({familiarity:80},"cow","female",12.5);
  assert.equal(newborn.familiarity,40);
  assert.equal(newborn.lastFamiliarityDecay,12.5);
