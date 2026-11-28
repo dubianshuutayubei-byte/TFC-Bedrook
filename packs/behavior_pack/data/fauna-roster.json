@@ -1,0 +1,327 @@
+{
+  "source": {
+    "project": "TerraFirmaCraft",
+    "version": "3.2.26",
+    "kind": "official fauna profile roster",
+    "sourceUrl": "https://github.com/TerraFirmaCraft/TerraFirmaCraft/tree/v3.2.26/src/main/resources/data/tfc/tfc/fauna",
+    "count": 63
+  },
+  "note": "This is the full species coverage target, not a claim that all Bedrock entities are implemented. Entity assets, spawn rules, behavior, breeding, products and drops are tracked separately.",
+  "species": [
+    {
+      "id": "alpaca",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "black_bear",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "bluegill",
+      "group": "aquatic",
+      "status": "not_implemented"
+    },
+    {
+      "id": "boar",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "bongo",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "caribou",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "chicken",
+      "group": "bird",
+      "status": "not_implemented"
+    },
+    {
+      "id": "cod",
+      "group": "aquatic",
+      "status": "not_implemented"
+    },
+    {
+      "id": "cougar",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "cow",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "crappie",
+      "group": "aquatic",
+      "status": "not_implemented"
+    },
+    {
+      "id": "crayfish",
+      "group": "aquatic",
+      "status": "not_implemented"
+    },
+    {
+      "id": "crocodile",
+      "group": "reptile",
+      "status": "not_implemented"
+    },
+    {
+      "id": "deer",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "direwolf",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "dolphin",
+      "group": "aquatic",
+      "status": "not_implemented"
+    },
+    {
+      "id": "donkey",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "duck",
+      "group": "bird",
+      "status": "not_implemented"
+    },
+    {
+      "id": "fox",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "frog",
+      "group": "amphibian",
+      "status": "not_implemented"
+    },
+    {
+      "id": "gazelle",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "goat",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "grizzly_bear",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "grouse",
+      "group": "bird",
+      "status": "not_implemented"
+    },
+    {
+      "id": "horse",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "horseshoe_crab",
+      "group": "aquatic",
+      "status": "not_implemented"
+    },
+    {
+      "id": "hyena",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "isopod",
+      "group": "aquatic",
+      "status": "not_implemented"
+    },
+    {
+      "id": "jellyfish",
+      "group": "aquatic",
+      "status": "not_implemented"
+    },
+    {
+      "id": "lake_trout",
+      "group": "aquatic",
+      "status": "not_implemented"
+    },
+    {
+      "id": "largemouth_bass",
+      "group": "aquatic",
+      "status": "not_implemented"
+    },
+    {
+      "id": "lion",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "lobster",
+      "group": "aquatic",
+      "status": "not_implemented"
+    },
+    {
+      "id": "manatee",
+      "group": "aquatic",
+      "status": "not_implemented"
+    },
+    {
+      "id": "moose",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "mule",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "musk_ox",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "ocelot",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "octopoteuthis",
+      "group": "aquatic",
+      "status": "not_implemented"
+    },
+    {
+      "id": "orca",
+      "group": "aquatic",
+      "status": "not_implemented"
+    },
+    {
+      "id": "panda",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "panther",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "peafowl",
+      "group": "bird",
+      "status": "not_implemented"
+    },
+    {
+      "id": "penguin",
+      "group": "bird",
+      "status": "not_implemented"
+    },
+    {
+      "id": "pheasant",
+      "group": "bird",
+      "status": "not_implemented"
+    },
+    {
+      "id": "pig",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "polar_bear",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "pufferfish",
+      "group": "aquatic",
+      "status": "not_implemented"
+    },
+    {
+      "id": "quail",
+      "group": "bird",
+      "status": "not_implemented"
+    },
+    {
+      "id": "rabbit",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "rainbow_trout",
+      "group": "aquatic",
+      "status": "not_implemented"
+    },
+    {
+      "id": "sabertooth",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "salmon",
+      "group": "aquatic",
+      "status": "not_implemented"
+    },
+    {
+      "id": "sheep",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "smallmouth_bass",
+      "group": "aquatic",
+      "status": "not_implemented"
+    },
+    {
+      "id": "squid",
+      "group": "aquatic",
+      "status": "not_implemented"
+    },
+    {
+      "id": "tiger",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "tropical_fish",
+      "group": "aquatic",
+      "status": "not_implemented"
+    },
+    {
+      "id": "turkey",
+      "group": "bird",
+      "status": "not_implemented"
+    },
+    {
+      "id": "turtle",
+      "group": "reptile",
+      "status": "not_implemented"
+    },
+    {
+      "id": "wildebeest",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "wolf",
+      "group": "mammal",
+      "status": "not_implemented"
+    },
+    {
+      "id": "yak",
+      "group": "mammal",
+      "status": "not_implemented"
+    }
+  ]
+}
