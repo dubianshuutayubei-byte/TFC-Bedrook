@@ -58,7 +58,6 @@ const FERTILIZER_PROFILES=Object.freeze({
  "tfc:wood_ash":{name:"木灰",nutrients:{phosphorus:10,potassium:20}}
 });
 const WEATHER_BY_DIMENSION=new Map([["overworld","clear"]]);
-const pendingAnimalShears=new Set();
 const ANIMAL_PROFILES={
  "tfc:deer":{speciesId:"deer",displayName:"シカ",adultAgeDays:30,requiredFamiliarity:35,breedingCooldownDays:20,gestationDays:210,customBreeding:true,feedItems:["minecraft:wheat","minecraft:wheat_seeds"],grazeBlocks:["minecraft:grass_block","minecraft:tallgrass"],kind:"terrestrial",domestic:false},
  "minecraft:cow":{adultAgeDays:192,speciesId:"cow",displayName:"ウシ",gestationDays:58,childCount:2,maxUses:128,productCooldownDays:1,productFamiliarityMin:15,familiarityCap:35,requiredFamiliarity:30,customBreeding:false,dairy:true,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
@@ -598,7 +597,7 @@ function damageSelectedTool(player){
 function shearAnimal(player,entity){
  if(!player||!entity||entity.typeId!=="minecraft:sheep")return;
  const profile=ANIMAL_PROFILES[entity.typeId];if(!profile)return;
- const state=animalState(entity),currentDay=world.getDay();
+ const state=animalState(entity),currentDay=currentAnimalDay();
  if(!canProduce(state,{requiredFamiliarity:profile.productFamiliarityMin??16,cooldownDays:profile.productCooldownDays??7,currentDay,minimumAgeDays:profile.adultAgeDays??0,minimumHealth:0,maximumHunger:100,maximumThirst:100,maxUses:profile.maxUses??Infinity})){
   player.sendMessage("§eこのヒツジは成長・なつき度・羊毛の再生条件を満たしていません。");return;
  }
@@ -612,16 +611,11 @@ async function animalInteract(player,entity){
  if(!player||!entity)return;
  const profile=ANIMAL_PROFILES[entity.typeId];if(!profile)return;
  let state=animalState(entity);
- const shearKey=player.id+"|"+entity.id;
- if(pendingAnimalShears.has(shearKey)){
-  pendingAnimalShears.delete(shearKey);
-  try{if(entity.typeId==="minecraft:sheep"&&entity.hasComponent("minecraft:is_sheared")){state=recordProduct(state,currentAnimalDay(),{maxUses:profile.maxUses??Infinity});saveAnimal(entity,state);player.sendMessage("§a羊毛を採取しました。産出回数: "+state.uses+"/"+(profile.maxUses??"∞"));}}catch(error){console.warn("[TFC-Bedrook] sheep product record failed:",error);}
- }
  if(state.sex==="unknown"){state.sex=Math.random()<0.5?"male":"female";saveAnimal(entity,state);}
  const held=inv(player)?.getItem(player.selectedSlotIndex);
  if(!held){
   const names=Object.fromEntries(Object.entries(ANIMAL_PROFILES).map(([id,p])=>[id,p.displayName]));
-  const products=profile.dairy?(entity.typeId==="minecraft:goat"?"\n産出: 山羊乳（メスの成体・健康/空腹/渇き条件を満たすと空き瓶で採取、1日間隔）":"\n産出: 牛乳（メスの成体・健康/空腹/渇き条件を満たすと空き瓶で採取、1日間隔）"):entity.typeId==="minecraft:sheep"?"\n産出: 羊毛（バニラのハサミ操作で採取）":entity.typeId==="minecraft:chicken"?"\n産出: 卵（バニラの産卵AI）":"";
+  const products=profile.dairy?(entity.typeId==="minecraft:goat"?"\n産出: 山羊乳（メスの成体・健康/空腹/渇き条件を満たすと空き瓶で採取、1日間隔）":"\n産出: 牛乳（メスの成体・健康/空腹/渇き条件を満たすと空き瓶で採取、1日間隔）"):entity.typeId==="minecraft:sheep"?"\n産出: 羊毛（TFC式のハサミ操作、7日間隔）":entity.typeId==="minecraft:chicken"?"\n産出: 卵（バニラの産卵AI）":"";
   const usesInfo=profile.productCooldownDays!=null?"\n産出回数: "+state.uses+"/"+profile.maxUses+(state.lifeStage==="old"?"（老齢）":state.oldDay>=0?"（老齢化予定: "+state.oldDay+"日）":""):"";\n  const status="性別: "+(state.sex==="female"?"メス":"オス")+"\n年齢: "+state.ageDays.toFixed(1)+"日 / 成熟目安: "+(profile.adultAgeDays==null?"未設定":profile.adultAgeDays+"日")+"\n空腹: "+Math.floor(state.hunger)+" / 100\n渇き: "+Math.floor(state.thirst)+" / 100\n健康: "+Math.floor(state.health)+" / 100\nなつき度: "+Math.floor(state.familiarity)+" / 100"+usesInfo+(state.pregnancyDays>0?"\n妊娠: "+Math.floor(state.pregnancyDays)+"日":"")+products;
   const feedHint=profile.feedItems.length?"給餌可能: "+profile.feedItems.map(id=>ITEM_LABELS[id]??id).join(" / ")+"\n餌を手に持ってもう一度操作してください。":"この種への手動給餌は未対応です。";
   const form=new ActionFormData().title((names[entity.typeId]??entity.typeId)+"の状態").body(status+"\n\n"+feedHint).button("閉じる");
@@ -660,19 +654,7 @@ async function animalInteract(player,entity){
 
 export function initializeGameplay(){
  loadTrackedFoodContainers();world.afterEvents.weatherChange.subscribe(event=>{const key=normalizeDimensionId(event.dimension?.id);if(key)WEATHER_BY_DIMENSION.set(key,normalizeWeather(event.newWeather));});
- world.beforeEvents.playerInteractWithEntity.subscribe(event=>{
-  const target=event.target,player=event.player,key=player&&target?player.id+"|"+target.id:null;
-  if(!target||target.typeId!=="minecraft:sheep"||event.itemStack?.typeId!=="minecraft:shears")return;
-  if(key)pendingAnimalShears.delete(key);
-  try{
-   if(target.hasComponent("minecraft:is_sheared"))return;
-   const profile=ANIMAL_PROFILES[target.typeId],state=animalState(target);
-   const eligible=canProduce(state,{requiredFamiliarity:profile.productFamiliarityMin??0,cooldownDays:profile.productCooldownDays??7,currentDay:currentAnimalDay(),minimumAgeDays:profile.adultAgeDays??0,maxUses:profile.maxUses??Infinity});
-   if(!eligible){event.cancel=true;return;}
-   if(key)pendingAnimalShears.add(key);
-  }catch(error){event.cancel=true;console.warn("[TFC-Bedrook] sheep shearing eligibility failed:",error);}
- });
-world.afterEvents.playerBreakBlock.subscribe(event=>{
+ world.afterEvents.playerBreakBlock.subscribe(event=>{
  const brokenId=event.brokenBlockPermutation?.type?.id,player=event.player;if(!player)return;
  try{
   if(brokenId==="tfc:firepit")player.dimension.spawnItem(new ItemStack("tfc:wood_ash",1),event.block.location);
