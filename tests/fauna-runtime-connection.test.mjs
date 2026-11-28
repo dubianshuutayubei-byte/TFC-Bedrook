@@ -37,8 +37,8 @@ test("custom pregnancy uses shared TFC birth and juvenile events for vanilla and
  assert.match(runtime,/if\(profile\.customBreeding&&state\.pregnancyDays>0\)/);
  assert.match(runtime,/if\(profile\.customBreeding&&state\.sex==="female"/);
  assert.match(runtime,/other\.lastBreedAt=breedingTime/);
- assert.match(runtime,/entity\.dimension\.spawnEntity\(entity\.typeId,\{x:entity\.location\.x\+1/);
- assert.match(runtime,/birthEvent=entity\.typeId\.startsWith\("tfc:"\)\?"tfc:spawn_baby":"minecraft:entity_born"/);
+ assert.match(runtime,/entity\.dimension\.spawnEntity\(offspringEntityType,\{x:entity\.location\.x\+1/);
+ assert.match(runtime,/birthEvent=offspringEntityType\.startsWith\("tfc:"\)\?"tfc:spawn_baby":"minecraft:entity_born"/);
  assert.match(runtime,/growthEvent=entity\.typeId\.startsWith\("tfc:"\)\?"tfc:grow_up":"minecraft:ageable_grow_up"/);
  assert.match(runtime,/getOffspringCount\(profile\)/);
 });
@@ -176,7 +176,7 @@ test("animal runtime applies daily familiarity decay and capped TFC feeding gain
 });
 
 test("custom births trigger juvenile state and persist remaining litter count",()=>{
- assert.match(runtime,/spawnEntity\(entity\.typeId,\{x:entity\.location\.x\+1/);
+ assert.match(runtime,/spawnEntity\(offspringEntityType,\{x:entity\.location\.x\+1/);
  assert.match(runtime,/baby\.triggerEvent\(birthEvent\)/);\n assert.doesNotMatch(runtime,/if\(!baby\.triggerEvent\(birthEvent\)\)/);
  assert.match(runtime,/createAnimalOffspringState\(state,profile\.speciesId/);
  assert.match(runtime,/started\.animal\.birthsTotal=started\.animal\.birthsRemaining/);\n assert.match(runtime,/state\.birthsTotal\|\|Math\.floor\(profile\.childCount\?\?1\)/);
@@ -214,7 +214,7 @@ test("custom TFC livestock alpaca, musk ox and yak use official reproduction and
  assert.match(runtime,/"tfc:alpaca":\{[^}]*adultAgeDays":98[^}]*gestationDays":36[^}]*childCount":2[^}]*maxUses":128[^}]*productCooldownDays":5[^}]*customBreeding":true[^}]*wooly":true/);
  assert.match(runtime,/"tfc:musk_ox":\{[^}]*adultAgeDays":168[^}]*gestationDays":64[^}]*childCount":1[^}]*maxUses":160[^}]*productCooldownDays":4[^}]*customBreeding":true[^}]*wooly":true/);
  assert.match(runtime,/"tfc:yak":\{[^}]*adultAgeDays":180[^}]*gestationDays":64[^}]*childCount":1[^}]*maxUses":230[^}]*productCooldownDays":1[^}]*customBreeding":true[^}]*dairy":true/);
- assert.match(runtime,/const birthEvent=entity\.typeId\.startsWith\("tfc:"\)\?"tfc:spawn_baby":"minecraft:entity_born"/);
+ assert.match(runtime,/const birthEvent=offspringEntityType\.startsWith\("tfc:"\)\?"tfc:spawn_baby":"minecraft:entity_born"/);
  assert.match(runtime,/baby\.triggerEvent\("tfc:spawn_baby"\)/);
 });
 
