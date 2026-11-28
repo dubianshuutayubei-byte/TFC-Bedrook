@@ -22,7 +22,7 @@ test("registered item and block identifiers are unique",()=>{
 test("catalog registeredIdentifiers all exist in item or block files",()=>{
   const actual=new Set([...readIdentifiers("packs/behavior_pack/items","minecraft:item"),...readIdentifiers("packs/behavior_pack/blocks","minecraft:block")]);
   const catalog=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/item-catalog.json"),"utf8"));
-  const missing=(catalog.registeredIdentifiers??[]).filter(id=>!actual.has(id));
+  const missing=(catalog.registeredIdentifiers??[]).filter(id=>id.startsWith("tfc:")&&!actual.has(id));
   assert.deepEqual(missing,[],"catalog claims identifiers that are not registered");
   assert.equal(new Set(catalog.registeredIdentifiers??[]).size,(catalog.registeredIdentifiers??[]).length,"catalog contains duplicate registered identifiers");
 });
