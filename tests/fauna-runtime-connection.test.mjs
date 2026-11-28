@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
 test("configured native livestock uses shared breeding and intercepted feed",()=>{
- assert.match(runtime,/for\(const id of \["minecraft:cow","minecraft:sheep","minecraft:pig","minecraft:goat","minecraft:horse","minecraft:donkey","minecraft:mule","minecraft:rabbit"\]\)if\(ANIMAL_PROFILES\[id\]\?\.gestationDays\)ANIMAL_PROFILES\[id\]\.customBreeding=true/);
+ assert.match(runtime,/for\(const id of \["minecraft:cow","minecraft:sheep","minecraft:pig","minecraft:goat","minecraft:horse","minecraft:donkey"\]\)if\(ANIMAL_PROFILES\[id\]\?\.gestationDays\)ANIMAL_PROFILES\[id\]\.customBreeding=true/);
  assert.match(runtime,/world\.beforeEvents\.playerInteractWithEntity\.subscribe\(event=>\{/);
  assert.match(runtime,/event\.cancel=true/);
  assert.match(runtime,/if\(!firstFeedToday\)/);
@@ -21,6 +21,8 @@ test("custom deer retains its own pregnancy and birth cycle",()=>{
 test("shared pregnancy supports native and custom births with the appropriate baby event",()=>{
  assert.match(runtime,/if\(profile\.customBreeding&&state\.pregnancyDays>0\)/);
  assert.match(runtime,/if\(profile\.customBreeding&&state\.sex==="female"/);
+ assert.match(runtime,/state=recordBreedingUse\(started\.animal,breedingTime/);
+ assert.match(runtime,/other=recordBreedingUse\(other,breedingTime/);
  assert.match(runtime,/other\.lastBreedAt=breedingTime/);
  assert.ok(runtime.includes('entity.dimension.spawnEntity(entity.typeId+"<tfc:spawn_baby>",birthLocation)'));
  assert.match(runtime,/baby\.triggerEvent\("minecraft:entity_born"\)/);
@@ -161,7 +163,7 @@ test("animal runtime applies daily familiarity decay and capped TFC feeding gain
 test("custom births trigger juvenile state and persist remaining litter count",()=>{
  assert.ok(runtime.includes('entity.dimension.spawnEntity(entity.typeId+"<tfc:spawn_baby>",birthLocation)'));
  assert.match(runtime,/createAnimalOffspringState\(state,profile\.speciesId/);
- assert.match(runtime,/state\.birthsRemaining=Math\.max\(1,Math\.floor\(profile\.childCount\?\?1\)\)/);
+ assert.match(runtime,/state\.birthsTotal=determineOffspringCount\(profile\);state\.birthsRemaining=state\.birthsTotal/);
  assert.match(runtime,/state\.birthsRemaining-=1/);
 });
 
