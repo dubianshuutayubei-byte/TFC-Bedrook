@@ -17,5 +17,5 @@ test("deer birth creates a juvenile entity with inherited familiarity",()=>{
  assert.match(runtime,/spawnEntity\(entity\.typeId,\{x:entity\.location\.x\+1/);
  assert.match(runtime,/baby\.triggerEvent\("tfc:spawn_baby"\)/);
  assert.match(runtime,/saveAnimal\(baby,createAnimalOffspringState\(state,profile\.speciesId/);
- assert.match(runtime,/entity\.triggerEvent\("tfc:grow_up"\)/);
+ assert.match(runtime,/growthEvent=entity\.typeId\.startsWith\("tfc:"\)\?"tfc:grow_up":"minecraft:ageable_grow_up"/);
 });
