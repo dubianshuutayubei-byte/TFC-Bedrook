@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { resolve, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { advanceAnimalLifecycle, createAnimalState, createEggState, advanceEggIncubation, evaluatePredation } from "../packs/behavior_pack/scripts/core/fauna-service.mjs";
+import { advanceAnimalLifecycle, initializeAnimalLifeStage, createAnimalState, createEggState, advanceEggIncubation, evaluatePredation } from "../packs/behavior_pack/scripts/core/fauna-service.mjs";
 import { CUSTOM_FAUNA_PROFILES } from "../packs/behavior_pack/scripts/core/fauna-runtime-profiles.mjs";
 
 const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
@@ -65,6 +65,7 @@ test("custom predator and prey entities expose their ecology families",()=>{
 test("life-stage progression, senescence and death are persistent states",()=>{
  const adult=advanceAnimalLifecycle(createAnimalState({ageDays:12,lifeStage:"juvenile",health:100}),12,{adultAgeDays:12,elapsedDays:1});
  assert.equal(adult.lifeStage,"adult");
+ assert.equal(initializeAnimalLifeStage({ageDays:0,lifeStage:"juvenile"},{isBaby:true,adultAgeDays:null}).lifeStage,"juvenile");
  const old=advanceAnimalLifecycle({ageDays:30,lifeStage:"adult",oldDay:5,health:100},6,{elapsedDays:2,oldAgeHealthLossPerDay:1});
  assert.equal(old.lifeStage,"old");
  assert.equal(old.health,98);
