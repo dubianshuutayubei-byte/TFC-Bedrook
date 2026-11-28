@@ -83,9 +83,16 @@ export function evaluateFaunaSpawn(profile, environment, random = Math.random) {
     throw new RangeError("unsupported fauna spawn placement: " + placement);
   }
 
-  if (profile.distanceBelowSeaLevel != null && profile.distanceBelowSeaLevel >= 0) {
-    if (environment.y == null || environment.seaLevel == null) missing.push("y", "seaLevel");
-    else if (environment.y > environment.seaLevel - profile.distanceBelowSeaLevel) failures.push("too_high_above_depth_limit");
+  const minimumDepth = profile.belowSeaLevel ?? profile.distanceBelowSeaLevel;
+  if (minimumDepth != null && minimumDepth >= 0) {
+    if (environment.belowSeaLevel != null) {
+      if (environment.belowSeaLevel < minimumDepth) failures.push(profile.belowSeaLevel != null ? "too_shallow_below_sea_level" : "too_high_above_depth_limit");
+    } else if (environment.y != null && environment.seaLevel != null) {
+      const sampledDepth = Math.max(0, environment.seaLevel - environment.y);
+      if (sampledDepth < minimumDepth) failures.push(profile.belowSeaLevel != null ? "too_shallow_below_sea_level" : "too_high_above_depth_limit");
+    } else {
+      missing.push("belowSeaLevel");
+    }
   }
 
   if (profile.months != null) {
