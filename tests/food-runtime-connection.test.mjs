@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const profiles=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/food-profiles.json"),"utf8"));
 const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
+const processing=readFileSync(join(root,"packs/behavior_pack/scripts/core/processing-recipes.mjs"),"utf8");
 
 test("registered edible items use the food service and match canonical nutrition profiles",()=>{
   assert.match(runtime,/import \{ consumeFood \} from "\.\/core\/food-service\.mjs"/);
@@ -42,5 +43,5 @@ test("smokehouse output is registered as smoked-preserved food, not merely cooke
   assert.equal(smoked.preservation,"smoked");
   assert.equal(smoked.cooked,true);
   assert.match(runtime,/"tfc:smoked_meat":0\.03/);
-  assert.match(runtime,/id:"tfc:smoked_meat",station:"smokehouse"/);
+  assert.match(processing,/id:"tfc:smoked_meat",station:"smokehouse"/);
 });
