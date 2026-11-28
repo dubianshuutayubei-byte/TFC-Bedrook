@@ -64,7 +64,7 @@ const ANIMAL_PROFILES={
  "tfc:deer":{speciesId:"deer",displayName:"シカ",adultAgeDays:30,requiredFamiliarity:30,breedingCooldownDays:1,gestationDays:210,customBreeding:true,feedItems:["minecraft:wheat","minecraft:wheat_seeds"],grazeBlocks:["minecraft:grass_block","minecraft:tallgrass"],kind:"terrestrial",domestic:false},
  "minecraft:cow":{adultAgeDays:192,speciesId:"cow",displayName:"ウシ",gestationDays:58,childCount:2,maxUses:128,productCooldownDays:1,productFamiliarityMin:15,familiarityCap:35,requiredFamiliarity:30,customBreeding:false,dairy:true,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
  "minecraft:sheep":{adultAgeDays:56,speciesId:"sheep",displayName:"ヒツジ",gestationDays:32,childCount:2,maxUses:60,productCooldownDays:4,productFamiliarityMin:15,familiarityCap:35,requiredFamiliarity:30,customBreeding:false,wooly:true,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
- "minecraft:chicken":{adultAgeDays:24,speciesId:"chicken",displayName:"ニワトリ",maxUses:100,productCooldownDays:1.25,eggSpecies:"chicken",eggLayCooldownDays:1.25,productFamiliarityMin:15,familiarityCap:35,hatchDays:8,requiredFamiliarity:20,customBreeding:false,feedItems:["minecraft:wheat_seeds","minecraft:beetroot_seeds","minecraft:melon_seeds","minecraft:pumpkin_seeds"],grazeBlocks:[],kind:"terrestrial",domestic:true},
+ "tfc:chicken":{adultAgeDays:24,speciesId:"chicken",displayName:"ニワトリ",maxUses:100,productCooldownDays:1.25,eggSpecies:"chicken",eggLayCooldownDays:1.25,productFamiliarityMin:15,familiarityCap:35,hatchDays:8,requiredFamiliarity:30,customBreeding:false,feedItems:["minecraft:wheat_seeds","minecraft:beetroot_seeds","minecraft:melon_seeds","minecraft:pumpkin_seeds"],grazeBlocks:[],kind:"terrestrial",domestic:true},
  "minecraft:pig":{speciesId:"pig",displayName:"ブタ",adultAgeDays:80,gestationDays:19,childCount:10,maxUses:60,familiarityCap:35,requiredFamiliarity:20,customBreeding:false,feedItems:["minecraft:carrot","minecraft:potato","minecraft:beetroot"],grazeBlocks:[],kind:"terrestrial",domestic:true},
  "minecraft:goat":{speciesId:"goat",displayName:"ヤギ",adultAgeDays:96,gestationDays:32,childCount:2,maxUses:60,productCooldownDays:3,productFamiliarityMin:15,familiarityCap:35,requiredFamiliarity:25,customBreeding:false,dairy:true,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
  "minecraft:horse":{speciesId:"horse",displayName:"ウマ",adultAgeDays:80,gestationDays:19,childCount:1,maxUses:60,familiarityCap:35,requiredFamiliarity:25,customBreeding:false,feedItems:["minecraft:wheat","minecraft:apple","minecraft:golden_carrot","minecraft:golden_apple"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
@@ -589,9 +589,9 @@ function nestBoxTick(block){
  for(const egg of [...state.eggs]){
   if(!egg.fertilized||!egg.hatchReady||!["chicken","duck","quail"].includes(egg.species))continue;
   try{
-   const entityType=egg.species==="chicken"?"minecraft:chicken":"tfc:"+egg.species;
+   const entityType="tfc:"+egg.species;
    const baby=block.dimension.spawnEntity(entityType,{x:block.location.x+0.5,y:block.location.y+0.2,z:block.location.z+0.5});
-   try{baby.triggerEvent(egg.species==="chicken"?"minecraft:ageable_set_baby":"tfc:spawn_baby");}catch(error){console.warn("[TFC-Bedrook] fauna hatch baby event unavailable:",error);}
+   try{baby.triggerEvent("tfc:spawn_baby");}catch(error){console.warn("[TFC-Bedrook] fauna hatch baby event unavailable:",error);}
    saveAnimal(baby,createAnimalOffspringState({familiarity:0},egg.species,"unknown"));
    state={...state,eggs:takeNestBoxEgg(state,egg.id).state.eggs};
   }catch(error){console.warn("[TFC-Bedrook] nest box hatch deferred:",error);}
@@ -715,7 +715,7 @@ function animalTick(entity){
    if(state.birthsRemaining===0){state.pregnancyDays=0;state.fertilized=false;}
   }
  }
- if(["tfc:deer","tfc:duck","tfc:quail","tfc:alpaca","tfc:musk_ox","tfc:yak"].includes(entity.typeId)&&state.lifeStage==="juvenile"&&profile.adultAgeDays!=null&&state.ageDays>=profile.adultAgeDays){try{entity.triggerEvent("tfc:grow_up");state.lifeStage="adult";}catch(error){console.warn("[TFC-Bedrook] fauna growth event failed:",error);}}
+ if(["tfc:deer","tfc:chicken","tfc:duck","tfc:quail","tfc:alpaca","tfc:musk_ox","tfc:yak"].includes(entity.typeId)&&state.lifeStage==="juvenile"&&profile.adultAgeDays!=null&&state.ageDays>=profile.adultAgeDays){try{entity.triggerEvent("tfc:grow_up");state.lifeStage="adult";}catch(error){console.warn("[TFC-Bedrook] fauna growth event failed:",error);}}
  if(state.sex==="unknown")state.sex=Math.random()<0.5?"male":"female";
  state=layAnimalEgg(entity,state,profile,currentDay);
  const breedingDay=world.getDay(),breedingTime=currentAnimalDay();
