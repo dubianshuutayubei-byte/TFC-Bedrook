@@ -1,0 +1,12 @@
+{
+  "format_version": "1.20.10",
+  "minecraft:recipe_shapeless": {
+    "description": { "identifier": "tfc:vegetable_mix" },
+    "tags": ["crafting_table"],
+    "ingredients": [
+      { "item": "minecraft:carrot" },
+      { "item": "minecraft:beetroot" }
+    ],
+    "result": { "item": "tfc:vegetable", "count": 2 }
+  }
+}
