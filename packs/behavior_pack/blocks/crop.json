@@ -29,6 +29,10 @@
           "lentils",
           "soybean",
           "peanuts"
+        ],
+        "tfc:part": [
+          "lower",
+          "upper"
         ]
       }
     },
