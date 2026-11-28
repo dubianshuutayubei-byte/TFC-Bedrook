@@ -532,7 +532,10 @@ function consumeDroppedAnimalFood(entity,profile,state){
   const items=entity.dimension.getEntities({type:"minecraft:item",location:entity.location,maxDistance:1.5});
   for(const dropped of items){
    const stack=dropped.getComponent("minecraft:item")?.itemStack;
-   if(!stack||stack.amount!==1||!profile.feedItems.includes(stack.typeId))continue;
+   if(!stack||stack.amount<1||!profile.feedItems.includes(stack.typeId))continue;
+   if(stack.amount>1){
+    try{entity.dimension.spawnItem(new ItemStack(stack.typeId,stack.amount-1),dropped.location);}catch(error){console.warn("[TFC-Bedrook] animal feed remainder restore failed:",error);continue;}
+   }
    dropped.kill();
    return grazeAnimal(state,{hungerReduction:35,thirstReduction:3});
   }
