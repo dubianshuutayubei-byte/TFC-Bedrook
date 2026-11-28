@@ -2,6 +2,7 @@ import { ItemStack, system, world } from "@minecraft/server";
 import { ActionFormData } from "@minecraft/server-ui";
 import { deserializePlayerState, serializePlayerState } from "./core/player-state-service.mjs";
 import { consumeFood, advanceFoodDecay, ticksToHours } from "./core/food-service.mjs";
+import { readStackFreshness, advanceStackFreshness } from "./core/food-stack-service.mjs";
 import { createFireState, addFuel, advanceFire, canProcessAtTemperature } from "./core/firepit-service.mjs";
 import { createSoilState, advanceSoilHydration, evaluateCropGrowth, calculateCropYield, applyFertilizer, applyCropNutrientEffects, inferSoilTypeFromBlockId, inferSoilFertilityClassFromBiomeId, advanceCropGrowthProgress } from "./core/agriculture-service.mjs";
 import { createAnimalState, syncAnimalHealth, advanceAnimalNeeds, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct } from "./core/fauna-service.mjs";
@@ -78,8 +79,7 @@ const inv=p=>p.getComponent("minecraft:inventory")?.container;
 function count(p,id){const c=inv(p);if(!c)return 0;let n=0;for(let i=0;i<c.size;i++){const s=c.getItem(i);if(s?.typeId===id)n+=s.amount;}return n;}
 function take(p,id,n){const c=inv(p);if(!c||count(p,id)<n)return false;for(let i=0;i<c.size&&n>0;i++){const s=c.getItem(i);if(!s||s.typeId!==id)continue;const k=Math.min(n,s.amount);if(k===s.amount)c.setItem(i,undefined);else{s.amount-=k;c.setItem(i,s);}n-=k;}return n===0;}
 function give(p,id,n=1){const c=inv(p);if(!c)return false;const rest=c.addItem(createOutputStack(id,n));if(rest)p.dimension.spawnItem(rest,p.location);return true;}
-function readFoodFreshness(player){try{const raw=player.getDynamicProperty(FOOD_FRESHNESS_KEY);return raw?JSON.parse(String(raw)):{};}catch{return {};}}
-function writeFoodFreshness(player,state){try{player.setDynamicProperty(FOOD_FRESHNESS_KEY,JSON.stringify(state));}catch(error){console.warn("[TFC-Bedrook] food freshness save:",error);}}
+
 function fillWaterVessel(player,block){
  if(!player||!block)return;
  if(block.typeId!=="minecraft:water"&&block.typeId!=="minecraft:flowing_water"){player.sendMessage("§c水源に向けて土器を使ってください。");return;}
@@ -107,23 +107,18 @@ function mixDough(player){
  give(player,"tfc:dough",1);give(player,"tfc:fired_vessel",1);
  player.sendMessage("§a小麦粉と水を混ぜて生地を作りました。空の土器が戻りました。");
 }
-function food(p,params){if(!p||p.typeId!=="minecraft:player")return;const s=deserializePlayerState(String(p.getDynamicProperty(STATE_KEY)??""));const freshnessState=readFoodFreshness(p);const itemId=String(params.itemId??"");const freshness=Number(freshnessState[itemId]?.freshness??100);const nutrition=params.category?{[params.category]:Number(params.nutrition??0)}:{};const result=consumeFood(s,{freshness,hydration:Number(params.hydration??0),nutrition});if(!result.consumed){p.sendMessage("§cこの食品は腐敗していて食べられません。");return;}p.setDynamicProperty(STATE_KEY,serializePlayerState(result.playerState));p.sendMessage("§a水分・栄養状態を更新しました。");}
+function food(event,params){const p=event?.source;if(!p||p.typeId!=="minecraft:player")return;const s=deserializePlayerState(String(p.getDynamicProperty(STATE_KEY)??""));const itemId=String(params.itemId??"");const freshness=readStackFreshness(event.itemStack?.getLore?.()??[])?.freshness??100;const nutrition=params.category?{[params.category]:Number(params.nutrition??0)}:{};const result=consumeFood(s,{freshness,hydration:Number(params.hydration??0),nutrition});if(!result.consumed){p.sendMessage("§cこの食品は腐敗していて食べられません。");return;}p.setDynamicProperty(STATE_KEY,serializePlayerState(result.playerState));p.sendMessage("§a"+(itemId||"食品")+"の栄養・水分を反映しました。");}
 function tickFoodFreshness(player,nowTick){
  const container=inv(player);if(!container)return;
- const freshnessState=readFoodFreshness(player);
- for(const [itemId,baseDecayPerHour] of Object.entries(FOOD_DECAY_PROFILES)){
-  const slots=[];let amount=0;
-  for(let slot=0;slot<container.size;slot++){const stack=container.getItem(slot);if(stack?.typeId===itemId){slots.push({slot,amount:stack.amount});amount+=stack.amount;}}
-  if(amount===0){delete freshnessState[itemId];continue;}
-  const previous=freshnessState[itemId]??{freshness:100,lastTick:nowTick};
-  const elapsedTicks=Math.max(0,nowTick-Number(previous.lastTick??nowTick));
-  const decayed=advanceFoodDecay({id:itemId,freshness:previous.freshness},ticksToHours(elapsedTicks),{temperatureC:temperatureAt(player.dimension,player.location),baseDecayPerHour});
-  if(decayed.spoiled){
-   for(const entry of slots)container.setItem(entry.slot,new ItemStack("tfc:spoiled_food",entry.amount));
-   delete freshnessState[itemId];
-  }else freshnessState[itemId]={freshness:decayed.freshness,lastTick:nowTick};
+ const temperatureC=temperatureAt(player.dimension,player.location);
+ for(let slot=0;slot<container.size;slot++){
+  const stack=container.getItem(slot);if(!stack)continue;
+  const baseDecayPerHour=FOOD_DECAY_PROFILES[stack.typeId];if(baseDecayPerHour===undefined)continue;
+  let lore=[];try{lore=stack.getLore();}catch{}
+  const result=advanceStackFreshness(lore,nowTick,{temperatureC,baseDecayPerHour});
+  if(result.food.spoiled){container.setItem(slot,new ItemStack("tfc:spoiled_food",stack.amount));continue;}
+  try{stack.setLore(result.lore);container.setItem(slot,stack);}catch(error){console.warn("[TFC-Bedrook] food stack freshness update:",error);}
  }
- writeFoodFreshness(player,freshnessState);
 }
 function posKey(block,kind){const l=block.location;return "tfc:"+kind+":"+block.dimension.id+":"+Math.floor(l.x)+","+Math.floor(l.y)+","+Math.floor(l.z);}
 function readWorldState(key,fallback){try{const raw=world.getDynamicProperty(key);return typeof raw==="string"?JSON.parse(raw):fallback;}catch{return fallback;}}
@@ -366,7 +361,7 @@ world.afterEvents.playerBreakBlock.subscribe(event=>{
 });system.beforeEvents.startup.subscribe(event=>{
 event.itemComponentRegistry.registerCustomComponent("tfc:open_knapping",{onUse:a=>{if(a.source?.typeId==="minecraft:player")void knap(a.source);}});
 event.itemComponentRegistry.registerCustomComponent("tfc:prospect",{onUseOn:a=>{if(a.source?.typeId==="minecraft:player")prospect(a.source,a.block);}});
-event.itemComponentRegistry.registerCustomComponent("tfc:consume_food",{onConsume:(a,p)=>food(a.source,p.params??{})}});
+event.itemComponentRegistry.registerCustomComponent("tfc:consume_food",{onConsume:(a,p)=>food(a,p.params??{})}});
 event.itemComponentRegistry.registerCustomComponent("tfc:fill_water_vessel",{onUseOn:a=>{if(a.source?.typeId==="minecraft:player")fillWaterVessel(a.source,a.block);}});
 event.itemComponentRegistry.registerCustomComponent("tfc:drink_water",{onUse:a=>{if(a.source?.typeId==="minecraft:player")drinkWaterVessel(a.source);}});
 event.itemComponentRegistry.registerCustomComponent("tfc:mix_dough",{onUse:a=>{if(a.source?.typeId==="minecraft:player")mixDough(a.source);}});
