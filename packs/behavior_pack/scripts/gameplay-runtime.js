@@ -8,6 +8,7 @@ import { createSoilState, advanceSoilHydration, evaluateCropGrowth, calculateCro
 import { CROP_PROFILES } from "./core/crop-profiles.mjs";
 import { createAnimalState, createAnimalOffspringState, initializeAnimalLifeStage, syncAnimalHealth, advanceAnimalNeeds, advanceAnimalFamiliarityDecay, canFeedAnimal, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct, recordBreedingUse, evaluateHabitat, advanceAnimalLifecycle, createEggState, advanceEggIncubation, evaluatePredation, determineOffspringCount } from "./core/fauna-service.mjs";
 import { CUSTOM_FAUNA_PROFILES } from "./core/fauna-runtime-profiles.mjs";
+import { FAUNA_DEATH_LOOT } from "./core/fauna-loot-profiles.mjs";
 import { OFFICIAL_FAUNA_PROFILES } from "./core/fauna-profiles.mjs";
 import { getStationRecipes } from "./core/processing-recipes.mjs";
 import { isStationJobDue, getPendingStationOutputs, markStationOutputDelivered, markStationJobRecoverable } from "./core/station-job-service.mjs";
@@ -938,3 +939,21 @@ world.afterEvents.playerInteractWithBlock.subscribe(event=>{
  try{const originalSoilType=inferSoilTypeFromBlockId(block.typeId);const biomeId=block.dimension.getBiome(block.location).id;const fertilityClass=inferSoilFertilityClassFromBiomeId(biomeId);const rainfallMultiplier=inferBiomeRainfallMultiplierFromBiomeId(biomeId);block.setType("tfc:farmland");const soil=createSoilState({...readSoil(block),soilType:originalSoilType,fertilityClass,rainfallMultiplier});writeWorldState(soilKey(block),soil);event.player.sendMessage("§a耕作土を作りました。土質: "+({loam:"壌土",silt:"シルト",clay:"粘土質"}[soil.soilType]??soil.soilType)+"。種を持って操作すると植えられます。");}catch(error){console.warn("[TFC-Bedrook] farmland conversion failed:",error);}
 });world.afterEvents.playerSpawn.subscribe(event=>{if(event.player)recoverPlayerStationJobs(event.player);});
 }
+
+
+function dropFaunaLoot(event){
+ const entity=event.deadEntity;if(!entity?.typeId?.startsWith("tfc:"))return;
+ const drops=FAUNA_DEATH_LOOT[entity.typeId];if(!drops?.length)return;
+ const killer=event.damageSource?.damagingEntity,killerProfile=killer?ANIMAL_PROFILES[killer.typeId]:null;
+ const playerKill=killer?.typeId==="minecraft:player",predated=Boolean(killerProfile?.predatorDiet?.length);
+ for(const drop of drops){
+  if(drop.playerKillOnly&&!playerKill)continue;
+  if(drop.notPredated&&predated)continue;
+  if(drop.chance!=null&&Math.random()>drop.chance)continue;
+  const min=Math.max(1,Math.floor(drop.min??1)),max=Math.max(min,Math.floor(drop.max??min));
+  const amount=min+Math.floor(Math.random()*(max-min+1));
+  try{entity.dimension.spawnItem(new ItemStack(drop.item,amount),entity.location);}
+  catch(error){console.warn("[TFC-Bedrook] fauna loot drop failed:",entity.typeId,drop.item,error);}
+ }
+}
+world.afterEvents.entityDie.subscribe(event=>{try{dropFaunaLoot(event);}catch(error){console.warn("[TFC-Bedrook] fauna death loot handler failed:",error);}});
