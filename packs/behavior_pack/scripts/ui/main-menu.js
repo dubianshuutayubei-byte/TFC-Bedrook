@@ -43,7 +43,7 @@ async function showFieldGuide(player) {
   const response = await showForm(player, form);
   if (!response || response.canceled) return;
   const pages = [
-    ["序盤の進行", "火打石を使うと3×3ナッピングUIが開きます。正しい位置を選ぶと石片を作成できます。粘土ボール5個で未焼成土器、8個で未焼成インゴット鋳型を作り、Pit Kilnで焼成します。"],
+    ["序盤の進行", "火打石を使うと5×5ナッピングUIが開きます。正しい位置を選ぶと石片を作成できます。粘土玉4個で未焼成土器、8個で未焼成インゴット鋳型を作り、Pit Kilnで焼成します。"],
     ["地質・鉱石・気候", "地質調査具を岩石に使うと、周囲9×9×5ブロックの範囲にあるバニラ鉱石を調査し、専用UIに検出数と量の目安を表示します。現段階では既存鉱石の痕跡調査で、TFC独自の鉱脈生成や岩石層による鉱石制限は地形工程に残しています。"],
     ["金属加工・鍛冶", "焚き火/Pit Kiln/るつぼは燃料を手に持って操作すると燃料を投入します。必要温度に達したら設備UIから工程を選択。銅・錫鉱石をそれぞれ2個と焼成済み鋳型で鋳造し、加熱インゴットを水で冷却します。銅9・錫1の比率で青銅を鋳造し、金床で銅板/青銅板へ加工できます。金床の「水で冷却」は近くに水源が必要です。"],
     ["農業・食品", "小麦・トウモロコシ・ジャガイモの種は既存レシピで作成できます。穀物・豆類・アルファルファ・カノーラ・ラディッシュの種は草地、野菜・トマト・パプリカ・ジュートの種はシダ、水稲・パピルス・サトウキビの種は水草、キャッサバなどは枯れ木から低確率で見つかります。成熟作物を収穫すると対応する種が1つ戻ります。穀物やトウモロコシは石臼で小麦粉にし、小麦粉と水入り土器を使って生地を作り、焚き火でパンを焼けます。TFC耕作土に対応する種を持って操作して植え付け、適温・適水分で成長し、トウモロコシ・インゲン・トマト・サトウキビ・ジュート・パピルスは2ブロックの高さまで育ちます。インゲンとトマトには隣接するトレリスが必要です。米は近くに淡水が必要です。赤/黄パプリカは成熟途中から実を繰り返し収穫できます。カボチャ/メロンは成熟後、周囲に最大2個の実ブロックを広げます。実を壊しても株は残り、再び実をつけます。アルファルファ・カノーラ・ラディッシュは土壌養分を補う被覆作物です。NPKは成長速度と土壌への養分出入りに影響します。肥沃度クラスは肥料効果を補正します。成熟後に操作して収穫します。大麦・オーツ麦・ライ麦・米は穀物、ビーツ・キャベツ・ニンジン・ニンニク・タマネギ・カボチャ・キャッサバ・インゲン・パンプキン・トマト・ピーマン・ラディッシュは野菜、レンズ豆・大豆・落花生はタンパク源として食品栄養と腐敗管理に接続しています。メロンは果物として扱います。食品は実時間換算で鮮度が下がり、腐敗すると腐敗食品へ変わります。乾燥棚では肉・果物・野菜を長時間かけて干し、腐敗速度を抑えた保存食を作れます。乾燥食品も鮮度が下がりますが、生鮮食品より長持ちします。粘土の封印具をチェストや樽などの容器に使うと封印状態になり、中の食品の腐敗速度が半分になります。容器を開くと自動で封印が解除されます。"],
@@ -55,6 +55,27 @@ async function showFieldGuide(player) {
   if (response.selection === 8) return void await showMainMenu(player);
   const page = pages[response.selection];
   if (page) await showInfo(player, page[0], page[1]);
+}
+
+async function showFoodInventory(player) {
+  const inventory = player.getComponent("minecraft:inventory")?.container;
+  if (!inventory) return void await showInfo(player,"食品鮮度一覧","インベントリを読み取れませんでした。");
+  const rows=[];
+  for(let slot=0;slot<inventory.size;slot++){
+    const stack=inventory.getItem(slot);
+    if(!stack)continue;
+    const name=FOOD_LABELS[stack.typeId];
+    if(!name&&stack.typeId!=="tfc:spoiled_food")continue;
+    let freshness=0;
+    if(stack.typeId!=="tfc:spoiled_food"){
+      try{freshness=readStackFreshness(stack.getLore()).freshness;}catch{freshness=100;}
+    }
+    const stage=stack.typeId==="tfc:spoiled_food"||freshness<=0?"腐敗":freshness>=75?"新鮮":freshness>=40?"劣化中":"腐敗間近";
+    const color=stage==="新鮮"?"§a":stage==="劣化中"?"§e":"§c";
+    rows.push(color+"スロット "+(slot+1)+"｜"+(name??"腐敗食品")+" ×"+stack.amount+"｜鮮度 "+Math.round(freshness)+"%｜"+stage);
+  }
+  const body=rows.length?rows.join("\n")+"\n\n各行は別々のItemStackです。同じ種類でもスタックごとに鮮度が異なる場合があります。":"インベントリに対象食品はありません。";
+  await showInfo(player,"食品鮮度一覧",body);
 }
 
 async function showPlayerStatus(player) {
@@ -121,6 +142,7 @@ export async function showMainMenu(player) {
     .button("フィールドガイド")
     .button("プレイヤー情報")
     .button("システム一覧")
+    .button("食品鮮度一覧")
     .button("閉じる");
   const response = await showForm(player, form);
   if (!response || response.canceled) return;
@@ -128,6 +150,7 @@ export async function showMainMenu(player) {
     case 0: await showFieldGuide(player); break;
     case 1: await showPlayerStatus(player); break;
     case 2: await showSystemOverview(player); break;
+    case 3: await showFoodInventory(player); break;
     default: break;
   }
 }
