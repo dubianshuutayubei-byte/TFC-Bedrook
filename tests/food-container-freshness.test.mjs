@@ -22,3 +22,12 @@ test("container food uses the same per-stack freshness logic as player inventory
  assert.match(runtime,/tickFoodContainerFreshness\(container,dimension,entry\.location,nowTick,\{sealed:readWorldState\(posKey\(block,"container_sealed"\),false\)===true\}\)/);
  assert.match(runtime,/trackFoodContainer\(event\.block\)/);
 });
+
+
+test("sealed container UI reports each stored food's freshness",()=>{
+ assert.match(runtime,/function foodContainerSummary\(container\)/);
+ assert.match(runtime,/鮮度 \+Math\.round\(freshness\)\+"% \/ "+status/);
+ assert.match(runtime,/食品容器を封印しました/);
+ assert.match(runtime,/食品容器を開封しました/);
+ assert.match(runtime,/foodContainerSummary\(container\)/);
+});
