@@ -174,3 +174,12 @@ test("TFC familiarity decays by 2 percentage points per day below 30 after the g
  const protectedState=advanceAnimalFamiliarityDecay({species:"cow",familiarity:35,lastFamiliarityDecay:1},3);
  assert.equal(protectedState.familiarity,35);
 });
+
+test("fuzzy fauna climate follows official TFC center-weighted probability",()=>{
+ const panda={minTemperatureC:18,maxTemperatureC:28,minRainfall:300,maxRainfall:500,minForest:"normal",fuzzy:true,placement:"on_ground"};
+ const center=evaluateFaunaSpawn(panda,{onGround:true,temperatureC:23,rainfall:400,forestType:"normal"},()=>0.9);
+ assert.equal(center.suitable,true);
+ const edge=evaluateFaunaSpawn(panda,{onGround:true,temperatureC:18,rainfall:300,forestType:"normal"},()=>0.1);
+ assert.equal(edge.suitable,false);
+ assert.ok(edge.failures.includes("fuzzy_climate"));
+});
