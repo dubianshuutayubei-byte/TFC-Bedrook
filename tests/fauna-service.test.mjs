@@ -1,4 +1,4 @@
-import test from"node:test";import assert from"node:assert/strict";import{createAnimalState,initializeAnimalLifeStage,syncAnimalHealth,advanceAnimalNeeds,feedAnimal,waterAnimal,canBreed,beginPregnancy,advancePregnancy,evaluateHabitat,evaluateFaunaSpawn,canProduce,recordProduct}from"../packs/behavior_pack/scripts/core/fauna-service.mjs";
+import test from"node:test";import assert from"node:assert/strict";import{createAnimalState,initializeAnimalLifeStage,canFeedAnimal,advanceAnimalFamiliarityDecay,syncAnimalHealth,advanceAnimalNeeds,feedAnimal,waterAnimal,canBreed,beginPregnancy,advancePregnancy,evaluateHabitat,evaluateFaunaSpawn,canProduce,recordProduct}from"../packs/behavior_pack/scripts/core/fauna-service.mjs";
 test("needs and age advance",()=>{const a=advanceAnimalNeeds(createAnimalState({species:"deer"}),2);assert.equal(a.ageDays,2);assert.equal(a.hunger,16);assert.equal(a.thirst,24);});
 test("feeding and watering reduce needs",()=>{const a=feedAnimal({hunger:80,thirst:50},10);assert.equal(a.hunger,45);assert.equal(waterAnimal(a,20).thirst,25);});
 test("breeding requires healthy, fed, adult, familiar pair",()=>{const p={adultAgeDays:10,requiredFamiliarity:20,breedingCooldownDays:2};const a={species:"deer",sex:"male",ageDays:20,familiarity:30,hunger:10,thirst:10};const b={...a,sex:"female"};assert.equal(canBreed(a,b,p),true);assert.equal(canBreed({...a,hunger:90},b,p),false);assert.equal(beginPregnancy(b,a,p).started,true);});
@@ -149,4 +149,28 @@ test("pregnancy state records fertilization",()=>{
  const result=beginPregnancy({species:"deer",sex:"female",ageDays:20},{species:"deer",sex:"male",ageDays:20},p);
  assert.equal(result.started,true);
  assert.equal(result.animal.fertilized,true);
+});
+
+test("TFC animal feeding is limited to once per calendar day and updates fed timestamp",()=>{
+ const state={species:"cow",lifeStage:"adult",familiarity:0,lastFedDay:4};
+ assert.equal(canFeedAnimal(state,4),false);
+ assert.equal(canFeedAnimal(state,5),true);
+ const fed=feedAnimal(state,6,0,{currentDay:5,adultFamiliarityCap:35});
+ assert.equal(fed.familiarity,6);
+ assert.equal(fed.lastFedDay,5);
+ assert.equal(canFeedAnimal(fed,5),false);
+ assert.equal(canFeedAnimal(fed,6),true);
+});
+test("adult familiarity is capped at the official 0.35 setting while juveniles can grow beyond it",()=>{
+ const adult=feedAnimal({species:"cow",lifeStage:"adult",familiarity:33},6,0,{currentDay:1,adultFamiliarityCap:35});
+ assert.equal(adult.familiarity,35);
+ const juvenile=feedAnimal({species:"cow",lifeStage:"juvenile",familiarity:33},6,0,{currentDay:1,adultFamiliarityCap:35});
+ assert.equal(juvenile.familiarity,39);
+});
+test("TFC familiarity decays by 2 percentage points per day below 30 after the grace period",()=>{
+ const a=advanceAnimalFamiliarityDecay({species:"cow",familiarity:20,lastFamiliarityDecay:1},3);
+ assert.equal(a.familiarity,16);
+ assert.equal(a.lastFamiliarityDecay,3);
+ const protectedState=advanceAnimalFamiliarityDecay({species:"cow",familiarity:35,lastFamiliarityDecay:1},3);
+ assert.equal(protectedState.familiarity,35);
 });
