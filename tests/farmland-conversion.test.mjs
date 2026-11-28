@@ -11,3 +11,8 @@ test("hoe interaction converts vanilla tilled soil to TFC farmland",()=>{
  assert.match(runtime,/block\.setType\("tfc:farmland"\)/);
  assert.match(runtime,/const soil=readSoil\(block\);writeWorldState\(soilKey\(block\),soil\)/);
 });
+
+test("farmland conversion preserves the original soil block type",()=>{
+ assert.match(runtime,/const originalSoilType=inferSoilTypeFromBlockId\(block\.typeId\)/);
+ assert.match(runtime,/soilType:originalSoilType/);
+});
