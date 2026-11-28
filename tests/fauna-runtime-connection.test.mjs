@@ -18,12 +18,14 @@ test("custom deer retains its own pregnancy and birth cycle",()=>{
  assert.match(runtime,/advancePregnancy\(state,elapsedAgeDays,profile\.gestationDays\)/);
 });
 
-test("custom pregnancy is confined to deer; vanilla livestock uses native breeding",()=>{
+test("shared pregnancy supports native and custom births with the appropriate baby event",()=>{
  assert.match(runtime,/if\(profile\.customBreeding&&state\.pregnancyDays>0\)/);
  assert.match(runtime,/if\(profile\.customBreeding&&state\.sex==="female"/);
  assert.match(runtime,/other\.lastBreedAt=breedingTime/);
- assert.match(runtime,/entity\.dimension\.spawnEntity\(entity\.typeId\+"<tfc:spawn_baby>"/);
+ assert.match(runtime,/const spawnType=entity\.typeId\.startsWith\("minecraft:"\)\?entity\.typeId:entity\.typeId\+"<tfc:spawn_baby>"/);
+ assert.match(runtime,/baby\.triggerEvent\("minecraft:entity_born"\)/);
 });
+
 test("animal needs and age update on the periodic loaded-entity tick",()=>{
  assert.match(runtime,/advanceAnimalNeeds\(state,0\.05,/);
  assert.match(runtime,/system\.runInterval\(\(\)=>\{for\(const dimensionId of \["overworld","nether","the_end"\]\)/);
@@ -152,7 +154,7 @@ test("animal dropped-food pickup consumes one item and preserves the remainder o
 test("animal runtime applies daily familiarity decay and capped TFC feeding gains",()=>{
  assert.ok(runtime.includes("state=advanceAnimalFamiliarityDecay(state,currentDay,{decayLimit:30,decayPerDay:2});"));
  assert.match(runtime,/canFeedAnimal\(state,currentDay\)/);
- assert.match(runtime,/feedAnimal\(state,firstFeedToday\?6:0,healPercent,\{currentDay,adultFamiliarityCap:profile\.familiarityCap\?\?100\}\)/);
+ assert.match(runtime,/feedAnimal\(state,6,healPercent,\{currentDay,adultFamiliarityCap:profile\.familiarityCap\?\?100\}\)/);
  for(const id of ["cow","goat","sheep","chicken","pig","horse","donkey","mule","rabbit"])assert.match(runtime,new RegExp('"minecraft:'+id+'":\\{[^}]*familiarityCap:35'));
 });
 
