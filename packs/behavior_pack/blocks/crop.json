@@ -16,7 +16,13 @@
         "tfc:crop_type": [
           "wheat",
           "maize",
-          "potato"
+          "potato",
+          "barley",
+          "oat",
+          "rye",
+          "beet",
+          "cabbage",
+          "carrot"
         ]
       }
     },
