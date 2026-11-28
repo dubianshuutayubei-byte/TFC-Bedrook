@@ -12,6 +12,8 @@ export function evaluateHabitat(p,e){
  check("maxTemperatureC","temperatureC",v=>v>p.maxTemperatureC,"temperature_high");
  check("minRainfall","rainfall",v=>v<p.minRainfall,"rainfall_low");
  check("maxRainfall","rainfall",v=>v>p.maxRainfall,"rainfall_high");
+ check("minGroundwater","groundwater",v=>v<p.minGroundwater,"groundwater_low");
+ check("maxGroundwater","groundwater",v=>v>p.maxGroundwater,"groundwater_high");
  check("belowSeaLevel","belowSeaLevel",v=>v<p.belowSeaLevel,"water_too_shallow");
  check("maxBrightness","brightness",v=>v>p.maxBrightness,"brightness_high");
  if(p.minForest!=null||p.maxForest!=null){
