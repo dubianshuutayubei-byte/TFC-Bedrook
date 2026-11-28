@@ -1,0 +1,188 @@
+{
+  "source": "TerraFirmaCraft v3.2.26 src/main/java/net/dries007/tfc/config/ServerConfig.java (animal config section)",
+  "dayUnit": "TFC calendar days; produceTicks converted using 24000 ticks per day",
+  "species": [
+    {
+      "id": "pig",
+      "adulthoodDays": 80,
+      "gestationDays": 19,
+      "childCount": 10,
+      "maxUses": 60,
+      "eatsRottenFood": true
+    },
+    {
+      "id": "donkey",
+      "adulthoodDays": 80,
+      "gestationDays": 19,
+      "childCount": 1,
+      "maxUses": 60,
+      "eatsRottenFood": false
+    },
+    {
+      "id": "mule",
+      "adulthoodDays": 80,
+      "gestationDays": 19,
+      "childCount": 1,
+      "maxUses": 60,
+      "eatsRottenFood": false
+    },
+    {
+      "id": "horse",
+      "adulthoodDays": 80,
+      "gestationDays": 19,
+      "childCount": 1,
+      "maxUses": 60,
+      "eatsRottenFood": false
+    },
+    {
+      "id": "rabbit",
+      "adulthoodDays": 80,
+      "gestationDays": 19,
+      "childCount": 6,
+      "maxUses": 40,
+      "eatsRottenFood": true
+    },
+    {
+      "id": "cow",
+      "adulthoodDays": 192,
+      "gestationDays": 58,
+      "childCount": 2,
+      "maxUses": 128,
+      "eatsRottenFood": true,
+      "product": {
+        "kind": "milk",
+        "cooldownTicks": 24000,
+        "cooldownDays": 1,
+        "minimumFamiliarity": 0.15
+      }
+    },
+    {
+      "id": "goat",
+      "adulthoodDays": 96,
+      "gestationDays": 32,
+      "childCount": 2,
+      "maxUses": 60,
+      "eatsRottenFood": true,
+      "product": {
+        "kind": "milk",
+        "cooldownTicks": 72000,
+        "cooldownDays": 3,
+        "minimumFamiliarity": 0.15
+      }
+    },
+    {
+      "id": "yak",
+      "adulthoodDays": 180,
+      "gestationDays": 64,
+      "childCount": 1,
+      "maxUses": 230,
+      "eatsRottenFood": false,
+      "product": {
+        "kind": "milk",
+        "cooldownTicks": 23500,
+        "cooldownDays": 0.9791666666666666,
+        "minimumFamiliarity": 0.15
+      }
+    },
+    {
+      "id": "alpaca",
+      "adulthoodDays": 98,
+      "gestationDays": 36,
+      "childCount": 2,
+      "maxUses": 128,
+      "eatsRottenFood": false,
+      "product": {
+        "kind": "wool",
+        "cooldownTicks": 120000,
+        "cooldownDays": 5,
+        "minimumFamiliarity": 0.15
+      }
+    },
+    {
+      "id": "sheep",
+      "adulthoodDays": 56,
+      "gestationDays": 32,
+      "childCount": 2,
+      "maxUses": 60,
+      "eatsRottenFood": false,
+      "product": {
+        "kind": "wool",
+        "cooldownTicks": 168000,
+        "cooldownDays": 7,
+        "minimumFamiliarity": 0.15
+      }
+    },
+    {
+      "id": "musk_ox",
+      "adulthoodDays": 168,
+      "gestationDays": 64,
+      "childCount": 1,
+      "maxUses": 160,
+      "eatsRottenFood": false,
+      "product": {
+        "kind": "wool",
+        "cooldownTicks": 96000,
+        "cooldownDays": 4,
+        "minimumFamiliarity": 0.15
+      }
+    },
+    {
+      "id": "chicken",
+      "adulthoodDays": 24,
+      "maxUses": 100,
+      "eatsRottenFood": true,
+      "product": {
+        "kind": "egg",
+        "cooldownTicks": 30000,
+        "cooldownDays": 1.25,
+        "minimumFamiliarity": 0.15,
+        "hatchDays": 8
+      }
+    },
+    {
+      "id": "duck",
+      "adulthoodDays": 32,
+      "maxUses": 72,
+      "eatsRottenFood": false,
+      "product": {
+        "kind": "egg",
+        "cooldownTicks": 32000,
+        "cooldownDays": 1.3333333333333333,
+        "minimumFamiliarity": 0.15,
+        "hatchDays": 8
+      }
+    },
+    {
+      "id": "quail",
+      "adulthoodDays": 22,
+      "maxUses": 48,
+      "eatsRottenFood": true,
+      "product": {
+        "kind": "egg",
+        "cooldownTicks": 28000,
+        "cooldownDays": 1.1666666666666667,
+        "minimumFamiliarity": 0.15,
+        "hatchDays": 8
+      }
+    },
+    {
+      "id": "cat",
+      "adulthoodDays": 50,
+      "gestationDays": 19,
+      "childCount": 6,
+      "maxUses": 60,
+      "eatsRottenFood": false,
+      "configEntityNote": "TFC config key only; exact species binding must be checked in entity registration"
+    },
+    {
+      "id": "dog",
+      "adulthoodDays": 50,
+      "gestationDays": 19,
+      "childCount": 2,
+      "maxUses": 60,
+      "eatsRottenFood": true,
+      "configEntityNote": "TFC config key only; exact species binding must be checked in entity registration"
+    }
+  ],
+  "caveat": "This records exact config defaults from ServerConfig. It does not infer lifecycle values for wild fauna without corresponding entries in this config section."
+}
