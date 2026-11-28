@@ -13,7 +13,9 @@ test("all 63 TFC fauna have shared runtime profiles and entity coverage",()=>{
  assert.equal(coverage.total,78);
  assert.equal(coverage.officialSpawnPlacementCount,78);
  assert.deepEqual(coverage.officialSpawnPlacementCounts,{in_water:29,no_restrictions:1,on_ground:48});
- assert.equal(coverage.officialClimateProfileCount,63);
+ assert.equal(coverage.officialClimateProfileCount,78);
+ assert.equal(coverage.officialHabitatProfileCount,78);
+ assert.equal(coverage.legacyClimateJsonProfileCount,63);
  assert.equal(coverage.runtimeTrackedCount,63);
  assert.equal(coverage.runtimeTrackedSpecies.length,63);
  for(const id of coverage.runtimeTrackedSpecies){const species=roster.species.find(x=>x.id===id);assert.ok(species,"runtime species must exist in official roster: "+id);assert.ok(runtime.includes('"speciesId":"'+species.id+'"')||runtime.includes('speciesId:"'+species.id+'"'),species.id+" runtime profile missing");}
