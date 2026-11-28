@@ -20,8 +20,8 @@ test("sneak-use clay ball opens pottery shaping and consumes the selected clay a
 test("crucible stores metal additions, validates bronze ratio, temperature and fired mold",()=>{
  assert.match(runtime,/async function crucibleStation\(player,block,state\)/);
  assert.match(runtime,/crucible_charge/);
- assert.match(runtime,/findMatchingAlloys\(\{copper,tin\}/);
- assert.match(runtime,/canProcessAtTemperature\(state,950\)/);
+ assert.match(runtime,/findMatchingAlloys\(\{\[firstMetal\]:firstAmount,\[secondMetal\]:secondAmount\}/);
+ assert.match(runtime,/canProcessAtTemperature\(state,bronzeRecipe\.minimumTemperatureC\)/);
  assert.match(runtime,/tfc:fired_ingot_mold/);
  assert.match(runtime,/tfc:heated_bronze_ingot/);
  assert.match(runtime,/tfc:copper_ore/);
