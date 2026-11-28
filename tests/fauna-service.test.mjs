@@ -5,7 +5,7 @@ import { dirname, join, resolve } from "node:path";
 import test from"node:test";import assert from"node:assert/strict";import{createAnimalState,createAnimalOffspringState,initializeAnimalLifeStage,canFeedAnimal,advanceAnimalFamiliarityDecay,syncAnimalHealth,advanceAnimalNeeds,feedAnimal,waterAnimal,canBreed,beginPregnancy,advancePregnancy,evaluateHabitat,evaluateFaunaSpawn,canProduce,recordProduct,canLayEgg,recordEggLaid,getOffspringCount} from"../packs/behavior_pack/scripts/core/fauna-service.mjs";
 test("needs and age advance",()=>{const a=advanceAnimalNeeds(createAnimalState({species:"deer"}),2);assert.equal(a.ageDays,2);assert.equal(a.hunger,16);assert.equal(a.thirst,24);});
 test("feeding and watering reduce needs",()=>{const a=feedAnimal({hunger:80,thirst:50},10);assert.equal(a.hunger,45);assert.equal(waterAnimal(a,20).thirst,25);});
-test("breeding requires opposite-sex adults, familiarity, feeding today and calendar cooldown",()=>{const p={adultAgeDays:10,requiredFamiliarity:30,breedingCooldownDays:1,currentDay:10,currentTime:10.5};const a={species:"deer",sex:"male",ageDays:20,lifeStage:"adult",familiarity:30,lastFedDay:10,lastBreedAt:9};const b={...a,sex:"female"};assert.equal(canBreed(a,b,p),true);assert.equal(canBreed({...a,lastFedDay:9},b,p),false);assert.equal(canBreed({...a,lastBreedAt:10},b,p),false);assert.equal(canBreed({...a,fertilized:true},b,p),false);const started=beginPregnancy(b,a,p);assert.equal(started.started,true);assert.equal(started.animal.fertilized,true);assert.equal(started.animal.lastBreedAt,10.5);assert.equal(started.animal.lastFedDay,9);});
+test("breeding requires opposite-sex adults, familiarity, recent feeding and calendar cooldown",()=>{const p={adultAgeDays:10,requiredFamiliarity:30,breedingCooldownDays:1,currentDay:10,currentTime:10.5};const a={species:"deer",sex:"male",ageDays:20,lifeStage:"adult",familiarity:30,lastFedDay:10,lastFedAt:10.25,lastBreedAt:9};const b={...a,sex:"female"};assert.equal(canBreed(a,b,p),true);assert.equal(canBreed({...a,lastFedAt:9.4},b,p),false);assert.equal(canBreed({...a,lastBreedAt:10},b,p),false);assert.equal(canBreed({...a,fertilized:true},b,p),false);const started=beginPregnancy(b,a,p);assert.equal(started.started,true);assert.equal(started.animal.fertilized,true);assert.equal(started.animal.lastBreedAt,10.5);assert.equal(started.animal.lastFedDay,9);assert.equal(started.animal.lastFedAt,9.5);});
 test("pregnancy timer signals birth readiness",()=>{assert.equal(advancePregnancy({species:"deer",pregnancyDays:4},6,10).birthReady,true);});
 test("habitat rejects unsuitable temperature",()=>{assert.deepEqual(evaluateHabitat({minTemperatureC:5},{temperatureC:0}).failures,["temperature_low"]);});
 
@@ -162,15 +162,17 @@ test("pregnancy state records fertilization",()=>{
  assert.equal(result.animal.fertilized,true);
 });
 
-test("TFC animal feeding is limited to once per calendar day and updates fed timestamp",()=>{
+test("TFC animal feeding requires more than 24 hours and preserves fractional fed time",()=>{
  const state={species:"cow",lifeStage:"adult",familiarity:0,lastFedDay:4};
  assert.equal(canFeedAnimal(state,4),false);
- assert.equal(canFeedAnimal(state,5),true);
- const fed=feedAnimal(state,6,0,{currentDay:5,adultFamiliarityCap:35});
+ assert.equal(canFeedAnimal(state,5),false);
+ assert.equal(canFeedAnimal(state,5.01),true);
+ const fed=feedAnimal(state,6,0,{currentDay:5,currentTime:5.5,adultFamiliarityCap:35});
  assert.equal(fed.familiarity,6);
  assert.equal(fed.lastFedDay,5);
- assert.equal(canFeedAnimal(fed,5),false);
- assert.equal(canFeedAnimal(fed,6),true);
+ assert.equal(fed.lastFedAt,5.5);
+ assert.equal(canFeedAnimal(fed,6.5),false);
+ assert.equal(canFeedAnimal(fed,6.51),true);
 });
 test("adult familiarity is capped at the official 0.35 setting while juveniles can grow beyond it",()=>{
  const adult=feedAnimal({species:"cow",lifeStage:"adult",familiarity:33},6,0,{currentDay:1,adultFamiliarityCap:35});
@@ -296,7 +298,7 @@ test("egg laying requires a healthy mature adult female and respects cooldown",(
  assert.equal(canLayEgg({...hen,lastEggAt:10.5},rules),false);
  assert.equal(canLayEgg({...hen,familiarity:15},rules),false);
  assert.equal(canLayEgg({...hen,uses:100},rules),true);
- assert.equal(canLayEgg({...hen,lastFedDay:10},rules),false);
+ assert.equal(canLayEgg({...hen,lastFedDay:10},rules),true);
 });
 
 test("recording an egg laid preserves the last laying day",()=>{
