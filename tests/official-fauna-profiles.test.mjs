@@ -6,10 +6,11 @@ import { fileURLToPath } from "node:url";
 const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const db=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/official-fauna-profiles.json"),"utf8"));
 const roster=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/fauna-roster.json"),"utf8"));
-test("official fauna climate database covers all 63 TFC 3.2.26 species",()=>{
+test("legacy official fauna climate database remains a 63-species subset of the 78-species target",()=>{
  assert.equal(db.species.length,63);
- assert.deepEqual(db.species.map(x=>x.id).sort(),roster.species.map(x=>x.id).sort());
+ assert.ok(db.species.every(x=>roster.species.some(y=>y.id===x.id)));
  assert.equal(new Set(db.species.map(x=>x.id)).size,63);
+ for(const id of ["pond_turtle","leopard_seal","bison","dromedary_camel","bactrian_camel","armadillo","northern_pike","burbot","arctic_char","muksun","tilapia","spotted_gudgeon","peacock_bass","pacu","red_piranha"])assert.ok(!db.species.some(x=>x.id===id),id+" climate data must not be invented");
 });
 test("official fauna constraints preserve cold, aquatic depth and special brightness profiles",()=>{
  const byId=Object.fromEntries(db.species.map(x=>[x.id,x]));
