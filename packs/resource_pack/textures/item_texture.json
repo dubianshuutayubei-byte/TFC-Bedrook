@@ -97,6 +97,9 @@
     },
     "tfc_composter": {
       "textures": "textures/items/tfc_pottery"
+    },
+    "tfc_wood_ash": {
+      "textures": "textures/items/tfc_grain"
     }
   }
 }
