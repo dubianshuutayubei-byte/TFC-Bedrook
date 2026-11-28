@@ -596,10 +596,13 @@ function damageSelectedTool(player){
 function shearAnimal(player,entity){
  if(!player||!entity||entity.typeId!=="minecraft:sheep")return;
  const profile=ANIMAL_PROFILES[entity.typeId];if(!profile)return;
- const state=animalState(entity),currentDay=currentAnimalDay();
- if(!canProduce(state,{requiredFamiliarity:profile.productFamiliarityMin??16,cooldownDays:profile.productCooldownDays??7,currentDay,minimumAgeDays:profile.adultAgeDays??0,minimumHealth:0,maximumHunger:100,maximumThirst:100,maxUses:profile.maxUses??Infinity})){
-  player.sendMessage("§eこのヒツジは成長・なつき度・羊毛の再生条件を満たしていません。");return;
- }
+ const state=animalState(entity),currentDay=currentAnimalDay(),minimumFamiliarity=profile.productFamiliarityMin??16,cooldown=profile.productCooldownDays??7;
+ if(state.lifeStage==="old"||state.uses>=(profile.maxUses??Infinity)){player.sendMessage("§eこのヒツジは生涯の羊毛産出上限に達しています。");return;}
+ if(state.ageDays<(profile.adultAgeDays??0)){player.sendMessage("§eこのヒツジはまだ成熟していません。");return;}
+ if(state.familiarity<=minimumFamiliarity){player.sendMessage("§e羊毛を採取するには、なつき度を"+(minimumFamiliarity+1)+"以上にしてください。");return;}
+ const remaining=cooldown-(currentDay-state.lastProductAt);
+ if(state.uses>0&&remaining>0){player.sendMessage("§e羊毛が再生するまであと"+remaining.toFixed(1)+"日です。");return;}
+ if(!canProduce(state,{requiredFamiliarity:minimumFamiliarity,cooldownDays:cooldown,currentDay,minimumAgeDays:profile.adultAgeDays??0,minimumHealth:0,maximumHunger:100,maximumThirst:100,maxUses:profile.maxUses??Infinity})){player.sendMessage("§e今は羊毛を採取できません。");return;}
  if(!damageSelectedTool(player)){player.sendMessage("§cハサミを使用できません。");return;}
  const amount=state.familiarity>99?2:1;
  give(player,"tfc:wool",amount);
