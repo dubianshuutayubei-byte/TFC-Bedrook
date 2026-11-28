@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const roster=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/fauna-roster.json"),"utf8"));
 const spawn=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/fauna-spawn-types.json"),"utf8"));
-test("official TFC spawn placement is recorded for all 63 fauna",()=>{
+test("legacy 63 TFC spawn placements remain recorded as a subset of the 78-species target",()=>{
  assert.equal(spawn.total,63);
  assert.equal(spawn.species.length,63);
  for(const item of spawn.species)assert.ok(roster.species.some(x=>x.id===item.id),item.id+" must remain in the expanded target roster");
