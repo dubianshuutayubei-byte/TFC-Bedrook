@@ -5,11 +5,12 @@ import { resolve, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
-test("vanilla livestock relies on vanilla breeding and avoids duplicate feed consumption",()=>{
- assert.match(runtime,/"minecraft:cow":\{[^}]*customBreeding:false/);
- assert.match(runtime,/"minecraft:sheep":\{[^}]*customBreeding:false/);
- assert.match(runtime,/"minecraft:chicken":\{[^}]*customBreeding:false/);
- assert.ok(runtime.includes('if(!entity.typeId.startsWith("minecraft:")&&!take(player,held.typeId,1))return;'));
+test("configured native livestock uses shared breeding and intercepted feed",()=>{
+ assert.match(runtime,/for\(const id of \["minecraft:cow","minecraft:sheep","minecraft:pig","minecraft:goat","minecraft:horse","minecraft:donkey","minecraft:mule","minecraft:rabbit"\]\)if\(ANIMAL_PROFILES\[id\]\?\.gestationDays\)ANIMAL_PROFILES\[id\]\.customBreeding=true/);
+ assert.match(runtime,/world\.beforeEvents\.playerInteractWithEntity\.subscribe\(event=>\{/);
+ assert.match(runtime,/event\.cancel=true/);
+ assert.match(runtime,/if\(!firstFeedToday\)/);
+ assert.match(runtime,/if\(!take\(player,held\.typeId,1\)\)return/);
  assert.match(runtime,/if\(profile\.customBreeding&&state\.sex==="female"/);
 });
 test("custom deer retains its own pregnancy and birth cycle",()=>{
