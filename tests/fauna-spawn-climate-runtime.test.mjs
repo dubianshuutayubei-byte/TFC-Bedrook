@@ -19,8 +19,12 @@ test("natural spawn validation uses official TFC profile constraints only for na
  assert.match(source,/evaluateFaunaSpawn\(official,environment\)/);
  assert.match(source,/if\(!result\.suitable\)\{?entity\.remove\(\)/);
 });
-test("spawn environment sampler provides temperature, rainfall, depth, light and forest density",()=>{
- for(const token of ["temperatureC:currentTemperatureC","rainfall:rainfallForBiome","belowSeaLevel:Math.max(0,63-blockLocation.y)","brightness","forestType:forestTypeAt"])assert.ok(source.includes(token),token);
+test("spawn environment sampler provides temperature, rainfall, depth and light",()=>{
+ for(const token of ["temperatureC:currentTemperatureC","rainfall:rainfallForBiome","belowSeaLevel:Math.max(0,63-blockLocation.y)","brightness"])assert.ok(source.includes(token),token);
+});
+test("forest density is sampled only for species whose official habitat profile requires it",()=>{
+ assert.match(source,/const needsForest=profile\?\.minForest!=null\|\|profile\?\.maxForest!=null/);
+ assert.match(source,/forestType:needsForest\?forestTypeAt\(dimension,location\):null/);
 });
 
 
