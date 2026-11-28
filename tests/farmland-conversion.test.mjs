@@ -24,7 +24,7 @@ test("farmland conversion stores biome-derived fertility class",()=>{
 });
 
 test("compost item applies nitrogen and potassium through farmland interaction",()=>{
- assert.match(runtime,/held\?\.typeId==="tfc:compost"/);
- assert.match(runtime,/applySoilCompost\(soil\)/);
- assert.match(runtime,/take\(player,"tfc:compost",1\)/);
+ assert.match(runtime,/"tfc:compost":\{name:"堆肥",nutrients:\{nitrogen:20,potassium:20\}\}/);
+ assert.match(runtime,/const fertilizer=FERTILIZER_PROFILES\[held\?\.typeId\]/);
+ assert.match(runtime,/applyFertilizer\(soil,fertilizer\.nutrients\)/);\n assert.match(runtime,/take\(player,held\.typeId,1\)/);
 });
