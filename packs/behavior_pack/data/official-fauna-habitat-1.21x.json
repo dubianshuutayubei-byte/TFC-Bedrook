@@ -39,71 +39,83 @@
     {
       "id": "isopod",
       "sourceExpression": "distanceBelowSeaLevel(20).maxTemperature(14)",
-      "maxTemperatureC": 14
+      "maxTemperatureC": 14,
+      "distanceBelowSeaLevel": 20
     },
     {
       "id": "crayfish",
       "sourceExpression": "distanceBelowSeaLevel(2).minTemperature(5).minGroundwater(125)",
       "minTemperatureC": 5,
-      "minGroundwater": 125
+      "minGroundwater": 125,
+      "distanceBelowSeaLevel": 2
     },
     {
       "id": "lobster",
       "sourceExpression": "distanceBelowSeaLevel(1).maxTemperature(21)",
-      "maxTemperatureC": 21
+      "maxTemperatureC": 21,
+      "distanceBelowSeaLevel": 1
     },
     {
       "id": "horseshoe_crab",
       "sourceExpression": "distanceBelowSeaLevel(1).temperature(10, 21).maxGroundwater(400)",
       "minTemperatureC": 10,
       "maxTemperatureC": 21,
-      "maxGroundwater": 400
+      "maxGroundwater": 400,
+      "distanceBelowSeaLevel": 1
     },
     {
       "id": "cod",
       "sourceExpression": "distanceBelowSeaLevel(5).maxTemperature(18)",
-      "maxTemperatureC": 18
+      "maxTemperatureC": 18,
+      "distanceBelowSeaLevel": 5
     },
     {
       "id": "pufferfish",
       "sourceExpression": "distanceBelowSeaLevel(3).minTemperature(10)",
-      "minTemperatureC": 10
+      "minTemperatureC": 10,
+      "distanceBelowSeaLevel": 3
     },
     {
       "id": "tropical_fish",
       "sourceExpression": "distanceBelowSeaLevel(3).minTemperature(18)",
-      "minTemperatureC": 18
+      "minTemperatureC": 18,
+      "distanceBelowSeaLevel": 3
     },
     {
       "id": "jellyfish",
       "sourceExpression": "distanceBelowSeaLevel(3).minTemperature(18)",
-      "minTemperatureC": 18
+      "minTemperatureC": 18,
+      "distanceBelowSeaLevel": 3
     },
     {
       "id": "orca",
       "sourceExpression": "distanceBelowSeaLevel(6).maxTemperature(19).minGroundwater(100).chance(10)",
       "maxTemperatureC": 19,
       "minGroundwater": 100,
-      "chance": 10
+      "chance": 10,
+      "distanceBelowSeaLevel": 6
     },
     {
       "id": "dolphin",
       "sourceExpression": "distanceBelowSeaLevel(6).minTemperature(10).minGroundwater(200).chance(10)",
       "minTemperatureC": 10,
       "minGroundwater": 200,
-      "chance": 10
+      "chance": 10,
+      "distanceBelowSeaLevel": 6
     },
     {
       "id": "manatee",
       "sourceExpression": "distanceBelowSeaLevel(3).minTemperature(20).minGroundwater(300).chance(10)",
       "minTemperatureC": 20,
       "minGroundwater": 300,
-      "chance": 10
+      "chance": 10,
+      "distanceBelowSeaLevel": 3
     },
     {
       "id": "crocodile",
       "sourceExpression": "distanceBelowSeaLevel(0).minTemperature(15)",
-      "minTemperatureC": 15
+      "minTemperatureC": 15,
+      "distanceBelowSeaLevel": 0
     },
     {
       "id": "bluegill",
@@ -116,7 +128,9 @@
         "AUGUST",
         "SEPTEMBER",
         "OCTOBER"
-      ]
+      ],
+      "minTemperatureC": -10,
+      "maxTemperatureC": 15
     },
     {
       "id": "crappie",
@@ -129,7 +143,9 @@
         "AUGUST",
         "SEPTEMBER",
         "OCTOBER"
-      ]
+      ],
+      "minTemperatureC": -10,
+      "maxTemperatureC": 20
     },
     {
       "id": "lake_trout",
@@ -143,7 +159,9 @@
         "AUGUST",
         "SEPTEMBER",
         "OCTOBER"
-      ]
+      ],
+      "minTemperatureC": -5,
+      "maxTemperatureC": 15
     },
     {
       "id": "rainbow_trout",
@@ -157,7 +175,9 @@
         "AUGUST",
         "SEPTEMBER",
         "OCTOBER"
-      ]
+      ],
+      "minTemperatureC": -12,
+      "maxTemperatureC": 10
     },
     {
       "id": "largemouth_bass",
@@ -172,7 +192,9 @@
         "AUGUST",
         "SEPTEMBER",
         "OCTOBER"
-      ]
+      ],
+      "minTemperatureC": -14,
+      "maxTemperatureC": 16
     },
     {
       "id": "smallmouth_bass",
@@ -187,7 +209,9 @@
         "AUGUST",
         "SEPTEMBER",
         "OCTOBER"
-      ]
+      ],
+      "minTemperatureC": -14,
+      "maxTemperatureC": 16
     },
     {
       "id": "salmon",
@@ -202,7 +226,9 @@
         "AUGUST",
         "SEPTEMBER",
         "OCTOBER"
-      ]
+      ],
+      "minTemperatureC": -8,
+      "maxTemperatureC": 12
     },
     {
       "id": "arctic_char",
@@ -217,7 +243,9 @@
         "AUGUST",
         "SEPTEMBER",
         "OCTOBER"
-      ]
+      ],
+      "minTemperatureC": -20,
+      "maxTemperatureC": -8
     },
     {
       "id": "northern_pike",
@@ -232,7 +260,9 @@
         "AUGUST",
         "SEPTEMBER",
         "OCTOBER"
-      ]
+      ],
+      "minTemperatureC": -14,
+      "maxTemperatureC": -5
     },
     {
       "id": "peacock_bass",
@@ -247,7 +277,9 @@
         "AUGUST",
         "SEPTEMBER",
         "OCTOBER"
-      ]
+      ],
+      "minTemperatureC": 12,
+      "maxTemperatureC": 25
     },
     {
       "id": "pacu",
@@ -262,7 +294,9 @@
         "AUGUST",
         "SEPTEMBER",
         "OCTOBER"
-      ]
+      ],
+      "minTemperatureC": 20,
+      "maxTemperatureC": 35
     },
     {
       "id": "red_piranha",
@@ -277,7 +311,9 @@
         "AUGUST",
         "SEPTEMBER",
         "OCTOBER"
-      ]
+      ],
+      "minTemperatureC": 22,
+      "maxTemperatureC": 35
     },
     {
       "id": "tilapia",
@@ -292,7 +328,9 @@
         "AUGUST",
         "SEPTEMBER",
         "OCTOBER"
-      ]
+      ],
+      "minTemperatureC": 10,
+      "maxTemperatureC": 32
     },
     {
       "id": "spotted_gudgeon",
@@ -307,7 +345,9 @@
         "AUGUST",
         "SEPTEMBER",
         "OCTOBER"
-      ]
+      ],
+      "minTemperatureC": 6,
+      "maxTemperatureC": 24
     },
     {
       "id": "muksun",
@@ -322,7 +362,9 @@
         "AUGUST",
         "SEPTEMBER",
         "OCTOBER"
-      ]
+      ],
+      "minTemperatureC": -20,
+      "maxTemperatureC": -10
     },
     {
       "id": "burbot",
@@ -337,151 +379,193 @@
         "AUGUST",
         "SEPTEMBER",
         "OCTOBER"
-      ]
+      ],
+      "minTemperatureC": -16,
+      "maxTemperatureC": -9
     },
     {
       "id": "penguin",
       "sourceExpression": "maxTemperature(-11).minGroundwater(75)",
-      "minGroundwater": 75
+      "minGroundwater": 75,
+      "maxTemperatureC": -11
     },
     {
       "id": "leopard_seal",
       "sourceExpression": "maxTemperature(-9).minGroundwater(105)",
-      "minGroundwater": 105
+      "minGroundwater": 105,
+      "maxTemperatureC": -9
     },
     {
       "id": "frog",
       "sourceExpression": "minGroundwater(150).minTemperature(-13)",
-      "minTemperatureC": -13
+      "minTemperatureC": -13,
+      "minGroundwater": 150
     },
     {
       "id": "turtle",
       "sourceExpression": "minTemperature(21).minGroundwater(250)",
-      "minGroundwater": 250
+      "minGroundwater": 250,
+      "minTemperatureC": 21
     },
     {
       "id": "pond_turtle",
       "sourceExpression": "minTemperature(5).minGroundwater(200)",
-      "minGroundwater": 200
+      "minGroundwater": 200,
+      "minTemperatureC": 5
     },
     {
       "id": "polar_bear",
       "sourceExpression": "maxTemperature(-10).minGroundwater(100)",
-      "minGroundwater": 100
+      "minGroundwater": 100,
+      "maxTemperatureC": -10
     },
     {
       "id": "grizzly_bear",
       "sourceExpression": "temperature(-15, 15).minGroundwater(200).minForest(2)",
       "minGroundwater": 200,
-      "minForestDensity": 2
+      "minForestDensity": 2,
+      "minTemperatureC": -15,
+      "maxTemperatureC": 15
     },
     {
       "id": "black_bear",
       "sourceExpression": "temperature(5, 20).minGroundwater(250).minForest(2)",
       "minGroundwater": 250,
-      "minForestDensity": 2
+      "minForestDensity": 2,
+      "minTemperatureC": 5,
+      "maxTemperatureC": 20
     },
     {
       "id": "cougar",
       "sourceExpression": "temperature(-10, 21).minGroundwater(150)",
-      "minGroundwater": 150
+      "minGroundwater": 150,
+      "minTemperatureC": -10,
+      "maxTemperatureC": 21
     },
     {
       "id": "panther",
       "sourceExpression": "temperature(-10, 21).minGroundwater(150)",
-      "minGroundwater": 150
+      "minGroundwater": 150,
+      "minTemperatureC": -10,
+      "maxTemperatureC": 21
     },
     {
       "id": "lion",
       "sourceExpression": "minTemperature(16).groundwater(50, 300).maxForest(2)",
       "minGroundwater": 50,
       "maxGroundwater": 300,
-      "maxForestDensity": 2
+      "maxForestDensity": 2,
+      "minTemperatureC": 16
     },
     {
       "id": "sabertooth",
       "sourceExpression": "maxTemperature(0).minGroundwater(250)",
-      "minGroundwater": 250
+      "minGroundwater": 250,
+      "maxTemperatureC": 0
     },
     {
       "id": "tiger",
       "sourceExpression": "minTemperature(13).minGroundwater(100).minForest(2)",
       "minGroundwater": 100,
-      "minForestDensity": 2
+      "minForestDensity": 2,
+      "minTemperatureC": 13
     },
     {
       "id": "squid",
-      "sourceExpression": "distanceBelowSeaLevel(15)"
+      "sourceExpression": "distanceBelowSeaLevel(15)",
+      "distanceBelowSeaLevel": 15
     },
     {
       "id": "octopoteuthis",
       "sourceExpression": "maxBrightness(0).distanceBelowSeaLevel(40)",
-      "distanceBelowSeaLevel": 40
+      "distanceBelowSeaLevel": 40,
+      "maxBrightness": 0
     },
     {
       "id": "pig",
       "sourceExpression": "temperature(-10, 35).minGroundwater(200).minForest(2)",
       "minGroundwater": 200,
-      "minForestDensity": 2
+      "minForestDensity": 2,
+      "minTemperatureC": -10,
+      "maxTemperatureC": 35
     },
     {
       "id": "cow",
       "sourceExpression": "temperature(-10, 35).minGroundwater(250)",
-      "minGroundwater": 250
+      "minGroundwater": 250,
+      "minTemperatureC": -10,
+      "maxTemperatureC": 35
     },
     {
       "id": "goat",
       "sourceExpression": "temperature(-12, 25).maxGroundwater(300)",
-      "maxGroundwater": 300
+      "maxGroundwater": 300,
+      "minTemperatureC": -12,
+      "maxTemperatureC": 25
     },
     {
       "id": "yak",
       "sourceExpression": "maxTemperature(-11).minGroundwater(100)",
-      "minGroundwater": 100
+      "minGroundwater": 100,
+      "maxTemperatureC": -11
     },
     {
       "id": "alpaca",
       "sourceExpression": "temperature(-8, 20).minGroundwater(250)",
-      "minGroundwater": 250
+      "minGroundwater": 250,
+      "minTemperatureC": -8,
+      "maxTemperatureC": 20
     },
     {
       "id": "sheep",
       "sourceExpression": "temperature(0, 35).groundwater(70, 300)",
       "minGroundwater": 70,
-      "maxGroundwater": 300
+      "maxGroundwater": 300,
+      "minTemperatureC": 0,
+      "maxTemperatureC": 35
     },
     {
       "id": "musk_ox",
       "sourceExpression": "temperature(-25, 0).minGroundwater(100)",
-      "minGroundwater": 100
+      "minGroundwater": 100,
+      "minTemperatureC": -25,
+      "maxTemperatureC": 0
     },
     {
       "id": "chicken",
       "sourceExpression": "minTemperature(14).minGroundwater(225).minForest(2)",
       "minGroundwater": 225,
-      "minForestDensity": 2
+      "minForestDensity": 2,
+      "minTemperatureC": 14
     },
     {
       "id": "duck",
       "sourceExpression": "temperature(-25, 30).minGroundwater(100).maxForest(2)",
       "minGroundwater": 100,
-      "maxForestDensity": 2
+      "maxForestDensity": 2,
+      "minTemperatureC": -25,
+      "maxTemperatureC": 30
     },
     {
       "id": "quail",
       "sourceExpression": "temperature(-15, 10).minGroundwater(200)",
-      "minGroundwater": 200
+      "minGroundwater": 200,
+      "minTemperatureC": -15,
+      "maxTemperatureC": 10
     },
     {
       "id": "rabbit",
       "sourceExpression": "minTemperature(-16).minGroundwater(15)",
-      "minGroundwater": 15
+      "minGroundwater": 15,
+      "minTemperatureC": -16
     },
     {
       "id": "fox",
       "sourceExpression": "groundwater(130, 400).maxTemperature(25).minForest(2)",
       "maxTemperatureC": 25,
-      "minForestDensity": 2
+      "minForestDensity": 2,
+      "minGroundwater": 130,
+      "maxGroundwater": 400
     },
     {
       "id": "panda",
@@ -489,143 +573,187 @@
       "minGroundwater": 300,
       "maxGroundwater": 500,
       "minForestDensity": 3,
-      "fuzzy": true
+      "fuzzy": true,
+      "minTemperatureC": 18,
+      "maxTemperatureC": 28
     },
     {
       "id": "boar",
       "sourceExpression": "groundwater(130, 400).temperature(-5, 25).maxForest(3)",
       "minTemperatureC": -5,
       "maxTemperatureC": 25,
-      "maxForestDensity": 3
+      "maxForestDensity": 3,
+      "minGroundwater": 130,
+      "maxGroundwater": 400
     },
     {
       "id": "wildebeest",
       "sourceExpression": "groundwater(90, 380).minTemperature(13).maxForest(2)",
       "minTemperatureC": 13,
-      "maxForestDensity": 2
+      "maxForestDensity": 2,
+      "minGroundwater": 90,
+      "maxGroundwater": 380
     },
     {
       "id": "bison",
       "sourceExpression": "groundwater(160, 420).temperature(-10, 15).maxForest(2)",
       "minTemperatureC": -10,
       "maxTemperatureC": 15,
-      "maxForestDensity": 2
+      "maxForestDensity": 2,
+      "minGroundwater": 160,
+      "maxGroundwater": 420
     },
     {
       "id": "ocelot",
       "sourceExpression": "groundwater(300, 500).temperature(15, 30).minForest(2)",
       "minTemperatureC": 15,
       "maxTemperatureC": 30,
-      "minForestDensity": 2
+      "minForestDensity": 2,
+      "minGroundwater": 300,
+      "maxGroundwater": 500
     },
     {
       "id": "caribou",
       "sourceExpression": "groundwater(110, 500).maxTemperature(-9)",
-      "maxTemperatureC": -9
+      "maxTemperatureC": -9,
+      "minGroundwater": 110,
+      "maxGroundwater": 500
     },
     {
       "id": "deer",
       "sourceExpression": "groundwater(160, 500).temperature(-12, 16).minForest(2)",
       "minTemperatureC": -12,
       "maxTemperatureC": 16,
-      "minForestDensity": 2
+      "minForestDensity": 2,
+      "minGroundwater": 160,
+      "maxGroundwater": 500
     },
     {
       "id": "gazelle",
       "sourceExpression": "groundwater(90, 380).minTemperature(12).maxForest(2)",
       "minTemperatureC": 12,
-      "maxForestDensity": 2
+      "maxForestDensity": 2,
+      "minGroundwater": 90,
+      "maxGroundwater": 380
     },
     {
       "id": "bongo",
       "sourceExpression": "groundwater(230, 500).minTemperature(15).minForest(2)",
       "minTemperatureC": 15,
-      "minForestDensity": 2
+      "minForestDensity": 2,
+      "minGroundwater": 230,
+      "maxGroundwater": 500
     },
     {
       "id": "moose",
       "sourceExpression": "groundwater(150, 300).temperature(-15, 10).minForest(2)",
       "minTemperatureC": -15,
       "maxTemperatureC": 10,
-      "minForestDensity": 2
+      "minForestDensity": 2,
+      "minGroundwater": 150,
+      "maxGroundwater": 300
     },
     {
       "id": "grouse",
       "sourceExpression": "groundwater(150, 400).temperature(-12, 13)",
       "minTemperatureC": -12,
-      "maxTemperatureC": 13
+      "maxTemperatureC": 13,
+      "minGroundwater": 150,
+      "maxGroundwater": 400
     },
     {
       "id": "pheasant",
       "sourceExpression": "groundwater(100, 300).temperature(-5, 17).minForest(2)",
       "minTemperatureC": -5,
       "maxTemperatureC": 17,
-      "minForestDensity": 2
+      "minForestDensity": 2,
+      "minGroundwater": 100,
+      "maxGroundwater": 300
     },
     {
       "id": "turkey",
       "sourceExpression": "groundwater(250, 450).temperature(0, 17).maxForest(3)",
       "minTemperatureC": 0,
       "maxTemperatureC": 17,
-      "maxForestDensity": 3
+      "maxForestDensity": 3,
+      "minGroundwater": 250,
+      "maxGroundwater": 450
     },
     {
       "id": "peafowl",
       "sourceExpression": "groundwater(190, 500).minTemperature(14).minForest(3)",
       "minTemperatureC": 14,
-      "minForestDensity": 3
+      "minForestDensity": 3,
+      "minGroundwater": 190,
+      "maxGroundwater": 500
     },
     {
       "id": "wolf",
       "sourceExpression": "groundwater(150, 420).temperature(-12, 17).maxForest(3)",
       "minTemperatureC": -12,
       "maxTemperatureC": 17,
-      "maxForestDensity": 3
+      "maxForestDensity": 3,
+      "minGroundwater": 150,
+      "maxGroundwater": 420
     },
     {
       "id": "hyena",
       "sourceExpression": "groundwater(80, 380).minTemperature(15).maxForest(3)",
       "minTemperatureC": 15,
-      "maxForestDensity": 3
+      "maxForestDensity": 3,
+      "minGroundwater": 80,
+      "maxGroundwater": 380
     },
     {
       "id": "direwolf",
       "sourceExpression": "groundwater(150, 420).maxTemperature(-5).maxForest(3)",
       "maxTemperatureC": -5,
-      "maxForestDensity": 3
+      "maxForestDensity": 3,
+      "minGroundwater": 150,
+      "maxGroundwater": 420
     },
     {
       "id": "donkey",
       "sourceExpression": "groundwater(130, 400).minTemperature(-15).maxForest(2)",
       "minTemperatureC": -15,
-      "maxForestDensity": 2
+      "maxForestDensity": 2,
+      "minGroundwater": 130,
+      "maxGroundwater": 400
     },
     {
       "id": "mule",
       "sourceExpression": "groundwater(130, 400).minTemperature(-15).maxForest(2)",
       "minTemperatureC": -15,
-      "maxForestDensity": 2
+      "maxForestDensity": 2,
+      "minGroundwater": 130,
+      "maxGroundwater": 400
     },
     {
       "id": "horse",
       "sourceExpression": "groundwater(130, 400).minTemperature(-15).maxForest(2)",
       "minTemperatureC": -15,
-      "maxForestDensity": 2
+      "maxForestDensity": 2,
+      "minGroundwater": 130,
+      "maxGroundwater": 400
     },
     {
       "id": "dromedary_camel",
       "sourceExpression": "maxGroundwater(100).minTemperature(-5)",
-      "minTemperatureC": -5
+      "minTemperatureC": -5,
+      "maxGroundwater": 100
     },
     {
       "id": "bactrian_camel",
       "sourceExpression": "maxGroundwater(100).maxTemperature(-5)",
-      "maxTemperatureC": -5
+      "maxTemperatureC": -5,
+      "maxGroundwater": 100
     },
     {
       "id": "armadillo",
       "sourceExpression": "groundwater(100, 400).minTemperature(12)",
-      "minTemperatureC": 12
+      "minTemperatureC": 12,
+      "minGroundwater": 100,
+      "maxGroundwater": 400
     }
   ]
 }
