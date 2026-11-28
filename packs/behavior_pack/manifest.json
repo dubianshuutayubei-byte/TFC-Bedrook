@@ -4,25 +4,55 @@
     "name": "TFC-Bedrook",
     "description": "TerraFirmaCraft-inspired survival systems for Minecraft Bedrock Edition.",
     "uuid": "1f52d4b8-8a13-4f7b-9b9d-0d2a7b6c4e11",
-    "version": [0, 1, 0],
-    "min_engine_version": [1, 26, 60]
+    "version": [
+      0,
+      1,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      26,
+      60
+    ]
   },
   "modules": [
     {
       "type": "data",
       "uuid": "2a63e5c9-9b24-4a8c-8cad-1e3b8c7d5f22",
-      "version": [0, 1, 0]
+      "version": [
+        0,
+        1,
+        0
+      ]
     },
     {
       "type": "script",
       "language": "javascript",
       "uuid": "3b74f6da-ac35-4b9d-9dbe-2f4c9d8e6033",
-      "version": [0, 1, 0],
+      "version": [
+        0,
+        1,
+        0
+      ],
       "entry": "scripts/main.js"
     }
   ],
   "dependencies": [
-    { "module_name": "@minecraft/server", "version": "2.11.0" },
-    { "module_name": "@minecraft/server-ui", "version": "2.3.0" }
+    {
+      "module_name": "@minecraft/server",
+      "version": "2.11.0"
+    },
+    {
+      "module_name": "@minecraft/server-ui",
+      "version": "2.3.0"
+    },
+    {
+      "uuid": "9f2b1e4a-7c63-4d1f-8a52-6b0e3d9c1f74",
+      "version": [
+        0,
+        1,
+        0
+      ]
+    }
   ]
 }
