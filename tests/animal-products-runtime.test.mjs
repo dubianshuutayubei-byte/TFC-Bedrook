@@ -34,22 +34,23 @@ test("milk collection uses the exact official TFC minimum familiarity of 0.15",(
 
 test("milk and wool cooldowns use fractional world days, not animal age",()=>{
  assert.match(runtime,/function currentAnimalDay\(\)\{return world\.getDay\(\)\+world\.getTimeOfDay\(\)\/24000;\}/);
- assert.match(runtime,/const currentDay=currentAnimalDay\(\);/);
- assert.match(runtime,/const state=animalState\(entity\),currentDay=currentAnimalDay\(\);/);
+ assert.match(runtime,/const currentDay=currentAnimalDay\(\),minimumFamiliarity=profile\.productFamiliarityMin\?\?0,cooldown=profile\.productCooldownDays\?\?1/);
+ assert.match(runtime,/const state=animalState\(entity\),currentDay=currentAnimalDay\(\),minimumFamiliarity=profile\.productFamiliarityMin\?\?16,cooldown=profile\.productCooldownDays\?\?7/);
 });
 
 test("sheep shearing uses TFC wool production familiarity, cooldown and per-animal uses",()=>{
  assert.match(runtime,/world\.beforeEvents\.playerInteractWithEntity\.subscribe/);
  assert.match(runtime,/target\?\.typeId!=="minecraft:sheep"\|\|event\.itemStack\?\.typeId!=="minecraft:shears"/);
  assert.match(runtime,/function shearAnimal\(player,entity\)/);
- assert.match(runtime,/requiredFamiliarity:profile\.productFamiliarityMin\?\?16,cooldownDays:profile\.productCooldownDays\?\?7/);
+ assert.match(runtime,/minimumFamiliarity=profile\.productFamiliarityMin\?\?16,cooldown=profile\.productCooldownDays\?\?7/);
+ assert.match(runtime,/requiredFamiliarity:minimumFamiliarity,cooldownDays:cooldown/);
  assert.match(runtime,/give\(player,"tfc:wool",amount\)/);
  assert.match(runtime,/durability\.damage\+=1/);
 });
 
 test("product timing uses fractional world calendar days rather than animal age",()=>{
  assert.match(runtime,/function currentAnimalDay\(\)\{return world\.getDay\(\)\+world\.getTimeOfDay\(\)\/24000;\}/);
- assert.match(runtime,/const currentDay=currentAnimalDay\(\);/);
+ assert.match(runtime,/const currentDay=currentAnimalDay\(\),minimumFamiliarity=profile\.productFamiliarityMin\?\?0,cooldown=profile\.productCooldownDays\?\?1/);
  assert.match(runtime,/recordProduct\(state,currentDay,\{maxUses:profile\.maxUses\?\?Infinity,oldDayDelay:1\+Math\.floor\(Math\.random\(\)\*5\)\}\)/);
 });
 
