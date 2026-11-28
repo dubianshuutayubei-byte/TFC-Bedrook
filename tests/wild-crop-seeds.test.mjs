@@ -7,15 +7,18 @@ const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
 const ui=readFileSync(join(root,"packs/behavior_pack/scripts/ui/main-menu.js"),"utf8");
 
-test("grass and ferns can provide seeds for the six additional crops",()=>{
- for(const block of ["minecraft:short_grass","minecraft:tall_grass"])assert.match(runtime,new RegExp('"'+block+'":\\["tfc:barley_seed"'));
- for(const block of ["minecraft:fern","minecraft:large_fern"])assert.match(runtime,new RegExp('"'+block+'":\\["tfc:beet_seed"'));
+test("grass, ferns, water plants and dead bushes can provide crop seeds",()=>{
+ assert.match(runtime,/"minecraft:short_grass":\["tfc:barley_seed"/);
+ assert.match(runtime,/"minecraft:fern":\["tfc:beet_seed"/);
+ assert.match(runtime,/"minecraft:seagrass":\["tfc:rice_seed","tfc:papyrus_seed","tfc:sugarcane_seed"/);
+ assert.match(runtime,/"minecraft:dead_bush":\["tfc:cassava_seed"/);
+ for(const id of ["tfc:tomato_seed","tfc:red_bell_pepper_seed","tfc:yellow_bell_pepper_seed","tfc:alfalfa_seed","tfc:canola_seed","tfc:radish_seed","tfc:green_beans_seed","tfc:jute_seed"])assert.ok(runtime.includes(id));
  assert.match(runtime,/Math\.random\(\)<0\.12/);
  assert.match(runtime,/spawnItem\(new ItemStack\(seed,1\)/);
 });
 
 test("seed collection and crop return are described in the field guide",()=>{
- assert.match(ui,/大麦・オーツ麦・ライ麦の種は草地、レンズ豆・大豆・落花生の種は草地、ビーツ・キャベツ・ニンジン・ニンニク・タマネギ・カボチャの種はシダを壊すと低確率で見つかります/);
+ assert.match(ui,/穀物・豆類・アルファルファ・カノーラ・ラディッシュの種は草地、野菜・トマト・パプリカ・ジュートの種はシダ、水稲・パピルス・サトウキビの種は水草、キャッサバなどは枯れ木から低確率で見つかります/);
  assert.match(ui,/成熟作物を収穫すると対応する種が1つ戻ります/);
 });
 
