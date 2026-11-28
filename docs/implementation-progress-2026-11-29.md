@@ -129,3 +129,11 @@
 - Node.jsユニットテスト：437件成功、失敗0件。
 - 途中の失敗は、ペットを自然スポーン対象と誤認した古い監査テスト、表示UI/孵化設定の古い期待値など。仕様に合わせてテストを修正し、最終実行で全件成功。
 - これは静的検証の成功であり、Bedrock 26.60の実機描画・AI・セーブ復元の合格を意味しない。
+
+
+### 追加検証：猫・犬の表示名とCI再実行
+- 猫・犬の日本語/英語のEntity名と召喚アイテム名を追加。
+- `fauna-entity-assets.test.mjs` に翻訳キーの存在検査を追加。
+- [Static Pack Validation](https://github.com/dubianshuutayubei-byte/TFC-Bedrook/actions/runs/46167111388)：成功。
+- JSON/manifest検証、JavaScript構文検査、Node.jsユニットテストすべて成功。
+- Node.jsテスト：438件成功、失敗0件。
