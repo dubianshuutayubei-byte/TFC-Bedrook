@@ -1,2 +1,6 @@
 pack.name=TFC-Bedrook Behavior Pack
 pack.description=TerraFirmaCraft風サバイバルシステム
+calendar.season.winter=冬
+calendar.season.spring=春
+calendar.season.summer=夏
+calendar.season.autumn=秋
