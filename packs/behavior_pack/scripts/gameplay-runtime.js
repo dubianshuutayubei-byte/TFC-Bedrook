@@ -71,17 +71,17 @@ const ANIMAL_PROFILES={
  "minecraft:rabbit":{speciesId:"rabbit",displayName:"ウサギ",adultAgeDays:null,requiredFamiliarity:15,customBreeding:false,feedItems:["minecraft:carrot","minecraft:golden_carrot","minecraft:dandelion"],grazeBlocks:[],kind:"terrestrial",domestic:false},
  "minecraft:wolf":{speciesId:"wolf",displayName:"オオカミ",adultAgeDays:null,requiredFamiliarity:20,customBreeding:false,feedItems:["minecraft:beef","minecraft:porkchop","minecraft:chicken","minecraft:mutton","minecraft:rabbit"],grazeBlocks:[],kind:"terrestrial",domestic:false},
  "minecraft:fox":{speciesId:"fox",displayName:"キツネ",adultAgeDays:null,requiredFamiliarity:10,customBreeding:false,feedItems:["minecraft:sweet_berries","minecraft:glow_berries"],grazeBlocks:[],kind:"terrestrial",domestic:false},
- "minecraft:polar_bear":{speciesId:"polar_bear",displayName:"ホッキョクグマ",adultAgeDays:null,requiredFamiliarity:0,customBreeding:false,feedItems:[],grazeBlocks:[],kind:"terrestrial",domestic:false},
+ "minecraft:polar_bear":{speciesId:"polar_bear",displayName:"ホッキョクグマ",adultAgeDays:null,requiredFamiliarity:0,customBreeding:false,feedItems:["minecraft:cod","minecraft:salmon"],grazeBlocks:[],kind:"terrestrial",domestic:false},
  "minecraft:panda":{speciesId:"panda",displayName:"パンダ",adultAgeDays:null,requiredFamiliarity:10,customBreeding:false,feedItems:["minecraft:bamboo"],grazeBlocks:[],kind:"terrestrial",domestic:false},
  "minecraft:ocelot":{speciesId:"ocelot",displayName:"ヤマネコ",adultAgeDays:null,requiredFamiliarity:10,customBreeding:false,feedItems:["minecraft:cod","minecraft:salmon"],grazeBlocks:[],kind:"terrestrial",domestic:false},
  "minecraft:dolphin":{speciesId:"dolphin",displayName:"イルカ",adultAgeDays:null,requiredFamiliarity:0,customBreeding:false,feedItems:["minecraft:cod","minecraft:salmon"],grazeBlocks:[],kind:"aquatic",domestic:false},
- "minecraft:cod":{speciesId:"cod",displayName:"タラ",adultAgeDays:null,requiredFamiliarity:0,customBreeding:false,feedItems:[],grazeBlocks:[],kind:"aquatic",domestic:false},
- "minecraft:salmon":{speciesId:"salmon",displayName:"サケ",adultAgeDays:null,requiredFamiliarity:0,customBreeding:false,feedItems:[],grazeBlocks:[],kind:"aquatic",domestic:false},
- "minecraft:tropicalfish":{speciesId:"tropical_fish",displayName:"熱帯魚",adultAgeDays:null,requiredFamiliarity:0,customBreeding:false,feedItems:[],grazeBlocks:[],kind:"aquatic",domestic:false},
- "minecraft:pufferfish":{speciesId:"pufferfish",displayName:"フグ",adultAgeDays:null,requiredFamiliarity:0,customBreeding:false,feedItems:[],grazeBlocks:[],kind:"aquatic",domestic:false},
+ "minecraft:cod":{speciesId:"cod",displayName:"タラ",adultAgeDays:null,requiredFamiliarity:0,customBreeding:false,feedItems:[],grazeBlocks:[],kind:"aquatic",domestic:false,hungerPerDay:0,thirstPerDay:0},
+ "minecraft:salmon":{speciesId:"salmon",displayName:"サケ",adultAgeDays:null,requiredFamiliarity:0,customBreeding:false,feedItems:[],grazeBlocks:[],kind:"aquatic",domestic:false,hungerPerDay:0,thirstPerDay:0},
+ "minecraft:tropicalfish":{speciesId:"tropical_fish",displayName:"熱帯魚",adultAgeDays:null,requiredFamiliarity:0,customBreeding:false,feedItems:[],grazeBlocks:[],kind:"aquatic",domestic:false,hungerPerDay:0,thirstPerDay:0},
+ "minecraft:pufferfish":{speciesId:"pufferfish",displayName:"フグ",adultAgeDays:null,requiredFamiliarity:0,customBreeding:false,feedItems:[],grazeBlocks:[],kind:"aquatic",domestic:false,hungerPerDay:0,thirstPerDay:0},
  "minecraft:turtle":{speciesId:"turtle",displayName:"ウミガメ",adultAgeDays:null,requiredFamiliarity:0,customBreeding:false,feedItems:["minecraft:seagrass"],grazeBlocks:[],kind:"aquatic",domestic:false},
  "minecraft:frog":{speciesId:"frog",displayName:"カエル",adultAgeDays:null,requiredFamiliarity:0,customBreeding:false,feedItems:["minecraft:slime_ball"],grazeBlocks:[],kind:"amphibian",domestic:false},
- "minecraft:squid":{speciesId:"squid",displayName:"イカ",adultAgeDays:null,requiredFamiliarity:0,customBreeding:false,feedItems:[],grazeBlocks:[],kind:"aquatic",domestic:false}
+ "minecraft:squid":{speciesId:"squid",displayName:"イカ",adultAgeDays:null,requiredFamiliarity:0,customBreeding:false,feedItems:[],grazeBlocks:[],kind:"aquatic",domestic:false,hungerPerDay:0,thirstPerDay:0}
 };
 const inv=p=>p.getComponent("minecraft:inventory")?.container;
 function count(p,id){const c=inv(p);if(!c)return 0;let n=0;for(let i=0;i<c.size;i++){const s=c.getItem(i);if(s?.typeId===id)n+=s.amount;}return n;}
@@ -526,11 +526,24 @@ function cropTick(block){
 function fireTick(block){const key=posKey(block,"fire");const state=advanceFire(readWorldState(key,{}),20);writeWorldState(key,state);}
 function animalState(entity){const profile=ANIMAL_PROFILES[entity.typeId];try{const raw=entity.getDynamicProperty("tfc:animal_state");const base=typeof raw==="string"?JSON.parse(raw):{};return createAnimalState({...base,species:profile?.speciesId??base.species??entity.typeId.replace(":","_")});}catch{return createAnimalState({species:profile?.speciesId??entity.typeId.replace(":","_")});}}
 function saveAnimal(entity,state){try{entity.setDynamicProperty("tfc:animal_state",JSON.stringify(state));}catch(error){console.warn("[TFC-Bedrook] animal state save:",error);}}
+function consumeDroppedAnimalFood(entity,profile,state){
+ if(!profile.feedItems?.length)return state;
+ try{
+  const items=entity.dimension.getEntities({type:"minecraft:item",location:entity.location,maxDistance:1.5});
+  for(const dropped of items){
+   const stack=dropped.getComponent("minecraft:item")?.itemStack;
+   if(!stack||stack.amount!==1||!profile.feedItems.includes(stack.typeId))continue;
+   dropped.kill();
+   return grazeAnimal(state,{hungerReduction:35,thirstReduction:3});
+  }
+ }catch(error){console.warn("[TFC-Bedrook] animal food pickup failed:",error);}
+ return state;
+}
 function animalTick(entity){
  const profile=ANIMAL_PROFILES[entity.typeId];if(!profile)return;
  let state=animalState(entity);
   try{const health=entity.getComponent("minecraft:health");if(health)state=syncAnimalHealth(state,health.currentValue,health.effectiveMax);}catch{}
-  state=advanceAnimalNeeds(state,0.05);
+  state=advanceAnimalNeeds(state,0.05,{hungerPerDay:profile.hungerPerDay??8,thirstPerDay:profile.thirstPerDay??(profile.kind==="aquatic"?0:12),healthLossPerDay:2});
  try{
   const base={x:Math.floor(entity.location.x),y:Math.floor(entity.location.y),z:Math.floor(entity.location.z)};
   let waterNearby=false;const forageCandidates=[];
