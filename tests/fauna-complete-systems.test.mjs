@@ -18,7 +18,7 @@ const custom=roster.species.filter(s=>!native.has(s.id));
 test("all 63 TFC fauna have runtime coverage and all 40 missing species have custom profiles",()=>{
  assert.equal(roster.species.length,63);
  assert.equal(coverage.runtimeTrackedCount,63);
- assert.equal(coverage.customEntityCount,40);
+ assert.equal(coverage.customEntityDefinitionCount,40);
  assert.equal(custom.length,40);
  assert.equal(Object.keys(CUSTOM_FAUNA_PROFILES).length,40);
  for(const s of custom)assert.ok(CUSTOM_FAUNA_PROFILES["tfc:"+s.id],s.id);
