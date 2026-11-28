@@ -9,7 +9,7 @@ const ids=["raw_meat","cooked_meat","grain","maize","potato","vegetable","fruit"
 test("inventory food freshness uses food decay service and persists per player",()=>{
  assert.match(runtime,/import \{ consumeFood, advanceFoodDecay \}/);
  assert.match(runtime,/function tickFoodFreshness\(player,nowTick\)/);
- assert.match(runtime,/advanceFoodDecay\(\{id:itemId,freshness:previous\.freshness\},elapsedTicks\/1000/);
+ assert.match(runtime,/advanceFoodDecay\(\{id:itemId,freshness:previous\.freshness\},elapsedTicks\/1000,\{temperatureC:currentTemperatureC\(player\.location\.y-63\),baseDecayPerHour\}\)/);
  assert.match(runtime,/FOOD_FRESHNESS_KEY/);
  assert.match(runtime,/new ItemStack\("tfc:spoiled_food",entry\.amount\)/);
 });
