@@ -59,7 +59,8 @@
         "suffocate_time": 0,
         "breathes_air": false,
         "breathes_water": true
-      }
+      },
+      "minecraft:bucketable": {}
     }
   }
 }
