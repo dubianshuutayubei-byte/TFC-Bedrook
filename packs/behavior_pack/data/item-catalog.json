@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "categories": {
+    "raw_materials": ["stone", "stick", "clay", "flint", "copper_ore", "native_copper"],
+    "stone_tools": ["stone_shard", "stone_knife_head", "stone_axe_head", "stone_hammer_head"],
+    "pottery": ["unfired_vessel", "unfired_ingot_mold", "fired_vessel", "fired_ingot_mold"],
+    "metals": ["copper_ingot", "copper_sheet", "copper_tool_head"],
+    "food": ["raw_meat", "cooked_meat", "grain", "vegetable", "fruit", "salt"],
+    "farming": ["crop_seed", "fertilizer", "farmland"],
+    "equipment": ["firepit", "pit_kiln", "charcoal_forge", "crucible", "anvil"]
+  },
+  "implementationStatus": "logical_catalog_only",
+  "notes": [
+    "This catalog is an internal ID registry, not yet a set of registered Bedrock item or block definitions.",
+    "Custom item identifiers and RP textures will be added together after the first asset batch is finalized.",
+    "Do not expose missing custom IDs as obtainable items in recipes before their definitions exist."
+  ]
+}
