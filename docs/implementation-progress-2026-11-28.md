@@ -1231,3 +1231,10 @@
 | 最後 | 地形生成 | 参考資料受領後に着手。現在の数値プロトタイプは完成扱いしない |
 
 **直近の動物検査:** 324件の動物ライフサイクルCIが成功。ウマ×ロバの交雑を含む追加コミットは最新CIで再検証中。
+
+
+### 追加監査修正（Script APIの戻り値仕様）
+- Microsoft LearnのBedrock Script APIでは `Entity.triggerEvent()` の戻り値は `void`。従来コードで戻り値を真偽判定していたため、幼体化時に誤警告し、成体化時に状態をadultへ更新できない可能性があった。
+- 出産イベントは例外の有無で成否を扱う形へ変更。成長イベントも例外なく呼び出せたら状態をadultへ更新する形へ修正。
+- 参照: https://learn.microsoft.com/ja-jp/minecraft/creator/scriptapi/minecraft/server/entity?view=minecraft-bedrock-stable
+- 実機でイベント名が実際のEntity定義に存在するか、イベントが意図したコンポーネント変更を起こすかは引き続き実機確認が必要。
