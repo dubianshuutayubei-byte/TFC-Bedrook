@@ -114,3 +114,26 @@ test("shared dairy interaction messages are species-neutral for cows and goats",
  assert.match(runtime,/この動物は健康・空腹・渇き、または補充時間の条件を満たしていません/);
  assert.match(runtime,/§a乳を採取しました/);
 });
+
+test("runtime uses official TFC maturity, gestation and production limits for supported livestock",()=>{
+ for(const [entity,age,uses] of [
+  ["minecraft:pig",80,60],["minecraft:horse",80,60],["minecraft:donkey",80,60],
+  ["minecraft:mule",80,60],["minecraft:rabbit",80,40],["minecraft:cow",192,128],
+  ["minecraft:goat",96,60],["minecraft:sheep",56,60],["minecraft:chicken",24,100]
+ ]){
+  const entry=runtime.match(new RegExp('"'+entity+'":\\{[^}]*\\}'))?.[0]??"";
+  assert.match(entry,new RegExp("adultAgeDays:"+age));
+  assert.match(entry,new RegExp("maxUses:"+uses));
+ }
+});
+test("dairy production applies TFC familiarity, cooldown and use limits",()=>{
+ assert.match(runtime,/requiredFamiliarity:profile\.productFamiliarityMin\?\?0/);
+ assert.match(runtime,/cooldownDays:profile\.productCooldownDays\?\?1/);
+ assert.match(runtime,/maxUses:profile\.maxUses\?\?Infinity/);
+ assert.match(runtime,/recordProduct\(state,currentDay,\{maxUses:profile\.maxUses\?\?Infinity\}\)/);
+ assert.match(runtime,/profile\.dairy&&held\.typeId==="minecraft:glass_bottle"/);
+});
+test("animal status UI reports product uses only for animals with configured production limits",()=>{
+ assert.match(runtime,/const usesInfo=profile\.productCooldownDays!=null/);
+ assert.match(runtime,/産出回数: .*state\.uses.*profile\.maxUses/);
+});
