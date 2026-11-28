@@ -18,7 +18,7 @@ import { summarizeOreSamples } from "./core/geology-service.mjs";
 const STATE_KEY="tfc:player_state",PROGRESS_KEY="tfc:knapping_progress";
 const TRACKED_FOOD_CONTAINERS_KEY="tfc:tracked_food_containers";
 const trackedFoodContainers=new Map();
-const FOOD_DECAY_PROFILES={"tfc:raw_meat":0.16,"tfc:cooked_meat":0.12,"tfc:grain":0.025,"tfc:maize":0.025,"tfc:potato":0.1,"tfc:vegetable":0.1,"tfc:fruit":0.11,"tfc:milk_bottle":0.18,"tfc:dried_meat":0.04,"tfc:dried_fruit":0.03,"tfc:dried_vegetables":0.03,"tfc:bread":0.05,"tfc:barley":0.025,"tfc:oat":0.025,"tfc:rye":0.025,"tfc:beet":0.1,"tfc:cabbage":0.1,"tfc:carrot":0.1,"tfc:garlic":0.1,"tfc:onion":0.1,"tfc:squash":0.1,"tfc:lentils":0.08,"tfc:soybean":0.08,"tfc:peanuts":0.08,"tfc:rice":0.025,"tfc:cassava":0.1,"tfc:green_beans":0.1,"tfc:pumpkin":0.1,"tfc:melon":0.11,"tfc:tomato":0.1,"tfc:green_bell_pepper":0.1,"tfc:radish":0.1};
+const FOOD_DECAY_PROFILES={"tfc:raw_meat":0.16,"tfc:cooked_meat":0.12,"tfc:salted_meat":0.025,"tfc:smoked_meat":0.05,"tfc:grain":0.025,"tfc:maize":0.025,"tfc:potato":0.1,"tfc:vegetable":0.1,"tfc:fruit":0.11,"tfc:milk_bottle":0.18,"tfc:dried_meat":0.04,"tfc:dried_fruit":0.03,"tfc:dried_vegetables":0.03,"tfc:bread":0.05,"tfc:barley":0.025,"tfc:oat":0.025,"tfc:rye":0.025,"tfc:beet":0.1,"tfc:cabbage":0.1,"tfc:carrot":0.1,"tfc:garlic":0.1,"tfc:onion":0.1,"tfc:squash":0.1,"tfc:lentils":0.08,"tfc:soybean":0.08,"tfc:peanuts":0.08,"tfc:rice":0.025,"tfc:cassava":0.1,"tfc:green_beans":0.1,"tfc:pumpkin":0.1,"tfc:melon":0.11,"tfc:tomato":0.1,"tfc:green_bell_pepper":0.1,"tfc:radish":0.1};
 const ITEM_TEMPERATURE_KEY="tfc:temperature_c",ITEM_HEAT_TICK_KEY="tfc:heat_updated_tick";
 const HEATED_METAL_PROFILES=Object.freeze({
  "tfc:heated_copper_ingot":{initialTemperatureC:1080,heatCapacity:2.857,forgingTemperatureC:648},
@@ -42,7 +42,7 @@ function tickMetalHeat(player,nowTick){
   if(next!==current||last!==nowTick||rawTemperature===undefined){stack.setDynamicProperties({[ITEM_TEMPERATURE_KEY]:next,[ITEM_HEAT_TICK_KEY]:nowTick});container.setItem(i,stack);}
  }
 }
-const ITEM_LABELS={"tfc:raw_meat":"生肉","tfc:cooked_meat":"焼いた肉","tfc:clay_vessel":"未焼成土器","tfc:fired_vessel":"焼成土器","tfc:unfired_ingot_mold":"未焼成鋳型","tfc:fired_ingot_mold":"焼成鋳型","tfc:copper_ore":"銅鉱石","tfc:heated_copper_ingot":"加熱銅インゴット","tfc:copper_ingot":"銅インゴット","tfc:tin_ore":"錫鉱石","tfc:heated_tin_ingot":"加熱錫インゴット","tfc:tin_ingot":"錫インゴット","tfc:heated_bronze_ingot":"加熱青銅インゴット","tfc:bronze_ingot":"青銅インゴット","tfc:fruit":"果物","tfc:vegetable":"野菜","tfc:dried_meat":"干し肉","tfc:dried_fruit":"干し果物","tfc:dried_vegetables":"干し野菜","tfc:compost":"堆肥","minecraft:oak_leaves":"落ち葉","tfc:barley":"大麦","tfc:oat":"オーツ麦","tfc:rye":"ライ麦","tfc:beet":"ビーツ","tfc:cabbage":"キャベツ","tfc:carrot":"ニンジン","tfc:garlic":"ニンニク","tfc:onion":"タマネギ","tfc:squash":"カボチャ","tfc:lentils":"レンズ豆","tfc:soybean":"大豆","tfc:peanuts":"落花生","tfc:quern":"石臼","tfc:handstone":"上臼石","tfc:flour":"小麦粉","tfc:dough":"生地","tfc:bread":"パン"};
+const ITEM_LABELS={"tfc:raw_meat":"生肉","tfc:cooked_meat":"焼いた肉","tfc:clay_vessel":"未焼成土器","tfc:fired_vessel":"焼成土器","tfc:unfired_ingot_mold":"未焼成鋳型","tfc:fired_ingot_mold":"焼成鋳型","tfc:copper_ore":"銅鉱石","tfc:heated_copper_ingot":"加熱銅インゴット","tfc:copper_ingot":"銅インゴット","tfc:tin_ore":"錫鉱石","tfc:heated_tin_ingot":"加熱錫インゴット","tfc:tin_ingot":"錫インゴット","tfc:heated_bronze_ingot":"加熱青銅インゴット","tfc:bronze_ingot":"青銅インゴット","tfc:fruit":"果物","tfc:vegetable":"野菜","tfc:dried_meat":"干し肉","tfc:dried_fruit":"干し果物","tfc:dried_vegetables":"干し野菜","tfc:salted_meat":"塩漬け肉","tfc:smoked_meat":"燻製肉","tfc:salt":"塩","tfc:brine_vessel":"塩水入り土器","tfc:unfired_crucible":"未焼成るつぼ","tfc:fired_crucible":"焼成済みるつぼ","tfc:tin_sheet":"錫板","tfc:smokehouse":"燻製設備","tfc:compost":"堆肥","minecraft:oak_leaves":"落ち葉","tfc:barley":"大麦","tfc:oat":"オーツ麦","tfc:rye":"ライ麦","tfc:beet":"ビーツ","tfc:cabbage":"キャベツ","tfc:carrot":"ニンジン","tfc:garlic":"ニンニク","tfc:onion":"タマネギ","tfc:squash":"カボチャ","tfc:lentils":"レンズ豆","tfc:soybean":"大豆","tfc:peanuts":"落花生","tfc:quern":"石臼","tfc:handstone":"上臼石","tfc:flour":"小麦粉","tfc:dough":"生地","tfc:bread":"パン"};
 const WILD_SEED_DROPS=Object.freeze({
  "minecraft:seagrass":["tfc:rice_seed","tfc:papyrus_seed","tfc:sugarcane_seed"],
  "minecraft:dead_bush":["tfc:cassava_seed"],
@@ -73,8 +73,10 @@ function fillWaterVessel(player,block){
  if(!player||!block)return;
  if(block.typeId!=="minecraft:water"&&block.typeId!=="minecraft:flowing_water"){player.sendMessage("§c水源に向けて土器を使ってください。");return;}
  if(!take(player,"tfc:fired_vessel",1)){player.sendMessage("§c空の焼成土器が必要です。");return;}
- give(player,"tfc:water_vessel",1);
- player.sendMessage("§b土器に水を汲みました。飲むと水分が回復します。");
+ let oceanWater=false;
+ try{const biomeId=String(block.dimension.getBiome(block.location).id);oceanWater=/(?:^|:)(?:deep_)?(?:cold_|lukewarm_|warm_|frozen_)?ocean$/.test(biomeId);}catch{}
+ if(oceanWater){give(player,"tfc:brine_vessel",1);player.sendMessage("§b海水を土器に汲みました。焚き火で煮詰めると塩を回収できます。");}
+ else{give(player,"tfc:water_vessel",1);player.sendMessage("§b淡水を土器に汲みました。飲むと水分が回復します。");}
 }
 function drinkWaterVessel(player){
  if(!player||player.typeId!=="minecraft:player")return;
@@ -277,13 +279,20 @@ async function processQuernManually(player,block,recipe){
 }
 
 async function shapePottery(player){
- const form=new ActionFormData().title("粘土成形").body("粘土玉を使って未焼成品を成形します。\n\n土器: 粘土玉 4個\nインゴット鋳型: 粘土玉 8個\n\n成形後はPit Kilnで焼成してください。").button("土器を成形（粘土玉×4）").button("インゴット鋳型を成形（粘土玉×8）").button("閉じる");
+ const choices=[
+  {name:"土器",amount:4,id:"tfc:clay_vessel"},
+  {name:"インゴット鋳型",amount:8,id:"tfc:unfired_ingot_mold"},
+  {name:"るつぼ",amount:8,id:"tfc:unfired_crucible"}
+ ];
+ const form=new ActionFormData().title("粘土成形").body("粘土玉を使って未焼成の陶器を成形します。\n\n土器: 4個\nインゴット鋳型: 8個\nるつぼ: 8個\n\n成形後はPit Kilnで焼成してください。");
+ for(const choice of choices)form.button(choice.name+"を成形（粘土玉×"+choice.amount+"）");
+ form.button("閉じる");
  let response;try{response=await form.show(player);}catch{return;}
- if(response.canceled||response.selection===2)return;
- const amount=response.selection===0?4:8,output=response.selection===0?"tfc:clay_vessel":"tfc:unfired_ingot_mold";
- if(count(player,"minecraft:clay_ball")<amount){player.sendMessage("§c粘土玉が不足しています。必要数: "+amount);return;}
- if(!take(player,"minecraft:clay_ball",amount)){player.sendMessage("§c粘土玉を取り出せませんでした。");return;}
- give(player,output,1);player.sendMessage("§a"+(output==="tfc:clay_vessel"?"土器":"インゴット鋳型")+"を成形しました。Pit Kilnで焼成できます。");
+ if(response.canceled||response.selection>=choices.length)return;
+ const choice=choices[response.selection];
+ if(count(player,"minecraft:clay_ball")<choice.amount){player.sendMessage("§c粘土玉が不足しています。必要数: "+choice.amount);return;}
+ if(!take(player,"minecraft:clay_ball",choice.amount)){player.sendMessage("§c粘土玉を取り出せませんでした。");return;}
+ give(player,choice.id,1);player.sendMessage("§a"+choice.name+"を成形しました。Pit Kilnで焼成できます。");
 }
 async function crucibleStation(player,block,state){
  const key=posKey(block,"crucible_charge"),charge=readWorldState(key,{copper:0,tin:0});
@@ -328,6 +337,18 @@ async function crucibleStation(player,block,state){
  give(player,"tfc:heated_bronze_ingot",1);give(player,"tfc:fired_ingot_mold",1);
  player.sendMessage("§a青銅を鋳造しました。加熱済みインゴットと鋳型を回収してください。");
 }
+function hasActiveSmokeSource(block){
+ const l=block.location,offsets=[[0,-1,0],[1,0,0],[-1,0,0],[0,0,1],[0,0,-1]];
+ for(const [dx,dy,dz] of offsets){
+  try{
+   const source=block.dimension.getBlock({x:l.x+dx,y:l.y+dy,z:l.z+dz});
+   if(source?.typeId!=="tfc:firepit")continue;
+   const fire=createFireState(readWorldState(posKey(source,"fire"),{}));
+   if(fire.burnTicks>0&&fire.temperatureC>=80)return true;
+  }catch{}
+ }
+ return false;
+}
 async function station(player,id,block){
  const recipes=getStationRecipes(id);if(!recipes.length)return;
  const key=stationJobKey(block),existing=readWorldState(key,null);
@@ -340,13 +361,13 @@ async function station(player,id,block){
   try{await form.show(player);}catch{}return;
  }
  const state=createFireState(readWorldState(posKey(block,"fire"),{}));
- const held=inv(player)?.getItem(player.selectedSlotIndex),fuel=(id==="anvil"||id==="drying_rack"||id==="composter"||id==="quern")?null:(held?FUELS[held.typeId]:null);
+ const held=inv(player)?.getItem(player.selectedSlotIndex),fuel=(id==="anvil"||id==="drying_rack"||id==="composter"||id==="quern"||id==="smokehouse")?null:(held?FUELS[held.typeId]:null);
  if(fuel){if(!take(player,held.typeId,1)){player.sendMessage("§c燃料を取り出せません。");return;}writeWorldState(posKey(block,"fire"),addFuel(state,fuel));player.sendMessage("§a燃料投入: "+Math.round(fuel.duration/20)+"秒分");return;}
  if(id==="crucible"){await crucibleStation(player,block,state);return;}
  const tempLabels={unheated:"未加熱",warming:"暖まり中",hot:"熱い",very_hot:"非常に熱い",faint_red:"かすかな赤熱",dark_red:"暗赤色",bright_red:"明るい赤熱",orange:"橙熱",yellow:"黄色熱",yellow_white:"黄白色",white:"白熱",brilliant_white:"強白熱"};
- const body=recipes.map((r,i)=>{const inputs=Object.entries(r.inputs).map(([itemId,amount])=>(count(player,itemId)>=amount?"§a":"§c")+(ITEM_LABELS[itemId]??itemId)+" ×"+amount+"§r").join("、");const outputs=Object.entries(r.outputs).map(([itemId,amount])=>(ITEM_LABELS[itemId]??itemId)+" ×"+amount).join("、");return(i+1)+". "+r.title+"\n   "+(id==="quern"?"手動回転 3回":id==="drying_rack"||id==="composter"?"所要時間 "+Math.ceil(r.durationTicks/20)+"秒":"必要温度 "+r.minimumTemperatureC+"°C / "+Math.ceil(r.durationTicks/20)+"秒")+"\n   材料: "+inputs+"\n   完成品: "+outputs;}).join("\n\n");
- const heldTemperature=Number(held?.getDynamicProperty(ITEM_TEMPERATURE_KEY)??0);const status=id==="quern"?"\n\n上臼石を材料と一緒に投入し、手動回転で穀物を挽きます。燃料・熱源は不要です。":id==="drying_rack"?"\n\n常温・時間式乾燥です。燃料は必要ありません。":id==="composter"?"\n\n常温で約10日間発酵させます。緑の素材と茶色の素材が必要です。":id==="anvil"?"\n\n手持ち金属温度: "+Math.floor(heldTemperature)+"°C（"+tempLabels[classifyTemperature(heldTemperature)]+"）\n鍛造温度に達した加熱インゴットが必要です。":"\n\n現在温度: "+Math.floor(state.temperatureC)+"°C（"+tempLabels[classifyTemperature(state.temperatureC)]+"）\n燃料残り: "+Math.ceil(state.burnTicks/20)+"秒";
- const form=new ActionFormData().title(id==="anvil"?"金床":id==="drying_rack"?"乾燥棚":id==="composter"?"コンポスター":id==="quern"?"石臼":"加工設備").body(body+status);
+ const body=recipes.map((r,i)=>{const inputs=Object.entries(r.inputs).map(([itemId,amount])=>(count(player,itemId)>=amount?"§a":"§c")+(ITEM_LABELS[itemId]??itemId)+" ×"+amount+"§r").join("、");const outputs=Object.entries(r.outputs).map(([itemId,amount])=>(ITEM_LABELS[itemId]??itemId)+" ×"+amount).join("、");return(i+1)+". "+r.title+"\n   "+(id==="quern"?"手動回転 3回":id==="drying_rack"||id==="composter"?"所要時間 "+Math.ceil(r.durationTicks/20)+"秒":id==="smokehouse"?"焚き火の煙 / "+Math.ceil(r.durationTicks/20)+"秒":"必要温度 "+r.minimumTemperatureC+"°C / "+Math.ceil(r.durationTicks/20)+"秒")+"\n   材料: "+inputs+"\n   完成品: "+outputs;}).join("\n\n");
+ const heldTemperature=Number(held?.getDynamicProperty(ITEM_TEMPERATURE_KEY)??0);const status=id==="smokehouse"?"\n\n隣接する焚き火を燃焼させ、80°C以上の煙を維持してください。":id==="quern"?"\n\n上臼石を材料と一緒に投入し、手動回転で穀物を挽きます。燃料・熱源は不要です。":id==="drying_rack"?"\n\n常温・時間式乾燥です。燃料は必要ありません。":id==="composter"?"\n\n常温で約10日間発酵させます。緑の素材と茶色の素材が必要です。":id==="anvil"?"\n\n手持ち金属温度: "+Math.floor(heldTemperature)+"°C（"+tempLabels[classifyTemperature(heldTemperature)]+"）\n鍛造温度に達した加熱インゴットが必要です。":"\n\n現在温度: "+Math.floor(state.temperatureC)+"°C（"+tempLabels[classifyTemperature(state.temperatureC)]+"）\n燃料残り: "+Math.ceil(state.burnTicks/20)+"秒";
+ const form=new ActionFormData().title(id==="smokehouse"?"燻製設備":id==="anvil"?"金床":id==="drying_rack"?"乾燥棚":id==="composter"?"コンポスター":id==="quern"?"石臼":"加工設備").body(body+status);
  for(const recipe of recipes)form.button(recipe.title);
  if(id==="anvil")form.button("水で冷却");
  form.button("閉じる");
@@ -569,10 +590,6 @@ world.afterEvents.itemUse.subscribe(event=>{
  if(player?.typeId==="minecraft:player"&&player.isSneaking&&stack?.typeId==="minecraft:clay_ball")void shapePottery(player);
 });
 world.afterEvents.playerInteractWithEntity.subscribe(event=>{if(ANIMAL_PROFILES[event.target?.typeId])animalInteract(event.player,event.target);});
-world.afterEvents.itemUse.subscribe(event=>{
- const player=event.source,stack=event.itemStack;
- if(player?.typeId==="minecraft:player"&&player.isSneaking&&stack?.typeId==="minecraft:clay_ball")void shapePottery(player);
-});
 
 
 
