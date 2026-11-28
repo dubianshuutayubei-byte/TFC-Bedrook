@@ -64,3 +64,5 @@ tile.tfc:composter.name=Composter
 item.tfc:wood_ash.name=Wood Ash
 
 item.tfc:wood_ash.name=Wood Ash
+
+item.tfc:water_vessel.name=Water Vessel
