@@ -21,7 +21,7 @@ test("custom pregnancy is confined to deer; vanilla livestock uses native breedi
  assert.match(runtime,/if\(profile\.customBreeding&&state\.pregnancyDays>0\)/);
  assert.match(runtime,/if\(profile\.customBreeding&&state\.sex==="female"/);
  assert.match(runtime,/other\.lastBreedAt=breedingTime/);
- assert.match(runtime,/entity\.dimension\.spawnEntity\(entity\.typeId/);
+ assert.match(runtime,/entity\.dimension\.spawnEntity\(entity\.typeId\+"<tfc:spawn_baby>"/);
 });
 test("animal needs and age update on the periodic loaded-entity tick",()=>{
  assert.match(runtime,/advanceAnimalNeeds\(state,0\.05,/);
