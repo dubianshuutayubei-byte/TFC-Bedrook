@@ -49,6 +49,9 @@
     },
     "tfc_potato": {
       "textures": "textures/items/tfc_grain"
+    },
+    "tfc_spoiled_food": {
+      "textures": "textures/items/tfc_meat_raw"
     }
   }
 }
