@@ -614,7 +614,7 @@ function tickPredation(entity,profile,state,currentDay){
    if(prey.id===entity.id)continue;
    const preyProfile=ANIMAL_PROFILES[prey.typeId];if(!preyProfile)continue;
    const preyState=animalState(prey),herd=Math.max(0,entity.dimension.getEntities({type:prey.typeId,location:prey.location,maxDistance:5}).length-1);
-   const result=evaluatePredation(state,preyState,{predatorDiet:profile.predatorDiet,preySpecies:preyProfile.speciesId??preyState.species,herdDefense:Math.min(0.6,herd*0.12)});
+   const result=evaluatePredation(state,preyState,{predatorDiet:profile.predatorDiet,preySpecies:preyProfile.speciesId??preyState.species,predatorHungerThreshold:profile.predatorHungerThreshold??0,herdDefense:Math.min(0.6,herd*0.12)});
    if(!result.eligible||Math.random()>result.successChance)continue;
    const hp=prey.getComponent("minecraft:health");if(!hp)continue;
    const remaining=Math.max(0,hp.currentValue-(profile.predationDamage??5));hp.setCurrentValue(remaining);
