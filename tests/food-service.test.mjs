@@ -33,3 +33,14 @@ test("freshness classes and invalid elapsed time are safe", () => {
   assert.equal(classifyFoodFreshness({ freshness: 0 }), "spoiled");
   assert.equal(advanceFoodDecay({ freshness: 70 }, Number.NaN).freshness, 70);
 });
+
+test("dried food profiles apply a recognized preservation multiplier", () => {
+  const dried = createFoodFromProfile({ id: "dried_meat", freshness: 100, baseDecayPerHour: 1, preservation: "dried" });
+  const ordinary = createFoodState({ id: "ordinary_meat", freshness: 100 });
+  assert.equal(dried.preservation, "dried");
+  assert.ok(advanceFoodDecay(dried, 10, { baseDecayPerHour: 1 }).freshness > advanceFoodDecay(ordinary, 10, { baseDecayPerHour: 1 }).freshness);
+});
+
+test("food profile validation rejects unknown preservation methods", () => {
+  assert.throws(() => validateFoodDatabase({ foods: [{ id: "bad_food", preservation: "sun_magic" }] }), /unknown preservation/);
+});
