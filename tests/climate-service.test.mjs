@@ -8,6 +8,9 @@ import {
   evaluateFaunaHabitat,
   normalizeHydration,
   getBiomeClimateProfile,
+  calculateTfcAverageGroundwater,
+  adjustTfcAverageTemperatureForElevation,
+  adjustTfcRainVarianceForHemisphere,
 } from "../packs/behavior_pack/scripts/core/climate-service.mjs";
 
 test("temperature follows season and elevation", () => {
@@ -89,4 +92,22 @@ test("biome climate profiles distinguish tropical, arid and cold regions",()=>{
  assert.deepEqual(getBiomeClimateProfile("minecraft:snowy_plains"),{meanAnnualTempC:-2,seasonalAmplitudeC:18});
  assert.deepEqual(getBiomeClimateProfile("minecraft:taiga"),{meanAnnualTempC:3,seasonalAmplitudeC:16});
  assert.deepEqual(getBiomeClimateProfile("minecraft:plains"),{meanAnnualTempC:12,seasonalAmplitudeC:14});
+});
+
+test("TFC 4.2.16 annual groundwater is capped base groundwater plus average rainfall", () => {
+  assert.equal(calculateTfcAverageGroundwater(100, 250), 350);
+  assert.equal(calculateTfcAverageGroundwater(400, 250), 500);
+});
+
+test("TFC 4.2.16 average temperature only cools above sea level", () => {
+  assert.equal(adjustTfcAverageTemperatureForElevation(63, 12), 12);
+  assert.equal(adjustTfcAverageTemperatureForElevation(73, 12), 12 - 10 * 0.16225);
+  assert.equal(adjustTfcAverageTemperatureForElevation(200, 12), 12 - 17.822);
+  assert.equal(adjustTfcAverageTemperatureForElevation(20, 12), 12);
+});
+
+test("TFC 4.2.16 rain variance flips by hemisphere unless absolute", () => {
+  assert.equal(adjustTfcRainVarianceForHemisphere(-0.3, true), -0.3);
+  assert.equal(adjustTfcRainVarianceForHemisphere(-0.3, false), 0.3);
+  assert.equal(adjustTfcRainVarianceForHemisphere(-0.3, false, true), 0.3);
 });
