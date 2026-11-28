@@ -7,8 +7,7 @@ import { createFireState, addFuel, advanceFire, canProcessAtTemperature } from "
 import { createSoilState, advanceSoilHydration, evaluateCropGrowth, calculateCropYield, applyFertilizer, applyCropNutrientEffects, inferSoilTypeFromBlockId, inferSoilFertilityClassFromBiomeId, advanceCropGrowthProgress } from "./core/agriculture-service.mjs";
 import { CROP_PROFILES } from "./core/crop-profiles.mjs";
 import { getFaunaPrey, getFaunaPredators } from "./core/fauna-ecology-service.mjs";
-import { createAnimalState, createAnimalOffspringState, initializeAnimalLifeStage, syncAnimalHealth, advanceAnimalNeeds, advanceAnimalFamiliarityDecay, canFeedAnimal, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct, canLayEgg, recordEggLaid, getOffspringCount, evaluateHabitat, evaluateFaunaSpawn, evaluateOfficialFaunaHabitat, tfcMonthFromDay } from "./core/fauna-service.mjs";
-import { OFFICIAL_FAUNA_PROFILES, OFFICIAL_FAUNA_HABITAT_EXTENSIONS, OFFICIAL_LIVESTOCK_LIFECYCLE } from "./core/fauna-profiles.mjs";
+import { createAnimalState, createAnimalOffspringState, initializeAnimalLifeStage, syncAnimalHealth, advanceAnimalNeeds, advanceAnimalFamiliarityDecay, canFeedAnimal, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct, canLayEgg, recordEggLaid, getOffspringCount, evaluateOfficialFaunaHabitat, tfcMonthFromDay } from "./core/fauna-service.mjs";
 import { OFFICIAL_FAUNA_HABITATS_1_21 } from "./core/official-fauna-habitat-profiles.mjs";
 import { addNestBoxEgg, advanceNestBoxIncubation, takeNestBoxEgg } from "./core/nest-box-service.mjs";
 import { getStationRecipes } from "./core/processing-recipes.mjs";
@@ -934,29 +933,6 @@ world.afterEvents.itemUse.subscribe(event=>{
  const player=event.source,stack=event.itemStack;
  if(player?.typeId==="minecraft:player"&&player.isSneaking&&stack?.typeId==="minecraft:clay_ball")void shapePottery(player);
 });
-function rainfallForBiome(biomeId){
- const id=String(biomeId??"").toLowerCase();
- if(/desert|badlands/.test(id))return 50;
- if(/savanna/.test(id))return 180;
- if(/jungle|mangrove/.test(id))return 600;
- if(/swamp/.test(id))return 550;
- if(/snowy|ice_spikes|frozen/.test(id))return 220;
- if(/taiga|old_growth_pine|old_growth_spruce/.test(id))return 280;
- if(/forest|birch|cherry_grove/.test(id))return 420;
- if(/ocean|river|beach/.test(id))return 300;
- return 320;
-}
-function forestTypeAt(dimension,location){
- let leaves=0,logs=0;
- for(let dx=-4;dx<=4;dx+=2)for(let dz=-4;dz<=4;dz+=2)for(let dy=0;dy<=5;dy+=2){
-  try{const block=dimension.getBlock({x:Math.floor(location.x)+dx,y:Math.floor(location.y)+dy,z:Math.floor(location.z)+dz});const id=block?.typeId??"";
-   if(id.includes("leaves")||id.includes("leaf"))leaves++;
-   if(id.includes("_log")||id.includes("_wood"))logs++;
-  }catch{}
- }
- const score=leaves+logs*2;
- return score>=24?"old_growth":score>=10?"normal":score>=2?"edge":"none";
-}
 function sampleAnimalEnvironment(entity,profile=null){
  const location=entity.location,dimension=entity.dimension;
  const blockLocation={x:Math.floor(location.x),y:Math.floor(location.y),z:Math.floor(location.z)};
