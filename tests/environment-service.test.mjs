@@ -21,3 +21,11 @@ test("only rain and thunder add soil rainfall",()=>{
   assert.equal(getRainfallMm("rain",1.25),1.25);
   assert.throws(()=>getRainfallMm("rain",-1),RangeError);
 });
+
+import { inferBiomeRainfallMultiplierFromBiomeId } from "../packs/behavior_pack/scripts/core/environment-service.mjs";
+test("rainfall is scaled by biome-family precipitation",()=>{
+ assert.equal(getRainfallMm("rain",0.8,inferBiomeRainfallMultiplierFromBiomeId("minecraft:desert")),0.12);
+ assert.equal(getRainfallMm("thunder",0.8,inferBiomeRainfallMultiplierFromBiomeId("minecraft:jungle")),1.16);
+ assert.equal(getRainfallMm("clear",0.8,1.5),0);
+ assert.equal(inferBiomeRainfallMultiplierFromBiomeId("minecraft:plains"),1);
+});
