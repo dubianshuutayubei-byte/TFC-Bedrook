@@ -25,7 +25,7 @@
       "tfc:consume_food": {
         "hydration": 0,
         "category": "grain",
-        "nutrition": 8
+        "nutrition": 14
       }
     }
   }
