@@ -11,6 +11,7 @@ import {
   calculateTfcAverageGroundwater,
   adjustTfcAverageTemperatureForElevation,
   adjustTfcRainVarianceForHemisphere,
+  modifyTfcBaseGroundwaterForSurface,
 } from "../packs/behavior_pack/scripts/core/climate-service.mjs";
 
 test("temperature follows season and elevation", () => {
@@ -110,4 +111,11 @@ test("TFC 4.2.16 rain variance flips by hemisphere unless absolute", () => {
   assert.equal(adjustTfcRainVarianceForHemisphere(-0.3, true), -0.3);
   assert.equal(adjustTfcRainVarianceForHemisphere(-0.3, false), 0.3);
   assert.equal(adjustTfcRainVarianceForHemisphere(-0.3, false, true), 0.3);
+});
+
+test("TFC 4.2.16 attenuates river groundwater using surface height", () => {
+  assert.equal(modifyTfcBaseGroundwaterForSurface(73, 300), 300);
+  assert.equal(modifyTfcBaseGroundwaterForSurface(80.5, 300), 150);
+  assert.equal(modifyTfcBaseGroundwaterForSurface(88, 300), 0);
+  assert.equal(modifyTfcBaseGroundwaterForSurface(100, 300), 0);
 });
