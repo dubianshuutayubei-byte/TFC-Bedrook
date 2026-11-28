@@ -1,0 +1,18 @@
+{
+  "format_version": "1.26.60",
+  "minecraft:item": {
+    "description": {
+      "identifier": "tfc:quail_egg",
+      "menu_category": {
+        "category": "items"
+      }
+    },
+    "components": {
+      "minecraft:icon": "tfc_egg",
+      "minecraft:display_name": {
+        "value": "ウズラの卵"
+      },
+      "minecraft:max_stack_size": 16
+    }
+  }
+}
