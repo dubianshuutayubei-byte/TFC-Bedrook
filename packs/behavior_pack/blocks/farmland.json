@@ -20,7 +20,8 @@
       },
       "minecraft:collision_box": true,
       "minecraft:selection_box": true,
-      "tfc:farmland_interaction": {}
+      "tfc:farmland_interaction": {},
+      "minecraft:display_name": "tile.tfc:farmland.name"
     }
   }
 }
