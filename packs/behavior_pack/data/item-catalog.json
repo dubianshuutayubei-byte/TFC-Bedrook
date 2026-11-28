@@ -23,6 +23,7 @@
     ],
     "metals": [
       "copper_ingot",
+      "heated_copper_ingot",
       "copper_sheet",
       "copper_tool_head"
     ],
@@ -65,6 +66,7 @@
     "tfc:fired_vessel",
     "tfc:copper_ore",
     "tfc:copper_ingot",
+    "tfc:heated_copper_ingot",
     "tfc:copper_sheet",
     "tfc:firepit",
     "tfc:pit_kiln",
