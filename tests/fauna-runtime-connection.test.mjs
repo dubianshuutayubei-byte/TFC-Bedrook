@@ -134,17 +134,17 @@ test("shared dairy interaction messages are species-neutral for cows and goats",
  assert.match(runtime,/§a乳を採取しました/);
 });
 
-test("runtime uses official TFC maturity, gestation and production limits for supported livestock",()=>{
- for(const [entity,age,uses] of [
-  ["minecraft:pig",80,60],["minecraft:horse",80,60],["minecraft:donkey",80,60],
-  ["minecraft:mule",80,60],["minecraft:rabbit",20,40],["minecraft:cow",192,128],
-  ["minecraft:goat",96,60],["minecraft:sheep",56,60],["tfc:chicken",24,100]
+test("runtime uses centralized official TFC maturity and production limits for supported livestock",()=>{
+ for(const [entity,key] of [
+  ["minecraft:pig","pig"],["minecraft:horse","horse"],["minecraft:donkey","donkey"],
+  ["minecraft:mule","mule"],["minecraft:rabbit","rabbit"],["minecraft:cow","cow"],
+  ["minecraft:goat","goat"],["minecraft:sheep","sheep"],["tfc:chicken","chicken"]
  ]){
   const entry=runtime.match(new RegExp('"'+entity+'":\\{[^}]*\\}'))?.[0]??"";
-  const key=entity==="minecraft:pig"?"pig":entity==="minecraft:horse"?"horse":entity==="minecraft:donkey"?"donkey":entity==="minecraft:mule"?"mule":entity==="minecraft:rabbit"?"rabbit":entity==="minecraft:cow"?"cow":entity==="minecraft:goat"?"goat":entity==="minecraft:sheep"?"sheep":"chicken";
-  assert.match(entry,new RegExp("adultAgeDays:OFFICIAL_LIVESTOCK_LIFECYCLE\\."+key+"\\.adultAgeDays"));
-  assert.match(entry,new RegExp("maxUses:OFFICIAL_LIVESTOCK_LIFECYCLE\\."+key+"\\.maxUses"));
+  assert.ok(entry.includes("adultAgeDays:OFFICIAL_LIVESTOCK_LIFECYCLE."+key+".adultAgeDays"),entity+" maturity source");
+  assert.ok(entry.includes("maxUses:OFFICIAL_LIVESTOCK_LIFECYCLE."+key+".maxUses"),entity+" uses source");
  }
+ assert.match(runtime,/OFFICIAL_LIVESTOCK_LIFECYCLE\.rabbit\.adultAgeDays/);
 });
 test("dairy production applies TFC familiarity, cooldown and use limits",()=>{
  assert.match(runtime,/minimumFamiliarity=profile\.productFamiliarityMin\?\?0,cooldown=profile\.productCooldownDays\?\?1/);
