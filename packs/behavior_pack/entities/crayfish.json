@@ -13,7 +13,8 @@
           "animal",
           "mob",
           "tfc_aquatic",
-          "tfc_fauna_crayfish"
+          "tfc_fauna_crayfish",
+          "tfc_shellfish"
         ]
       },
       "minecraft:nameable": {},
@@ -43,21 +44,35 @@
       "minecraft:behavior.random_look_around": {
         "priority": 8
       },
-      "minecraft:navigation.swim": {
-        "can_path_over_water": true
-      },
-      "minecraft:movement.swim": {},
-      "minecraft:behavior.swim_wander": {
-        "priority": 6,
-        "interval": 120,
-        "look_ahead": 10,
-        "speed_multiplier": 1
-      },
       "minecraft:breathable": {
         "total_supply": 15,
         "suffocate_time": 0,
         "breathes_air": false,
         "breathes_water": true
+      },
+      "minecraft:navigation.walk": {
+        "can_path_over_water": true,
+        "avoid_water": false
+      },
+      "minecraft:movement.basic": {},
+      "minecraft:behavior.random_stroll": {
+        "priority": 6,
+        "speed_multiplier": 0.65
+      },
+      "minecraft:behavior.avoid_mob_type": {
+        "priority": 1,
+        "entity_types": [
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "tfc_predator"
+            },
+            "max_dist": 8,
+            "walk_speed_multiplier": 1.25,
+            "sprint_speed_multiplier": 1.5
+          }
+        ]
       }
     },
     "component_groups": {
