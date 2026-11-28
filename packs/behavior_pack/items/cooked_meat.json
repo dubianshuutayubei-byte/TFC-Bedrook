@@ -25,7 +25,8 @@
       "tfc:consume_food": {
         "hydration": 0,
         "category": "protein",
-        "nutrition": 18
+        "nutrition": 18,
+        "itemId": "tfc:cooked_meat"
       }
     }
   }
