@@ -24,3 +24,7 @@ tile.tfc:crucible.name=るつぼ設備
 tile.tfc:anvil.name=金床
 tile.tfc:farmland.name=TFC耕作土
 tile.tfc:crop.name=TFC作物
+
+item.tfc:farmland.name=耕作土
+item.tfc:unfired_ingot_mold.name=未焼成インゴット鋳型
+item.tfc:fired_ingot_mold.name=焼成済みインゴット鋳型
