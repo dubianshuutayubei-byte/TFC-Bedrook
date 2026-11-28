@@ -581,7 +581,6 @@ function nearbyBreedingPair(block,entityType){
  }catch(error){console.warn("[TFC-Bedrook] nest box nearby breeding-pair scan failed:",error);}
  return male&&female;
 }
-function nearbyChickenPair(block){return nearbyBreedingPair(block,"minecraft:chicken");}
 function nestBoxTick(block){
  const key=posKey(block,"nest_box"),day=currentAnimalDay();
  const stored=readWorldState(key,{eggs:[],lastUpdateDay:day});
@@ -603,25 +602,16 @@ async function nestBoxInteract(player,block){
  if(!player||!block)return;
  const key=posKey(block,"nest_box"),day=currentAnimalDay();
  let state=readWorldState(key,{eggs:[],lastUpdateDay:day});
- const container=inv(player),held=container?.getItem(player.selectedSlotIndex);
- if(held?.typeId==="minecraft:egg"){
-  if(!take(player,"minecraft:egg",1))return;
-  const added=addNestBoxEgg(state,{id:"egg-"+system.currentTick+"-"+Math.floor(Math.random()*1000000),species:"chicken",laidAtDay:day,fertilized:nearbyChickenPair(block),hatchDays:ANIMAL_PROFILES["minecraft:chicken"].hatchDays??8});
-  if(!added.added){give(player,"minecraft:egg",1);player.sendMessage("§c卵を巣箱に入れられませんでした。");return;}
-  state={...state,eggs:added.state.eggs,lastUpdateDay:day};
-  if(!writeWorldState(key,state)){give(player,"minecraft:egg",1);player.sendMessage("§c巣箱の状態を保存できませんでした。卵を返却しました。");return;}
-  player.sendMessage(added.state.eggs.at(-1).fertilized?"§a受精卵を巣箱に入れました。孵化まで最大8日です。":"§a卵を巣箱に入れました。近くに成体のオスとメスがいないため、孵化しません。");
-  return;
- }
  const eggs=Array.isArray(state.eggs)?state.eggs:[];
  const fertilized=eggs.filter(egg=>egg.fertilized);
- const progress=fertilized.map(egg=>Math.floor(Math.min(100,egg.incubationDays/egg.hatchDays*100))+"%");
- const body="保管中の卵: "+eggs.length+"個\n受精卵: "+fertilized.length+"個\n孵化進行度: "+(progress.join(" / ")||"なし")+"\n\n手にニワトリの卵を持って操作すると巣箱に入れられます。";
+ const unfertilized=eggs.filter(egg=>!egg.fertilized);
+ const progress=fertilized.map(egg=>egg.species+" "+Math.floor(Math.min(100,egg.incubationDays/egg.hatchDays*100))+"%");
+ const body="保管中の卵: "+eggs.length+"個\n受精卵: "+fertilized.length+"個\n未受精卵: "+unfertilized.length+"個\n孵化進行度: "+(progress.join(" / ")||"なし")+"\n\n成体のメスが巣箱を見つけると自動で産卵します。近くに成体のオスとメスがいて、両方が十分になつき、当日給餌されていると受精卵になります。";
  const form=new ActionFormData().title("巣箱").body(body).button("未受精卵を1個回収").button("閉じる");
  try{
   const response=await form.show(player);
   if(response.canceled||response.selection!==0)return;
-  const egg=eggs.find(value=>!value.fertilized);
+  const egg=unfertilized[0];
   if(!egg){player.sendMessage("§e回収できる未受精卵はありません。");return;}
   const result=takeNestBoxEgg(state,egg.id);
   state={...state,eggs:result.state.eggs};
