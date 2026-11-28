@@ -24,3 +24,15 @@ export function classifyTerrain(elevation, slope, ruggedness = 0) {
   if (slope > 0.25) return "hills";
   return "plains";
 }
+
+export function summarizeOreSamples(counts) {
+  if (!counts || typeof counts !== "object" || Array.isArray(counts)) throw new TypeError("counts must be an object");
+  return Object.entries(counts)
+    .filter(([, count]) => Number.isFinite(Number(count)) && Number(count) > 0)
+    .map(([ore, count]) => {
+      const amount = Math.floor(Number(count));
+      const evaluation = evaluateOreProspecting({ radius: 4, abundance: amount * 12 }, { distance: 0 });
+      return { ore, count: amount, abundance: evaluation.abundance, confidence: evaluation.confidence };
+    })
+    .sort((a, b) => b.count - a.count || a.ore.localeCompare(b.ore));
+}
