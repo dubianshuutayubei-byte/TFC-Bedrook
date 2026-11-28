@@ -14,6 +14,7 @@ Minecraft Bedrock Edition 向けに TerraFirmaCraft（TFC）Java 1.20.1-3.2.26 �
 
 ## 設計・調査資料
 
+- [外部Addon・公式サンプルの高速再利用監査](docs/research/addon-reference-reuse-audit-2026-11-28.md)
 - [地形生成リファレンス監査](docs/research/terrain-generation-reference-audit.md)
 - [ユーザー提供カスタム高山バイオームJSON監査](docs/research/bedrock-custom-biome-snippet-review.md)
 - [独自地形再構成方式の検討](docs/research/terrain-reconstruction-design.md)
@@ -74,7 +75,6 @@ GitHub ActionsでJSON・manifestの静的検査、JavaScript構文検査、Node.
 
 - [初期ゲーム内アイテム・設備実装](packs/behavior_pack/scripts/gameplay-runtime.js)
 - [Resource Pack](packs/resource_pack/manifest.json)
-
 
 ## 公式参照元
 
