@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { PROCESSING_RECIPES, getStationRecipes, validateProcessingRecipes } from "../packs/behavior_pack/scripts/core/processing-recipes.mjs";
 
 test("canonical station recipes are valid and unique",()=>{
-  assert.deepEqual(validateProcessingRecipes(),{count:8});
+  assert.deepEqual(validateProcessingRecipes(),{count:11});
 });
 test("pit kiln exposes both vessel and ingot-mold firing",()=>{
   const ids=getStationRecipes("pit_kiln").map(r=>r.id);
@@ -43,4 +43,10 @@ test("tin and bronze alloy stages are available",()=>{
  assert.equal(bronze.inputs["tfc:tin_ingot"],1);
  assert.equal(bronze.outputs["tfc:heated_bronze_ingot"],1);
  assert.equal(getStationRecipes("anvil").some(r=>r.id==="tfc:bronze_sheet"),true);
+});
+
+test("drying rack preserves meat, fruit and vegetables",()=>{
+ const recipes=getStationRecipes("drying_rack");
+ assert.deepEqual(recipes.map(r=>r.id),["tfc:dried_meat","tfc:dried_fruit","tfc:dried_vegetables"]);
+ assert.equal(recipes.find(r=>r.id==="tfc:dried_meat").inputs["tfc:raw_meat"],1);
 });
