@@ -78,7 +78,7 @@
       "textures": "textures/items/tfc_ingot"
     },
     "tfc_drying_rack": {
-      "textures": "textures/items/tfc_firepit"
+      "textures": "textures/items/tfc_pottery"
     },
     "tfc_dried_meat": {
       "textures": "textures/items/tfc_meat_cooked"
