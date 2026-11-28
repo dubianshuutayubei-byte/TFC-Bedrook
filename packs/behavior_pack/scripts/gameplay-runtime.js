@@ -6,7 +6,7 @@ import { readStackFreshness, advanceStackFreshness } from "./core/food-stack-ser
 import { createFireState, addFuel, advanceFire, canProcessAtTemperature } from "./core/firepit-service.mjs";
 import { createSoilState, advanceSoilHydration, evaluateCropGrowth, calculateCropYield, applyFertilizer, applyCropNutrientEffects, inferSoilTypeFromBlockId, inferSoilFertilityClassFromBiomeId, advanceCropGrowthProgress } from "./core/agriculture-service.mjs";
 import { CROP_PROFILES } from "./core/crop-profiles.mjs";
-import { createAnimalState, createAnimalOffspringState, initializeAnimalLifeStage, syncAnimalHealth, advanceAnimalNeeds, advanceAnimalFamiliarityDecay, canFeedAnimal, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct, evaluateHabitat, advanceAnimalLifecycle, createEggState, advanceEggIncubation, evaluatePredation } from "./core/fauna-service.mjs";
+import { createAnimalState, createAnimalOffspringState, initializeAnimalLifeStage, syncAnimalHealth, advanceAnimalNeeds, advanceAnimalFamiliarityDecay, canFeedAnimal, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct, evaluateHabitat, advanceAnimalLifecycle, createEggState, advanceEggIncubation, evaluatePredation, determineOffspringCount } from "./core/fauna-service.mjs";
 import { CUSTOM_FAUNA_PROFILES } from "./core/fauna-runtime-profiles.mjs";
 import { OFFICIAL_FAUNA_PROFILES } from "./core/fauna-profiles.mjs";
 import { getStationRecipes } from "./core/processing-recipes.mjs";
@@ -126,7 +126,7 @@ const ANIMAL_PROFILES={
  "tfc:yak":{"speciesId":"yak","displayName":"ヤク","adultAgeDays":180,"requiredFamiliarity":30,"customBreeding":false,"feedItems":["minecraft:wheat"],"grazeBlocks":["minecraft:grass_block"],"kind":"terrestrial","domestic":true,"hungerPerDay":8,"thirstPerDay":12,"healthLossPerDay":0,"archetype":"livestock"}
 };
 for(const [id,profile] of Object.entries(CUSTOM_FAUNA_PROFILES))ANIMAL_PROFILES[id]={...ANIMAL_PROFILES[id],...profile};
-for(const id of ["minecraft:cow","minecraft:sheep","minecraft:pig","minecraft:goat","minecraft:horse","minecraft:donkey","minecraft:mule","minecraft:rabbit"])if(ANIMAL_PROFILES[id]?.gestationDays)ANIMAL_PROFILES[id].customBreeding=true;
+for(const id of ["minecraft:cow","minecraft:sheep","minecraft:pig","minecraft:goat","minecraft:horse","minecraft:donkey"])if(ANIMAL_PROFILES[id]?.gestationDays)ANIMAL_PROFILES[id].customBreeding=true;
 for(const [id,override] of Object.entries({
  "minecraft:wolf":{predatorDiet:["deer","rabbit","sheep","pig","duck","quail","boar","caribou","gazelle","musk_ox","moose","wildebeest"],predationDamage:5},
  "minecraft:fox":{predatorDiet:["chicken","rabbit","duck","quail","grouse","pheasant"],predationDamage:3},
@@ -648,7 +648,7 @@ function animalTick(entity){
   }
  }catch{}
  try{const hp=entity.getComponent("minecraft:health");if(hp)hp.setCurrentValue(Math.max(0,hp.effectiveMax*state.health/100));}catch{}
- if(profile.customBreeding&&state.pregnancyDays>0){const result=advancePregnancy(state,elapsedAgeDays,profile.gestationDays);state=result.animal;if(result.birthReady){if(state.birthsRemaining===0){state.birthsRemaining=Math.max(1,Math.floor(profile.childCount??1));saveAnimal(entity,state);}while(state.birthsRemaining>0){try{const offset=Math.max(0,Math.floor(profile.childCount??1))-state.birthsRemaining;const birthLocation={x:entity.location.x+1+(offset%2)*0.8,y:entity.location.y,z:entity.location.z+Math.floor(offset/2)*0.8};const baby=entity.typeId.startsWith("minecraft:")?entity.dimension.spawnEntity(entity.typeId,birthLocation):entity.dimension.spawnEntity(entity.typeId+"<tfc:spawn_baby>",birthLocation);if(entity.typeId.startsWith("minecraft:")){try{baby.triggerEvent("minecraft:entity_born");}catch{}}state.birthsRemaining-=1;saveAnimal(entity,state);saveAnimal(baby,createAnimalOffspringState(state,profile.speciesId,Math.random()<0.5?"male":"female"));}catch(error){console.warn("[TFC-Bedrook] animal birth deferred:",error);break;}}if(state.birthsRemaining===0){state.pregnancyDays=0;state.fertilized=false;}}}\n if(entity.typeId.startsWith("tfc:")&&state.lifeStage==="adult"){try{if(entity.hasComponent("minecraft:is_baby"))entity.triggerEvent("tfc:grow_up");}catch(error){console.warn("[TFC-Bedrook] fauna growth event failed:",error);}}
+ if(profile.customBreeding&&state.pregnancyDays>0){const result=advancePregnancy(state,elapsedAgeDays,profile.gestationDays);state=result.animal;if(result.birthReady){if(state.birthsRemaining===0){state.birthsTotal=determineOffspringCount(profile);state.birthsRemaining=state.birthsTotal;saveAnimal(entity,state);}while(state.birthsRemaining>0){try{const offset=Math.max(0,state.birthsTotal)-state.birthsRemaining;const birthLocation={x:entity.location.x+1+(offset%2)*0.8,y:entity.location.y,z:entity.location.z+Math.floor(offset/2)*0.8};const baby=entity.typeId.startsWith("minecraft:")?entity.dimension.spawnEntity(entity.typeId,birthLocation):entity.dimension.spawnEntity(entity.typeId+"<tfc:spawn_baby>",birthLocation);if(entity.typeId.startsWith("minecraft:")){try{baby.triggerEvent("minecraft:entity_born");}catch{}}state.birthsRemaining-=1;saveAnimal(entity,state);saveAnimal(baby,createAnimalOffspringState(state,profile.speciesId,Math.random()<0.5?"male":"female"));}catch(error){console.warn("[TFC-Bedrook] animal birth deferred:",error);break;}}if(state.birthsRemaining===0){state.pregnancyDays=0;state.fertilized=false;state.birthsTotal=0;}}}\n if(entity.typeId.startsWith("tfc:")&&state.lifeStage==="adult"){try{if(entity.hasComponent("minecraft:is_baby"))entity.triggerEvent("tfc:grow_up");}catch(error){console.warn("[TFC-Bedrook] fauna growth event failed:",error);}}
  if(state.sex==="unknown")state.sex=Math.random()<0.5?"male":"female";
  const breedingDay=world.getDay(),breedingTime=currentAnimalDay();
  if(profile.customBreeding&&state.sex==="female"&&state.ageDays>=profile.adultAgeDays&&state.familiarity>=profile.requiredFamiliarity&&state.lastFedDay>=breedingDay&&state.pregnancyDays<=0&&!state.fertilized){
@@ -676,8 +676,24 @@ function eggNestInteract(player,block){
  player.sendMessage(fertilized?"§a有精卵を巣に置きました。火の近くで温めてください。":"§e無精卵を巣に置きました。孵化しません。");
 }
 function eggNestTick(block){
- const key=posKey(block,"egg_nest"),stored=readWorldState(key,{egg:null});if(!stored?.egg)return;
- const day=currentAnimalDay(),elapsed=Math.max(0,day-(stored.lastDay??day));
+ const key=posKey(block,"egg_nest"),stored=readWorldState(key,{egg:null}),day=currentAnimalDay();
+ if(!stored?.egg){
+  try{
+   const nearby=block.dimension.getEntities({location:block.location,maxDistance:6});
+   for(const bird of nearby){
+    const profile=ANIMAL_PROFILES[bird.typeId];if(!profile?.eggProduct||bird.typeId==="minecraft:chicken")continue;
+    let state=animalState(bird);if(state.sex==="unknown"){state.sex=Math.random()<0.5?"male":"female";saveAnimal(bird,state);}
+    const minimum=profile.productFamiliarityMin??15,cooldown=profile.productCooldownDays??1;
+    if(state.sex!=="female"||state.lifeStage==="old"||state.ageDays<(profile.adultAgeDays??0)||state.familiarity<=minimum||state.health<40||state.hunger>60||state.thirst>60||state.uses>=(profile.maxUses??Infinity)||(state.uses>0&&day-state.lastProductAt<cooldown))continue;
+    const maleNearby=nearby.some(other=>other.id!==bird.id&&other.typeId===bird.typeId&&animalState(other).sex==="male");
+    const egg=createEggState({species:profile.speciesId,fertilized:maleNearby,requiredDays:profile.hatchDays??8,temperatureC:eggNestTemperature(block)});
+    state=recordProduct(state,day,{maxUses:profile.maxUses??Infinity,oldDayDelay:1+Math.floor(Math.random()*5)});saveAnimal(bird,state);
+    writeWorldState(key,{egg,lastDay:day,laidBy:bird.id});return;
+   }
+  }catch(error){console.warn("[TFC-Bedrook] automatic oviparous laying failed:",error);}
+  return;
+ }
+ const elapsed=Math.max(0,day-(stored.lastDay??day));
  const egg=createEggState({...stored.egg,temperatureC:eggNestTemperature(block)});
  const result=advanceEggIncubation(egg,elapsed,{minimumTemperatureC:32,maximumTemperatureC:40,viabilityLossPerDay:8});
  if(result.ready){
@@ -723,16 +739,7 @@ async function animalInteract(player,entity){
  let state=animalState(entity);
  if(state.sex==="unknown"){state.sex=Math.random()<0.5?"male":"female";saveAnimal(entity,state);}
  const held=inv(player)?.getItem(player.selectedSlotIndex);
- if(profile.eggProduct&&player.isSneaking&&!held){
-  const day=currentAnimalDay(),minimum=profile.productFamiliarityMin??15,cooldown=profile.productCooldownDays??1.25;
-  if(state.sex!=="female"||state.ageDays<(profile.adultAgeDays??0)||state.lifeStage==="old"||state.uses>=(profile.maxUses??Infinity)){player.sendMessage("§eこの鳥は卵を産める状態ではありません。");return;}
-  if(state.familiarity<=minimum||state.health<40||state.hunger>60||state.thirst>60||(state.uses>0&&day-state.lastProductAt<cooldown)){player.sendMessage("§e成熟度・なつき度・健康状態・産卵間隔を確認してください。");return;}
-  const egg=new ItemStack("tfc:"+profile.speciesId+"_egg",1);
-  try{egg.setDynamicProperties({"tfc:egg_fertilized":Boolean(state.eggFertilized&&day<=state.eggFertilizedUntil)});}catch{}
-  const rest=inv(player)?.addItem(egg);if(rest)player.dimension.spawnItem(rest,player.location);
-  state=recordProduct(state,day,{maxUses:profile.maxUses??Infinity,oldDayDelay:1+Math.floor(Math.random()*5)});
-  state.eggFertilized=false;saveAnimal(entity,state);player.sendMessage("§a卵を採取しました。巣に置いて温めると孵化します。");return;
- }
+ if(profile.eggProduct&&player.isSneaking&&!held){player.sendMessage("§eこの鳥は巣箱で産卵します。近くに孵卵用の巣を設置してください。");return;}
  if(!held){
   const names=Object.fromEntries(Object.entries(ANIMAL_PROFILES).map(([id,p])=>[id,p.displayName]));
   const products=profile.dairy?(entity.typeId==="minecraft:goat"?"\n産出: 山羊乳（メスの成体・健康/空腹/渇き条件を満たすと空き瓶で採取、1日間隔）":"\n産出: 牛乳（メスの成体・健康/空腹/渇き条件を満たすと空き瓶で採取、1日間隔）"):entity.typeId==="minecraft:sheep"?"\n産出: 羊毛（TFC式のハサミ操作、7日間隔）\n再生待ち: "+(state.uses>0?Math.max(0,profile.productCooldownDays-(currentAnimalDay()-state.lastProductAt)).toFixed(1)+"日":"なし"):entity.typeId==="minecraft:chicken"?"\n産出: 卵（バニラの産卵AI）":"";
