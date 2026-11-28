@@ -24,6 +24,9 @@
     },
     "tfc_composter": {
       "textures": "textures/blocks/tfc_pottery"
+    },
+    "tfc_quern": {
+      "textures": "textures/blocks/tfc_pottery"
     }
   }
 }
