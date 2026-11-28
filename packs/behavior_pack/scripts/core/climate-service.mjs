@@ -167,3 +167,21 @@ export function evaluateFaunaHabitat(profile, environment) {
 export function normalizeHydration(value) {
   return clamp(finite(value, "hydration"), 0, 100);
 }
+
+/**
+ * Convert the Bedrock world-day counter into the addon calendar.
+ * World day 0 is year 1, winter, day 1.
+ */
+export function getCalendarInfo(worldDay, daysPerYear = DEFAULTS.yearLengthDays) {
+  const day = finite(worldDay, "worldDay");
+  const yearLength = positive(daysPerYear, "daysPerYear");
+  if (day < 0) throw new RangeError("worldDay must be >= 0");
+  const yearIndex = Math.floor(day / yearLength);
+  const seasonInfo = getSeasonInfo(day % yearLength, yearLength);
+  return {
+    year: yearIndex + 1,
+    dayOfYear: seasonInfo.dayOfYear,
+    dayOfYearNumber: Math.floor(seasonInfo.dayOfYear) + 1,
+    ...seasonInfo,
+  };
+}
