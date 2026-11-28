@@ -153,3 +153,9 @@ export function calculateAmbientTemperatureC({
   const dailyPhase = (time / 24000 - 0.5) * 2 * Math.PI;
   return seasonal + Math.cos(dailyPhase) * dailyAmplitude;
 }
+
+export function getSeasonName(dayOfYear) {
+  const day = Math.floor(finite(dayOfYear, "dayOfYear"));
+  const normalized = ((day % DEFAULTS.yearLengthDays) + DEFAULTS.yearLengthDays) % DEFAULTS.yearLengthDays;
+  return ["冬", "春", "夏", "秋"][Math.floor(normalized / 24)];
+}
