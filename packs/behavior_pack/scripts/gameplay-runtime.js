@@ -50,6 +50,12 @@ function tickMetalHeat(player,nowTick){
  }
 }
 const ITEM_LABELS={"tfc:raw_meat":"生肉","tfc:cooked_meat":"焼いた肉","tfc:clay_vessel":"未焼成土器","tfc:fired_vessel":"焼成土器","tfc:unfired_ingot_mold":"未焼成鋳型","tfc:fired_ingot_mold":"焼成鋳型","tfc:copper_ore":"銅鉱石","tfc:heated_copper_ingot":"加熱銅インゴット","tfc:copper_ingot":"銅インゴット","tfc:tin_ore":"錫鉱石","tfc:heated_tin_ingot":"加熱錫インゴット","tfc:tin_ingot":"錫インゴット","tfc:heated_bronze_ingot":"加熱青銅インゴット","tfc:bronze_ingot":"青銅インゴット","tfc:fruit":"果物","tfc:vegetable":"野菜","tfc:dried_meat":"干し肉","tfc:dried_fruit":"干し果物","tfc:dried_vegetables":"干し野菜","tfc:compost":"堆肥","minecraft:oak_leaves":"落ち葉","tfc:barley":"大麦","tfc:oat":"オーツ麦","tfc:rye":"ライ麦","tfc:beet":"ビーツ","tfc:cabbage":"キャベツ","tfc:carrot":"ニンジン"};
+const WILD_SEED_DROPS=Object.freeze({
+ "minecraft:short_grass":["tfc:barley_seed","tfc:oat_seed","tfc:rye_seed"],
+ "minecraft:tall_grass":["tfc:barley_seed","tfc:oat_seed","tfc:rye_seed"],
+ "minecraft:fern":["tfc:beet_seed","tfc:cabbage_seed","tfc:carrot_seed"],
+ "minecraft:large_fern":["tfc:beet_seed","tfc:cabbage_seed","tfc:carrot_seed"]
+});
 const FERTILIZER_PROFILES=Object.freeze({
  "minecraft:bone_meal":{name:"骨粉",nutrients:{phosphorus:10}},
  "tfc:compost":{name:"堆肥",nutrients:{nitrogen:20,potassium:20}},
@@ -304,7 +310,14 @@ function animalInteract(player,entity){
 }
 
 export function initializeGameplay(){world.afterEvents.weatherChange.subscribe(event=>{const key=normalizeDimensionId(event.dimension?.id);if(key)WEATHER_BY_DIMENSION.set(key,normalizeWeather(event.newWeather));});
-world.afterEvents.playerBreakBlock.subscribe(event=>{try{if(event.brokenBlockPermutation?.type?.id!=="tfc:firepit")return;event.dimension.spawnItem(new ItemStack("tfc:wood_ash",1),event.block.location);}catch(error){console.warn("[TFC-Bedrook] firepit ash drop failed:",error);}});system.beforeEvents.startup.subscribe(event=>{
+world.afterEvents.playerBreakBlock.subscribe(event=>{
+ const brokenId=event.brokenBlockPermutation?.type?.id,player=event.player;if(!player)return;
+ try{
+  if(brokenId==="tfc:firepit")player.dimension.spawnItem(new ItemStack("tfc:wood_ash",1),event.block.location);
+  const seeds=WILD_SEED_DROPS[brokenId];
+  if(seeds&&Math.random()<0.12){const seed=seeds[Math.floor(Math.random()*seeds.length)];player.dimension.spawnItem(new ItemStack(seed,1),event.block.location);player.sendMessage("§a野生の種を見つけました: "+seed);}
+ }catch(error){console.warn("[TFC-Bedrook] block-break drops failed:",error);}
+});system.beforeEvents.startup.subscribe(event=>{
 event.itemComponentRegistry.registerCustomComponent("tfc:open_knapping",{onUse:a=>{if(a.source?.typeId==="minecraft:player")void knap(a.source);}});
 event.itemComponentRegistry.registerCustomComponent("tfc:prospect",{onUseOn:a=>{if(a.source?.typeId==="minecraft:player")prospect(a.source,a.block);}});
 event.itemComponentRegistry.registerCustomComponent("tfc:consume_food",{onConsume:(a,p)=>food(a.source,p.params??{})}});
@@ -318,7 +331,7 @@ system.runInterval(()=>{for(const player of world.getAllPlayers()){try{tickFoodF
 system.runInterval(()=>{for(const player of world.getAllPlayers()){try{tickMetalHeat(player,system.currentTick);}catch(error){console.warn("[TFC-Bedrook] metal heat tick failed:",error);}}},20);
 });
 world.afterEvents.playerInteractWithEntity.subscribe(event=>{if(ANIMAL_PROFILES[event.target?.typeId])animalInteract(event.player,event.target);});
-world.afterEvents.playerBreakBlock.subscribe(event=>{if(event.brokenBlockPermutation?.type?.id!=="tfc:firepit"||!event.player)return;try{event.player.dimension.spawnItem(new ItemStack("tfc:wood_ash",1),event.block.location);}catch(error){console.warn("[TFC-Bedrook] wood ash drop failed:",error);}});
+
 world.afterEvents.playerInteractWithBlock.subscribe(event=>{
  if(!event.isFirstEvent)return;
  const held=event.beforeItemStack??event.itemStack;
