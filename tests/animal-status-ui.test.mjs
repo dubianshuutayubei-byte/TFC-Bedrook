@@ -17,3 +17,11 @@ test("empty-hand animal interaction shows husbandry state",()=>{
 test("livestock forage scan is bounded to a 3x3 area",()=>{
  assert.match(runtime,/for\(let x=-1;x<=1;x\+\+\)for\(let z=-1;z<=1;z\+\+\)/);
 });
+
+test("livestock sex and maturity follow TFC adult thresholds",()=>{
+ assert.match(runtime,/minecraft:cow":\{adultAgeDays:192/);
+ assert.match(runtime,/minecraft:sheep":\{adultAgeDays:56/);
+ assert.match(runtime,/minecraft:chicken":\{adultAgeDays:24/);
+ assert.match(runtime,/state\.sex!=="female"/);
+ assert.match(runtime,/cooldownDays:1,currentDay/);
+});
