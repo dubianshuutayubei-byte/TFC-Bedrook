@@ -3,7 +3,8 @@ import { ActionFormData } from "@minecraft/server-ui";
 import { deserializePlayerState, serializePlayerState, applyHydration, applyNutrition } from "./core/player-state-service.mjs";
 import { createFireState, addFuel, advanceFire, canProcessAtTemperature } from "./core/firepit-service.mjs";
 import { createSoilState, applySoilCompost } from "./core/agriculture-service.mjs";
-import { createAnimalState, advanceAnimalNeeds, feedAnimal, canBreed, beginPregnancy, advancePregnancy } from "./core/fauna-service.mjs";
+import { createAnimalState, advanceAnimalNeeds, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy } from "./core/fauna-service.mjs";
+import { getStationRecipe } from "./core/processing-recipes.mjs";
 
 const STATE_KEY="tfc:player_state",PROGRESS_KEY="tfc:knapping_progress";
 const inv=p=>p.getComponent("minecraft:inventory")?.container;
@@ -25,27 +26,48 @@ const FUELS={
 "minecraft:acacia_log":{id:"acacia_log",duration:1000,temperatureC:650},
 "minecraft:dark_oak_log":{id:"dark_oak_log",duration:1750,temperatureC:700}
 };
-const RECIPES={
-firepit:{title:"焚き火",description:"生肉を加熱調理します。",input:"tfc:raw_meat",amount:1,output:"tfc:cooked_meat",minTemp:180,duration:100},
-pit_kiln:{title:"Pit Kiln",description:"粘土容器を焼成します。",input:"tfc:clay_vessel",amount:1,output:"tfc:fired_vessel",minTemp:550,duration:600},
-crucible:{title:"るつぼ",description:"銅鉱石2個を高温処理して加熱済み銅インゴットを作ります（鋳型工程は今後接続）。",input:"tfc:copper_ore",amount:2,output:"tfc:heated_copper_ingot",minTemp:1085,duration:200},
-anvil:{title:"金床",description:"加熱済み銅インゴットを成形します。金床自体に燃料は不要です。",input:"tfc:heated_copper_ingot",amount:1,output:"tfc:copper_sheet",minTemp:0,duration:60}
-};
-async function station(player,id,block){
-const recipe=RECIPES[id];if(!recipe)return;
-const key=posKey(block,"fire"),state=createFireState(readWorldState(key,{}));
-const held=inv(player)?.getItem(player.selectedSlotIndex);
-const fuel=id==="anvil"?null:(held?FUELS[held.typeId]:null);
-if(fuel){if(!take(player,held.typeId,1)){player.sendMessage("§c燃料を取り出せません。");return;}writeWorldState(key,addFuel(state,fuel));player.sendMessage("§a燃料を投入しました。燃焼時間: "+Math.round(fuel.duration/20)+"秒");return;}
-const stationStatus=id==="anvil"?"\n金床は加熱済み素材を加工します。":"\n温度: "+Math.floor(state.temperatureC)+"°C\n燃料残り: "+Math.ceil(state.burnTicks/20)+"秒\n必要温度: "+recipe.minTemp+"°C";
-const form=new ActionFormData().title(recipe.title).body(recipe.description+stationStatus).button("加工を開始").button("閉じる");
-let response;try{response=await form.show(player);}catch(e){player.sendMessage("§c設備UIを開けませんでした。");return;}
-if(response.canceled||response.selection!==0)return;
-if(id!=="anvil"&&!canProcessAtTemperature(state,recipe.minTemp)){player.sendMessage("§c温度不足です。燃料を追加して加熱してください。");return;}
-if(!take(player,recipe.input,recipe.amount)){player.sendMessage("§c材料が足りません。");return;}
-player.sendMessage("§e加工中…");
-system.runTimeout(()=>{try{if(!give(player,recipe.output))block.dimension.spawnItem(new ItemStack(recipe.output,1),block.location);player.sendMessage("§a加工完了: "+recipe.output);}catch(e){try{block.dimension.spawnItem(new ItemStack(recipe.output,1),block.location);}catch{}}},recipe.duration);
+
+function stationJobKey(block){return posKey(block,"station_job");}
+function completeStationJob(key,dimension,location){
+ const job=readWorldState(key,null);if(!job||job.status!=="running"||Date.now()<job.endsAt)return false;
+ writeWorldState(key,null);
+ let delivered=false;
+ try{
+  const player=world.getAllPlayers().find(p=>p.id===job.playerId);
+  if(player){for(const [id,n] of Object.entries(job.outputs))give(player,id,n);player.sendMessage("§a加工完了: "+Object.keys(job.outputs).join(", "));delivered=true;}
+ }catch(error){console.warn("[TFC-Bedrook] station delivery:",error);}
+ if(!delivered){for(const [id,n] of Object.entries(job.outputs)){try{dimension.spawnItem(new ItemStack(id,n),location);}catch(error){console.warn("[TFC-Bedrook] output drop failed:",id,error);}}}
+ return true;
 }
+function scheduleStationJob(key,dimension,location,delayTicks){
+ system.runTimeout(()=>{try{completeStationJob(key,dimension,location);}catch(error){console.warn("[TFC-Bedrook] station job completion:",error);}},Math.max(1,Math.ceil(delayTicks)));
+}
+async function station(player,id,block){
+ const recipe=getStationRecipe(id);if(!recipe)return;
+ const key=stationJobKey(block),existing=readWorldState(key,null);
+ if(existing?.status==="running"){
+  const remaining=Math.max(0,existing.endsAt-Date.now());
+  if(remaining<=0){completeStationJob(key,block.dimension,block.location);player.sendMessage("§a保留されていた加工を完了しました。");return;}
+  scheduleStationJob(key,block.dimension,block.location,remaining/50);
+  const form=new ActionFormData().title(recipe.title).body("§e加工中\n進捗: "+Math.floor(100*(1-remaining/Math.max(1,existing.endsAt-existing.startedAt)))+"%\n残り: "+Math.ceil(remaining/1000)+"秒\n\n設備を壊しても、処理結果は予定位置に回収可能な形で出力されます。").button("閉じる");
+  try{await form.show(player);}catch{}return;
+ }
+ const state=createFireState(readWorldState(posKey(block,"fire"),{}));
+ const held=inv(player)?.getItem(player.selectedSlotIndex);
+ const fuel=id==="anvil"?null:(held?FUELS[held.typeId]:null);
+ if(fuel){if(!take(player,held.typeId,1)){player.sendMessage("§c燃料を取り出せません。");return;}writeWorldState(posKey(block,"fire"),addFuel(state,fuel));player.sendMessage("§a燃料投入: "+Math.round(fuel.duration/20)+"秒分");return;}
+ const status=id==="anvil"?"\n金床は燃料を使いません。加熱済み素材を加工します。":"\n温度: "+Math.floor(state.temperatureC)+"°C\n燃料残り: "+Math.ceil(state.burnTicks/20)+"秒";
+ const form=new ActionFormData().title(recipe.title).body(recipe.description+status+"\n必要温度: "+recipe.minimumTemperatureC+"°C\n所要時間: "+Math.ceil(recipe.durationTicks/20)+"秒").button("加工開始").button("閉じる");
+ let response;try{response=await form.show(player);}catch{player.sendMessage("§c設備UIを開けませんでした。");return;}
+ if(response.canceled||response.selection!==0)return;
+ if(id!=="anvil"&&!canProcessAtTemperature(state,recipe.minimumTemperatureC)){player.sendMessage("§c温度不足です。");return;}
+ for(const [itemId,amount] of Object.entries(recipe.inputs)){if(count(player,itemId)<amount){player.sendMessage("§c材料不足: "+itemId+" ×"+amount);return;}}
+ for(const [itemId,amount] of Object.entries(recipe.inputs)){if(!take(player,itemId,amount)){player.sendMessage("§c材料を取り出せませんでした。処理を中止しました。");return;}}
+ const now=Date.now(),job={status:"running",recipeId:recipe.id,outputs:recipe.outputs,playerId:player.id,startedAt:now,endsAt:now+recipe.durationTicks*50,dimensionId:block.dimension.id,location:{x:block.location.x,y:block.location.y,z:block.location.z}};
+ writeWorldState(key,job);player.sendMessage("§e加工を開始しました。途中で退出しても処理状態を保存します。");
+ scheduleStationJob(key,block.dimension,block.location,recipe.durationTicks);
+}
+
 async function knap(player){
 let selected=[];try{selected=JSON.parse(String(player.getDynamicProperty(PROGRESS_KEY)??"[]"));}catch{selected=[];}if(!Array.isArray(selected))selected=[];
 const form=new ActionFormData().title("石器成形").body("3×3の打撃位置を選択してください。\n正解パターン: 左上・中央・右下\n選択済み: "+selected.length+"/3");
