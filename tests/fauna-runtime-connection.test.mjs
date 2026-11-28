@@ -154,3 +154,10 @@ test("animal runtime applies daily familiarity decay and capped TFC feeding gain
  assert.match(runtime,/feedAnimal\(state,firstFeedToday\?6:0,healPercent,\{currentDay,adultFamiliarityCap:profile\.familiarityCap\?\?100\}\)/);
  for(const id of ["cow","goat","sheep","chicken","pig","horse","donkey","mule","rabbit"])assert.match(runtime,new RegExp('"minecraft:'+id+'":\\{[^}]*familiarityCap:35'));
 });
+
+test("custom births trigger juvenile state and persist remaining litter count",()=>{
+ assert.match(runtime,/child\.triggerEvent\("tfc:spawn_baby"\)/);
+ assert.match(runtime,/createAnimalOffspringState\(state,profile\.speciesId/);
+ assert.match(runtime,/state\.birthsRemaining=Math\.max\(1,Math\.floor\(profile\.childCount\?\?1\)\)/);
+ assert.match(runtime,/state\.birthsRemaining-=1/);
+});
