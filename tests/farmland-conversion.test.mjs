@@ -20,7 +20,8 @@ test("farmland conversion preserves the original soil block type",()=>{
 
 test("farmland conversion stores biome-derived fertility class",()=>{
  assert.match(runtime,/block\.dimension\.getBiome\(block\.location\)\.id/);
- assert.match(runtime,/fertilityClass\}\)/);
+ assert.match(runtime,/fertilityClass,rainfallMultiplier\}\)/);
+ assert.match(runtime,/inferBiomeRainfallMultiplierFromBiomeId\(biomeId\)/);
 });
 
 test("compost item applies nitrogen and potassium through farmland interaction",()=>{
