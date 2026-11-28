@@ -6,7 +6,7 @@ import { deserializePlayerState } from "../core/player-state-service.mjs";
 const UI_TITLE = "TerraFirmaCraft: Bedrook";
 const PLAYER_STATE_KEY = "tfc:player_state";
 const FOOD_FRESHNESS_KEY = "tfc:food_freshness";
-const FOOD_LABELS = Object.freeze({ "tfc:raw_meat":"生肉", "tfc:cooked_meat":"焼いた肉", "tfc:grain":"穀物", "tfc:maize":"トウモロコシ", "tfc:potato":"ジャガイモ", "tfc:vegetable":"野菜", "tfc:fruit":"果物", "tfc:milk_bottle":"牛乳瓶", "tfc:dried_meat":"干し肉", "tfc:dried_fruit":"干し果物", "tfc:dried_vegetables":"干し野菜", "tfc:barley":"大麦", "tfc:oat":"オーツ麦", "tfc:rye":"ライ麦", "tfc:beet":"ビーツ", "tfc:cabbage":"キャベツ", "tfc:carrot":"ニンジン","tfc:garlic":"ニンニク","tfc:onion":"タマネギ","tfc:squash":"カボチャ","tfc:lentils":"レンズ豆","tfc:soybean":"大豆","tfc:peanuts":"落花生","tfc:bread":"パン" });
+const FOOD_LABELS = Object.freeze({ "tfc:raw_meat":"生肉", "tfc:cooked_meat":"焼いた肉", "tfc:grain":"穀物", "tfc:maize":"トウモロコシ", "tfc:potato":"ジャガイモ", "tfc:vegetable":"野菜", "tfc:fruit":"果物", "tfc:milk_bottle":"牛乳瓶", "tfc:dried_meat":"干し肉", "tfc:dried_fruit":"干し果物", "tfc:dried_vegetables":"干し野菜", "tfc:barley":"大麦", "tfc:oat":"オーツ麦", "tfc:rye":"ライ麦", "tfc:beet":"ビーツ", "tfc:cabbage":"キャベツ", "tfc:carrot":"ニンジン","tfc:bread":"パン","tfc:garlic":"ニンニク","tfc:onion":"タマネギ","tfc:squash":"カボチャ","tfc:lentils":"レンズ豆","tfc:soybean":"大豆","tfc:peanuts":"落花生","tfc:bread":"パン" });
 const NUTRITION_LABELS = Object.freeze({
   grain: "穀物", fruit: "果物", vegetables: "野菜", protein: "タンパク質", dairy: "乳製品"
 });
@@ -38,6 +38,7 @@ async function showFieldGuide(player) {
     .button("動物・畜産")
     .button("食品保存・乾燥")
     .button("堆肥・土壌肥沃度")
+    .button("石臼・パン作り")
     .button("戻る");
   const response = await showForm(player, form);
   if (!response || response.canceled) return;
@@ -48,9 +49,10 @@ async function showFieldGuide(player) {
     ["農業・食品", "小麦・トウモロコシ・ジャガイモの種は既存レシピで作成できます。大麦・オーツ麦・ライ麦の種は草地、ビーツ・キャベツ・ニンジンの種はシダを壊すと低確率で見つかります。成熟作物を収穫すると対応する種が1つ戻ります。TFC耕作土に対応する種を持って操作して植え付け、適温・適水分で成長し、トウモロコシは2ブロックの高さまで育ちます。NPKは成長速度と土壌への養分出入りに影響します。肥沃度クラスは肥料効果を補正します。成熟後に操作して収穫します。大麦・オーツ麦・ライ麦は穀物、ビーツ・キャベツ・ニンジン・ニンニク・タマネギ・カボチャは野菜、レンズ豆・大豆・落花生はタンパク源として食品栄養と腐敗管理に接続しています。食品は実時間換算で鮮度が下がり、腐敗すると腐敗食品へ変わります。乾燥棚では肉・果物・野菜を長時間かけて干し、腐敗速度を抑えた保存食を作れます。乾燥食品も鮮度が下がりますが、生鮮食品より長持ちします。"],
     ["動物・畜産", "牛・羊・ニワトリの給餌と繁殖はバニラの仕組みを使い、TFC側で空腹/渇き/健康/年齢を管理します。牛にはオス/メスがあり、メスの成体だけが1日ごとに牛乳を生産します。空き瓶で採取できます。シカは独自の給餌・繁殖処理です。"],
     ["食品保存・乾燥", "作業台で棒6本と糸1本から乾燥棚を作れます。乾燥棚を設置して操作し、生肉・果物・野菜を時間をかけて乾燥。干し肉・干し果物・干し野菜は通常の食品より鮮度が長持ちします。"],
-    ["堆肥・土壌肥沃度", "コンポスターでは野菜または果物と落ち葉を組み合わせ、約10日かけて堆肥を作れます。堆肥は窒素とカリウム、骨粉はリンを補給します。土壌の肥沃度クラスによって肥料の効果が変化します。"]
+    ["堆肥・土壌肥沃度", "コンポスターでは野菜または果物と落ち葉を組み合わせ、約10日かけて堆肥を作れます。堆肥は窒素とカリウム、骨粉はリンを補給します。土壌の肥沃度クラスによって肥料の効果が変化します。"],
+    ["石臼・パン作り", "石臼は上臼石と穀物を投入して操作すると、小麦粉を作れます。小麦粉を手に持って使用し、水入り土器をインベントリに用意すると生地を作り、空の土器が戻ります。生地を焚き火で焼くとパンになります。"]
   ];
-  if (response.selection === 7) return void await showMainMenu(player);
+  if (response.selection === 8) return void await showMainMenu(player);
   const page = pages[response.selection];
   if (page) await showInfo(player, page[0], page[1]);
 }
@@ -97,7 +99,7 @@ async function showSystemOverview(player) {
     "・動物: シカとバニラ牛/羊/ニワトリの状態・給餌・採食・繁殖処理あり。成体の牛から瓶でミルク採取",
     "・地質 / 地形分類: 基礎モデルあり",
     "・専用アイテム: 石片・食品・土器・銅素材・設備を登録",
-    "・設備: 焚き火 / Pit Kiln / るつぼ / 金床 / 乾燥棚 / コンポスター。加工レシピ統一、ジョブ保存/再参加復旧、鋳型焼成、銅/錫/青銅鋳造、乾燥保存、堆肥発酵あり",
+    "・設備: 焚き火 / Pit Kiln / るつぼ / 金床 / 乾燥棚 / コンポスター / 石臼。加工レシピ統一、ジョブ保存/再参加復旧、鋳型焼成、銅/錫/青銅鋳造、乾燥保存、堆肥発酵あり",
     "",
     "農業は降雨はバイオーム系統別の降水係数を反映し、96日季節/昼夜気温・地域気温・標高補正も適用。地域値はバニラBiome IDからの大まかな推定で、TFC気候データへの置換は地形資料と合わせて実施。動物の採食は近傍草ブロックによる簡易モデルです。食品鮮度はプレイヤー単位・食品種類単位で、72000 ticksを実時間1時間として換算し、季節/昼夜/標高/バイオームの推定気温を使用。食品の受け渡し時の鮮度継承、保存食、完全な金属熱伝達、乾燥棚の温湿度による乾燥速度調整、26.60実機互換性は引き続き確認が必要です。"
   ].join("\n");
