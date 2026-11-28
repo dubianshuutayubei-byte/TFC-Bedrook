@@ -123,9 +123,11 @@ export function advanceCropGrowthProgress(currentProgress, growthMultiplier, gro
 export function applyCropNutrientEffects(soilInput, effects = {}, intensity = 1) {
   const soil = createSoilState(soilInput);
   const scale = Math.max(0, finiteOr(intensity, 1));
+  const fertilityMultiplier = getSoilFertilityMultiplier(soil);
   for (const nutrient of ["nitrogen", "phosphorus", "potassium"]) {
     const change = finiteOr(effects[nutrient], 0) * scale;
-    soil[nutrient] = clamp(soil[nutrient] + change, 0, 100);
+    const adjustedChange = change > 0 ? change * fertilityMultiplier : change;
+    soil[nutrient] = clamp(soil[nutrient] + adjustedChange, 0, 100);
   }
   return soil;
 }
