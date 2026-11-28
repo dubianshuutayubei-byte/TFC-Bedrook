@@ -57,6 +57,8 @@
 - `BuiltinFauna.java` ではヒトコブラクダが `maxGroundwater(100)` + `minTemperature(-5)`、フタコブラクダが `maxGroundwater(100)` + `maxTemperature(-5)`。これは降雨量ではなく地下水条件であるため、現行Bedrockの降雨量プロファイルへ誤変換しない。地下水を取得・評価する環境層が未実装のため、正確な自然スポーン制限は保留。
 - `Faunas.java` はラクダ2種を自然スポーン対象として登録する一方、ネコ・イヌは `TFCEntities` / spawn egg と `ServerConfig` に存在するが `Faunas` の自然スポーン登録には含まれない。したがってネコ・イヌにラクダと同じ自然スポーン規則を与えない。
 - Java 1.21.x公式ロスターを78種へ拡張。既存Bedrock実装63種は維持し、追加15種は `fauna-roster.json` / `fauna-archetypes.json` / `fauna-runtime-coverage.json` に未実装として登録した。カバレッジの完了フラグを `false` に変更し、未実装を完了扱いしないテストを追加。
+- `Faunas.java` の `registerAnimal` / `registerFish` / `registerAmphibiousPredator` を照合し、78種すべての公式スポーン配置を `fauna-spawn-types.json` と `official-fauna-spawn-profiles.json` に登録。内訳は地上48・水中29・制限なし1。新規15種については配置種別のみを記録し、未確認の温度・地下水・降雨などの気候条件を推測で補わない。既存63種の気候データは別ファイルに残して区別。
+- 地下水条件を `evaluateHabitat` が独立評価できるよう `minGroundwater` / `maxGroundwater` を追加。ヒトコブラクダは地下水100以下かつ気温-5°C以上、フタコブラクダは地下水100以下かつ気温-5°C以下という公式条件を別テーブルへ登録し、回帰テストを追加。現状 `sampleAnimalEnvironment` は地下水を取得していないため、実際の自然スポーン判定への接続は保留。
 
 ## 残作業（完成判定に必要）
 
