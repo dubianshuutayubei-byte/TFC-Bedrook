@@ -25,7 +25,13 @@
       "copper_ingot",
       "heated_copper_ingot",
       "copper_sheet",
-      "copper_tool_head"
+      "copper_tool_head",
+      "tin_ore",
+      "heated_tin_ingot",
+      "tin_ingot",
+      "heated_bronze_ingot",
+      "bronze_ingot",
+      "bronze_sheet"
     ],
     "food": [
       "raw_meat",
