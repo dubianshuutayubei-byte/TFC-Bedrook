@@ -134,7 +134,9 @@
       "potato",
       "potato_seed",
       "milk_bottle",
-      "spoiled_food",
+      "spoiled_food"
+    ],
+    "animals": [
       "deer_spawn_egg"
     ]
   },
