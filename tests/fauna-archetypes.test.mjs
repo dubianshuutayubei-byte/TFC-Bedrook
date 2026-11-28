@@ -32,6 +32,6 @@ test("63 legacy fauna are runtime-tracked while 55 official species need impleme
  assert.equal(tracked.size,63);
  assert.equal(remaining.size,55);
  for(const id of tracked){assert.ok(roster.species.some(x=>x.id===id),id);assert.ok(runtime.includes('"speciesId":"'+id+'"')||runtime.includes('speciesId:"'+id+'"'),id);}
- for(const id of remaining){assert.ok(roster.species.some(x=>x.id===id),id);assert.ok(tracked.has(id),id);}
+ for(const id of remaining){assert.ok(roster.species.some(x=>x.id===id),id);if(coverage.missingOfficialSpecies.includes(id)){assert.ok(!tracked.has(id),id);}else{assert.ok(tracked.has(id),id);}}
  for(const id of coverage.missingOfficialSpecies){assert.ok(!tracked.has(id),id+" must not be claimed as runtime tracked");assert.equal(roster.species.find(x=>x.id===id).status,"not_implemented");}
 });
