@@ -14,8 +14,9 @@ test("cow milk requires an adult female meeting health and needs thresholds",()=
 });
 
 test("sheep wool uses TFC product logic while chicken eggs retain native laying",()=>{
- assert.match(runtime,/産出: 羊毛（TFC式のハサミ操作、7日間隔）/);
+ assert.match(runtime,/産出: 毛（TFC式のハサミ操作/);
  assert.match(runtime,/function shearAnimal\(player,entity\)/);
+ assert.match(runtime,/!profile\.wooly&&entity\.typeId!=="minecraft:sheep"/);
  assert.match(runtime,/give\(player,"tfc:wool",amount\)/);
  assert.match(runtime,/産出: 卵（バニラの産卵AI）/);
  assert.doesNotMatch(runtime,/spawnItem\(new ItemStack\("minecraft:egg"/);
@@ -23,12 +24,12 @@ test("sheep wool uses TFC product logic while chicken eggs retain native laying"
 });
 
 test("livestock status displays age, needs, health and product instructions",()=>{
- for(const label of ["性別: ","年齢: ","空腹: ","渇き: ","健康: ","なつき度: ","産出: 牛乳","産出: 羊毛","産出: 卵"])assert.ok(runtime.includes(label),label);
+ for(const label of ["性別: ","年齢: ","空腹: ","渇き: ","健康: ","なつき度: ","産出: 牛乳","産出: 毛","産出: 卵"])assert.ok(runtime.includes(label),label);
 });
 
 test("milk collection uses the exact official TFC minimum familiarity of 0.15",()=>{
- assert.ok(runtime.includes('"minecraft:cow":{adultAgeDays:192,speciesId:"cow",displayName:"ウシ",gestationDays:58,childCount:2,maxUses:128,productCooldownDays:1,productFamiliarityMin:15'));
- assert.ok(runtime.includes('"minecraft:goat":{speciesId:"goat",displayName:"ヤギ",adultAgeDays:96,gestationDays:32,childCount:2,maxUses:60,productCooldownDays:3,productFamiliarityMin:15'));
+ assert.ok(runtime.includes('"minecraft:cow":{adultAgeDays:192,speciesId:"cow",displayName:"ウシ",gestationDays:58,childCount:2,childCountMin:1,childCountMax:2,maxBreedUses:13,maxUses:128,productCooldownDays:1,productFamiliarityMin:15'));
+ assert.ok(runtime.includes('"minecraft:goat":{speciesId:"goat",displayName:"ヤギ",adultAgeDays:96,gestationDays:32,childCount:2,childCountMin:1,childCountMax:2,maxBreedUses:6,maxUses:60,productCooldownDays:3,productFamiliarityMin:15'));
 });
 
 
@@ -40,7 +41,7 @@ test("milk and wool cooldowns use fractional world days, not animal age",()=>{
 
 test("sheep shearing uses TFC wool production familiarity, cooldown and per-animal uses",()=>{
  assert.match(runtime,/world\.beforeEvents\.playerInteractWithEntity\.subscribe/);
- assert.match(runtime,/target\?\.typeId!=="minecraft:sheep"\|\|event\.itemStack\?\.typeId!=="minecraft:shears"/);
+ assert.match(runtime,/target\?\.typeId!=="minecraft:sheep"&&!ANIMAL_PROFILES\[target\?\.typeId\]\?\.wooly/);
  assert.match(runtime,/function shearAnimal\(player,entity\)/);
  assert.match(runtime,/minimumFamiliarity=profile\.productFamiliarityMin\?\?16,cooldown=profile\.productCooldownDays\?\?7/);
  assert.match(runtime,/requiredFamiliarity:minimumFamiliarity,cooldownDays:cooldown/);
@@ -56,9 +57,9 @@ test("product timing uses fractional world calendar days rather than animal age"
 
 test("sheep status shows remaining wool regrowth time and specific failure reasons",()=>{
  assert.match(runtime,/再生待ち: "\+\(state\.uses>0\?Math\.max\(0,profile\.productCooldownDays-\(currentAnimalDay\(\)-state\.lastProductAt\)\)/);
- assert.match(runtime,/このヒツジはまだ成熟していません/);
+ assert.match(runtime,/この動物はまだ成熟していません/);
  assert.match(runtime,/なつき度を.*以上にしてください/);
- assert.match(runtime,/羊毛が再生するまであと/);
+ assert.match(runtime,/毛が再生するまであと/);
 });
 
 test("dairy collection reports familiarity, regrowth, and animal-condition blockers separately",()=>{

@@ -71,6 +71,31 @@
           "minecraft:wheat",
           "minecraft:wheat_seeds"
         ]
+      },
+      "minecraft:behavior.avoid_mob_type": {
+        "priority": 2,
+        "entity_types": [
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "tfc_predator"
+            },
+            "max_dist": 12,
+            "walk_speed_multiplier": 1.2,
+            "sprint_speed_multiplier": 1.5
+          },
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "player"
+            },
+            "max_dist": 12,
+            "walk_speed_multiplier": 1.2,
+            "sprint_speed_multiplier": 1.5
+          }
+        ]
       }
     },
     "component_groups": {

@@ -1,0 +1,209 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.tfc.fauna.direwolf",
+        "texture_width": 256,
+        "texture_height": 256,
+        "visible_bounds_width": 2.5,
+        "visible_bounds_height": 2.5,
+        "visible_bounds_offset": [
+          0,
+          0.8,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "body",
+          "pivot": [
+            0,
+            8,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -4,
+                5,
+                -6
+              ],
+              "size": [
+                8,
+                6,
+                12
+              ],
+              "uv": [
+                64,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "head",
+          "parent": "body",
+          "pivot": [
+            0,
+            9,
+            -6
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -2,
+                7,
+                -10
+              ],
+              "size": [
+                5,
+                5,
+                5
+              ],
+              "uv": [
+                64,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_fl",
+          "parent": "body",
+          "pivot": [
+            -3,
+            6,
+            -5
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -3,
+                0,
+                -5
+              ],
+              "size": [
+                2,
+                7,
+                2
+              ],
+              "uv": [
+                64,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_fr",
+          "parent": "body",
+          "pivot": [
+            1,
+            6,
+            -5
+          ],
+          "cubes": [
+            {
+              "origin": [
+                1,
+                0,
+                -5
+              ],
+              "size": [
+                2,
+                7,
+                2
+              ],
+              "uv": [
+                64,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_bl",
+          "parent": "body",
+          "pivot": [
+            -3,
+            6,
+            3
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -3,
+                0,
+                3
+              ],
+              "size": [
+                2,
+                7,
+                2
+              ],
+              "uv": [
+                64,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_br",
+          "parent": "body",
+          "pivot": [
+            1,
+            6,
+            3
+          ],
+          "cubes": [
+            {
+              "origin": [
+                1,
+                0,
+                3
+              ],
+              "size": [
+                2,
+                7,
+                2
+              ],
+              "uv": [
+                64,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "tail",
+          "parent": "body",
+          "pivot": [
+            0,
+            8,
+            6
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -1,
+                7,
+                6
+              ],
+              "size": [
+                2,
+                2,
+                5
+              ],
+              "uv": [
+                64,
+                32
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

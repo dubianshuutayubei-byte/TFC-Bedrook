@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "source": "TerraFirmaCraft v3.2.26",
+  "sourceUrl": "https://github.com/TerraFirmaCraft/TerraFirmaCraft/tree/v3.2.26/src/main/resources/data/tfc/tags/entity_types",
+  "note": "Official entity-type tag snapshot. The land-prey expansion includes the referenced livestock tag; do not infer additional prey species.",
+  "tags": {
+    "land_predators": [
+      "polar_bear",
+      "grizzly_bear",
+      "black_bear",
+      "cougar",
+      "panther",
+      "lion",
+      "sabertooth",
+      "wolf",
+      "direwolf",
+      "ocelot",
+      "tiger",
+      "hyena",
+      "crocodile"
+    ],
+    "livestock": [
+      "pig",
+      "cow",
+      "goat",
+      "yak",
+      "alpaca",
+      "sheep",
+      "musk_ox",
+      "chicken",
+      "duck",
+      "quail",
+      "horse",
+      "mule",
+      "donkey"
+    ],
+    "land_prey": [
+      "rabbit",
+      "fox",
+      "turtle",
+      "penguin",
+      "frog",
+      "deer",
+      "bongo",
+      "panda",
+      "grouse",
+      "pheasant",
+      "turkey",
+      "ocelot",
+      "caribou",
+      "gazelle",
+      "peafowl"
+    ],
+    "hunted_by_land_predators": [
+      "#tfc:land_prey"
+    ],
+    "hunts_land_prey": [
+      "#tfc:land_predators",
+      "minecraft:player",
+      "tfc:cat",
+      "tfc:dog"
+    ],
+    "ocean_predators": [
+      "dolphin",
+      "orca"
+    ],
+    "hunted_by_ocean_predators": [
+      "isopod",
+      "lobster",
+      "crayfish",
+      "cod",
+      "tropical_fish",
+      "horseshoe_crab",
+      "bluegill",
+      "crappie",
+      "lake_trout",
+      "largemouth_bass",
+      "rainbow_trout",
+      "salmon",
+      "smallmouth_bass"
+    ]
+  },
+  "expanded": {
+    "land_prey": [
+      "rabbit",
+      "fox",
+      "turtle",
+      "penguin",
+      "frog",
+      "deer",
+      "bongo",
+      "panda",
+      "grouse",
+      "pheasant",
+      "turkey",
+      "ocelot",
+      "caribou",
+      "gazelle",
+      "peafowl",
+      "pig",
+      "cow",
+      "goat",
+      "yak",
+      "alpaca",
+      "sheep",
+      "musk_ox",
+      "chicken",
+      "duck",
+      "quail",
+      "horse",
+      "mule",
+      "donkey"
+    ]
+  }
+}

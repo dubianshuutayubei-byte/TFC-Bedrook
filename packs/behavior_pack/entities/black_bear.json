@@ -74,6 +74,118 @@
               "value": "tfc_livestock"
             },
             "max_dist": 16
+          },
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "rabbit"
+            },
+            "max_dist": 16
+          },
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "fox"
+            },
+            "max_dist": 16
+          },
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "turtle"
+            },
+            "max_dist": 16
+          },
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "frog"
+            },
+            "max_dist": 16
+          },
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "panda"
+            },
+            "max_dist": 16
+          },
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "ocelot"
+            },
+            "max_dist": 16
+          },
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "cow"
+            },
+            "max_dist": 16
+          },
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "sheep"
+            },
+            "max_dist": 16
+          },
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "pig"
+            },
+            "max_dist": 16
+          },
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "goat"
+            },
+            "max_dist": 16
+          },
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "horse"
+            },
+            "max_dist": 16
+          },
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "donkey"
+            },
+            "max_dist": 16
+          },
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "mule"
+            },
+            "max_dist": 16
+          },
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "chicken"
+            },
+            "max_dist": 16
           }
         ]
       },
@@ -81,6 +193,41 @@
         "priority": 3,
         "speed_multiplier": 1.2,
         "track_target": true
+      }
+    },
+    "component_groups": {
+      "tfc:baby": {
+        "minecraft:is_baby": {},
+        "minecraft:scale": {
+          "value": 0.55
+        },
+        "minecraft:collision_box": {
+          "width": 0.45,
+          "height": 0.85
+        },
+        "minecraft:movement": {
+          "value": 0.22
+        },
+        "minecraft:behavior.follow_parent": {
+          "priority": 5,
+          "speed_multiplier": 1.1
+        }
+      }
+    },
+    "events": {
+      "tfc:spawn_baby": {
+        "add": {
+          "component_groups": [
+            "tfc:baby"
+          ]
+        }
+      },
+      "tfc:grow_up": {
+        "remove": {
+          "component_groups": [
+            "tfc:baby"
+          ]
+        }
       }
     }
   }

@@ -110,7 +110,7 @@
     "yak"
   ],
   "remainingCount": 40,
-  "caveat": "All 63 species now have a Bedrock entity definition, shared runtime state tracking, and a spawn-rule entry. The 40 custom entities use shared archetype models and generic AI; exact per-species TFC behavior, diets, breeding, products, drops, genetics, spawn climate/density and in-game validation remain incomplete. The 23 existing adapters still retain some vanilla AI/behavior.",
+  "caveat": "63種すべてにランタイム追跡と自然スポーン経路を接続済み。40種の専用エンティティ/ジオメトリ定義/スポーン規則/召喚アイテムに加え、共通ライフサイクル、公式タグに基づく捕食関係、水生移動、反撃ラミング、巣箱産卵、公式LootTableを基にした汎用アイテム換算ドロップを実装。残作業は種固有モデル/アニメーション、細かな採食・採取・繁殖差、専用食材と素材、気候/個体密度の完全一致、実機検証。",
   "customEntitySpecies": [
     "alpaca",
     "black_bear",
@@ -198,5 +198,6 @@
     "turkey",
     "wildebeest",
     "yak"
-  ]
+  ],
+  "remainingSpeciesSpecificWorkCount": 40
 }

@@ -1,0 +1,206 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { resolve, dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { createAnimalState, determineOffspringCount, recordProduct, recordBreedingUse, canBreed } from "../packs/behavior_pack/scripts/core/fauna-service.mjs";
+import { CUSTOM_FAUNA_PROFILES } from "../packs/behavior_pack/scripts/core/fauna-runtime-profiles.mjs";
+import { FAUNA_DEATH_LOOT } from "../packs/behavior_pack/scripts/core/fauna-loot-profiles.mjs";
+
+const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
+const read=p=>JSON.parse(readFileSync(join(root,p),"utf8"));
+const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
+
+test("all 40 custom species have an official-source-mapped death loot profile",()=>{
+ for(const id of Object.keys(CUSTOM_FAUNA_PROFILES))assert.ok(Object.hasOwn(FAUNA_DEATH_LOOT,id),id+" missing loot profile");
+ assert.deepEqual(FAUNA_DEATH_LOOT["tfc:boar"][0],{item:"tfc:raw_meat",min:5,max:10,notPredated:true});
+ assert.equal(FAUNA_DEATH_LOOT["tfc:bluegill"][0].playerKillOnly,true);
+ assert.equal(FAUNA_DEATH_LOOT["tfc:orca"][0].item,"minecraft:slime_ball");
+ assert.equal(FAUNA_DEATH_LOOT["tfc:octopoteuthis"][0].item,"minecraft:glow_ink_sac");
+ assert.match(runtime,/world\.afterEvents\.entityDie\.subscribe/);
+ assert.match(runtime,/dropFaunaLoot\(event\)/);
+ assert.match(runtime,/drop\.playerKillOnly&&!playerKill/);
+ assert.match(runtime,/drop\.notPredated&&predated/);
+ assert.match(runtime,/prey\.setDynamicProperty\("tfc:predated",true\)/);
+ assert.match(runtime,/entity\.getDynamicProperty\("tfc:predated"\)===true/);
+});
+
+test("shared breeding flow keeps the partner state mutable for both use counters",()=>{
+ assert.match(runtime,/let other=animalState\(partner\);const breedingProfile/);
+ assert.match(runtime,/other=recordBreedingUse\(other,breedingTime/);
+});
+
+test("TFC livestock litter sizes are rolled within documented ranges",()=>{
+ assert.equal(determineOffspringCount({childCountMin:1,childCountMax:10},()=>0),1);
+ assert.equal(determineOffspringCount({childCountMin:1,childCountMax:10},()=>0.999999),10);
+ assert.equal(determineOffspringCount({childCount:1},()=>0.5),1);
+ assert.throws(()=>determineOffspringCount({childCountMin:1,childCountMax:2},()=>1),RangeError);
+});
+
+test("product and breeding use counters independently trigger old age at their TFC limits",()=>{
+ const product=recordProduct(createAnimalState({uses:127}),20,{maxUses:128,oldDayDelay:2});
+ assert.equal(product.uses,128);
+ assert.equal(product.oldDay,22);
+ const breeding=recordBreedingUse(createAnimalState({breedUses:12}),20,{maxBreedUses:13,oldDayDelay:3});
+ assert.equal(breeding.breedUses,13);
+ assert.equal(breeding.oldDay,23);
+ assert.equal(recordBreedingUse(createAnimalState(),20).breedUses,1);
+});
+
+test("livestock breeding stops at the per-species breeding-use limit",()=>{
+ const male={species:"cow",sex:"male",ageDays:192,lifeStage:"adult",health:100,hunger:0,thirst:0,familiarity:40,lastFedDay:4,lastBreedAt:0};
+ const female={...male,sex:"female"};
+ assert.equal(canBreed(male,female,{adultAgeDays:192,requiredFamiliarity:30,currentDay:4,currentTime:5,maxBreedUses:13}),true);
+ assert.equal(canBreed({...male,breedUses:13},female,{adultAgeDays:192,requiredFamiliarity:30,currentDay:4,currentTime:5,maxBreedUses:13}),false);
+});
+
+test("official livestock values are represented for alpaca, musk ox and yak",()=>{
+ const alpaca=CUSTOM_FAUNA_PROFILES["tfc:alpaca"],musk=CUSTOM_FAUNA_PROFILES["tfc:musk_ox"],yak=CUSTOM_FAUNA_PROFILES["tfc:yak"];
+ assert.deepEqual([alpaca.adultAgeDays,alpaca.gestationDays,alpaca.childCountMin,alpaca.childCountMax,alpaca.productCooldownDays,alpaca.maxUses,alpaca.maxBreedUses],[98,36,1,2,6,128,13]);
+ assert.deepEqual([musk.adultAgeDays,musk.gestationDays,musk.childCountMin,musk.childCountMax,musk.productCooldownDays,musk.maxUses,musk.maxBreedUses],[168,64,1,1,4,160,16]);
+ assert.deepEqual([yak.adultAgeDays,yak.gestationDays,yak.childCountMin,yak.childCountMax,yak.productCooldownDays,yak.maxUses,yak.maxBreedUses],[180,64,1,1,1,230,23]);
+ assert.equal(alpaca.wooly,true);
+ assert.equal(musk.wooly,true);
+ assert.equal(yak.dairy,true);
+});
+
+test("native fox, panda, rabbit and chicken adapters forage from world blocks",()=>{
+ assert.match(runtime,/"minecraft:fox":\{[^}]*grazeBlocks:\["minecraft:sweet_berry_bush"\]/);
+ assert.match(runtime,/"minecraft:panda":\{[^}]*grazeBlocks:\["minecraft:bamboo"\]/);
+ assert.match(runtime,/"minecraft:rabbit":\{[^}]*grazeBlocks:\["minecraft:carrots","minecraft:dandelion"/);
+ assert.match(runtime,/"minecraft:chicken":\{[^}]*grazeBlocks:\["minecraft:grass_block"/);
+ assert.match(runtime,/forage\.typeId==="minecraft:sweet_berry_bush"/);
+ assert.match(runtime,/"minecraft:bamboo","minecraft:carrots"/);
+});
+
+test("birds, herbivores and manatees have natural forage sources",()=>{
+ for(const id of ["alpaca","musk_ox","yak","boar","bongo","caribou","gazelle","moose","wildebeest","duck","quail","grouse","peafowl","pheasant","turkey"]){
+  assert.ok(CUSTOM_FAUNA_PROFILES["tfc:"+id].grazeBlocks.includes("minecraft:grass_block"),id+" missing grass forage");
+ }
+ assert.deepEqual(CUSTOM_FAUNA_PROFILES["tfc:manatee"].grazeBlocks,["minecraft:seagrass"]);
+ assert.deepEqual(CUSTOM_FAUNA_PROFILES["tfc:penguin"].fishForageItems,["minecraft:cod","minecraft:salmon","minecraft:tropical_fish"]);
+ assert.match(runtime,/function tickFishForage\(entity,profile,state\)/);
+ assert.match(runtime,/state=tickFishForage\(entity,profile,state\)/);
+});
+
+test("duck and quail use automatic nest-box laying with eight-day incubation",()=>{
+ for(const id of ["tfc:duck","tfc:quail"]){
+  const p=CUSTOM_FAUNA_PROFILES[id];
+  assert.equal(p.eggProduct,true);
+  assert.equal(p.hatchDays,8);
+ }
+ assert.match(runtime,/function eggNestTick\(block\)/);
+ assert.match(runtime,/!profile\?\.eggProduct\|\|bird\.typeId==="minecraft:chicken"/);
+ assert.match(runtime,/const maleNearby=nearby\.some/);
+ assert.match(runtime,/requiredDays:profile\.hatchDays\?\?8/);
+ assert.match(runtime,/recordProduct\(state,day/);
+ assert.match(runtime,/巣箱で産卵します/);
+});
+
+test("natural fauna spawning enforces official depth, chance and underwater constraints",()=>{
+ const profiles=read("packs/behavior_pack/data/official-fauna-spawn-profiles.json").species;
+ const orca=profiles.find(p=>p.id==="orca"),deep=profiles.find(p=>p.id==="octopoteuthis");
+ assert.equal(orca.distanceBelowSeaLevel,6);
+ assert.equal(orca.chance,10);
+ assert.equal(deep.distanceBelowSeaLevel,33);
+ assert.equal(deep.maxBrightness,0);
+ assert.match(runtime,/official\.distanceBelowSeaLevel>0&&environment\.belowSeaLevel<official\.distanceBelowSeaLevel/);
+ assert.match(runtime,/official\.chance>1&&Math\.random\(\)>=1\/official\.chance/);
+ assert.match(runtime,/official\.placement==="in_water"/);
+});
+
+test("aquatic fauna distinguish swimming fish from seafloor shellfish",()=>{
+ const aquatic=Object.entries(CUSTOM_FAUNA_PROFILES).filter(([,p])=>p.kind==="aquatic");
+ assert.ok(aquatic.length>=10);
+ const shellfish=new Set(["lobster","crayfish","isopod","horseshoe_crab"]);
+ for(const [entityId] of aquatic){
+  const id=entityId.split(":")[1],e=read("packs/behavior_pack/entities/"+id+".json")["minecraft:entity"].components;
+  assert.ok(e["minecraft:breathable"],id+" missing breathing component");
+  if(shellfish.has(id)){
+   assert.ok(e["minecraft:navigation.walk"],id+" must move along the water floor");
+   assert.ok(e["minecraft:behavior.avoid_mob_type"],id+" must avoid predators");
+   assert.ok(e["minecraft:behavior.avoid_mob_type"].entity_types.some(t=>t.filters?.value==="tfc_ocean_predator"),id+" must avoid ocean predators");
+   assert.equal(e["minecraft:behavior.swim_wander"],undefined,id+" should not swim freely");
+  }else{
+   assert.ok(e["minecraft:navigation.swim"],id+" missing swim navigation");
+   assert.ok(e["minecraft:movement.swim"],id+" missing swim movement");
+  }
+ }
+ const manatee=read("packs/behavior_pack/entities/manatee.json")["minecraft:entity"].components["minecraft:breathable"];
+ assert.equal(manatee.breathes_water,true);
+ const manateeAi=read("packs/behavior_pack/entities/manatee.json")["minecraft:entity"].components;
+ assert.ok(manateeAi["minecraft:behavior.panic"]);
+ assert.ok(manateeAi["minecraft:behavior.avoid_mob_type"].entity_types.some(t=>t.filters?.value==="player"));
+});
+
+test("predators follow TFC day/night schedules, territory and post-kill pacification",()=>{
+ assert.match(runtime,/profile\.diurnal!==undefined/);
+ assert.match(runtime,/profile\.pacifiesAfterHunt!==false&&state\.lastHuntAt>=0&&currentDay-state\.lastHuntAt<=0\.5\)return state/);
+ assert.match(runtime,/if\(profile\.territorial\)\{/);
+ assert.match(runtime,/homeDx\*homeDx\+homeDy\*homeDy\+homeDz\*homeDz>6400/);
+ assert.match(runtime,/player\.applyDamage\(profile\.playerAttackDamage\?\?3\)/);
+ assert.match(runtime,/if\(remaining<=0\)\{state\.hunger=Math\.max\(0,state\.hunger-28\);state\.lastHuntAt=currentDay;\}/);
+ assert.match(runtime,/predatorHungerThreshold:profile\.predatorHungerThreshold\?\?0/);
+ for(const id of ["black_bear","grizzly_bear"]){assert.equal(CUSTOM_FAUNA_PROFILES["tfc:"+id].diurnal,true);assert.equal(CUSTOM_FAUNA_PROFILES["tfc:"+id].territorial,true);}
+ assert.equal(CUSTOM_FAUNA_PROFILES["tfc:orca"].territorial,false);
+ assert.equal(CUSTOM_FAUNA_PROFILES["tfc:orca"].attackPlayers,false);
+ assert.equal(CUSTOM_FAUNA_PROFILES["tfc:orca"].pacifiesAfterHunt,false);
+ for(const id of ["cougar","panther","lion","sabertooth","tiger","hyena","direwolf","crocodile"])assert.equal(CUSTOM_FAUNA_PROFILES["tfc:"+id].diurnal,false);
+});
+
+test("checked-in ecology snapshot records the official TFC 3.2.26 tag expansion",()=>{
+ const tags=read("packs/behavior_pack/data/official-fauna-ecology-tags.json");
+ assert.equal(tags.source,"TerraFirmaCraft v3.2.26");
+ assert.deepEqual(tags.expanded.land_prey,[...tags.tags.land_prey,...tags.tags.livestock]);
+ assert.deepEqual(tags.tags.ocean_predators,["dolphin","orca"]);
+ assert.deepEqual(tags.tags.hunted_by_land_predators,["#tfc:land_prey"]);
+});
+
+test("predator diets follow official TFC land-prey and ocean-prey entity tags",()=>{
+ const land=["rabbit","fox","turtle","penguin","frog","deer","bongo","panda","grouse","pheasant","turkey","ocelot","caribou","gazelle","peafowl","pig","cow","goat","yak","alpaca","sheep","musk_ox","chicken","duck","quail","horse","mule","donkey"];
+ const ocean=["isopod","lobster","crayfish","cod","tropical_fish","horseshoe_crab","bluegill","crappie","lake_trout","largemouth_bass","rainbow_trout","salmon","smallmouth_bass"];
+ for(const id of ["black_bear","grizzly_bear","cougar","panther","lion","sabertooth","tiger","hyena","direwolf","crocodile"])assert.deepEqual(CUSTOM_FAUNA_PROFILES["tfc:"+id].predatorDiet,land,id);
+ assert.deepEqual(CUSTOM_FAUNA_PROFILES["tfc:orca"].predatorDiet,ocean);
+ assert.match(runtime,/"minecraft:dolphin":\{territorial:false,attackPlayers:false,pacifiesAfterHunt:false,predatorDiet:\["isopod","lobster","crayfish"/);
+ assert.doesNotMatch(runtime,/"minecraft:fox":\{predatorDiet/);
+});
+
+test("boar, wildebeest and moose have species-specific ramming behavior",()=>{
+ for(const id of ["boar","wildebeest","moose"])assert.equal(CUSTOM_FAUNA_PROFILES["tfc:"+id].ramming,true);
+ assert.match(runtime,/function tickRamming\(entity,profile,state,currentDay\)/);
+ assert.match(runtime,/target\.applyDamage\(profile\.ramDamage\?\?6\)/);
+ assert.match(runtime,/target\.applyKnockback/);
+});
+
+test("freshwater fish flee players and ocean predators only",()=>{
+ for(const id of ["bluegill","crappie","lake_trout","largemouth_bass","rainbow_trout","smallmouth_bass"]){
+  const e=read("packs/behavior_pack/entities/"+id+".json")["minecraft:entity"].components;
+  const families=e["minecraft:behavior.avoid_mob_type"].entity_types.map(t=>t.filters?.value);
+  assert.ok(families.includes("player"),id);
+  assert.ok(families.includes("tfc_ocean_predator"),id);
+  assert.ok(!families.includes("tfc_predator"),id);
+ }
+ const orca=read("packs/behavior_pack/entities/orca.json")["minecraft:entity"].components["minecraft:type_family"].family;
+ assert.ok(orca.includes("tfc_ocean_predator"));
+});
+
+test("custom prey avoid predator family while predator archetypes can target prey",()=>{
+ for(const id of ["bongo","caribou","gazelle","grouse","pheasant","turkey","peafowl"]){
+  const e=read("packs/behavior_pack/entities/"+id+".json")["minecraft:entity"].components;
+  assert.ok(e["minecraft:behavior.avoid_mob_type"],id+" missing predator avoidance");
+  assert.ok(e["minecraft:behavior.panic"],id+" missing panic behavior");
+  assert.ok(e["minecraft:behavior.avoid_mob_type"].entity_types.some(t=>t.filters?.value==="player"),id+" should fear players");
+ }
+ for(const id of ["black_bear","grizzly_bear","cougar","lion","tiger","hyena","direwolf","crocodile"]){
+  const e=read("packs/behavior_pack/entities/"+id+".json")["minecraft:entity"].components;
+  assert.ok(e["minecraft:behavior.nearest_attackable_target"],id+" missing target AI");
+  const targetFamilies=e["minecraft:behavior.nearest_attackable_target"].entity_types.map(t=>t.filters?.value);
+  for(const family of ["rabbit","fox","panda","ocelot","cow","sheep","pig","goat","horse","donkey","chicken"])assert.ok(targetFamilies.includes(family),id+" missing prey family "+family);
+ }
+});
+
+test("native mule and rabbit are excluded from shared mammal breeding",()=>{
+ assert.match(runtime,/for\(const id of \["minecraft:cow","minecraft:sheep","minecraft:pig","minecraft:goat","minecraft:horse","minecraft:donkey"\]\)/);
+ assert.doesNotMatch(runtime,/for\(const id of \[[^\]]*"minecraft:mule"/);
+ assert.doesNotMatch(runtime,/for\(const id of \[[^\]]*"minecraft:rabbit"/);
+});
