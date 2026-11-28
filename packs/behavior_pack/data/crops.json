@@ -132,5 +132,98 @@
       "phosphorus": -0.3,
       "potassium": -0.4
     }
+  },
+  "garlic": {
+    "minTemperatureC": -3,
+    "maxTemperatureC": 22,
+    "minHydration": 10,
+    "maxHydration": 70,
+    "nutrientDemand": {
+      "nitrogen": 40,
+      "phosphorus": 20,
+      "potassium": 50
+    },
+    "nutrientEffects": {
+      "nitrogen": -0.4,
+      "phosphorus": -0.2,
+      "potassium": -0.5
+    }
+  },
+  "onion": {
+    "minTemperatureC": -5,
+    "maxTemperatureC": 26,
+    "minHydration": 15,
+    "maxHydration": 85,
+    "nutrientDemand": {
+      "nitrogen": 40,
+      "phosphorus": 40,
+      "potassium": 40
+    },
+    "nutrientEffects": {
+      "nitrogen": -0.4,
+      "phosphorus": -0.4,
+      "potassium": -0.4
+    }
+  },
+  "squash": {
+    "minTemperatureC": -7,
+    "maxTemperatureC": 25,
+    "minHydration": 15,
+    "maxHydration": 85,
+    "nutrientDemand": {
+      "nitrogen": 25,
+      "phosphorus": 45,
+      "potassium": 50
+    },
+    "nutrientEffects": {
+      "nitrogen": -0.25,
+      "phosphorus": -0.45,
+      "potassium": -0.5
+    }
+  },
+  "lentils": {
+    "minTemperatureC": -5,
+    "maxTemperatureC": 25,
+    "minHydration": 15,
+    "maxHydration": 50,
+    "nutrientDemand": {
+      "phosphorus": 20,
+      "potassium": 20
+    },
+    "nutrientEffects": {
+      "nitrogen": 0.8,
+      "phosphorus": -0.2,
+      "potassium": -0.2
+    }
+  },
+  "soybean": {
+    "minTemperatureC": -7,
+    "maxTemperatureC": 22,
+    "minHydration": 25,
+    "maxHydration": 90,
+    "nutrientDemand": {
+      "phosphorus": 60,
+      "potassium": 30
+    },
+    "nutrientEffects": {
+      "nitrogen": 0.8,
+      "phosphorus": -0.6,
+      "potassium": -0.3
+    }
+  },
+  "peanuts": {
+    "minTemperatureC": 11,
+    "maxTemperatureC": 31,
+    "minHydration": 20,
+    "maxHydration": 80,
+    "nutrientDemand": {
+      "phosphorus": 50,
+      "potassium": 50
+    },
+    "nutrientEffects": {
+      "nitrogen": 0.9,
+      "phosphorus": -0.5,
+      "potassium": -0.5
+    }
   }
 }
