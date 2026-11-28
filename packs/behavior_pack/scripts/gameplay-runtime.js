@@ -310,7 +310,7 @@ async function crucibleStation(player,block,state){
  let response;try{response=await form.show(player);}catch{player.sendMessage("§cるつぼUIを開けませんでした。");return;}
  if(response.canceled||response.selection===6)return;
  if(response.selection===0||response.selection===1){
-  const copperOre=response.selection===0,oreId=copperOre?"tfc:copper_ore":"tfc:tin_ore",outputId=copperOre?"tfc:heated_copper_ingot":"tfc:heated_tin_ingot",requiredTemp=copperOre?1085:232,name=copperOre?"銅":"錫";
+  const copperOre=response.selection===0,oreId=copperOre?"tfc:copper_ore":"tfc:tin_ore",outputId=copperOre?"tfc:heated_copper_ingot":"tfc:heated_tin_ingot",requiredTemp=copperOre?1080:230,name=copperOre?"銅":"錫";
   if(!canProcessAtTemperature(state,requiredTemp)){player.sendMessage("§c"+name+"の鋳造には"+requiredTemp+"°C以上が必要です。");return;}
   if(count(player,oreId)<2||count(player,"tfc:fired_ingot_mold")<1){player.sendMessage("§c"+name+"鉱石×2と焼成済み鋳型×1が必要です。");return;}
   if(!take(player,oreId,2)){player.sendMessage("§c鉱石を取り出せませんでした。");return;}
@@ -385,7 +385,7 @@ async function station(player,id,block){
  if(id==="quern"){await processQuernManually(player,block,recipe);return;}
  if(id==="anvil"){const requiredId=Object.keys(recipe.inputs)[0],heldNow=inv(player)?.getItem(player.selectedSlotIndex),profile=HEATED_METAL_PROFILES[requiredId],temperature=Number(heldNow?.getDynamicProperty(ITEM_TEMPERATURE_KEY)??0);if(!profile||heldNow?.typeId!==requiredId||temperature<profile.forgingTemperatureC){player.sendMessage("§c手持ちの加熱インゴットが鍛造温度に達していません。必要温度: "+(profile?.forgingTemperatureC??0)+"°C");return;}}
  if(recipe.alloyId){const matches=findMatchingAlloys(recipe.metalInputs,{recipes:[{id:recipe.alloyId,components:recipe.alloyComponents}]});if(!matches.includes(recipe.alloyId)){player.sendMessage("§c合金の配合比が範囲外です。");return;}}
- if(!["anvil","drying_rack","composter","quern"].includes(id)&&!canProcessAtTemperature(state,recipe.minimumTemperatureC)){player.sendMessage("§c温度不足です。");return;}
+ if(!["anvil","drying_rack","composter","quern","smokehouse"].includes(id)&&!canProcessAtTemperature(state,recipe.minimumTemperatureC)){player.sendMessage("§c温度不足です。");return;}
  for(const [itemId,amount] of Object.entries(recipe.inputs)){if(count(player,itemId)<amount){player.sendMessage("§c材料不足: "+itemId+" ×"+amount);return;}}
  const consumedInputs={};
  for(const [itemId,amount] of Object.entries(recipe.inputs)){if(!take(player,itemId,amount)){for(const [rollbackId,rollbackAmount] of Object.entries(consumedInputs))give(player,rollbackId,rollbackAmount);player.sendMessage("§c材料の取り出しに失敗したため、投入済み材料を返却しました。");return;}consumedInputs[itemId]=amount;}
