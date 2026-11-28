@@ -5,10 +5,23 @@ import { resolve, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createAnimalState, determineOffspringCount, recordProduct, recordBreedingUse, canBreed } from "../packs/behavior_pack/scripts/core/fauna-service.mjs";
 import { CUSTOM_FAUNA_PROFILES } from "../packs/behavior_pack/scripts/core/fauna-runtime-profiles.mjs";
+import { FAUNA_DEATH_LOOT } from "../packs/behavior_pack/scripts/core/fauna-loot-profiles.mjs";
 
 const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const read=p=>JSON.parse(readFileSync(join(root,p),"utf8"));
 const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
+
+test("all 40 custom species have an official-source-mapped death loot profile",()=>{
+ for(const id of Object.keys(CUSTOM_FAUNA_PROFILES))assert.ok(Object.hasOwn(FAUNA_DEATH_LOOT,id),id+" missing loot profile");
+ assert.deepEqual(FAUNA_DEATH_LOOT["tfc:boar"][0],{item:"tfc:raw_meat",min:5,max:10,notPredated:true});
+ assert.equal(FAUNA_DEATH_LOOT["tfc:bluegill"][0].playerKillOnly,true);
+ assert.equal(FAUNA_DEATH_LOOT["tfc:orca"][0].item,"minecraft:slime_ball");
+ assert.equal(FAUNA_DEATH_LOOT["tfc:octopoteuthis"][0].item,"minecraft:glow_ink_sac");
+ assert.match(runtime,/world\.afterEvents\.entityDie\.subscribe/);
+ assert.match(runtime,/dropFaunaLoot\(event\)/);
+ assert.match(runtime,/drop\.playerKillOnly&&!playerKill/);
+ assert.match(runtime,/drop\.notPredated&&predated/);
+});
 
 test("TFC livestock litter sizes are rolled within documented ranges",()=>{
  assert.equal(determineOffspringCount({childCountMin:1,childCountMax:10},()=>0),1);
