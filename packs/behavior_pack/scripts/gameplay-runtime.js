@@ -11,6 +11,7 @@ import { normalizeDimensionId, normalizeWeather, getRainfallMm } from "./core/en
 import { calculateAmbientTemperatureC } from "./core/climate-service.mjs";
 import { findMatchingAlloys } from "./core/metal-service.mjs";
 import { classifyTemperature } from "./core/heat-service.mjs";
+import { summarizeOreSamples } from "./core/geology-service.mjs";
 
 const STATE_KEY="tfc:player_state",PROGRESS_KEY="tfc:knapping_progress",FOOD_FRESHNESS_KEY="tfc:food_freshness";
 const FOOD_DECAY_PROFILES={"tfc:raw_meat":0.16,"tfc:cooked_meat":0.12,"tfc:grain":0.025,"tfc:maize":0.025,"tfc:potato":0.1,"tfc:vegetable":0.1,"tfc:fruit":0.11,"tfc:milk_bottle":0.18,"tfc:dried_meat":0.04,"tfc:dried_fruit":0.03,"tfc:dried_vegetables":0.03};
@@ -54,6 +55,35 @@ function tickFoodFreshness(player,nowTick){
 function posKey(block,kind){const l=block.location;return "tfc:"+kind+":"+block.dimension.id+":"+Math.floor(l.x)+","+Math.floor(l.y)+","+Math.floor(l.z);}
 function readWorldState(key,fallback){try{const raw=world.getDynamicProperty(key);return typeof raw==="string"?JSON.parse(raw):fallback;}catch{return fallback;}}
 function writeWorldState(key,value){try{world.setDynamicProperty(key,JSON.stringify(value));return true;}catch(error){console.warn("[TFC-Bedrook] world state save:",error);return false;}}
+
+const PROSPECTING_ORES=Object.freeze({
+ "minecraft:coal_ore":"石炭","minecraft:deepslate_coal_ore":"石炭",
+ "minecraft:copper_ore":"銅","minecraft:deepslate_copper_ore":"銅",
+ "minecraft:iron_ore":"鉄","minecraft:deepslate_iron_ore":"鉄",
+ "minecraft:gold_ore":"金","minecraft:deepslate_gold_ore":"金",
+ "minecraft:redstone_ore":"レッドストーン","minecraft:deepslate_redstone_ore":"レッドストーン",
+ "minecraft:lapis_ore":"ラピスラズリ","minecraft:deepslate_lapis_ore":"ラピスラズリ",
+ "minecraft:diamond_ore":"ダイヤモンド","minecraft:deepslate_diamond_ore":"ダイヤモンド",
+ "minecraft:emerald_ore":"エメラルド","minecraft:deepslate_emerald_ore":"エメラルド",
+ "minecraft:nether_quartz_ore":"ネザークォーツ","minecraft:nether_gold_ore":"ネザー金"
+});
+const PROSPECTING_ABUNDANCE={trace:"痕跡",small:"少量",large:"豊富",very_large:"非常に豊富"};
+function prospect(player,centerBlock){
+ if(!player||!centerBlock)return;
+ const center=centerBlock.location,counts={},radius=4;
+ let samples=0,hostRock=centerBlock.typeId;
+ for(let dx=-radius;dx<=radius;dx++)for(let dz=-radius;dz<=radius;dz++)for(let dy=-2;dy<=2;dy++){
+  try{
+   const block=centerBlock.dimension.getBlock({x:Math.floor(center.x)+dx,y:Math.floor(center.y)+dy,z:Math.floor(center.z)+dz});
+   if(!block)continue;samples++;
+   const ore=PROSPECTING_ORES[block.typeId];if(ore)counts[ore]=(counts[ore]??0)+1;
+  }catch{}
+ }
+ const summary=summarizeOreSamples(counts);
+ const lines=summary.slice(0,5).map(entry=>entry.ore+": "+entry.count+"ブロック（"+PROSPECTING_ABUNDANCE[entry.abundance]+"）");
+ player.sendMessage("§6地質調査結果§r\n基準岩石: "+hostRock+"\n調査範囲: 水平"+radius+"ブロック / 上下2ブロック\n調査ブロック数: "+samples+"\n"+(lines.length?lines.join("\n"):"鉱石は検出されませんでした。"));
+}
+
 const FUELS={
 "minecraft:coal":{id:"coal",duration:2200,temperatureC:1415},
 "minecraft:charcoal":{id:"charcoal",duration:1800,temperatureC:1350},
@@ -213,6 +243,7 @@ function animalInteract(player,entity){
 }
 export function initializeGameplay(){world.afterEvents.weatherChange.subscribe(event=>{const key=normalizeDimensionId(event.dimension?.id);if(key)WEATHER_BY_DIMENSION.set(key,normalizeWeather(event.newWeather));});system.beforeEvents.startup.subscribe(event=>{
 event.itemComponentRegistry.registerCustomComponent("tfc:open_knapping",{onUse:a=>{if(a.source?.typeId==="minecraft:player")void knap(a.source);}});
+event.itemComponentRegistry.registerCustomComponent("tfc:prospect",{onUseOn:a=>{if(a.source?.typeId==="minecraft:player")prospect(a.source,a.block);}});
 event.itemComponentRegistry.registerCustomComponent("tfc:consume_food",{onConsume:(a,p)=>food(a.source,p.params??{})}});
 event.blockComponentRegistry.registerCustomComponent("tfc:station_ui",{onPlayerInteract:a=>{if(a.player)void station(a.player,a.block.typeId.split(":")[1],a.block);}});event.blockComponentRegistry.registerCustomComponent("tfc:heated_station_tick",{onTick:a=>fireTick(a.block)});
 event.blockComponentRegistry.registerCustomComponent("tfc:farmland_interaction",{onPlayerInteract:a=>void farmlandInteract(a.player,a.block),onTick:a=>soilTick(a.block)});
