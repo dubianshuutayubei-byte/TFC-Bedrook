@@ -42,3 +42,9 @@ test("crafting recipe JSON inputs and outputs reference registered TFC items",()
  }
  assert.deepEqual(missing,[]);
 });
+
+test("every food profile maps to a registered food item",()=>{
+ const database=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/food-profiles.json"),"utf8"));
+ const missing=database.foods.map(food=>"tfc:"+food.id).filter(id=>!itemIds.has(id));
+ assert.deepEqual(missing,[]);
+});
