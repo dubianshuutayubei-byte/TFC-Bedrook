@@ -30,7 +30,8 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
     "predatorDiet": [],
     "predationDamage": 0,
     "childCountMin": 1,
-    "childCountMax": 2
+    "childCountMax": 2,
+    "maxBreedUses": 13
   },
   "tfc:black_bear": {
     "speciesId": "black_bear",
@@ -1001,7 +1002,8 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
     "predatorDiet": [],
     "predationDamage": 0,
     "childCountMin": 1,
-    "childCountMax": 1
+    "childCountMax": 1,
+    "maxBreedUses": 16
   },
   "tfc:octopoteuthis": {
     "speciesId": "octopoteuthis",
@@ -1520,6 +1522,7 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
     "predatorDiet": [],
     "predationDamage": 0,
     "childCountMin": 1,
-    "childCountMax": 1
+    "childCountMax": 1,
+    "maxBreedUses": 23
   }
 });
