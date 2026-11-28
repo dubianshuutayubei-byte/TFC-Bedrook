@@ -37,6 +37,18 @@
     },
     "tfc_milk_bottle": {
       "textures": "textures/items/tfc_pottery"
+    },
+    "tfc_maize_seed": {
+      "textures": "textures/items/tfc_seed"
+    },
+    "tfc_potato_seed": {
+      "textures": "textures/items/tfc_seed"
+    },
+    "tfc_maize": {
+      "textures": "textures/items/tfc_grain"
+    },
+    "tfc_potato": {
+      "textures": "textures/items/tfc_grain"
     }
   }
 }
