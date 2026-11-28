@@ -28,3 +28,28 @@ test("animal needs and age update on the periodic loaded-entity tick",()=>{
  assert.match(runtime,/system\.runInterval\(\(\)=>\{for\(const dimensionId of \["overworld","nether","the_end"\]\)/);
  assert.match(runtime,/\},1200\)/);
 });
+
+test("native Bedrock fauna adapters cover domestic, wild, aquatic and amphibian species",()=>{
+ for(const [entity,species,kind] of [
+  ["minecraft:pig","pig","terrestrial"],["minecraft:goat","goat","terrestrial"],
+  ["minecraft:horse","horse","terrestrial"],["minecraft:donkey","donkey","terrestrial"],
+  ["minecraft:mule","mule","terrestrial"],["minecraft:rabbit","rabbit","terrestrial"],
+  ["minecraft:wolf","wolf","terrestrial"],["minecraft:fox","fox","terrestrial"],
+  ["minecraft:polar_bear","polar_bear","terrestrial"],["minecraft:panda","panda","terrestrial"],
+  ["minecraft:ocelot","ocelot","terrestrial"],["minecraft:dolphin","dolphin","aquatic"],
+  ["minecraft:cod","cod","aquatic"],["minecraft:salmon","salmon","aquatic"],
+  ["minecraft:tropicalfish","tropical_fish","aquatic"],["minecraft:pufferfish","pufferfish","aquatic"],
+  ["minecraft:turtle","turtle","aquatic"],["minecraft:frog","frog","amphibian"],
+  ["minecraft:squid","squid","aquatic"]
+ ]){
+  assert.match(runtime,new RegExp('"'+entity.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+'":\\{speciesId:"'+species+'",displayName:'));
+  assert.match(runtime,new RegExp('"'+entity.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")+'":\\{[^}]*kind:"'+kind+'"'));
+ }
+});
+test("animal state stores TFC species identifiers rather than Minecraft namespace identifiers",()=>{
+ assert.match(runtime,/species:profile\?\.speciesId\?\?base\.species\?\?entity\.typeId/);
+});
+test("all supported animal entity types are included in the periodic state update and interaction handlers",()=>{
+ assert.match(runtime,/Object\.keys\(ANIMAL_PROFILES\).*dimension\.getEntities\(\{type\}\).*animalTick/);
+ assert.match(runtime,/if\(ANIMAL_PROFILES\[event\.target\?\.typeId\]\)animalInteract/);
+});
