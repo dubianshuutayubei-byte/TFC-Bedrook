@@ -59,3 +59,9 @@ The existing 63-species legacy climate profiles and 78-species 1.21.x habitat pr
 - Dataset: 78 unique entries, matched against the current 78-species target roster.
 - Tests cover camel and armadillo groundwater constraints, numeric forest density, freshwater fish seasonal and ignore-rivers behavior, deep-water and brightness limits, and panda fuzzy climate rolls.
 - GitHub Actions validates JSON, JavaScript syntax, and Node tests only. It does not launch Minecraft Bedrock or validate entity rendering, spawning, or gameplay in the game.
+
+## Freshwater fish entity source audit
+
+The 4.2.16 `Fish.java` enum registers 16 freshwater fish. All use the shared `FreshwaterFish` entity class. The source dimensions are 0.5 × 0.3 for bluegill and 0.7 × 0.4 for every other fish. The shared class uses the TFC fish movement controller, hooking goal, bucket pickup interaction, water-only fluid check, and water-only ambient sound playback. Salmon alone uses vanilla salmon sound events; other fish register TFC fish sounds by serialized species name.
+
+These facts are transcribed into `packs/behavior_pack/data/official-freshwater-fish-profiles-1.21.1-4.2.16.json` and guarded by `tests/official-freshwater-fish-profiles.test.mjs`. This is a source-data milestone only: it does not mark missing Bedrock fish entities, models, textures, spawn rules, bucket items, or in-game behavior as implemented.
