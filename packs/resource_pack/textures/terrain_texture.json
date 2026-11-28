@@ -39,6 +39,9 @@
     },
     "tfc_smokehouse": {
       "textures": "textures/blocks/tfc_pottery"
+    },
+    "tfc_nest_box": {
+      "textures": "textures/blocks/tfc_pottery"
     }
   }
 }
