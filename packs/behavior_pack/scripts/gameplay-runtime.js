@@ -666,7 +666,7 @@ function layChickenEgg(entity,state,profile,currentDay){
  if(!nest)return state;
  const key=posKey(nest,"nest_box"),stored=readWorldState(key,{eggs:[],lastUpdateDay:currentDay});
  const added=addNestBoxEgg(stored,{id:"hen-"+String(entity.id).replace(/[^a-zA-Z0-9_-]/g,"").slice(-20)+"-"+Math.floor(currentDay*1000),species:"chicken",laidAtDay:currentDay,fertilized:nearbyChickenPair(nest),hatchDays:profile.hatchDays??8});
- if(!added.added)return state;
+ if(!added.added){if(added.reason==="duplicate_egg_id"&&stored.eggs?.some(egg=>egg.id==="hen-"+String(entity.id).replace(/[^a-zA-Z0-9_-]/g,"").slice(-20)+"-"+Math.floor(currentDay*1000)))return recordEggLaid(state,currentDay);return state;}
  const next={...stored,eggs:added.state.eggs,lastUpdateDay:currentDay};
  if(!writeWorldState(key,next))return state;
  return recordEggLaid(state,currentDay);
