@@ -16,6 +16,8 @@ test("official 1.21.x BuiltinFauna provides exact habitat data for all 78 fauna"
  assert.equal(habitat.source.blobs["src/main/java/net/dries007/tfc/world/chunkdata/ChunkData.java"],"0420d41f6c9155cc2c2f7dda553997bc713937be");
  assert.equal(habitat.source.blobs["src/main/java/net/dries007/tfc/util/climate/OverworldClimateModel.java"],"ed0c53f52b87be990269476e333184db00d474eb");
  assert.equal(habitat.source.blobs["src/main/java/net/dries007/tfc/util/climate/ClimateModel.java"],"200efb9bb06e47eeb901dad0dec8eed2175a96cf");
+ assert.equal(habitat.source.blobs["src/main/java/net/dries007/tfc/util/EnvironmentHelpers.java"],"61bc2c05873251d9f45e60a87fb18c4b8ac42c6a");
+ assert.equal(habitat.source.blobs["src/main/java/net/dries007/tfc/world/TFCChunkGenerator.java"],"a325b293552dcdec15d91727ddb8facd8cdd39d9");
  assert.equal(habitat.count,78);
  assert.equal(habitat.species.length,78);
  assert.equal(new Set(habitat.species.map(x=>x.id)).size,78);
