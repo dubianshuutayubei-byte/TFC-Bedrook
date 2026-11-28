@@ -1,4 +1,4 @@
-import { OFFICIAL_FAUNA_PROFILES } from "../packs/behavior_pack/scripts/core/fauna-profiles.mjs";
+import { OFFICIAL_FAUNA_PROFILES, OFFICIAL_LIVESTOCK_LIFECYCLE } from "../packs/behavior_pack/scripts/core/fauna-profiles.mjs";
 import test from"node:test";import assert from"node:assert/strict";import{createAnimalState,createAnimalOffspringState,initializeAnimalLifeStage,canFeedAnimal,advanceAnimalFamiliarityDecay,syncAnimalHealth,advanceAnimalNeeds,feedAnimal,waterAnimal,canBreed,beginPregnancy,advancePregnancy,evaluateHabitat,evaluateFaunaSpawn,canProduce,recordProduct,canLayEgg,recordEggLaid,getOffspringCount} from"../packs/behavior_pack/scripts/core/fauna-service.mjs";
 test("needs and age advance",()=>{const a=advanceAnimalNeeds(createAnimalState({species:"deer"}),2);assert.equal(a.ageDays,2);assert.equal(a.hunger,16);assert.equal(a.thirst,24);});
 test("feeding and watering reduce needs",()=>{const a=feedAnimal({hunger:80,thirst:50},10);assert.equal(a.hunger,45);assert.equal(waterAnimal(a,20).thirst,25);});
@@ -370,4 +370,14 @@ test("animal production rejects individuals that reached their lifetime use limi
  assert.equal(canProduce(eligible,rules),true);
  assert.equal(canProduce({...eligible,uses:3},rules),false);
  assert.equal(canProduce({...eligible,uses:4},rules),false);
+});
+
+test("TFC 1.21.x livestock defaults match the NeoForge reference audit",()=>{
+ assert.equal(OFFICIAL_LIVESTOCK_LIFECYCLE.rabbit.adultAgeDays,30);
+ assert.equal(OFFICIAL_LIVESTOCK_LIFECYCLE.cow.adultAgeDays,192);
+ assert.equal(OFFICIAL_LIVESTOCK_LIFECYCLE.cow.gestationDays,58);
+ assert.equal(OFFICIAL_LIVESTOCK_LIFECYCLE.goat.productCooldownDays,3);
+ assert.equal(OFFICIAL_LIVESTOCK_LIFECYCLE.chicken.eggLayCooldownDays,30/24);
+ assert.equal(OFFICIAL_LIVESTOCK_LIFECYCLE.dromedary_camel.gestationDays,19);
+ assert.equal(OFFICIAL_LIVESTOCK_LIFECYCLE.bactrian_camel.productCooldownDays,7);
 });
