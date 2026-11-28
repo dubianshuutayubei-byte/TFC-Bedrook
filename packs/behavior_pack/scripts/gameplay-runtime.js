@@ -60,7 +60,7 @@ const FERTILIZER_PROFILES=Object.freeze({
 const WEATHER_BY_DIMENSION=new Map([["overworld","clear"]]);
 const ANIMAL_PROFILES={
  "tfc:deer":{speciesId:"deer",displayName:"シカ",adultAgeDays:30,requiredFamiliarity:35,breedingCooldownDays:20,gestationDays:210,customBreeding:true,feedItems:["minecraft:wheat","minecraft:wheat_seeds"],grazeBlocks:["minecraft:grass_block","minecraft:tallgrass"],kind:"terrestrial",domestic:false},
- "minecraft:cow":{adultAgeDays:192,speciesId:"cow",displayName:"ウシ",requiredFamiliarity:30,customBreeding:false,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
+ "minecraft:cow":{adultAgeDays:192,speciesId:"cow",displayName:"ウシ",requiredFamiliarity:30,customBreeding:false,dairy:true,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
  "minecraft:sheep":{adultAgeDays:56,speciesId:"sheep",displayName:"ヒツジ",requiredFamiliarity:25,customBreeding:false,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
  "minecraft:chicken":{adultAgeDays:24,speciesId:"chicken",displayName:"ニワトリ",requiredFamiliarity:20,customBreeding:false,feedItems:["minecraft:wheat_seeds","minecraft:beetroot_seeds","minecraft:melon_seeds","minecraft:pumpkin_seeds"],grazeBlocks:[],kind:"terrestrial",domestic:true},
  "minecraft:pig":{speciesId:"pig",displayName:"ブタ",adultAgeDays:null,requiredFamiliarity:20,customBreeding:false,feedItems:["minecraft:carrot","minecraft:potato","minecraft:beetroot"],grazeBlocks:[],kind:"terrestrial",domestic:true},
