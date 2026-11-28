@@ -19,3 +19,19 @@ test("official predator, prey, livestock, fish and aquatic classes are preserved
  for(const id of ["alpaca","sheep","musk_ox"])assert.equal(archetypes.species.find(x=>x.id===id).archetype,"wool_livestock");
  for(const id of ["bluegill","crappie","lake_trout","largemouth_bass","rainbow_trout","salmon","smallmouth_bass"])assert.equal(archetypes.species.find(x=>x.id===id).archetype,"freshwater_fish");
 });
+
+const coverage=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/fauna-runtime-coverage.json"),"utf8"));
+const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
+test("runtime fauna coverage is an exact partition of the 63-species official roster",()=>{
+ assert.equal(coverage.total,63);
+ assert.equal(coverage.runtimeTrackedCount,coverage.runtimeTrackedSpecies.length);
+ assert.equal(coverage.remainingCount,coverage.requiresSpeciesImplementation.length);
+ assert.equal(coverage.runtimeTrackedCount+coverage.remainingCount,63);
+ const tracked=new Set(coverage.runtimeTrackedSpecies);
+ const remaining=new Set(coverage.requiresSpeciesImplementation);
+ assert.equal(tracked.size,coverage.runtimeTrackedSpecies.length);
+ assert.equal(remaining.size,coverage.requiresSpeciesImplementation.length);
+ for(const id of tracked){assert.ok(roster.species.some(x=>x.id===id),id);assert.ok(runtime.includes('speciesId:"'+id+'"'),id);}
+ for(const id of remaining){assert.ok(roster.species.some(x=>x.id===id),id);assert.ok(!tracked.has(id),id);}
+ for(const x of roster.species)assert.ok(tracked.has(x.id)||remaining.has(x.id),x.id);
+});
