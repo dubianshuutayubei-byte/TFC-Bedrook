@@ -559,6 +559,11 @@ world.afterEvents.itemUse.subscribe(event=>{
  if(player?.typeId==="minecraft:player"&&player.isSneaking&&stack?.typeId==="minecraft:clay_ball")void shapePottery(player);
 });
 world.afterEvents.playerInteractWithEntity.subscribe(event=>{if(ANIMAL_PROFILES[event.target?.typeId])animalInteract(event.player,event.target);});
+world.afterEvents.itemUse.subscribe(event=>{
+ const player=event.source,stack=event.itemStack;
+ if(player?.typeId==="minecraft:player"&&player.isSneaking&&stack?.typeId==="minecraft:clay_ball")void shapePottery(player);
+});
+
 
 
 
