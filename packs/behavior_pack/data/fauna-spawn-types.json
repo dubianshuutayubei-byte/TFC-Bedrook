@@ -1,0 +1,390 @@
+{
+  "source": "TerraFirmaCraft v3.2.26 src/main/java/net/dries007/tfc/common/entities/Faunas.java",
+  "total": 63,
+  "placementCounts": {
+    "in_water": 20,
+    "no_restrictions": 1,
+    "on_ground": 42
+  },
+  "species": [
+    {
+      "id": "alpaca",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "black_bear",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "bluegill",
+      "placement": "in_water",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "boar",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "bongo",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "caribou",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "chicken",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "cod",
+      "placement": "in_water",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "cougar",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "cow",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "crappie",
+      "placement": "in_water",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "crayfish",
+      "placement": "in_water",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "crocodile",
+      "placement": "no_restrictions",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "deer",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "direwolf",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "dolphin",
+      "placement": "in_water",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "donkey",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "duck",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "fox",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "frog",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "gazelle",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "goat",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "grizzly_bear",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "grouse",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "horse",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "horseshoe_crab",
+      "placement": "in_water",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "hyena",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "isopod",
+      "placement": "in_water",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "jellyfish",
+      "placement": "in_water",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "lake_trout",
+      "placement": "in_water",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "largemouth_bass",
+      "placement": "in_water",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "lion",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "lobster",
+      "placement": "in_water",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "manatee",
+      "placement": "in_water",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "moose",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "mule",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "musk_ox",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "ocelot",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "octopoteuthis",
+      "placement": "in_water",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "orca",
+      "placement": "in_water",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "panda",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "panther",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "peafowl",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "penguin",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "pheasant",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "pig",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "polar_bear",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "pufferfish",
+      "placement": "in_water",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "quail",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "rabbit",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "rainbow_trout",
+      "placement": "in_water",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "sabertooth",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "salmon",
+      "placement": "in_water",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "sheep",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "smallmouth_bass",
+      "placement": "in_water",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "squid",
+      "placement": "in_water",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "tiger",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "tropical_fish",
+      "placement": "in_water",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "turkey",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "turtle",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "wildebeest",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "wolf",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "yak",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    }
+  ],
+  "caveat": "This records official placement categories only. It is not a Bedrock spawn-rule implementation; per-species climate, light, sea-level, terrain, fluid and density checks still need Bedrock-compatible runtime sampling."
+}
