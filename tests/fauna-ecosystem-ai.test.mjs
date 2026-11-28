@@ -52,3 +52,25 @@ test("leopard seal targets the TFC small-fish family",()=>{const seal=entities.f
 test("bison uses a defensive ram response with a TFC-like cooldown window",()=>{const bison=entities.find(x=>x.name==="bison.json");const c=bison.entity.components;assert.ok(c["minecraft:behavior.hurt_by_target"]);const ram=c["minecraft:behavior.ram_attack"];assert.ok(ram);assert.deepEqual(ram.cooldown_range,{min:30,max:80});assert.equal(ram.min_ram_distance,4);assert.equal(ram.ram_distance,9);assert.equal(ram.knockback_force,2.5);});
 
 test("armadillo has a damage-triggered defensive play-dead response as a Bedrock approximation of TFC rolling",()=>{const armadillo=entities.find(x=>x.name==="armadillo.json");const behavior=armadillo.entity.components["minecraft:behavior.play_dead"];assert.ok(behavior);assert.equal(behavior.duration,4);assert.equal(behavior.random_start_chance,1);assert.deepEqual(behavior.damage_sources,["entity_attack","projectile"]);});
+
+import { getFaunaPredators, FAUNA_ECOLOGY } from "../packs/behavior_pack/scripts/core/fauna-ecology-service.mjs";
+const roster=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/fauna-roster.json"),"utf8"));
+const rosterIds=new Set(roster.species.map(entry=>typeof entry==="string"?entry:entry.id));
+
+test("every predator-prey relationship references species in the official TFC roster",()=>{
+ for(const [predator,profile] of Object.entries(FAUNA_ECOLOGY)){
+  assert.ok(rosterIds.has(predator),`unknown predator species: ${predator}`);
+  assert.ok(profile.prey.length>0,`${predator} has no prey`);
+  assert.equal(new Set(profile.prey).size,profile.prey.length,`${predator} has duplicate prey`);
+  for(const prey of profile.prey){
+   assert.ok(rosterIds.has(prey),`${predator} references unknown prey ${prey}`);
+   assert.ok(getFaunaPredators(prey).includes(predator),`reverse predator index missing ${predator} -> ${prey}`);
+  }
+ }
+});
+
+test("fauna prey queries return isolated arrays",()=>{
+ const first=getFaunaPrey("leopard_seal");
+ first.push("not_a_species");
+ assert.equal(getFaunaPrey("leopard_seal").includes("not_a_species"),false);
+});
