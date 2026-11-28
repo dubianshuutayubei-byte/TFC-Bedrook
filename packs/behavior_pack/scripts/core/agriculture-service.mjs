@@ -129,3 +129,20 @@ export function applyCropNutrientEffects(soilInput, effects = {}, intensity = 1)
   }
   return soil;
 }
+
+const SOIL_FERTILITY_BY_BIOME = Object.freeze({
+  "minecraft:basalt_deltas": "andisol"
+});
+
+export function inferSoilFertilityClassFromBiomeId(biomeId) {
+  const id = String(biomeId ?? "").toLowerCase();
+  if (SOIL_FERTILITY_BY_BIOME[id]) return SOIL_FERTILITY_BY_BIOME[id];
+  if (id.includes("volcanic")) return "andisol";
+  if (id.includes("river")) return "fluvisol";
+  if (id.includes("jungle") || id.includes("mangrove")) return "oxisol";
+  if (id.includes("desert") || id.includes("badlands") || id.includes("savanna")) return "aridisol";
+  if (id.includes("taiga") || id.includes("grove") || id.includes("pine")) return "podzol";
+  if (id.includes("forest") || id.includes("birch") || id.includes("cherry")) return "alfisol";
+  if (id.includes("snowy_plains") || id.includes("ice_spikes") || id.includes("meadow")) return "mollisol";
+  return "entisol";
+}
