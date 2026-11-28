@@ -53,6 +53,9 @@
 - 産出回数上限到達時の老齢化猶予期間について、サービス層では継続産出を許可していた一方、乳・羊毛の操作UIが `uses >= maxUses` で即時拒否していた不整合を修正した。現在は `oldDay` までは産出可能、期限経過後または `lifeStage=old` で停止する。回帰テストを追加し、CIで338件すべて成功。
 - 交配時にオスの共通使用回数を5増やすJava TFCの仕様を確認し、Bedrock側の処理を維持する回帰テストを追加した。繁殖回数は乳・羊毛・卵の使用回数とは別カウンターではなく、Java参照どおり共通の老齢化カウンターに加算する。CIで341件すべて成功。
 - Java 1.21.xの `TFCEntities` と `ServerConfig` を再照合し、ヒトコブラクダ・フタコブラクダ・ネコ・イヌのランタイム種別プロファイルを追加した。成熟・妊娠・子数・使用回数はServerConfig既定値に接続。餌候補は `CAMEL_FOOD`（穀物・果物）、`CAT_FOOD`（穀物・加熱肉・乳製品・加熱魚）、`DOG_FOOD`（肉類）の公式タグ構成を参照して、現行Bedrockアイテムに存在する範囲で登録した。プロファイル接続のCIは342件すべて成功。ただし4種のBedrock Entity定義・専用モデル/テクスチャ・スポーン・専用AIは未実装であり、ゲーム内対応済みとは扱わない。
+- 追加監査で `ServerConfig.java` の既定値を再検証し、4種の値を `OFFICIAL_LIVESTOCK_LIFECYCLE` に集約。フタコブラクダは `ProducingMammalConfig` + `IShearable` のため `wooly=true` とし、168時間の毛再生間隔（7日）を反映。イヌは `dogEatsRottenFood=true` のため `tfc:spoiled_food` を餌候補へ追加。成長イベント対象にも4種を接続した。
+- `BuiltinFauna.java` ではヒトコブラクダが `maxGroundwater(100)` + `minTemperature(-5)`、フタコブラクダが `maxGroundwater(100)` + `maxTemperature(-5)`。これは降雨量ではなく地下水条件であるため、現行Bedrockの降雨量プロファイルへ誤変換しない。地下水を取得・評価する環境層が未実装のため、正確な自然スポーン制限は保留。
+- `Faunas.java` はラクダ2種を自然スポーン対象として登録する一方、ネコ・イヌは `TFCEntities` / spawn egg と `ServerConfig` に存在するが `Faunas` の自然スポーン登録には含まれない。したがってネコ・イヌにラクダと同じ自然スポーン規則を与えない。
 
 ## 残作業（完成判定に必要）
 
