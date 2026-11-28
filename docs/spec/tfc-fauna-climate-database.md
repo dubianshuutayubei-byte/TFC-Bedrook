@@ -84,7 +84,25 @@
 | wolf | -12 | 17 | 150 | 420 | — | normal | — | |
 | yak | — | -11 | 100 | — | — | — | — | |
 
-## 3. 設計上の重要点
+## 3. 1.21.xの全78種スポーン配置監査
+
+2026-11-28追記。`Faunas.java` と `aquatic/Fish.java` の登録経路を確認し、78種すべての配置タイプを別データとして記録した。
+
+| 配置 | 種数 | Java側の登録経路 |
+|---|---:|---|
+| in_water | 29 | `FISH.values()` / `registerFish` を含む水生登録 |
+| on_ground | 48 | `registerAnimal` |
+| no_restrictions | 1 | `registerAmphibiousPredator`（crocodile） |
+
+従来の気候JSON 63種に存在しない15種も、配置タイプだけはJava登録経路から確定できる。淡水魚9種（arctic_char, burbot, muksun, northern_pike, pacu, peacock_bass, red_piranha, spotted_gudgeon, tilapia）は `FISH.values()` 経由で `in_water`。陸上6種（armadillo, bactrian_camel, bison, dromedary_camel, leopard_seal, pond_turtle）は `registerAnimal` 経由で `on_ground`。
+
+**注意：** この15種には気候JSONの裏付けがないため、気温・降水量・森林・深度などの制約は追加していない。配置タイプが判明したことは、自然スポーン条件全体やBedrock実装が完成したことを意味しない。
+
+公式参照：
+- `TerraFirmaCraft/src/main/java/net/dries007/tfc/common/entities/Faunas.java`（1.21.x）
+- `TerraFirmaCraft/src/main/java/net/dries007/tfc/common/entities/aquatic/Fish.java`（1.21.x）
+
+## 4. 設計上の重要点
 
 1. 陸上動物は温度だけでなく、降水量と森林密度の条件を持つ個体が多い。
 2. 水生動物はBelow sea levelを指定するものがあり、海面下の深さがスポーン条件の一部になる。
@@ -94,7 +112,7 @@
 6. これらは生息可能範囲であって、個体数を直接決めるものではない。Bedrock側ではBiome/Climate判定とスポーン密度・群れ生成を分離する。
 7. Fauna profileにない行動・繁殖・家畜化・成長・ドロップは別のEntity / code / lootデータから抽出する必要がある。
 
-## 4. Bedrock実装への変換
+## 5. Bedrock実装への変換
 
 - Climate Serviceが温度・降水量・森林密度を返す。
 - Fauna Profileは共通スキーマとして保持し、Entityごとに異なる条件だけを埋める。
@@ -104,7 +122,7 @@
 - 家畜・野生動物・海洋生物のAIは生息条件と別モジュールにする。
 - TFCの温度・降水スケールをBedrock側の気候計算へ正規化する。
 
-## 5. 公式ソース
+## 6. 公式ソース
 
 - [TFC v3.2.26 Fauna Profiles](https://github.com/TerraFirmaCraft/TerraFirmaCraft/tree/v3.2.26/src/main/resources/data/tfc/tfc/fauna)
 - [TFC Field Guide - Animals](https://terrafirmacraft.github.io/Field-Guide/20/en_us/the_world/animals.html)
