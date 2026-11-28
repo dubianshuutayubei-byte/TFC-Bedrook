@@ -3,7 +3,7 @@ import { ActionFormData } from "@minecraft/server-ui";
 import { deserializePlayerState, serializePlayerState, applyHydration, applyNutrition } from "./core/player-state-service.mjs";
 import { createFireState, addFuel, advanceFire, canProcessAtTemperature } from "./core/firepit-service.mjs";
 import { createSoilState, applySoilCompost, advanceSoilHydration } from "./core/agriculture-service.mjs";
-import { createAnimalState, advanceAnimalNeeds, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy } from "./core/fauna-service.mjs";
+import { createAnimalState, advanceAnimalNeeds, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal } from "./core/fauna-service.mjs";
 import { getStationRecipes } from "./core/processing-recipes.mjs";
 import { isStationJobDue, getPendingStationOutputs, markStationOutputDelivered, markStationJobRecoverable } from "./core/station-job-service.mjs";
 
@@ -140,10 +140,10 @@ function animalTick(entity){
    }
   }
   if(waterNearby)state=waterAnimal(state,1.5);
-  if(forageNearby)state.hunger=Math.max(0,state.hunger-2);
+  if(forageNearby)state=grazeAnimal(state,{hungerReduction:2});
  }catch{}
  try{const hp=entity.getComponent("minecraft:health");if(hp)hp.setCurrentValue(Math.max(0,hp.effectiveMax*state.health/100));}catch{}
- if(state.pregnancyDays>0){const result=advancePregnancy(state,0.05,profile.gestationDays);state=result.animal;if(result.birthReady){try{entity.dimension.spawnEntity(entity.typeId,{x:entity.location.x+1,y:entity.location.y,z:entity.location.z});}catch{}state.pregnancyDays=0;}}
+ if(state.pregnancyDays>0){const result=advancePregnancy(state,0.05,profile.gestationDays);state=result.animal;if(result.birthReady){let born=false;try{entity.dimension.spawnEntity(entity.typeId,{x:entity.location.x+1,y:entity.location.y,z:entity.location.z});born=true;}catch(error){console.warn("[TFC-Bedrook] animal birth deferred:",error);}if(born)state.pregnancyDays=0;}}
  if(state.sex==="unknown")state.sex=Math.random()<0.5?"male":"female";
  if(state.sex==="female"&&state.ageDays>=profile.adultAgeDays&&state.familiarity>=profile.requiredFamiliarity&&state.hunger<60&&state.thirst<60&&state.pregnancyDays===0){
   try{const nearby=entity.dimension.getEntities({type:entity.typeId,location:entity.location,maxDistance:6});for(const partner of nearby){if(partner.id===entity.id)continue;const other=animalState(partner);if(canBreed(state,other,profile)){const started=beginPregnancy(state,other,profile);if(started.started){state=started.animal;other.lastBreedAt=other.ageDays;saveAnimal(partner,other);break;}}}}catch{}
