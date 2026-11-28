@@ -17,3 +17,18 @@ test("animal health sync preserves damage instead of restoring full health",()=>
  const invalid=syncAnimalHealth(damaged,6,0);
  assert.equal(invalid.health,60);
 });
+
+test("product eligibility checks maturity, sex, health, needs and cooldown",()=>{
+ const cow={species:"minecraft_cow",sex:"female",ageDays:200,health:90,hunger:20,thirst:20,familiarity:10,lastProductAt:10};
+ const rules={requiredSex:"female",minimumAgeDays:192,minimumHealth:50,maximumHunger:60,maximumThirst:60,cooldownDays:1,currentDay:11};
+ assert.equal(canProduce(cow,rules),true);
+ assert.equal(canProduce({...cow,sex:"male"},rules),false);
+ assert.equal(canProduce({...cow,ageDays:100},rules),false);
+ assert.equal(canProduce({...cow,health:20},rules),false);
+ assert.equal(canProduce({...cow,hunger:80},rules),false);
+ assert.equal(canProduce({...cow,lastProductAt:11},rules),false);
+});
+
+test("product eligibility rejects time moving backwards",()=>{
+ assert.equal(canProduce({species:"cow",ageDays:200,lastProductAt:10},{currentDay:9}),false);
+});
