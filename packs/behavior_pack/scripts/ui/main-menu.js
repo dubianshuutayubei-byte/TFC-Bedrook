@@ -50,7 +50,6 @@ async function showPlayerStatus(player) {
   const nutrition = Object.entries(state.nutrition).map(([key, value]) => `${key}: ${Math.round(value)}`).join("\n");
   await showInfo(player, "プレイヤー情報", [
     `水分: ${Math.round(state.hydration)} / 100`,
-    `体温基準値: ${state.temperature} °C`,
     "",
     "栄養:",
     nutrition,
