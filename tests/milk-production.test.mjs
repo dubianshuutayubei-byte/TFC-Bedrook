@@ -13,7 +13,7 @@ test("adult cows produce milk bottles with a per-animal cooldown",()=>{
   assert.match(runtime,/entity\.typeId==="minecraft:cow"&&held\.typeId==="minecraft:glass_bottle"/);
   assert.match(runtime,/canProduce\(state,\{requiredFamiliarity:0,cooldownDays:1,currentDay\}\)/);
   assert.match(runtime,/state\.sex!=="female"/);
-  assert.match(runtime,/recordProduct\(state,currentDay\)/);\n  assert.match(runtime,/state\.sex!=="female"/);
+  assert.match(runtime,/recordProduct\(state,currentDay\)/);
 });
 
 test("milk bottle is registered as the dairy food profile",()=>{
