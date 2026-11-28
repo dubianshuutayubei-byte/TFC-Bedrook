@@ -276,19 +276,6 @@ async function processQuernManually(player,block,recipe){
  player.sendMessage("§a粉挽き完了: "+recipe.title);
 }
 
-function openFoodDetail(player,stack){
- if(!player||!stack)return;
- const id=stack.typeId,baseDecay=FOOD_DECAY_PROFILES[id];
- if(baseDecay===undefined&&id!=="tfc:spoiled_food")return;
- let lore=[];try{lore=stack.getLore();}catch{}
- const freshness=id==="tfc:spoiled_food"?0:readStackFreshness(lore).freshness;
- const stage=id==="tfc:spoiled_food"||freshness<=0?"腐敗":freshness>=75?"新鮮":freshness>=40?"劣化中":"腐敗間近";
- const color=stage==="新鮮"?"§a":stage==="劣化中"?"§e":"§c";
- const body="食品: "+(ITEM_LABELS[id]??id)+"\n個数: "+stack.amount+"\n鮮度: "+Math.round(freshness)+"%（"+stage+"）\n腐敗速度: "+(baseDecay===undefined?"腐敗済み":(baseDecay*100).toFixed(1)+"% / 実時間1時間")+
- "\n\n"+(id==="tfc:spoiled_food"?"この食品は食べられません。":freshness<=0?"腐敗しています。":"鮮度は食品スタック単位で保存され、移動しても引き継がれます。");
- const form=new ActionFormData().title("食品の状態").body(color+body).button("閉じる");
- void form.show(player).catch(()=>player.sendMessage(body));
-}
 async function shapePottery(player){
  const form=new ActionFormData().title("粘土成形").body("粘土玉を使って未焼成品を成形します。\n\n土器: 粘土玉 4個\nインゴット鋳型: 粘土玉 8個\n\n成形後はPit Kilnで焼成してください。").button("土器を成形（粘土玉×4）").button("インゴット鋳型を成形（粘土玉×8）").button("閉じる");
  let response;try{response=await form.show(player);}catch{return;}
@@ -568,15 +555,7 @@ system.runInterval(()=>{try{tickTrackedFoodContainers(system.currentTick);}catch
 system.runInterval(()=>{for(const player of world.getAllPlayers()){try{tickMetalHeat(player,system.currentTick);}catch(error){console.warn("[TFC-Bedrook] metal heat tick failed:",error);}}},20);
 });
 world.afterEvents.playerInteractWithEntity.subscribe(event=>{if(ANIMAL_PROFILES[event.target?.typeId])animalInteract(event.player,event.target);});
-world.afterEvents.itemUse.subscribe(event=>{
- const player=event.source,stack=event.itemStack;if(!player||player.typeId!=="minecraft:player"||!stack)return;
- if(player.isSneaking&&stack.typeId==="minecraft:clay_ball"){void shapePottery(player);return;}
- if(player.isSneaking&&(FOOD_DECAY_PROFILES[stack.typeId]!==undefined||stack.typeId==="tfc:spoiled_food")){
-  const container=inv(player),slot=player.selectedSlotIndex;
-  if(container){const current=container.getItem(slot);if(current&&current.typeId===stack.typeId){const lore=current.getLore?.()??[],advanced=advanceStackFreshness(lore,system.currentTick,{temperatureC:temperatureAt(player.dimension,player.location),baseDecayPerHour:FOOD_DECAY_PROFILES[stack.typeId]??0});try{current.setLore(advanced.lore);container.setItem(slot,current);}catch{}openFoodDetail(player,current);return;}}
-  openFoodDetail(player,stack);
- }
-});
+
 
 
 world.afterEvents.playerInteractWithBlock.subscribe(event=>{
