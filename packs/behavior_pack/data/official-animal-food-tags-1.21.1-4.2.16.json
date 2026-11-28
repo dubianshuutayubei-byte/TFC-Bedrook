@@ -385,8 +385,7 @@
         "tfc:food/dried_kelp",
         "tfc:food/dried_seaweed"
       ],
-      "bedrockFeedItems": [],
-      "missingBedrockItems": [
+      "bedrockFeedItems": [
         "tfc:food/dried_kelp",
         "tfc:food/dried_seaweed"
       ]
