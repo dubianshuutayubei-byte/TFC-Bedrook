@@ -78,12 +78,21 @@ test("aquatic fauna distinguish swimming fish from seafloor shellfish",()=>{
  assert.equal(manatee.breathes_water,true);
 });
 
-test("predators follow TFC day/night schedules and only threaten players after a recent hunt",()=>{
+test("predators follow TFC day/night schedules, territory and post-kill pacification",()=>{
  assert.match(runtime,/profile\.diurnal!==undefined/);
- assert.match(runtime,/state\.lastHuntAt>=0&&currentDay-state\.lastHuntAt<=0\.25/);
+ assert.match(runtime,/state\.lastHuntAt>=0&&currentDay-state\.lastHuntAt<=0\.5\)return state/);
+ assert.match(runtime,/homeDx\*homeDx\+homeDy\*homeDy\+homeDz\*homeDz>6400/);
  assert.match(runtime,/player\.applyDamage\(profile\.playerAttackDamage\?\?3\)/);
+ assert.match(runtime,/if\(remaining<=0\)\{state\.hunger=Math\.max\(0,state\.hunger-28\);state\.lastHuntAt=currentDay;\}/);
  for(const id of ["black_bear","grizzly_bear"])assert.equal(CUSTOM_FAUNA_PROFILES["tfc:"+id].diurnal,true);
  for(const id of ["cougar","panther","lion","sabertooth","tiger","hyena","direwolf","crocodile"])assert.equal(CUSTOM_FAUNA_PROFILES["tfc:"+id].diurnal,false);
+});
+
+test("boar, wildebeest and moose have species-specific ramming behavior",()=>{
+ for(const id of ["boar","wildebeest","moose"])assert.equal(CUSTOM_FAUNA_PROFILES["tfc:"+id].ramming,true);
+ assert.match(runtime,/function tickRamming\(entity,profile,state,currentDay\)/);
+ assert.match(runtime,/target\.applyDamage\(profile\.ramDamage\?\?6\)/);
+ assert.match(runtime,/target\.applyKnockback/);
 });
 
 test("custom prey avoid predator family while predator archetypes can target prey",()=>{
@@ -91,6 +100,7 @@ test("custom prey avoid predator family while predator archetypes can target pre
   const e=read("packs/behavior_pack/entities/"+id+".json")["minecraft:entity"].components;
   assert.ok(e["minecraft:behavior.avoid_mob_type"],id+" missing predator avoidance");
   assert.ok(e["minecraft:behavior.panic"],id+" missing panic behavior");
+  assert.ok(e["minecraft:behavior.avoid_mob_type"].entity_types.some(t=>t.filters?.value==="player"),id+" should fear players");
  }
  for(const id of ["black_bear","grizzly_bear","cougar","lion","tiger","hyena","direwolf","crocodile"]){
   const e=read("packs/behavior_pack/entities/"+id+".json")["minecraft:entity"].components;
