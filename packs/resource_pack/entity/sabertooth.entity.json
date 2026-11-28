@@ -10,7 +10,7 @@
         "default": "textures/entity/tfc_fauna_atlas"
       },
       "geometry": {
-        "default": "geometry.tfc.sabertooth"
+        "default": "geometry.tfc.fauna.sabertooth"
       },
       "render_controllers": [
         "controller.render.tfc_fauna"

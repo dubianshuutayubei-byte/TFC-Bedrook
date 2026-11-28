@@ -10,7 +10,7 @@
         "default": "textures/entity/tfc_fauna_atlas"
       },
       "geometry": {
-        "default": "geometry.tfc.quail"
+        "default": "geometry.tfc.fauna.quail"
       },
       "render_controllers": [
         "controller.render.tfc_fauna"

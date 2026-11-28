@@ -10,7 +10,7 @@
         "default": "textures/entity/tfc_fauna_atlas"
       },
       "geometry": {
-        "default": "geometry.tfc.pheasant"
+        "default": "geometry.tfc.fauna.pheasant"
       },
       "render_controllers": [
         "controller.render.tfc_fauna"

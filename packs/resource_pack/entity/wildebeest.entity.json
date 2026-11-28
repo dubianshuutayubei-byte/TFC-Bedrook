@@ -10,7 +10,7 @@
         "default": "textures/entity/tfc_fauna_atlas"
       },
       "geometry": {
-        "default": "geometry.tfc.wildebeest"
+        "default": "geometry.tfc.fauna.wildebeest"
       },
       "render_controllers": [
         "controller.render.tfc_fauna"

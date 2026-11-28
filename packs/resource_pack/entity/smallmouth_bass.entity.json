@@ -10,7 +10,7 @@
         "default": "textures/entity/tfc_fauna_atlas"
       },
       "geometry": {
-        "default": "geometry.tfc.smallmouth_bass"
+        "default": "geometry.tfc.fauna.smallmouth_bass"
       },
       "render_controllers": [
         "controller.render.tfc_fauna"

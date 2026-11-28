@@ -12,27 +12,21 @@
         "family": [
           "animal",
           "mob",
-          "tfc_fauna",
-          "tfc_prey",
-          "tfc_smallmouth_bass"
+          "tfc_aquatic",
+          "tfc_fauna_smallmouth_bass"
         ]
       },
       "minecraft:nameable": {},
       "minecraft:health": {
-        "value": 8,
-        "max": 8
+        "value": 10,
+        "max": 10
       },
       "minecraft:collision_box": {
-        "width": 0.8,
-        "height": 0.6
+        "width": 0.6,
+        "height": 0.8
       },
       "minecraft:movement": {
-        "value": 0.18
-      },
-      "minecraft:navigation.generic": {},
-      "minecraft:movement.generic": {},
-      "minecraft:underwater_movement": {
-        "value": 0.08
+        "value": 0.16
       },
       "minecraft:physics": {},
       "minecraft:pushable": {
@@ -42,37 +36,28 @@
       "minecraft:behavior.float": {
         "priority": 0
       },
+      "minecraft:behavior.look_at_player": {
+        "priority": 7,
+        "look_distance": 8
+      },
+      "minecraft:behavior.random_look_around": {
+        "priority": 8
+      },
+      "minecraft:navigation.swim": {
+        "can_path_over_water": true
+      },
+      "minecraft:movement.swim": {},
       "minecraft:behavior.swim_wander": {
         "priority": 6,
-        "look_ahead": 5
-      }
-    },
-    "component_groups": {
-      "tfc:baby": {
-        "minecraft:is_baby": {},
-        "minecraft:scale": {
-          "value": 0.55
-        },
-        "minecraft:behavior.follow_parent": {
-          "priority": 5,
-          "speed_multiplier": 1.1
-        }
-      }
-    },
-    "events": {
-      "tfc:spawn_baby": {
-        "add": {
-          "component_groups": [
-            "tfc:baby"
-          ]
-        }
+        "interval": 120,
+        "look_ahead": 10,
+        "speed_multiplier": 1
       },
-      "tfc:grow_up": {
-        "remove": {
-          "component_groups": [
-            "tfc:baby"
-          ]
-        }
+      "minecraft:breathable": {
+        "total_supply": 15,
+        "suffocate_time": 0,
+        "breathes_air": false,
+        "breathes_water": true
       }
     }
   }

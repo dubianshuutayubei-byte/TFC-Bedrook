@@ -1,0 +1,182 @@
+{
+  "format_version": "1.12.0",
+  "minecraft:geometry": [
+    {
+      "description": {
+        "identifier": "geometry.tfc.crayfish",
+        "texture_width": 256,
+        "texture_height": 256,
+        "visible_bounds_width": 2.5,
+        "visible_bounds_height": 2.5,
+        "visible_bounds_offset": [
+          0,
+          0.8,
+          0
+        ]
+      },
+      "bones": [
+        {
+          "name": "shell",
+          "pivot": [
+            0,
+            7,
+            0
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -5,
+                4,
+                -5
+              ],
+              "size": [
+                10,
+                4,
+                10
+              ],
+              "uv": [
+                0,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "head",
+          "parent": "shell",
+          "pivot": [
+            0,
+            7,
+            -5
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -2,
+                5,
+                -8
+              ],
+              "size": [
+                4,
+                3,
+                4
+              ],
+              "uv": [
+                0,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_fl",
+          "parent": "shell",
+          "pivot": [
+            -5,
+            5,
+            -4
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -5,
+                2,
+                -4
+              ],
+              "size": [
+                2,
+                2,
+                3
+              ],
+              "uv": [
+                0,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_fr",
+          "parent": "shell",
+          "pivot": [
+            3,
+            5,
+            -4
+          ],
+          "cubes": [
+            {
+              "origin": [
+                3,
+                2,
+                -4
+              ],
+              "size": [
+                2,
+                2,
+                3
+              ],
+              "uv": [
+                0,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_bl",
+          "parent": "shell",
+          "pivot": [
+            -5,
+            5,
+            2
+          ],
+          "cubes": [
+            {
+              "origin": [
+                -5,
+                2,
+                2
+              ],
+              "size": [
+                2,
+                2,
+                3
+              ],
+              "uv": [
+                0,
+                32
+              ]
+            }
+          ]
+        },
+        {
+          "name": "leg_br",
+          "parent": "shell",
+          "pivot": [
+            3,
+            5,
+            2
+          ],
+          "cubes": [
+            {
+              "origin": [
+                3,
+                2,
+                2
+              ],
+              "size": [
+                2,
+                2,
+                3
+              ],
+              "uv": [
+                0,
+                32
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
