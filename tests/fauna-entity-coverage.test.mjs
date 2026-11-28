@@ -10,6 +10,8 @@ const archetypes=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/fau
 const geometry=JSON.parse(readFileSync(join(root,"packs/resource_pack/models/entity/fauna-archetypes.geo.json"),"utf8"));
 const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
 test("all 63 TFC fauna have shared runtime profiles and entity coverage",()=>{
+ assert.equal(coverage.officialSourceVersion,"TerraFirmaCraft 1.21.1-4.2.16");
+ assert.equal(coverage.officialSourceTag,"v4.2.16");
  assert.equal(coverage.total,78);
  assert.equal(coverage.officialSpawnPlacementCount,78);
  assert.deepEqual(coverage.officialSpawnPlacementCounts,{in_water:29,no_restrictions:1,on_ground:48});
