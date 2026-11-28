@@ -156,7 +156,7 @@ test("animal runtime applies daily familiarity decay and capped TFC feeding gain
 });
 
 test("custom births trigger juvenile state and persist remaining litter count",()=>{
- assert.match(runtime,/child\.triggerEvent\("tfc:spawn_baby"\)/);
+ assert.match(runtime,/baby\.triggerEvent\("tfc:spawn_baby"\)/);
  assert.match(runtime,/createAnimalOffspringState\(state,profile\.speciesId/);
  assert.match(runtime,/state\.birthsRemaining=Math\.max\(1,Math\.floor\(profile\.childCount\?\?1\)\)/);
  assert.match(runtime,/state\.birthsRemaining-=1/);
