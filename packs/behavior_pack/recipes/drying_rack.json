@@ -1,0 +1,28 @@
+{
+  "format_version": "1.20.10",
+  "minecraft:recipe_shaped": {
+    "description": {
+      "identifier": "tfc:drying_rack"
+    },
+    "tags": [
+      "crafting_table"
+    ],
+    "pattern": [
+      "SSS",
+      " W ",
+      "SSS"
+    ],
+    "key": {
+      "S": {
+        "item": "minecraft:stick"
+      },
+      "W": {
+        "item": "minecraft:string"
+      }
+    },
+    "result": {
+      "item": "tfc:drying_rack",
+      "count": 1
+    }
+  }
+}
