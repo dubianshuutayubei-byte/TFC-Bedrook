@@ -304,16 +304,20 @@ async function station(player,id,block){
  scheduleStationJob(key,block.dimension,block.location,recipe.durationTicks);
 }
 async function knap(player){
-let selected=[];try{selected=JSON.parse(String(player.getDynamicProperty(PROGRESS_KEY)??"[]"));}catch{selected=[];}if(!Array.isArray(selected))selected=[];
-const grid=Array.from({length:3},(_,row)=>Array.from({length:3},(_,col)=>{const n=row*3+col;return selected.includes(n)?"[●]":"[ ]";}).join(" ")).join("\n");
-const form=new ActionFormData().title("石器成形").body("3×3の打撃位置を選択してください。\n"+grid+"\n\n選択済み: "+selected.length+"/3\n同じ位置を再選択すると解除できます。");
-for(let i=0;i<9;i++)form.button((selected.includes(i)?"§a● ":"§7○ ")+"位置 "+(i+1));
-let response;try{response=await form.show(player);}catch{return;}if(response.canceled||response.selection===undefined)return;
-const index=response.selection;if(selected.includes(index))selected=selected.filter(v=>v!==index);else if(selected.length<3)selected.push(index);
-if(selected.length<3){player.setDynamicProperty(PROGRESS_KEY,JSON.stringify(selected));player.sendMessage("§e打撃位置を記録しました。");return;}
-const correct=[0,4,8].every(v=>selected.includes(v));player.setDynamicProperty(PROGRESS_KEY,"[]");
-if(!correct){player.sendMessage("§c形が合いません。");return;}
-if(take(player,"tfc:flint",1)){give(player,"tfc:stone_shard",2);player.sendMessage("§a石片を2個作成しました。");}else player.sendMessage("§c火打石がありません。");
+ let selected=[];try{selected=JSON.parse(String(player.getDynamicProperty(PROGRESS_KEY)??"[]"));}catch{selected=[];}
+ if(!Array.isArray(selected))selected=[];
+ // 5x5 is the standard TFC knapping work area. Discard stale positions outside the grid.
+ selected=[...new Set(selected.filter(v=>Number.isInteger(v)&&v>=0&&v<25))];
+ const grid=Array.from({length:5},(_,row)=>Array.from({length:5},(_,col)=>{const n=row*5+col;return selected.includes(n)?"[●]":"[ ]";}).join(" ")).join("\n");
+ const form=new ActionFormData().title("石器成形").body("5×5の打撃位置を選択してください。\n"+grid+"\n\n選択済み: "+selected.length+"/3\n同じ位置を再選択すると解除できます。");
+ for(let i=0;i<25;i++)form.button((selected.includes(i)?"§a● ":"§7○ ")+"位置 "+(i+1));
+ let response;try{response=await form.show(player);}catch{return;}if(response.canceled||response.selection===undefined)return;
+ const index=response.selection;if(selected.includes(index))selected=selected.filter(v=>v!==index);else if(selected.length<3)selected.push(index);
+ if(selected.length<3){player.setDynamicProperty(PROGRESS_KEY,JSON.stringify(selected));player.sendMessage("§e打撃位置を記録しました。");return;}
+ // Temporary prototype pattern; recipe-specific TFC knapping patterns remain a separate implementation task.
+ const correct=[0,12,24].every(v=>selected.includes(v));player.setDynamicProperty(PROGRESS_KEY,"[]");
+ if(!correct){player.sendMessage("§c形が合いません。");return;}
+ if(take(player,"tfc:flint",1)){give(player,"tfc:stone_shard",2);player.sendMessage("§a石片を2個作成しました。");}else player.sendMessage("§c火打石がありません。");
 }
 function soilKey(block){return posKey(block,"soil");}
 function readSoil(block){const saved=readWorldState(soilKey(block),{});let substrate;try{substrate=block.below()?.typeId;}catch{}return createSoilState({...saved,soilType:saved.soilType??inferSoilTypeFromBlockId(substrate)});}
