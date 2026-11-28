@@ -19,3 +19,9 @@ test("crop profiles use TFC Field Guide temperature and hydration ranges",()=>{
  assert.match(runtime,/maize:\{minTemperatureC:-7,maxTemperatureC:27,minHydration:50,maxHydration:100/);
  assert.match(runtime,/potato:\{minTemperatureC:-7,maxTemperatureC:22,minHydration:35,maxHydration:90/);
 });
+
+test("crop harvest yield is based on accumulated nutrient quality",()=>{
+ assert.match(runtime,/calculateCropYield\(cropType==="potato"\?2:3,quality\)/);
+ assert.match(runtime,/Math\.min\(previousQuality,evaluation\.nutrientFactor\)/);
+ assert.match(runtime,/writeWorldState\(posKey\(top,"crop_quality"\),1\)/);
+});
