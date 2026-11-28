@@ -71,7 +71,11 @@
       "melon",
       "tomato",
       "green_bell_pepper",
-      "radish"
+      "radish",
+      "maize",
+      "potato",
+      "milk_bottle",
+      "spoiled_food"
     ],
     "farming": [
       "crop_seed",
@@ -107,7 +111,9 @@
       "papyrus_seed",
       "trellis",
       "pumpkin_fruit",
-      "melon_fruit"
+      "melon_fruit",
+      "maize_seed",
+      "potato_seed"
     ],
     "equipment": [
       "firepit",
@@ -127,14 +133,6 @@
     "agriculture": [
       "compost",
       "wood_ash"
-    ],
-    "foods": [
-      "maize",
-      "maize_seed",
-      "potato",
-      "potato_seed",
-      "milk_bottle",
-      "spoiled_food"
     ],
     "animals": [
       "deer_spawn_egg"
