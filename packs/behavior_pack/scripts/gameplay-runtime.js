@@ -591,9 +591,21 @@ function nestBoxTick(block){
   if(!egg.fertilized||!egg.hatchReady||!["chicken","duck","quail"].includes(egg.species))continue;
   try{
    const entityType="tfc:"+egg.species;
-   const baby=block.dimension.spawnEntity(entityType,{x:block.location.x+0.5,y:block.location.y+0.2,z:block.location.z+0.5});
-   try{baby.triggerEvent("tfc:spawn_baby");}catch(error){console.warn("[TFC-Bedrook] fauna hatch baby event unavailable:",error);}
-   saveAnimal(baby,createAnimalOffspringState({familiarity:0},egg.species,"unknown"));
+   const hatchLocation={x:block.location.x+0.5,y:block.location.y+0.2,z:block.location.z+0.5};
+   // Make hatch retries idempotent: if the entity spawned but the nest state
+   // could not be persisted on the previous tick, reuse that child instead
+   // of creating a duplicate.
+   let priorHatch=null;
+   try{
+    const nearby=block.dimension.getEntities({type:entityType,location:hatchLocation,maxDistance:3});
+    priorHatch=nearby.find(candidate=>candidate.getDynamicProperty("tfc:hatched_egg_id")===egg.id)??null;
+   }catch(error){console.warn("[TFC-Bedrook] fauna hatch duplicate check unavailable:",error);}
+   if(!priorHatch){
+    const baby=block.dimension.spawnEntity(entityType,hatchLocation);
+    try{baby.setDynamicProperty("tfc:hatched_egg_id",egg.id);}catch(error){console.warn("[TFC-Bedrook] fauna hatch id save unavailable:",error);}
+    try{baby.triggerEvent("tfc:spawn_baby");}catch(error){console.warn("[TFC-Bedrook] fauna hatch baby event unavailable:",error);}
+    saveAnimal(baby,createAnimalOffspringState({familiarity:0},egg.species,"unknown"));
+   }
    state={...state,eggs:takeNestBoxEgg(state,egg.id).state.eggs};
   }catch(error){console.warn("[TFC-Bedrook] nest box hatch deferred:",error);}
  }
