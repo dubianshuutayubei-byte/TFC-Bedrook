@@ -1,5 +1,46 @@
 {
-  "wheat": { "minTemperatureC": 5, "maxTemperatureC": 30, "minHydration": 25, "maxHydration": 100, "preferredNutrient": "nitrogen", "minPreferredNutrient": 10, "optimalNutrient": 60, "soilTypes": ["loam", "silt", "clay"] },
-  "maize": { "minTemperatureC": 12, "maxTemperatureC": 35, "minHydration": 30, "maxHydration": 100, "preferredNutrient": "nitrogen", "minPreferredNutrient": 15, "optimalNutrient": 65, "soilTypes": ["loam", "silt"] },
-  "potato": { "minTemperatureC": 4, "maxTemperatureC": 25, "minHydration": 20, "maxHydration": 90, "preferredNutrient": "potassium", "minPreferredNutrient": 10, "optimalNutrient": 55, "soilTypes": ["loam", "silt"] }
+  "wheat": {
+    "minTemperatureC": -7,
+    "maxTemperatureC": 22,
+    "minHydration": 15,
+    "maxHydration": 85,
+    "nutrientDemand": {
+      "nitrogen": 100
+    },
+    "nutrientEffects": {
+      "nitrogen": -1,
+      "phosphorus": 0.3,
+      "potassium": 0.3
+    }
+  },
+  "maize": {
+    "minTemperatureC": -7,
+    "maxTemperatureC": 27,
+    "minHydration": 50,
+    "maxHydration": 100,
+    "nutrientDemand": {
+      "nitrogen": 90
+    },
+    "nutrientEffects": {
+      "nitrogen": -0.9,
+      "phosphorus": 0.25,
+      "potassium": 0.25
+    }
+  },
+  "potato": {
+    "minTemperatureC": -7,
+    "maxTemperatureC": 22,
+    "minHydration": 35,
+    "maxHydration": 90,
+    "nutrientDemand": {
+      "nitrogen": 40,
+      "phosphorus": 20,
+      "potassium": 60
+    },
+    "nutrientEffects": {
+      "nitrogen": -0.4,
+      "phosphorus": -0.2,
+      "potassium": -0.6
+    }
+  }
 }
