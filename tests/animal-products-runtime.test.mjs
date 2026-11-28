@@ -10,7 +10,7 @@ const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runti
 test("cow milk requires an adult female meeting health and needs thresholds",()=>{
  assert.match(runtime,/requiredSex:"female",minimumAgeDays:profile\.adultAgeDays,minimumHealth:40,maximumHunger:60,maximumThirst:60/);
  assert.match(runtime,/give\(player,"tfc:milk_bottle",1\)/);
- assert.match(runtime,/recordProduct\(state,currentDay\)/);
+ assert.match(runtime,/recordProduct\(state,currentDay,\{maxUses:profile\.maxUses\?\?Infinity\}\)/);
 });
 
 test("sheep wool and chicken eggs use native Bedrock collection systems",()=>{
