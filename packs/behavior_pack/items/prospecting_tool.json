@@ -1,0 +1,19 @@
+{
+  "format_version": "1.26.60",
+  "minecraft:item": {
+    "description": {
+      "identifier": "tfc:prospecting_tool",
+      "menu_category": {
+        "category": "tools"
+      }
+    },
+    "components": {
+      "minecraft:icon": "tfc_prospecting_tool",
+      "minecraft:display_name": {
+        "value": "地質調査具"
+      },
+      "minecraft:max_stack_size": 1,
+      "tfc:prospect": {}
+    }
+  }
+}
