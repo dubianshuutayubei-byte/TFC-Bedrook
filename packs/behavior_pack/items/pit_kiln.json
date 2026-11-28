@@ -1,0 +1,21 @@
+{
+  "format_version": "1.26.60",
+  "minecraft:item": {
+    "description": {
+      "identifier": "tfc:pit_kiln",
+      "menu_category": {
+        "category": "items"
+      }
+    },
+    "components": {
+      "minecraft:icon": "tfc_pottery",
+      "minecraft:display_name": {
+        "value": "Pit Kiln"
+      },
+      "minecraft:max_stack_size": 64,
+      "minecraft:block_placer": {
+        "block": "tfc:pit_kiln"
+      }
+    }
+  }
+}
