@@ -27,6 +27,9 @@
     },
     "tfc_quern": {
       "textures": "textures/blocks/tfc_pottery"
+    },
+    "tfc_trellis": {
+      "textures": "textures/blocks/tfc_pottery"
     }
   }
 }
