@@ -154,6 +154,8 @@ test("custom prey avoid predator family while predator archetypes can target pre
  for(const id of ["black_bear","grizzly_bear","cougar","lion","tiger","hyena","direwolf","crocodile"]){
   const e=read("packs/behavior_pack/entities/"+id+".json")["minecraft:entity"].components;
   assert.ok(e["minecraft:behavior.nearest_attackable_target"],id+" missing target AI");
+  const targetFamilies=e["minecraft:behavior.nearest_attackable_target"].entity_types.map(t=>t.filters?.value);
+  for(const family of ["rabbit","fox","panda","ocelot","cow","sheep","pig","goat","horse","donkey","chicken"])assert.ok(targetFamilies.includes(family),id+" missing prey family "+family);
  }
 });
 
