@@ -36,15 +36,31 @@ const FUELS={
 
 function stationJobKey(block){return posKey(block,"station_job");}
 function completeStationJob(key,dimension,location){
- const job=readWorldState(key,null);if(!job||job.status!=="running"||Date.now()<job.endsAt)return false;
- writeWorldState(key,null);
- let delivered=false;
+ const job=readWorldState(key,null);if(!job||!["running","ready_to_claim"].includes(job.status)||Date.now()<job.endsAt)return false;
  try{
   const player=world.getAllPlayers().find(p=>p.id===job.playerId);
-  if(player){for(const [id,n] of Object.entries(job.outputs))give(player,id,n);player.sendMessage("§a加工完了: "+Object.keys(job.outputs).join(", "));delivered=true;}
- }catch(error){console.warn("[TFC-Bedrook] station delivery:",error);}
- if(!delivered){for(const [id,n] of Object.entries(job.outputs)){try{dimension.spawnItem(new ItemStack(id,n),location);}catch(error){console.warn("[TFC-Bedrook] output drop failed:",id,error);}}}
- return true;
+  if(player){
+   let ok=true;for(const [id,n] of Object.entries(job.outputs))if(!give(player,id,n))ok=false;
+   if(ok){writeWorldState(key,null);player.sendMessage("§a加工完了: "+Object.keys(job.outputs).join(", "));return true;}
+  }
+ }catch(error){console.warn("[TFC-Bedrook] station inventory delivery:",error);}
+ try{
+  for(const [id,n] of Object.entries(job.outputs))dimension.spawnItem(new ItemStack(id,n),location);
+  writeWorldState(key,null);return true;
+ }catch(error){
+  writeWorldState(key,{...job,status:"ready_to_claim"});
+  console.warn("[TFC-Bedrook] output retained for recovery:",error);return false;
+ }
+}
+function recoverPlayerStationJobs(player){
+ if(!player)return;
+ let ids=[];try{ids=world.getDynamicPropertyIds();}catch{return;}
+ for(const key of ids){if(!key.startsWith("tfc:station_job:"))continue;const job=readWorldState(key,null);if(!job||job.playerId!==player.id)continue;
+  let dimension;try{dimension=world.getDimension(job.dimensionId);}catch{continue;}
+  const location=job.location;if(!location)continue;
+  const remaining=Math.max(0,job.endsAt-Date.now());
+  if(remaining===0)completeStationJob(key,dimension,location);else scheduleStationJob(key,dimension,location,remaining/50);
+ }
 }
 function scheduleStationJob(key,dimension,location,delayTicks){
  system.runTimeout(()=>{try{completeStationJob(key,dimension,location);}catch(error){console.warn("[TFC-Bedrook] station job completion:",error);}},Math.max(1,Math.ceil(delayTicks)));
@@ -142,5 +158,5 @@ event.blockComponentRegistry.registerCustomComponent("tfc:farmland_interaction",
 event.blockComponentRegistry.registerCustomComponent("tfc:crop_growth",{onTick:a=>cropTick(a.block),onPlayerInteract:a=>{const p=a.player,b=a.block;if(!p||!b)return;if(b.permutation.getState("tfc:age")!==3){p.sendMessage("§eまだ成長中です。");return;}give(p,"tfc:grain",2);give(p,"tfc:crop_seed",1);b.setPermutation(b.permutation.withState("tfc:age",0));p.sendMessage("§a収穫しました。");}});
 system.runInterval(()=>{for(const dimensionId of ["overworld","nether","the_end"]){try{const dimension=world.getDimension(dimensionId);for(const type of Object.keys(ANIMAL_PROFILES))for(const entity of dimension.getEntities({type}))animalTick(entity);}catch(error){}}},1200);
 });
-world.afterEvents.playerInteractWithEntity.subscribe(event=>{if(ANIMAL_PROFILES[event.target?.typeId])animalInteract(event.player,event.target);});
+world.afterEvents.playerInteractWithEntity.subscribe(event=>{if(ANIMAL_PROFILES[event.target?.typeId])animalInteract(event.player,event.target);});world.afterEvents.playerSpawn.subscribe(event=>{if(event.player)recoverPlayerStationJobs(event.player);});
 }
