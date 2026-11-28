@@ -25,6 +25,8 @@ test("crucible stores metal additions, validates bronze ratio, temperature and f
  assert.match(runtime,/tfc:copper_ore/);
  assert.match(runtime,/tfc:tin_ore/);
  assert.match(runtime,/鋳型を使う鉱石鋳造/);
+ assert.match(runtime,/°C\\\\n§7燃料残り/,"crucible status text must use rendered line breaks");
+ assert.match(runtime,/if\(!writeWorldState\(key,\{copper:0,tin:0\}\)\)\{player\.sendMessage\("§cるつぼの状態を保存できませんでした/,"withdrawal must persist before returning metals");
 });
 
 test("food freshness UI lists each inventory stack without consuming it",()=>{
