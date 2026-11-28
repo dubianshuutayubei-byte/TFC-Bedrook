@@ -17,7 +17,7 @@ import { summarizeOreSamples } from "./core/geology-service.mjs";
 const STATE_KEY="tfc:player_state",PROGRESS_KEY="tfc:knapping_progress";
 const TRACKED_FOOD_CONTAINERS_KEY="tfc:tracked_food_containers";
 const trackedFoodContainers=new Map();
-const FOOD_DECAY_PROFILES={"tfc:raw_meat":0.16,"tfc:cooked_meat":0.12,"tfc:grain":0.025,"tfc:maize":0.025,"tfc:potato":0.1,"tfc:vegetable":0.1,"tfc:fruit":0.11,"tfc:milk_bottle":0.18,"tfc:dried_meat":0.04,"tfc:dried_fruit":0.03,"tfc:dried_vegetables":0.03,"tfc:bread":0.05,"tfc:barley":0.025,"tfc:oat":0.025,"tfc:rye":0.025,"tfc:beet":0.1,"tfc:cabbage":0.1,"tfc:carrot":0.1,"tfc:garlic":0.1,"tfc:onion":0.1,"tfc:squash":0.1,"tfc:lentils":0.08,"tfc:soybean":0.08,"tfc:peanuts":0.08};
+const FOOD_DECAY_PROFILES={"tfc:raw_meat":0.16,"tfc:cooked_meat":0.12,"tfc:grain":0.025,"tfc:maize":0.025,"tfc:potato":0.1,"tfc:vegetable":0.1,"tfc:fruit":0.11,"tfc:milk_bottle":0.18,"tfc:dried_meat":0.04,"tfc:dried_fruit":0.03,"tfc:dried_vegetables":0.03,"tfc:bread":0.05,"tfc:barley":0.025,"tfc:oat":0.025,"tfc:rye":0.025,"tfc:beet":0.1,"tfc:cabbage":0.1,"tfc:carrot":0.1,"tfc:garlic":0.1,"tfc:onion":0.1,"tfc:squash":0.1,"tfc:lentils":0.08,"tfc:soybean":0.08,"tfc:peanuts":0.08,"tfc:rice":0.025,"tfc:cassava":0.1,"tfc:green_beans":0.1,"tfc:pumpkin":0.1,"tfc:melon":0.11,"tfc:tomato":0.1,"tfc:green_bell_pepper":0.1,"tfc:radish":0.1};
 const CROP_PROFILES={
  wheat:{minTemperatureC:-7,maxTemperatureC:22,minHydration:15,maxHydration:85,nutrientDemand:{nitrogen:100},nutrientEffects:{nitrogen:-1,phosphorus:0.3,potassium:0.3},seed:"tfc:crop_seed",harvest:"tfc:grain"},
  maize:{minTemperatureC:-7,maxTemperatureC:27,minHydration:50,maxHydration:100,nutrientDemand:{nitrogen:90},nutrientEffects:{nitrogen:-0.9,phosphorus:0.25,potassium:0.25},seed:"tfc:maize_seed",harvest:"tfc:maize",twoBlock:true},
@@ -75,10 +75,12 @@ function tickMetalHeat(player,nowTick){
 }
 const ITEM_LABELS={"tfc:raw_meat":"生肉","tfc:cooked_meat":"焼いた肉","tfc:clay_vessel":"未焼成土器","tfc:fired_vessel":"焼成土器","tfc:unfired_ingot_mold":"未焼成鋳型","tfc:fired_ingot_mold":"焼成鋳型","tfc:copper_ore":"銅鉱石","tfc:heated_copper_ingot":"加熱銅インゴット","tfc:copper_ingot":"銅インゴット","tfc:tin_ore":"錫鉱石","tfc:heated_tin_ingot":"加熱錫インゴット","tfc:tin_ingot":"錫インゴット","tfc:heated_bronze_ingot":"加熱青銅インゴット","tfc:bronze_ingot":"青銅インゴット","tfc:fruit":"果物","tfc:vegetable":"野菜","tfc:dried_meat":"干し肉","tfc:dried_fruit":"干し果物","tfc:dried_vegetables":"干し野菜","tfc:compost":"堆肥","minecraft:oak_leaves":"落ち葉","tfc:barley":"大麦","tfc:oat":"オーツ麦","tfc:rye":"ライ麦","tfc:beet":"ビーツ","tfc:cabbage":"キャベツ","tfc:carrot":"ニンジン","tfc:garlic":"ニンニク","tfc:onion":"タマネギ","tfc:squash":"カボチャ","tfc:lentils":"レンズ豆","tfc:soybean":"大豆","tfc:peanuts":"落花生","tfc:quern":"石臼","tfc:handstone":"上臼石","tfc:flour":"小麦粉","tfc:dough":"生地","tfc:bread":"パン"};
 const WILD_SEED_DROPS=Object.freeze({
- "minecraft:short_grass":["tfc:barley_seed","tfc:oat_seed","tfc:rye_seed","tfc:lentils_seed","tfc:soybean_seed","tfc:peanuts_seed"],
- "minecraft:tall_grass":["tfc:barley_seed","tfc:oat_seed","tfc:rye_seed","tfc:lentils_seed","tfc:soybean_seed","tfc:peanuts_seed"],
- "minecraft:fern":["tfc:beet_seed","tfc:cabbage_seed","tfc:carrot_seed","tfc:garlic_seed","tfc:onion_seed","tfc:squash_seed"],
- "minecraft:large_fern":["tfc:beet_seed","tfc:cabbage_seed","tfc:carrot_seed","tfc:garlic_seed","tfc:onion_seed","tfc:squash_seed"]
+ "minecraft:short_grass":["tfc:barley_seed","tfc:oat_seed","tfc:rye_seed","tfc:lentils_seed","tfc:soybean_seed","tfc:peanuts_seed","tfc:cassava_seed","tfc:alfalfa_seed","tfc:canola_seed","tfc:radish_seed","tfc:jute_seed"],
+ "minecraft:tall_grass":["tfc:barley_seed","tfc:oat_seed","tfc:rye_seed","tfc:lentils_seed","tfc:soybean_seed","tfc:peanuts_seed","tfc:cassava_seed","tfc:alfalfa_seed","tfc:canola_seed","tfc:radish_seed","tfc:jute_seed"],
+ "minecraft:fern":["tfc:beet_seed","tfc:cabbage_seed","tfc:carrot_seed","tfc:garlic_seed","tfc:onion_seed","tfc:squash_seed","tfc:green_beans_seed","tfc:pumpkin_seed","tfc:melon_seed","tfc:tomato_seed","tfc:red_bell_pepper_seed","tfc:yellow_bell_pepper_seed"],
+ "minecraft:large_fern":["tfc:beet_seed","tfc:cabbage_seed","tfc:carrot_seed","tfc:garlic_seed","tfc:onion_seed","tfc:squash_seed","tfc:green_beans_seed","tfc:pumpkin_seed","tfc:melon_seed","tfc:tomato_seed","tfc:red_bell_pepper_seed","tfc:yellow_bell_pepper_seed"],
+ "minecraft:seagrass":["tfc:rice_seed","tfc:sugarcane_seed","tfc:papyrus_seed"],
+ "minecraft:tall_seagrass":["tfc:rice_seed","tfc:sugarcane_seed","tfc:papyrus_seed"]
 });
 const FERTILIZER_PROFILES=Object.freeze({
  "minecraft:bone_meal":{name:"骨粉",nutrients:{phosphorus:10}},
