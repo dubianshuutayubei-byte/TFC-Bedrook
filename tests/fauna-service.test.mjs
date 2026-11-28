@@ -179,9 +179,9 @@ test("adult familiarity is capped at the official 0.35 setting while juveniles c
  assert.equal(juvenile.familiarity,39);
 });
 test("TFC familiarity decays by 2 percentage points per day below 30 after the grace period",()=>{
- const a=advanceAnimalFamiliarityDecay({species:"cow",familiarity:20,lastFamiliarityDecay:1},3);
- assert.equal(a.familiarity,16);
- assert.equal(a.lastFamiliarityDecay,3);
+ const a=advanceAnimalFamiliarityDecay({species:"cow",familiarity:20,lastFamiliarityDecay:1},3.5);
+ assert.equal(a.familiarity,18);
+ assert.equal(a.lastFamiliarityDecay,2);
  const protectedState=advanceAnimalFamiliarityDecay({species:"cow",familiarity:35,lastFamiliarityDecay:1},3);
  assert.equal(protectedState.familiarity,35);
 });
@@ -284,7 +284,7 @@ test("egg laying requires a healthy mature adult female and respects cooldown",(
  assert.equal(canLayEgg({...hen,hunger:80},rules),false);
  assert.equal(canLayEgg({...hen,lastEggAt:10.5},rules),false);
  assert.equal(canLayEgg({...hen,familiarity:15},rules),false);
- assert.equal(canLayEgg({...hen,uses:100},rules),false);
+ assert.equal(canLayEgg({...hen,uses:100},rules),true);
  assert.equal(canLayEgg({...hen,lastFedDay:10},rules),false);
 });
 
@@ -374,11 +374,11 @@ test("milk and wool production remain available during the scheduled old-age gra
  assert.equal(canProduce({...scheduled,oldDay:11},rules),false);
 });
 
-test("animal production rejects individuals that reached their lifetime use limit",()=>{
+test("animal production remains available at the use threshold and stops after exceeding it",()=>{
  const rules={requiredFamiliarity:0,cooldownDays:0,currentDay:20,minimumAgeDays:1,maxUses:3};
  const eligible={species:"cow",lifeStage:"adult",ageDays:200,health:100,hunger:0,thirst:0,familiarity:50,uses:2,lastProductAt:20};
  assert.equal(canProduce(eligible,rules),true);
- assert.equal(canProduce({...eligible,uses:3},rules),false);
+ assert.equal(canProduce({...eligible,uses:3},rules),true);
  assert.equal(canProduce({...eligible,uses:4},rules),false);
 });
 
@@ -392,19 +392,19 @@ test("TFC 1.21.x livestock defaults match the NeoForge reference audit",()=>{
  assert.equal(OFFICIAL_LIVESTOCK_LIFECYCLE.bactrian_camel.productCooldownDays,7);
 });
 
-test("livestock enters the old-age schedule exactly when it reaches the configured use limit",()=>{
- const animal={species:"sheep",lifeStage:"adult",uses:1};
+test("livestock enters the old-age schedule only after exceeding the configured use limit",()=>{
+ const animal={species:"sheep",lifeStage:"adult",uses:2};
  const result=recordProduct(animal,12,{maxUses:2,oldDayDelay:3});
- assert.equal(result.uses,2);
+ assert.equal(result.uses,3);
  assert.equal(result.oldDay,15);
 });
 
 
 test("egg laying applies the same lifetime-use and old-age grace period as milk and wool",()=>{
- const female={species:"chicken",sex:"female",lifeStage:"adult",ageDays:24,familiarity:30,health:100,hunger:0,thirst:0,lastFedDay:10,lastEggAt:8,uses:1};
+ const female={species:"chicken",sex:"female",lifeStage:"adult",ageDays:24,familiarity:30,health:100,hunger:0,thirst:0,lastFedDay:10,lastEggAt:8,uses:2};
  assert.equal(canLayEgg(female,{currentDay:10,cooldownDays:1,minimumAgeDays:24,maxUses:2}),true);
  const used=recordEggLaid(female,10,{maxUses:2,oldDayDelay:3});
- assert.equal(used.uses,2);
+ assert.equal(used.uses,3);
  assert.equal(used.oldDay,13);
  assert.equal(canLayEgg({...used,lastFedDay:12},{currentDay:12,cooldownDays:1,minimumAgeDays:24,maxUses:2}),true);
  assert.equal(canLayEgg({...used,lastFedDay:14},{currentDay:14,cooldownDays:1,minimumAgeDays:24,maxUses:2}),false);
@@ -433,8 +433,9 @@ test("male breeding increments the shared livestock use counter by five as in Ja
  const section=runtime.slice(start,end);
  assert.match(section,/other\.lastBreedAt=breedingTime/);
  assert.match(section,/other\.lastFedDay=breedingDay-1/);
- assert.match(section,/other\.uses=\(other\.uses\?\?0\)\+5/,"male breeding must add five uses");
- assert.match(section,/other\.uses>profile\.maxUses/,"the shared use limit must schedule old age");
+ assert.match(section,/recordBreedingUse\(other,breedingTime/,"male breeding must add five uses through the shared service");
+ assert.match(section,/useCost:5/,"male breeding must add five uses");
+ assert.doesNotMatch(section,/recordBreedingUse\(started\.animal/,"pregnant female must not gain breeding uses");
 });
 
 
@@ -481,8 +482,9 @@ test("TFC 1.21.x camel cat and dog defaults match ServerConfig",()=>{
  assert.ok(lifecycle.includes("dog: Object.freeze({ adultAgeDays: 50, maxUses: 60, gestationDays: 19, childCount: 2 })"));
  const dog=runtime.slice(runtime.indexOf('"tfc:dog":'),runtime.indexOf("\\n",runtime.indexOf('"tfc:dog":')));
  assert.match(dog,/"tfc:spoiled_food"/);
- const growth=runtime.slice(runtime.indexOf('if(["tfc:deer"'),runtime.indexOf('state.sex==="unknown"',runtime.indexOf('if(["tfc:deer"')));
- for(const id of ["tfc:dromedary_camel","tfc:bactrian_camel","tfc:cat","tfc:dog"])assert.ok(growth.includes('"'+id+'"'),id+" juvenile growth event missing");
+ assert.match(runtime,/if\(state\.lifeStage==="juvenile"&&profile\.adultAgeDays!=null&&state\.ageDays>=profile\.adultAgeDays\)/,"juvenile growth must use each species maturity profile");
+ assert.doesNotMatch(runtime,/if\(\["tfc:deer"/,"growth must not depend on a manually maintained entity allowlist");
+ for(const id of ["dromedary_camel","bactrian_camel","cat","dog"])assert.ok(profiles.includes("OFFICIAL_LIVESTOCK_LIFECYCLE."+id+".adultAgeDays"),id+" maturity must be connected");
 });
 
 
