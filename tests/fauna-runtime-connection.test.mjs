@@ -83,7 +83,7 @@ test("animal runtime applies species-specific needs and natural dropped-food pic
 test("aquatic species do not lose health from terrestrial hunger and thirst simulation",()=>{
  for(const id of ["cod","salmon","tropicalfish","pufferfish","squid"]){
   const entry=runtime.match(new RegExp('"minecraft:'+id+'":\\{[^}]*\\}'))?.[0]??"";
-  assert.match(entry,/hungerPerDay:0/);
+  assert.match(entry,id==="leopard_seal"?/hungerPerDay:8/:/hungerPerDay:0/);
   assert.match(entry,/thirstPerDay:0/);
  }
 });
