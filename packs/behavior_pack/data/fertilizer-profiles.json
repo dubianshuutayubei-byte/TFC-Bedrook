@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "fertilizers": [
+    {
+      "id": "minecraft:bone_meal",
+      "name": "骨粉",
+      "nutrients": {
+        "nitrogen": 0,
+        "phosphorus": 10,
+        "potassium": 0
+      },
+      "source": "バニラ素材"
+    },
+    {
+      "id": "tfc:compost",
+      "name": "堆肥",
+      "nutrients": {
+        "nitrogen": 20,
+        "phosphorus": 0,
+        "potassium": 20
+      },
+      "source": "コンポスター"
+    },
+    {
+      "id": "tfc:wood_ash",
+      "name": "木灰",
+      "nutrients": {
+        "nitrogen": 0,
+        "phosphorus": 10,
+        "potassium": 20
+      },
+      "source": "焚き火設備を破壊"
+    }
+  ],
+  "notes": [
+    "栄養値はTFC 1.21 Field Guideの肥料表を基準にした。",
+    "肥料効果は土壌肥沃度倍率を適用する。"
+  ]
+}
