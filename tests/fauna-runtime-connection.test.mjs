@@ -22,7 +22,7 @@ test("shared pregnancy supports native and custom births with the appropriate ba
  assert.match(runtime,/if\(profile\.customBreeding&&state\.pregnancyDays>0\)/);
  assert.match(runtime,/if\(profile\.customBreeding&&state\.sex==="female"/);
  assert.match(runtime,/other\.lastBreedAt=breedingTime/);
- assert.match(runtime,/const spawnType=entity\.typeId\.startsWith\("minecraft:"\)\?entity\.typeId:entity\.typeId\+"<tfc:spawn_baby>"/);
+ assert.ok(runtime.includes('entity.dimension.spawnEntity(entity.typeId+"<tfc:spawn_baby>",birthLocation)'));
  assert.match(runtime,/baby\.triggerEvent\("minecraft:entity_born"\)/);
 });
 
