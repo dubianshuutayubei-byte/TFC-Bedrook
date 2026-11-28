@@ -13,7 +13,7 @@ test("livestock forage scan is bounded to a 3x3 area",()=>{
  assert.ok(runtime.includes("for(let x=-1;x<=1;x++)for(let z=-1;z<=1;z++)"));
 });
 test("livestock sex and maturity follow TFC adult thresholds",()=>{
- for(const profile of ['"minecraft:cow":{adultAgeDays:192,','"minecraft:sheep":{adultAgeDays:56,','"minecraft:chicken":{adultAgeDays:24,'])assert.ok(runtime.includes(profile));
+ for(const profile of ['"minecraft:cow":{adultAgeDays:192,','"minecraft:sheep":{adultAgeDays:56,','"tfc:chicken":{adultAgeDays:24,'])assert.ok(runtime.includes(profile));
  assert.ok(runtime.includes('state.sex!=="female"'));
  assert.ok(runtime.includes("cooldownDays:cooldown,currentDay"));
 });
