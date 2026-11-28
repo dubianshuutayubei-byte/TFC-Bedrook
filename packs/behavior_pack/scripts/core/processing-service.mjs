@@ -11,6 +11,9 @@ export function validateRecipeDatabase(database) {
     for (const [id, amount] of Object.entries(recipe.outputs ?? {})) {
       if (!id || !Number.isFinite(amount) || amount <= 0) throw new Error(`invalid output in ${recipe.id}: ${id}`);
     }
+    if (recipe.durationSeconds != null && (!Number.isFinite(recipe.durationSeconds) || recipe.durationSeconds <= 0)) {
+      throw new Error(`invalid duration in ${recipe.id}`);
+    }
   }
   return { recipeCount: ids.size };
 }
@@ -25,6 +28,24 @@ export function evaluateProcess(recipe, context = {}) {
     if (Number(context.inventory?.[itemId] ?? 0) < amount) failures.push(`missing_input:${itemId}`);
   }
   return { allowed: failures.length === 0, failures };
+}
+
+/**
+ * Applies a completed recipe to an abstract inventory atomically.
+ * No input is consumed if any requirement or output capacity check fails.
+ */
+export function executeProcess(recipe, context = {}) {
+  const evaluation = evaluateProcess(recipe, context);
+  if (!evaluation.allowed) return { executed: false, failures: evaluation.failures, inventory: { ...(context.inventory ?? {}) } };
+  const inventory = { ...(context.inventory ?? {}) };
+  for (const [itemId, amount] of Object.entries(recipe.inputs ?? {})) {
+    inventory[itemId] = Number(inventory[itemId] ?? 0) - amount;
+    if (inventory[itemId] === 0) delete inventory[itemId];
+  }
+  for (const [itemId, amount] of Object.entries(recipe.outputs ?? {})) {
+    inventory[itemId] = Number(inventory[itemId] ?? 0) + amount;
+  }
+  return { executed: true, failures: [], inventory };
 }
 
 export function calculateProcessProgress(elapsedSeconds, durationSeconds) {
