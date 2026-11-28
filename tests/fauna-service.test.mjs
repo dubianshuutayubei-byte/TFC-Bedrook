@@ -123,11 +123,13 @@ test("newly encountered adult animals start at their configured maturity age",()
  const adult=initializeAnimalLifeStage({species:"cow"},{isBaby:false,adultAgeDays:192});
  assert.equal(adult.ageDays,192);assert.equal(adult.lifeStage,"adult");
 });
-test("baby animals begin at age zero and mature when the Bedrock baby component disappears",()=>{
- const baby=initializeAnimalLifeStage({species:"cow"},{isBaby:true,adultAgeDays:192});
- assert.equal(baby.ageDays,0);assert.equal(baby.lifeStage,"juvenile");
- const adult=initializeAnimalLifeStage(baby,{isBaby:false,adultAgeDays:192});
- assert.equal(adult.ageDays,192);assert.equal(adult.lifeStage,"adult");
+test("baby animals remain juvenile after vanilla visual growth until TFC maturity age",()=>{
+ const baby=initializeAnimalLifeStage({species:"cow"},{isBaby:true,adultAgeDays:192,currentDay:10});
+ assert.equal(baby.ageDays,0);assert.equal(baby.lifeStage,"juvenile");assert.equal(baby.lastAgeUpdateAt,10);
+ const visuallyAdult=initializeAnimalLifeStage({...baby,ageDays:30},{isBaby:false,adultAgeDays:192,currentDay:40});
+ assert.equal(visuallyAdult.ageDays,30);assert.equal(visuallyAdult.lifeStage,"juvenile");
+ const mature=initializeAnimalLifeStage({...visuallyAdult,ageDays:192},{isBaby:false,adultAgeDays:192,currentDay:202});
+ assert.equal(mature.lifeStage,"adult");
 });
 test("species without verified maturity ages do not receive fabricated ages",()=>{
  const adult=initializeAnimalLifeStage({species:"wolf"},{isBaby:false,adultAgeDays:null});
@@ -204,4 +206,12 @@ test("offspring inherit the official TFC familiarity rule and begin as juveniles
 test("animal state persists a partially delivered litter count",()=>{
  const state=createAnimalState({pregnancyDays:210,birthsRemaining:2});
  assert.equal(state.birthsRemaining,2);
+});
+
+test("animal needs use loaded time while TFC age can advance by world-calendar elapsed days",()=>{
+ const start=createAnimalState({ageDays:4,hunger:20,thirst:20});
+ const next=advanceAnimalNeeds(start,0.05,{hungerPerDay:8,thirstPerDay:12,ageElapsedDays:1});
+ assert.equal(next.ageDays,5);
+ assert.equal(next.hunger,20.4);
+ assert.equal(next.thirst,20.6);
 });
