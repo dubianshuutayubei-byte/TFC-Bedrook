@@ -903,7 +903,7 @@ function validateNaturalFaunaSpawn(event){
    if(!result.suitable){entity.remove();return;}
    if(official.distanceBelowSeaLevel>0&&environment.belowSeaLevel<official.distanceBelowSeaLevel){entity.remove();return;}
    if(official.chance>1&&Math.random()>=1/official.chance){entity.remove();return;}
-   if(official.placement==="in_water"){let inWater=false;try{const b=dimension.getBlock({x:blockLocation.x,y:blockLocation.y,z:blockLocation.z});inWater=b?.typeId==="minecraft:water"||b?.typeId==="minecraft:flowing_water";}catch{}if(!inWater)entity.remove();}
+   if(official.placement==="in_water"){let inWater=false;try{const b=entity.dimension.getBlock({x:Math.floor(entity.location.x),y:Math.floor(entity.location.y),z:Math.floor(entity.location.z)});inWater=b?.typeId==="minecraft:water"||b?.typeId==="minecraft:flowing_water";}catch{}if(!inWater)entity.remove();}
   }catch(error){console.warn("[TFC-Bedrook] fauna spawn climate validation skipped:",profile.speciesId,error);}
  });
 }
