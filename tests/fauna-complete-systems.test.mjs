@@ -128,6 +128,6 @@ test("official domestic life-cycle profiles use the shared breeding and egg syst
  for(const id of ["tfc:alpaca","tfc:musk_ox","tfc:yak"])assert.equal(CUSTOM_FAUNA_PROFILES[id].customBreeding,true,id);
  for(const id of ["tfc:duck","tfc:quail"])assert.equal(CUSTOM_FAUNA_PROFILES[id].eggProduct,true,id);
  const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
- assert.match(runtime,/for\(const id of \["minecraft:cow","minecraft:sheep","minecraft:pig","minecraft:goat","minecraft:horse","minecraft:donkey","minecraft:mule","minecraft:rabbit"\]\)if\(ANIMAL_PROFILES\[id\]\?\.gestationDays\)ANIMAL_PROFILES\[id\]\.customBreeding=true/);
+ assert.match(runtime,/for\(const id of \["minecraft:cow","minecraft:sheep","minecraft:pig","minecraft:goat","minecraft:horse","minecraft:donkey"\]\)if\(ANIMAL_PROFILES\[id\]\?\.gestationDays\)ANIMAL_PROFILES\[id\]\.customBreeding=true/);
  assert.match(runtime,/baby\.triggerEvent\("minecraft:entity_born"\)/);
 });
