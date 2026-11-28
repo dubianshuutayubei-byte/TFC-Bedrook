@@ -159,7 +159,7 @@ test("animal runtime applies daily familiarity decay and capped TFC feeding gain
 });
 
 test("custom births trigger juvenile state and persist remaining litter count",()=>{
- assert.match(runtime,/const spawnType=entity\.typeId\.startsWith\("minecraft:"\)\?entity\.typeId:entity\.typeId\+"<tfc:spawn_baby>"/);
+ assert.ok(runtime.includes('entity.dimension.spawnEntity(entity.typeId+"<tfc:spawn_baby>",birthLocation)'));
  assert.match(runtime,/createAnimalOffspringState\(state,profile\.speciesId/);
  assert.match(runtime,/state\.birthsRemaining=Math\.max\(1,Math\.floor\(profile\.childCount\?\?1\)\)/);
  assert.match(runtime,/state\.birthsRemaining-=1/);
