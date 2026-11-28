@@ -5,6 +5,7 @@ import { consumeFood } from "./core/food-service.mjs";
 import { readStackFreshness, advanceStackFreshness } from "./core/food-stack-service.mjs";
 import { createFireState, addFuel, advanceFire, canProcessAtTemperature } from "./core/firepit-service.mjs";
 import { createSoilState, advanceSoilHydration, evaluateCropGrowth, calculateCropYield, applyFertilizer, applyCropNutrientEffects, inferSoilTypeFromBlockId, inferSoilFertilityClassFromBiomeId, advanceCropGrowthProgress } from "./core/agriculture-service.mjs";
+import { CROP_PROFILES } from "./core/crop-profiles.mjs";
 import { createAnimalState, syncAnimalHealth, advanceAnimalNeeds, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct } from "./core/fauna-service.mjs";
 import { getStationRecipes } from "./core/processing-recipes.mjs";
 import { isStationJobDue, getPendingStationOutputs, markStationOutputDelivered, markStationJobRecoverable } from "./core/station-job-service.mjs";
@@ -18,38 +19,6 @@ const STATE_KEY="tfc:player_state",PROGRESS_KEY="tfc:knapping_progress";
 const TRACKED_FOOD_CONTAINERS_KEY="tfc:tracked_food_containers";
 const trackedFoodContainers=new Map();
 const FOOD_DECAY_PROFILES={"tfc:raw_meat":0.16,"tfc:cooked_meat":0.12,"tfc:grain":0.025,"tfc:maize":0.025,"tfc:potato":0.1,"tfc:vegetable":0.1,"tfc:fruit":0.11,"tfc:milk_bottle":0.18,"tfc:dried_meat":0.04,"tfc:dried_fruit":0.03,"tfc:dried_vegetables":0.03,"tfc:bread":0.05,"tfc:barley":0.025,"tfc:oat":0.025,"tfc:rye":0.025,"tfc:beet":0.1,"tfc:cabbage":0.1,"tfc:carrot":0.1,"tfc:garlic":0.1,"tfc:onion":0.1,"tfc:squash":0.1,"tfc:lentils":0.08,"tfc:soybean":0.08,"tfc:peanuts":0.08,"tfc:rice":0.025,"tfc:cassava":0.1,"tfc:green_beans":0.1,"tfc:pumpkin":0.1,"tfc:melon":0.11,"tfc:tomato":0.1,"tfc:green_bell_pepper":0.1,"tfc:radish":0.1};
-const CROP_PROFILES={
- wheat:{minTemperatureC:-7,maxTemperatureC:22,minHydration:15,maxHydration:85,nutrientDemand:{nitrogen:100},nutrientEffects:{nitrogen:-1,phosphorus:0.3,potassium:0.3},seed:"tfc:crop_seed",harvest:"tfc:grain"},
- maize:{minTemperatureC:-7,maxTemperatureC:27,minHydration:50,maxHydration:100,nutrientDemand:{nitrogen:90},nutrientEffects:{nitrogen:-0.9,phosphorus:0.25,potassium:0.25},seed:"tfc:maize_seed",harvest:"tfc:maize",twoBlock:true},
- potato:{minTemperatureC:-7,maxTemperatureC:22,minHydration:35,maxHydration:90,nutrientDemand:{nitrogen:40,phosphorus:20,potassium:60},nutrientEffects:{nitrogen:-0.4,phosphorus:-0.2,potassium:-0.6},seed:"tfc:potato_seed",harvest:"tfc:potato"},
- barley:{minTemperatureC:-7,maxTemperatureC:23,minHydration:10,maxHydration:70,nutrientDemand:{"nitrogen":75},nutrientEffects:{"nitrogen":-0.75,"phosphorus":0.2,"potassium":0.2},seed:"tfc:barley_seed",harvest:"tfc:barley"},
- oat:{minTemperatureC:-7,maxTemperatureC:22,minHydration:25,maxHydration:85,nutrientDemand:{"nitrogen":100},nutrientEffects:{"nitrogen":-1,"phosphorus":0.4,"potassium":0.3},seed:"tfc:oat_seed",harvest:"tfc:oat"},
- rye:{minTemperatureC:-7,maxTemperatureC:18,minHydration:15,maxHydration:80,nutrientDemand:{"nitrogen":100},nutrientEffects:{"nitrogen":-1,"phosphorus":0.2,"potassium":0.4},seed:"tfc:rye_seed",harvest:"tfc:rye"},
- beet:{minTemperatureC:-10,maxTemperatureC:27,minHydration:10,maxHydration:70,nutrientDemand:{"nitrogen":40,"phosphorus":30,"potassium":50},nutrientEffects:{"nitrogen":-0.4,"phosphorus":-0.3,"potassium":-0.5},seed:"tfc:beet_seed",harvest:"tfc:beet"},
- cabbage:{minTemperatureC:-10,maxTemperatureC:27,minHydration:10,maxHydration:65,nutrientDemand:{"nitrogen":50,"phosphorus":20,"potassium":40},nutrientEffects:{"nitrogen":-0.5,"phosphorus":-0.2,"potassium":-0.4},seed:"tfc:cabbage_seed",harvest:"tfc:cabbage"},
- carrot:{minTemperatureC:-10,maxTemperatureC:27,minHydration:15,maxHydration:85,nutrientDemand:{"nitrogen":50,"phosphorus":30,"potassium":40},nutrientEffects:{"nitrogen":-0.5,"phosphorus":-0.3,"potassium":-0.4},seed:"tfc:carrot_seed",harvest:"tfc:carrot"},
- garlic:{minTemperatureC:-3,maxTemperatureC:22,minHydration:10,maxHydration:70,nutrientDemand:{"nitrogen":40,"phosphorus":20,"potassium":50},nutrientEffects:{"nitrogen":-0.4,"phosphorus":-0.2,"potassium":-0.5},seed:"tfc:garlic_seed",harvest:"tfc:garlic"},
- onion:{minTemperatureC:-5,maxTemperatureC:26,minHydration:15,maxHydration:85,nutrientDemand:{"nitrogen":40,"phosphorus":40,"potassium":40},nutrientEffects:{"nitrogen":-0.4,"phosphorus":-0.4,"potassium":-0.4},seed:"tfc:onion_seed",harvest:"tfc:onion"},
- squash:{minTemperatureC:-7,maxTemperatureC:25,minHydration:15,maxHydration:85,nutrientDemand:{"nitrogen":25,"phosphorus":45,"potassium":50},nutrientEffects:{"nitrogen":-0.25,"phosphorus":-0.45,"potassium":-0.5},seed:"tfc:squash_seed",harvest:"tfc:squash"},
- lentils:{minTemperatureC:-5,maxTemperatureC:25,minHydration:15,maxHydration:50,nutrientDemand:{"phosphorus":20,"potassium":20},nutrientEffects:{"nitrogen":0.8,"phosphorus":-0.2,"potassium":-0.2},seed:"tfc:lentils_seed",harvest:"tfc:lentils"},
- soybean:{minTemperatureC:-7,maxTemperatureC:22,minHydration:25,maxHydration:90,nutrientDemand:{"phosphorus":60,"potassium":30},nutrientEffects:{"nitrogen":0.8,"phosphorus":-0.6,"potassium":-0.3},seed:"tfc:soybean_seed",harvest:"tfc:soybean"},
- peanuts:{minTemperatureC:11,maxTemperatureC:31,minHydration:20,maxHydration:80,nutrientDemand:{"phosphorus":50,"potassium":50},nutrientEffects:{"nitrogen":0.9,"phosphorus":-0.5,"potassium":-0.5},seed:"tfc:peanuts_seed",harvest:"tfc:peanuts"},
-
- rice:{minTemperatureC:8,maxTemperatureC:31,minHydration:35,maxHydration:100,nutrientDemand:{nitrogen:40,phosphorus:30,potassium:30},nutrientEffects:{nitrogen:-0.4,phosphorus:-0.3,potassium:-0.3},seed:"tfc:rice_seed",harvest:"tfc:rice",requiresWater:true},
- cassava:{minTemperatureC:10,maxTemperatureC:31,minHydration:45,maxHydration:100,nutrientDemand:{phosphorus:40,potassium:20},nutrientEffects:{nitrogen:0.5,phosphorus:-0.4,potassium:-0.2},seed:"tfc:cassava_seed",harvest:"tfc:cassava"},
- green_beans:{minTemperatureC:-2,maxTemperatureC:25,minHydration:25,maxHydration:90,nutrientDemand:{phosphorus:50,potassium:40},nutrientEffects:{nitrogen:0.8,phosphorus:-0.5,potassium:-0.4},seed:"tfc:green_beans_seed",harvest:"tfc:green_beans",twoBlock:true,supportRequired:true},
- pumpkin:{minTemperatureC:-7,maxTemperatureC:27,minHydration:20,maxHydration:85,nutrientDemand:{nitrogen:40,phosphorus:30,potassium:60},nutrientEffects:{nitrogen:-0.4,phosphorus:-0.3,potassium:-0.6},seed:"tfc:pumpkin_seed",harvest:"tfc:pumpkin",spreading:true,fruitBlock:"tfc:pumpkin_fruit"},
- melon:{minTemperatureC:5,maxTemperatureC:31,minHydration:35,maxHydration:100,nutrientDemand:{nitrogen:30,phosphorus:40,potassium:65},nutrientEffects:{nitrogen:-0.3,phosphorus:-0.4,potassium:-0.65},seed:"tfc:melon_seed",harvest:"tfc:melon",spreading:true,fruitBlock:"tfc:melon_fruit"},
- tomato:{minTemperatureC:2,maxTemperatureC:31,minHydration:20,maxHydration:85,nutrientDemand:{nitrogen:40,phosphorus:50,potassium:60},nutrientEffects:{nitrogen:-0.4,phosphorus:-0.5,potassium:-0.6},seed:"tfc:tomato_seed",harvest:"tfc:tomato",twoBlock:true,supportRequired:true},
- red_bell_pepper:{minTemperatureC:11,maxTemperatureC:31,minHydration:30,maxHydration:95,nutrientDemand:{nitrogen:30,phosphorus:40,potassium:50},nutrientEffects:{nitrogen:-0.3,phosphorus:-0.4,potassium:-0.5},seed:"tfc:red_bell_pepper_seed",harvest:"tfc:green_bell_pepper",pickable:true},
- yellow_bell_pepper:{minTemperatureC:11,maxTemperatureC:31,minHydration:30,maxHydration:95,nutrientDemand:{nitrogen:30,phosphorus:40,potassium:50},nutrientEffects:{nitrogen:-0.3,phosphorus:-0.4,potassium:-0.5},seed:"tfc:yellow_bell_pepper_seed",harvest:"tfc:green_bell_pepper",pickable:true},
- alfalfa:{minTemperatureC:-32,maxTemperatureC:8,minHydration:40,maxHydration:100,nutrientDemand:{},nutrientEffects:{nitrogen:0.24,phosphorus:0.15,potassium:0.18},seed:"tfc:alfalfa_seed",harvest:"tfc:alfalfa"},
- canola:{minTemperatureC:-30,maxTemperatureC:6,minHydration:20,maxHydration:75,nutrientDemand:{},nutrientEffects:{nitrogen:0.09,phosphorus:0.18,potassium:0.3},seed:"tfc:canola_seed",harvest:"tfc:canola"},
- radish:{minTemperatureC:-28,maxTemperatureC:10,minHydration:30,maxHydration:90,nutrientDemand:{},nutrientEffects:{nitrogen:0.15,phosphorus:0.3,potassium:0.18},seed:"tfc:radish_seed",harvest:"tfc:radish"},
- sugarcane:{minTemperatureC:16,maxTemperatureC:31,minHydration:25,maxHydration:100,nutrientDemand:{nitrogen:50,phosphorus:50,potassium:50},nutrientEffects:{nitrogen:-0.5,phosphorus:-0.5,potassium:-0.5},seed:"tfc:sugarcane_seed",harvest:"tfc:sugarcane",twoBlock:true},
- jute:{minTemperatureC:2,maxTemperatureC:25,minHydration:15,maxHydration:90,nutrientDemand:{nitrogen:60,phosphorus:40},nutrientEffects:{nitrogen:-0.6,phosphorus:-0.4,potassium:0.4},seed:"tfc:jute_seed",harvest:"tfc:jute",twoBlock:true},
- papyrus:{minTemperatureC:11,maxTemperatureC:31,minHydration:50,maxHydration:100,nutrientDemand:{nitrogen:60,potassium:40},nutrientEffects:{nitrogen:-0.6,phosphorus:0.4,potassium:-0.4},seed:"tfc:papyrus_seed",harvest:"tfc:papyrus",twoBlock:true}
-};
 const ITEM_TEMPERATURE_KEY="tfc:temperature_c",ITEM_HEAT_TICK_KEY="tfc:heat_updated_tick";
 const HEATED_METAL_PROFILES=Object.freeze({
  "tfc:heated_copper_ingot":{initialTemperatureC:1080,heatCapacity:2.857,forgingTemperatureC:648},
