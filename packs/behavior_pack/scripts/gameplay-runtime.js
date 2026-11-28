@@ -81,7 +81,6 @@ const WILD_SEED_DROPS=Object.freeze({
  "minecraft:tall_grass":["tfc:barley_seed","tfc:oat_seed","tfc:rye_seed","tfc:lentils_seed","tfc:soybean_seed","tfc:peanuts_seed","tfc:cassava_seed","tfc:alfalfa_seed","tfc:canola_seed","tfc:radish_seed","tfc:jute_seed"],
  "minecraft:fern":["tfc:beet_seed","tfc:cabbage_seed","tfc:carrot_seed","tfc:garlic_seed","tfc:onion_seed","tfc:squash_seed","tfc:green_beans_seed","tfc:pumpkin_seed","tfc:melon_seed","tfc:tomato_seed","tfc:red_bell_pepper_seed","tfc:yellow_bell_pepper_seed"],
  "minecraft:large_fern":["tfc:beet_seed","tfc:cabbage_seed","tfc:carrot_seed","tfc:garlic_seed","tfc:onion_seed","tfc:squash_seed","tfc:green_beans_seed","tfc:pumpkin_seed","tfc:melon_seed","tfc:tomato_seed","tfc:red_bell_pepper_seed","tfc:yellow_bell_pepper_seed"],
- "minecraft:seagrass":["tfc:rice_seed","tfc:sugarcane_seed","tfc:papyrus_seed"],
  "minecraft:tall_seagrass":["tfc:rice_seed","tfc:sugarcane_seed","tfc:papyrus_seed"]
 });
 const FERTILIZER_PROFILES=Object.freeze({
