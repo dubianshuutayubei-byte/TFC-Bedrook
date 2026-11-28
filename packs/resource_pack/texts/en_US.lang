@@ -36,3 +36,6 @@ item.tfc:maize.name=Maize
 item.tfc:potato.name=Potato
 
 item.tfc:spoiled_food.name=Spoiled Food
+
+item.tfc:vegetable.name=Vegetables
+item.tfc:fruit.name=Fruit
