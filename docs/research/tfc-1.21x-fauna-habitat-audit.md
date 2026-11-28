@@ -28,6 +28,18 @@ The extracted data is stored in `packs/behavior_pack/data/official-fauna-habitat
 - `fuzzy()` applies the source random threshold after hard climate limits pass. It uses normalized temperature, groundwater/rainfall, and rain-variance deltas, with two random floats.
 - Java's spawn placement separately checks entity placement type, aquatic fluid compatibility, heightmap, optional valid solid ground, and season.
 
+## Climate-layer formulas required by the habitat evaluator
+
+The pinned 4.2.16 source also confirms why biome-name estimates are not sufficient:
+- `ChunkData.getAverageGroundwater(x,z)` is `min(baseGroundwater + averageRainfall, 500)`.
+- `baseGroundwater` represents local freshwater-body influence (the source comment identifies rivers as its current use); it is not the same as rainfall.
+- `averageRainfall` is a time-invariant annual value in mm/year, in the documented 0–500 range.
+- `getAverageSeaLevelTemp` is a per-chunk climate layer. `ClimatePlacement` adjusts it for candidate Y using `EnvironmentHelpers.adjustAvgTempForElev`.
+- `rainVariance` is a separate climate-layer value. For non-absolute rain variance, the source flips its sign in the southern hemisphere before the fuzzy check.
+- `ignoreRivers()` substitutes average rainfall for average groundwater; it does not mean that rainfall can be replaced by a biome category label.
+
+These formulas and source blob IDs are also recorded in the habitat JSON metadata. The terrain/world-climate layer is still a prerequisite for runtime parity; no synthetic groundwater values have been introduced.
+
 ## Forest density reference
 
 The 1.21.x `ForestType.java` enum has 29 entries. Its second constructor argument is the exact `getDensity()` value used by `ClimatePlacement` (0–4). The values are stored in `packs/behavior_pack/data/official-forest-type-density-1.21x.json` so habitat limits such as `minForest(3)` and `maxForest(2)` can be evaluated numerically without translating them into guessed labels.
