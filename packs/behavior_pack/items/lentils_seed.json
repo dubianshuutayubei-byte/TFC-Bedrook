@@ -1,0 +1,18 @@
+{
+  "format_version": "1.26.60",
+  "minecraft:item": {
+    "description": {
+      "identifier": "tfc:lentils_seed",
+      "menu_category": {
+        "category": "items"
+      }
+    },
+    "components": {
+      "minecraft:icon": "tfc_lentils_seed",
+      "minecraft:display_name": {
+        "value": "レンズ豆の種"
+      },
+      "minecraft:max_stack_size": 64
+    }
+  }
+}
