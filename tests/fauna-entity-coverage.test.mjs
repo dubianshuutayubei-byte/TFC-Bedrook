@@ -23,7 +23,7 @@ test("all 63 TFC fauna have shared runtime profiles and entity coverage",()=>{
  for(const id of coverage.runtimeTrackedSpecies){const species=roster.species.find(x=>x.id===id);assert.ok(species,"runtime species must exist in official roster: "+id);assert.ok(runtime.includes('"speciesId":"'+species.id+'"')||runtime.includes('speciesId:"'+species.id+'"'),species.id+" runtime profile missing");}
 });
 test("all 40 missing species now have behavior, client and spawn definitions",()=>{
- assert.equal(coverage.customEntityDefinitionCount,40);
+ assert.equal(coverage.customEntityDefinitionCount,55);
  for(const id of coverage.customEntitySpecies){
   const bp=JSON.parse(readFileSync(join(root,"packs/behavior_pack/entities",id+".json"),"utf8"));
   const rp=JSON.parse(readFileSync(join(root,"packs/resource_pack/entity",id+".entity.json"),"utf8"));
@@ -37,18 +37,27 @@ test("all 40 missing species now have behavior, client and spawn definitions",()
 test("every custom fauna geometry is registered in the shared archetype model",()=>{
  const ids=geometry["minecraft:geometry"].map(x=>x.description.identifier);
  for(const id of coverage.customEntitySpecies)assert.ok(ids.includes("geometry.tfc.fauna."+id),id+" geometry missing");
- assert.equal(geometry["minecraft:geometry"].length,40);
+ assert.equal(geometry["minecraft:geometry"].length,55);
  assert.equal(archetypes.species.length,78);
 });
 
 
 test("official Java 1.21.x fauna additions are tracked as missing rather than falsely complete",()=>{
  assert.equal(roster.species.length,78);
- assert.equal(coverage.missingOfficialSpecies.length,15);
+ assert.equal(coverage.missingOfficialSpecies.length,0);
  for(const id of coverage.missingOfficialSpecies){
   assert.ok(roster.species.some(x=>x.id===id),id+" must be in official target roster");
   assert.ok(coverage.requiresSpeciesImplementation.includes(id),id+" must remain in implementation backlog");
   assert.equal(roster.species.find(x=>x.id===id).status,"not_implemented");
  }
- assert.equal(coverage.entityDefinitionsComplete,false);
+ assert.equal(coverage.entityDefinitionsComplete,true);
+});
+
+test("new Java 1.21.1 fauna scaffolds remain explicitly marked as species-specific work",()=>{
+ const ids=["arctic_char","burbot","muksun","northern_pike","pacu","peacock_bass","red_piranha","spotted_gudgeon","tilapia","armadillo","bactrian_camel","bison","dromedary_camel","leopard_seal","pond_turtle"];
+ for(const id of ids){
+  assert.equal(roster.species.find(x=>x.id===id).status,"custom_entity_scaffold");
+  assert.ok(coverage.remainingSpeciesSpecificWork.includes(id));
+  assert.ok(geometry["minecraft:geometry"].some(x=>x.description.identifier==="geometry.tfc.fauna."+id));
+ }
 });
