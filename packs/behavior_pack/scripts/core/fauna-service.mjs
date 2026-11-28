@@ -45,3 +45,54 @@ export function syncAnimalHealth(input,currentHealth,effectiveMax){
   animal.health=clamp((current/maximum)*100,0,100);
   return animal;
 }
+
+/**
+ * Mirrors the official TFC v3.2.26 fauna spawn-condition order.
+ * The caller must supply sampled environment values; unavailable measurements
+ * are reported as missing and never silently treated as suitable.
+ */
+export function evaluateFaunaSpawn(profile, environment, random = Math.random) {
+  if (!profile || !environment) throw new TypeError("profile and environment are required");
+  if (typeof random !== "function") throw new TypeError("random must be a function");
+  const failures = [];
+  const missing = [];
+  const chance = profile.chance ?? 1;
+  if (!Number.isInteger(chance) || chance < 1) throw new RangeError("profile.chance must be a positive integer");
+  const roll = Number(random());
+  if (!Number.isFinite(roll) || roll < 0 || roll >= 1) throw new RangeError("random must return a number in [0, 1)");
+  if (roll >= 1 / chance) failures.push("chance");
+
+  const placement = profile.placement ?? "on_ground";
+  if (placement === "in_water" && environment.inWater !== true) failures.push("not_in_water");
+  if (placement === "on_ground" && environment.onGround !== true) failures.push("not_on_ground");
+  if (!["in_water", "on_ground", "no_restrictions"].includes(placement)) {
+    throw new RangeError("unsupported fauna spawn placement: " + placement);
+  }
+
+  if (profile.distanceBelowSeaLevel != null && profile.distanceBelowSeaLevel >= 0) {
+    if (environment.y == null || environment.seaLevel == null) missing.push("y", "seaLevel");
+    else if (environment.y > environment.seaLevel - profile.distanceBelowSeaLevel) failures.push("too_high_above_depth_limit");
+  }
+
+  const climate = evaluateHabitat(profile, environment);
+  failures.push(...climate.failures);
+  missing.push(...climate.missing);
+
+  if (profile.solidGround === true) {
+    if (environment.validSpawnGround == null) missing.push("validSpawnGround");
+    else if (environment.validSpawnGround !== true) failures.push("invalid_spawn_ground");
+  }
+
+  if (profile.maxBrightness != null && profile.maxBrightness >= 0) {
+    if (environment.brightness == null) missing.push("brightness");
+    else if (environment.brightness > profile.maxBrightness) failures.push("brightness_high");
+  }
+
+  return {
+    suitable: failures.length === 0 && missing.length === 0,
+    failures: [...new Set(failures)],
+    missing: [...new Set(missing)],
+    chance,
+    roll
+  };
+}
