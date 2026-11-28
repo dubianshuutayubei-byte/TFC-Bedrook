@@ -56,6 +56,9 @@
       "crucible",
       "anvil",
       "drying_rack"
+    ],
+    "geology_tools": [
+      "prospecting_tool"
     ]
   },
   "implementationStatus": "partially_registered",
@@ -110,6 +113,7 @@
     "tfc:dried_meat",
     "tfc:dried_fruit",
     "tfc:dried_vegetables",
-    "tfc:drying_rack"
+    "tfc:drying_rack",
+    "tfc:prospecting_tool"
   ]
 }
