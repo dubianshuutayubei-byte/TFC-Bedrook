@@ -27,3 +27,18 @@ test("dried food items match preservation profiles",()=>{
   assert.equal(food.hydration,profile.hydration);
  }
 });
+
+test("every food profile has a matching registered edible item",()=>{
+ const profiles=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/food-profiles.json"),"utf8"));
+ const fileIds={milk:"milk_bottle"};
+ for(const profile of profiles.foods){
+  const fileId=fileIds[profile.id]??profile.id;
+  const item=JSON.parse(readFileSync(join(root,"packs/behavior_pack/items",fileId+".json"),"utf8"))["minecraft:item"];
+  const food=item.components["tfc:consume_food"];
+  assert.ok(food,"missing food component for "+profile.id);
+  const category=Object.keys(profile.nutrition)[0];
+  assert.equal(food.category,category,profile.id+" category mismatch");
+  assert.equal(food.nutrition,profile.nutrition[category],profile.id+" nutrition mismatch");
+  assert.equal(food.hydration,profile.hydration,profile.id+" hydration mismatch");
+ }
+});
