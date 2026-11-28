@@ -97,14 +97,14 @@ function mixDough(player){
  player.sendMessage("§a小麦粉と水を混ぜて生地を作りました。空の土器が戻りました。");
 }
 function food(event,params){const p=event?.source;if(!p||p.typeId!=="minecraft:player")return;const s=deserializePlayerState(String(p.getDynamicProperty(STATE_KEY)??""));const itemId=String(params.itemId??"");const freshness=readStackFreshness(event.itemStack?.getLore?.()??[])?.freshness??100;const nutrition=params.category?{[params.category]:Number(params.nutrition??0)}:{};const result=consumeFood(s,{freshness,hydration:Number(params.hydration??0),nutrition});if(!result.consumed){p.sendMessage("§cこの食品は腐敗していて食べられません。");return;}p.setDynamicProperty(STATE_KEY,serializePlayerState(result.playerState));p.sendMessage("§a"+(itemId||"食品")+"の栄養・水分を反映しました。");}
-function tickFoodContainerFreshness(container,dimension,location,nowTick){
+function tickFoodContainerFreshness(container,dimension,location,nowTick,{sealed=false}={}){
  if(!container)return;
  const temperatureC=temperatureAt(dimension,location);
  for(let slot=0;slot<container.size;slot++){
   const stack=container.getItem(slot);if(!stack)continue;
   const baseDecayPerHour=FOOD_DECAY_PROFILES[stack.typeId];if(baseDecayPerHour===undefined)continue;
   let lore=[];try{lore=stack.getLore();}catch{}
-  const result=advanceStackFreshness(lore,nowTick,{temperatureC,baseDecayPerHour});
+  const result=advanceStackFreshness(lore,nowTick,{temperatureC,baseDecayPerHour:baseDecayPerHour*(sealed?0.5:1)});
   if(result.food.spoiled){container.setItem(slot,new ItemStack("tfc:spoiled_food",stack.amount));continue;}
   try{stack.setLore(result.lore);container.setItem(slot,stack);}catch(error){console.warn("[TFC-Bedrook] food stack freshness update:",error);}
  }
@@ -150,7 +150,7 @@ function tickTrackedFoodContainers(nowTick){
    if(!block){continue;}
    const container=getBlockInventoryContainer(block);
    if(!container){trackedFoodContainers.delete(key);changed=true;continue;}
-   tickFoodContainerFreshness(container,dimension,entry.location,nowTick);
+   tickFoodContainerFreshness(container,dimension,entry.location,nowTick,{sealed:readWorldState(posKey(block,"container_sealed"),false)===true});
   }catch{}
  }
  if(changed)saveTrackedFoodContainers();
@@ -474,6 +474,7 @@ world.afterEvents.playerBreakBlock.subscribe(event=>{
 });system.beforeEvents.startup.subscribe(event=>{
 event.itemComponentRegistry.registerCustomComponent("tfc:open_knapping",{onUse:a=>{if(a.source?.typeId==="minecraft:player")void knap(a.source);}});
 event.itemComponentRegistry.registerCustomComponent("tfc:prospect",{onUseOn:a=>{if(a.source?.typeId==="minecraft:player")prospect(a.source,a.block);}});
+event.itemComponentRegistry.registerCustomComponent("tfc:clay_seal",{onUseOn:a=>{const player=a.source,block=a.block;if(player?.typeId!=="minecraft:player"||!block)return;const container=getBlockInventoryContainer(block);if(!container){player.sendMessage("§cこのブロックは食品を保存できる容器ではありません。");return;}const key=posKey(block,"container_sealed"),sealed=readWorldState(key,false)===true;writeWorldState(key,!sealed);trackFoodContainer(block);player.sendMessage(!sealed?"§a容器を封印しました。内部の食品は2倍長持ちします。":"§e容器の封印を解除しました。");}});
 event.itemComponentRegistry.registerCustomComponent("tfc:consume_food",{onConsume:(a,p)=>food(a,p.params??{})}});
 event.itemComponentRegistry.registerCustomComponent("tfc:fill_water_vessel",{onUseOn:a=>{if(a.source?.typeId==="minecraft:player")fillWaterVessel(a.source,a.block);}});
 event.itemComponentRegistry.registerCustomComponent("tfc:drink_water",{onUse:a=>{if(a.source?.typeId==="minecraft:player")drinkWaterVessel(a.source);}});
