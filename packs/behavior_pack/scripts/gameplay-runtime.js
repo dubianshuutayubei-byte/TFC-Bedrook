@@ -599,6 +599,15 @@ async function animalInteract(player,entity){
   player.sendMessage("§a牛乳を採取しました。");
   return;
  }
+ if(held.typeId==="tfc:water_vessel"){
+  if(profile.kind==="aquatic"){player.sendMessage("§e水生動物に土器の水を与える必要はありません。");return;}
+  if(state.thirst<=0){player.sendMessage("§eこの動物は今、水を必要としていません。");return;}
+  if(!take(player,"tfc:water_vessel",1)){player.sendMessage("§c水入り土器を取り出せませんでした。");return;}
+  give(player,"tfc:fired_vessel",1);
+  state=waterAnimal(state,40);saveAnimal(entity,state);
+  player.sendMessage("§b水を与えました。渇き: "+Math.floor(state.thirst)+"/100");
+  return;
+ }
  if(!profile.feedItems.includes(held.typeId))return;
  // Vanilla livestock already consumes its breeding feed during the interaction event.
  // Only the custom deer entity needs a manual inventory deduction.
