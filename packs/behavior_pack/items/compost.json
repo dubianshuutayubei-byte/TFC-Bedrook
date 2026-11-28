@@ -1,0 +1,14 @@
+{
+  "format_version": "1.26.60",
+  "minecraft:item": {
+    "description": {
+      "identifier": "tfc:compost",
+      "menu_category": { "category": "items" }
+    },
+    "components": {
+      "minecraft:icon": "tfc_compost",
+      "minecraft:display_name": { "value": "堆肥" },
+      "minecraft:max_stack_size": 64
+    }
+  }
+}
