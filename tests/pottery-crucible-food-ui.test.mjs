@@ -10,7 +10,7 @@ const menu=readFileSync(join(root,"packs/behavior_pack/scripts/ui/main-menu.js")
 
 test("sneak-use clay ball opens pottery shaping and consumes the selected clay amount",()=>{
  assert.match(runtime,/async function shapePottery\(player\)/);
- assert.match(runtime,/player\.isSneaking&&stack\.typeId==="minecraft:clay_ball"/);
+ assert.match(runtime,/world\\.afterEvents\\.itemUse\\.subscribe/);\n assert.match(runtime,/player\\.isSneaking&&stack\\?\\.typeId==="minecraft:clay_ball"/);
  assert.match(runtime,/tfc:clay_vessel/);
  assert.match(runtime,/tfc:unfired_ingot_mold/);
 });
