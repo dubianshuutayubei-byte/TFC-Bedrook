@@ -96,3 +96,6 @@ item.tfc:flour.name=Flour
 item.tfc:dough.name=Dough
 item.tfc:bread.name=Bread
 tile.tfc:quern.name=Quern
+
+item.tfc:quern.name=Quern
+tile.tfc:quern.name=Quern
