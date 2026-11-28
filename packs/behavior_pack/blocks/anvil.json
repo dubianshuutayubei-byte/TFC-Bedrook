@@ -22,7 +22,8 @@
       "minecraft:selection_box": true,
       "tfc:station_ui": {
         "station": "anvil"
-      }
+      },
+      "minecraft:display_name": "tile.tfc:anvil.name"
     }
   }
 }
