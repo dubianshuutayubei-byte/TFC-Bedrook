@@ -213,7 +213,9 @@ export function validateClimateProfiles(data) {
       }
       if (profile.minTemperatureC > profile.maxTemperatureC) errors.push(`${category}/${profile.id}: temperature minimum exceeds maximum`);
       if (profile.minHydration > profile.maxHydration) errors.push(`${category}/${profile.id}: hydration minimum exceeds maximum`);
-      if (profile.minHydration < 0 || profile.maxHydration > 100) errors.push(`${category}/${profile.id}: hydration must be within 0..100`);
+      if (profile.minHydration < 0 || profile.minHydration > 100 || profile.maxHydration < 0 || profile.maxHydration > 100) {
+        errors.push(`${category}/${profile.id}: hydration must be within 0..100`);
+      }
       if (profile.temperatureWiggleC < 0 || profile.hydrationWiggle < 0) errors.push(`${category}/${profile.id}: wiggle ranges must be >= 0`);
     }
   }
