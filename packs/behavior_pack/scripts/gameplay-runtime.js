@@ -525,6 +525,7 @@ function cropTick(block){
  }
 }
 function fireTick(block){const key=posKey(block,"fire");const state=advanceFire(readWorldState(key,{}),20);writeWorldState(key,state);}
+function currentAnimalDay(){return world.getDay()+world.getTimeOfDay()/24000;}
 function animalState(entity){const profile=ANIMAL_PROFILES[entity.typeId];try{const raw=entity.getDynamicProperty("tfc:animal_state");const base=typeof raw==="string"?JSON.parse(raw):{};const isBaby=entity.hasComponent("minecraft:is_baby");return initializeAnimalLifeStage({...base,species:profile?.speciesId??base.species??entity.typeId.replace(":","_")},{isBaby,adultAgeDays:profile?.adultAgeDays??null,maxUses:profile?.maxUses??Infinity,currentDay:world.getDay()});}catch{return initializeAnimalLifeStage({species:profile?.speciesId??entity.typeId.replace(":","_")},{isBaby:false,adultAgeDays:profile?.adultAgeDays??null,maxUses:profile?.maxUses??Infinity,currentDay:world.getDay()});}}
 function saveAnimal(entity,state){try{entity.setDynamicProperty("tfc:animal_state",JSON.stringify(state));}catch(error){console.warn("[TFC-Bedrook] animal state save:",error);}}
 function consumeDroppedAnimalFood(entity,profile,state){
@@ -586,7 +587,7 @@ async function animalInteract(player,entity){
  const shearKey=player.id+"|"+entity.id;
  if(pendingAnimalShears.has(shearKey)){
   pendingAnimalShears.delete(shearKey);
-  try{if(entity.typeId==="minecraft:sheep"&&entity.hasComponent("minecraft:is_sheared")){state=recordProduct(state,world.getDay(),{maxUses:profile.maxUses??Infinity});saveAnimal(entity,state);player.sendMessage("§a羊毛を採取しました。産出回数: "+state.uses+"/"+(profile.maxUses??"∞"));}}catch(error){console.warn("[TFC-Bedrook] sheep product record failed:",error);}
+  try{if(entity.typeId==="minecraft:sheep"&&entity.hasComponent("minecraft:is_sheared")){state=recordProduct(state,currentAnimalDay(),{maxUses:profile.maxUses??Infinity});saveAnimal(entity,state);player.sendMessage("§a羊毛を採取しました。産出回数: "+state.uses+"/"+(profile.maxUses??"∞"));}}catch(error){console.warn("[TFC-Bedrook] sheep product record failed:",error);}
  }
  if(state.sex==="unknown"){state.sex=Math.random()<0.5?"male":"female";saveAnimal(entity,state);}
  const held=inv(player)?.getItem(player.selectedSlotIndex);
@@ -602,7 +603,7 @@ async function animalInteract(player,entity){
  if(profile.dairy&&held.typeId==="minecraft:glass_bottle"){
   if(state.sex!=="female"){player.sendMessage("§e乳を生産できるのはメスの乳畜だけです。");return;}
   if(entity.hasComponent("minecraft:is_baby")||(profile.adultAgeDays!=null&&state.ageDays<profile.adultAgeDays)){player.sendMessage("§eこの動物はまだ成長中です。");return;}
-  const currentDay=state.ageDays;
+  const currentDay=currentAnimalDay();
   if(!canProduce(state,{requiredFamiliarity:profile.productFamiliarityMin??0,cooldownDays:profile.productCooldownDays??1,currentDay,requiredSex:"female",minimumAgeDays:profile.adultAgeDays,minimumHealth:40,maximumHunger:60,maximumThirst:60,maxUses:profile.maxUses??Infinity})){player.sendMessage("§eこの動物は健康・空腹・渇き、または補充時間の条件を満たしていません。");return;}
   if(!take(player,"minecraft:glass_bottle",1)){player.sendMessage("§c空き瓶を取り出せません。");return;}
   give(player,"tfc:milk_bottle",1);
@@ -638,7 +639,7 @@ export function initializeGameplay(){
   try{
    if(target.hasComponent("minecraft:is_sheared"))return;
    const profile=ANIMAL_PROFILES[target.typeId],state=animalState(target);
-   const eligible=canProduce(state,{requiredFamiliarity:profile.productFamiliarityMin??0,cooldownDays:profile.productCooldownDays??7,currentDay:world.getDay(),minimumAgeDays:profile.adultAgeDays??0,maxUses:profile.maxUses??Infinity});
+   const eligible=canProduce(state,{requiredFamiliarity:profile.productFamiliarityMin??0,cooldownDays:profile.productCooldownDays??7,currentDay:currentAnimalDay(),minimumAgeDays:profile.adultAgeDays??0,maxUses:profile.maxUses??Infinity});
    if(!eligible){event.cancel=true;return;}
    if(key)pendingAnimalShears.add(key);
   }catch(error){event.cancel=true;console.warn("[TFC-Bedrook] sheep shearing eligibility failed:",error);}
