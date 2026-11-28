@@ -5,6 +5,7 @@ import { createFireState, addFuel, advanceFire, canProcessAtTemperature } from "
 import { createSoilState, applySoilCompost, advanceSoilHydration } from "./core/agriculture-service.mjs";
 import { createAnimalState, advanceAnimalNeeds, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy } from "./core/fauna-service.mjs";
 import { getStationRecipes } from "./core/processing-recipes.mjs";
+import { isStationJobDue, getPendingStationOutputs, markStationOutputDelivered, markStationJobRecoverable } from "./core/station-job-service.mjs";
 
 const STATE_KEY="tfc:player_state",PROGRESS_KEY="tfc:knapping_progress";
 const WEATHER_BY_DIMENSION=new Map([["overworld","Clear"]]);
@@ -36,21 +37,19 @@ const FUELS={
 
 function stationJobKey(block){return posKey(block,"station_job");}
 function completeStationJob(key,dimension,location){
- const job=readWorldState(key,null);if(!job||!["running","ready_to_claim","delivering"].includes(job.status)||Date.now()<job.endsAt)return false;
- const delivered={...(job.deliveredOutputs??{})};
+ let job=readWorldState(key,null);if(!isStationJobDue(job))return false;
  try{
-  for(const [id,n] of Object.entries(job.outputs??{})){
-   if(delivered[id])continue;
+  for(const [id,n] of getPendingStationOutputs(job)){
    dimension.spawnItem(new ItemStack(id,n),location);
-   delivered[id]=true;
-   writeWorldState(key,{...job,status:"delivering",deliveredOutputs:delivered});
+   job=markStationOutputDelivered(job,id);
+   writeWorldState(key,job);
   }
   writeWorldState(key,null);
   const player=world.getAllPlayers().find(p=>p.id===job.playerId);
   if(player)player.sendMessage("§a加工完了。完成品を設備の場所に搬出しました。");
   return true;
  }catch(error){
-  writeWorldState(key,{...job,status:"ready_to_claim",deliveredOutputs:delivered});
+  writeWorldState(key,markStationJobRecoverable(job));
   console.warn("[TFC-Bedrook] output retained for recovery:",error);return false;
  }
 }
