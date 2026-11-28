@@ -6,7 +6,7 @@ import { readStackFreshness, advanceStackFreshness } from "./core/food-stack-ser
 import { createFireState, addFuel, advanceFire, canProcessAtTemperature } from "./core/firepit-service.mjs";
 import { createSoilState, advanceSoilHydration, evaluateCropGrowth, calculateCropYield, applyFertilizer, applyCropNutrientEffects, inferSoilTypeFromBlockId, inferSoilFertilityClassFromBiomeId, advanceCropGrowthProgress } from "./core/agriculture-service.mjs";
 import { CROP_PROFILES } from "./core/crop-profiles.mjs";
-import { createAnimalState, createAnimalOffspringState, initializeAnimalLifeStage, syncAnimalHealth, advanceAnimalNeeds, advanceAnimalFamiliarityDecay, canFeedAnimal, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct, canLayEgg, recordEggLaid, getOffspringCount, evaluateHabitat, evaluateFaunaSpawn } from "./core/fauna-service.mjs";
+import { createAnimalState, createAnimalOffspringState, initializeAnimalLifeStage, syncAnimalHealth, advanceAnimalNeeds, advanceAnimalFamiliarityDecay, canFeedAnimal, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct, canLayEgg, recordEggLaid, getOffspringCount, evaluateHabitat, evaluateFaunaSpawn, tfcMonthFromDay } from "./core/fauna-service.mjs";
 import { OFFICIAL_FAUNA_PROFILES } from "./core/fauna-profiles.mjs";
 import { addNestBoxEgg, advanceNestBoxIncubation, takeNestBoxEgg } from "./core/nest-box-service.mjs";
 import { getStationRecipes } from "./core/processing-recipes.mjs";
@@ -875,7 +875,7 @@ function sampleAnimalEnvironment(entity){
  const onGround=validSpawnGround&&!inWater;
  const terrain=/mountain|windswept|peaks|highlands/.test(biomeId)?"highlands":/plains|savanna/.test(biomeId)?"plains":/forest|taiga|jungle/.test(biomeId)?"forest":"other";
  const waterType=/ocean|beach/.test(biomeId)?"saltwater":"freshwater";
- return {y:blockLocation.y,seaLevel:63,onGround,inWater,validSpawnGround,temperatureC:currentTemperatureC(location.y-63,biomeId),rainfall:rainfallForBiome(biomeId),belowSeaLevel:Math.max(0,63-blockLocation.y),brightness,forestType:forestTypeAt(dimension,location),terrain,waterType,biomeId};
+ return {y:blockLocation.y,seaLevel:63,month:tfcMonthFromDay(world.getDay()),onGround,inWater,validSpawnGround,temperatureC:currentTemperatureC(location.y-63,biomeId),rainfall:rainfallForBiome(biomeId),belowSeaLevel:Math.max(0,63-blockLocation.y),brightness,forestType:forestTypeAt(dimension,location),terrain,waterType,biomeId};
 }
 function validateNaturalFaunaSpawn(event){
  if(event?.cause!=="Spawned")return;
