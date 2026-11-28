@@ -26,3 +26,19 @@ test("catalog registeredIdentifiers all exist in item or block files",()=>{
   assert.deepEqual(missing,[],"catalog claims identifiers that are not registered");
   assert.equal(new Set(catalog.registeredIdentifiers??[]).size,(catalog.registeredIdentifiers??[]).length,"catalog contains duplicate registered identifiers");
 });
+
+test("item block placers resolve to registered block definitions and catalog counts match",()=>{
+ const items=readIdentifiers("packs/behavior_pack/items","minecraft:item");
+ const blocks=readIdentifiers("packs/behavior_pack/blocks","minecraft:block");
+ const blockSet=new Set(blocks);
+ const bad=[];
+ for(const file of readdirSync(join(root,"packs/behavior_pack/items")).filter(name=>name.endsWith(".json"))){
+  const item=JSON.parse(readFileSync(join(root,"packs/behavior_pack/items",file),"utf8"))["minecraft:item"];
+  const placed=item.components?.["minecraft:block_placer"]?.block;
+  if(placed&&!blockSet.has(placed))bad.push(file+" -> "+placed);
+ }
+ assert.deepEqual(bad,[]);
+ const catalog=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/item-catalog.json"),"utf8"));
+ assert.equal(catalog.audit.registeredItemCount,items.length);
+ assert.equal(catalog.audit.registeredBlockCount,blocks.length);
+});
