@@ -6,6 +6,7 @@ import { fileURLToPath } from "node:url";
 import { getStationRecipes } from "../packs/behavior_pack/scripts/core/processing-recipes.mjs";
 const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
+const menu=readFileSync(join(root,"packs/behavior_pack/scripts/ui/main-menu.js"),"utf8");
 
 test("sneak-use clay ball opens pottery shaping and consumes the selected clay amount",()=>{
  assert.match(runtime,/async function shapePottery\(player\)/);
