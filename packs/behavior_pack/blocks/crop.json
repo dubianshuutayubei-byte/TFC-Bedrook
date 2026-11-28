@@ -28,7 +28,21 @@
           "squash",
           "lentils",
           "soybean",
-          "peanuts"
+          "peanuts",
+          "rice",
+          "cassava",
+          "green_beans",
+          "pumpkin",
+          "melon",
+          "tomato",
+          "red_bell_pepper",
+          "yellow_bell_pepper",
+          "alfalfa",
+          "canola",
+          "radish",
+          "sugarcane",
+          "jute",
+          "papyrus"
         ],
         "tfc:part": [
           "lower",
