@@ -75,7 +75,7 @@ test("all four official TFC wool-producing mammals are connected, including Bact
  for(const id of ["minecraft:sheep","tfc:alpaca","tfc:musk_ox","tfc:bactrian_camel"]){
   const line=runtime.split("\n").find(value=>value.includes('"'+id+'":'));
   assert.ok(line,id+" runtime profile must exist");
-  assert.match(line,/wooly:true/,id+" must use the wool product path");
+  assert.match(line,/"?wooly"?:true/,id+" must use the wool product path");
  }
  const camel=runtime.split("\n").find(value=>value.includes('"tfc:bactrian_camel":'));
  assert.ok(camel,"Bactrian camel runtime profile must exist");
