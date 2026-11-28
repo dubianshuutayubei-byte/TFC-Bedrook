@@ -130,6 +130,22 @@ function getBlockInventoryContainer(block){
  try{const component=block.getComponent("inventory");if(component?.container)return component.container;}catch{}
  return undefined;
 }
+function foodContainerSummary(container){
+ if(!container)return "容器の内容を読み取れませんでした。";
+ const lines=[];
+ for(let slot=0;slot<container.size;slot++){
+  const stack=container.getItem(slot);if(!stack)continue;
+  const name=ITEM_LABELS[stack.typeId]??stack.typeId.replace(/^tfc:/,"").replaceAll("_"," ");
+  if(stack.typeId==="tfc:spoiled_food"){lines.push("§c"+name+" ×"+stack.amount+"（腐敗）");continue;}
+  if(FOOD_DECAY_PROFILES[stack.typeId]===undefined)continue;
+  let lore=[];try{lore=stack.getLore();}catch{}
+  const freshness=readStackFreshness(lore).freshness;
+  const status=freshness>=75?"新鮮":freshness>=40?"劣化中":freshness>0?"腐敗間近":"腐敗";
+  const color=freshness>=75?"§a":freshness>=40?"§e":"§c";
+  lines.push(color+name+" ×"+stack.amount+"（鮮度 "+Math.round(freshness)+"% / "+status+"）");
+ }
+ return lines.length?lines.join("\n"):"食品は入っていません。";
+}
 function trackFoodContainer(block){
  try{
   const container=getBlockInventoryContainer(block);
@@ -481,7 +497,7 @@ world.afterEvents.playerBreakBlock.subscribe(event=>{
 });system.beforeEvents.startup.subscribe(event=>{
 event.itemComponentRegistry.registerCustomComponent("tfc:open_knapping",{onUse:a=>{if(a.source?.typeId==="minecraft:player")void knap(a.source);}});
 event.itemComponentRegistry.registerCustomComponent("tfc:prospect",{onUseOn:a=>{if(a.source?.typeId==="minecraft:player")prospect(a.source,a.block);}});
-event.itemComponentRegistry.registerCustomComponent("tfc:clay_seal",{onUseOn:a=>{const player=a.source,block=a.block;if(player?.typeId!=="minecraft:player"||!block)return;const container=getBlockInventoryContainer(block);if(!container){player.sendMessage("§cこのブロックは食品を保存できる容器ではありません。");return;}const key=posKey(block,"container_sealed"),sealed=readWorldState(key,false)===true;tickFoodContainerFreshness(container,block.dimension,block.location,system.currentTick,{sealed});if(!writeWorldState(key,!sealed)){player.sendMessage("§c封印状態を保存できませんでした。");return;}trackFoodContainer(block);player.sendMessage(!sealed?"§a容器を封印しました。開くと封印が解除され、内部の食品は封印中に2倍長持ちします。":"§e容器の封印を解除しました。");}});
+event.itemComponentRegistry.registerCustomComponent("tfc:clay_seal",{onUseOn:a=>{const player=a.source,block=a.block;if(player?.typeId!=="minecraft:player"||!block)return;const container=getBlockInventoryContainer(block);if(!container){player.sendMessage("§cこのブロックは食品を保存できる容器ではありません。");return;}const key=posKey(block,"container_sealed"),sealed=readWorldState(key,false)===true;tickFoodContainerFreshness(container,block.dimension,block.location,system.currentTick,{sealed});if(!writeWorldState(key,!sealed)){player.sendMessage("§c封印状態を保存できませんでした。");return;}trackFoodContainer(block);const nextSealed=!sealed;const title=nextSealed?"食品容器を封印しました":"食品容器を開封しました";const body=(nextSealed?"封印中は食品の腐敗速度が通常の50%になります。":"開封中は通常速度で腐敗します。")+"\n\n"+foodContainerSummary(container);const form=new ActionFormData().title(title).body(body).button("閉じる");void form.show(player).catch(()=>player.sendMessage(title+"\n"+body));}});
 event.itemComponentRegistry.registerCustomComponent("tfc:consume_food",{onConsume:(a,p)=>food(a,p.params??{})}});
 event.itemComponentRegistry.registerCustomComponent("tfc:fill_water_vessel",{onUseOn:a=>{if(a.source?.typeId==="minecraft:player")fillWaterVessel(a.source,a.block);}});
 event.itemComponentRegistry.registerCustomComponent("tfc:drink_water",{onUse:a=>{if(a.source?.typeId==="minecraft:player")drinkWaterVessel(a.source);}});
