@@ -527,7 +527,7 @@ function fireTick(block){const key=posKey(block,"fire");const state=advanceFire(
 function animalState(entity){const profile=ANIMAL_PROFILES[entity.typeId];try{const raw=entity.getDynamicProperty("tfc:animal_state");const base=typeof raw==="string"?JSON.parse(raw):{};const isBaby=entity.hasComponent("minecraft:is_baby");return initializeAnimalLifeStage({...base,species:profile?.speciesId??base.species??entity.typeId.replace(":","_")},{isBaby,adultAgeDays:profile?.adultAgeDays??null});}catch{return initializeAnimalLifeStage({species:profile?.speciesId??entity.typeId.replace(":","_")},{isBaby:false,adultAgeDays:profile?.adultAgeDays??null});}}
 function saveAnimal(entity,state){try{entity.setDynamicProperty("tfc:animal_state",JSON.stringify(state));}catch(error){console.warn("[TFC-Bedrook] animal state save:",error);}}
 function consumeDroppedAnimalFood(entity,profile,state){
- if(!profile.feedItems?.length)return state;
+ if(!profile.feedItems?.length||state.hunger<25)return state;
  try{
   const items=entity.dimension.getEntities({type:"minecraft:item",location:entity.location,maxDistance:1.5});
   for(const dropped of items){
