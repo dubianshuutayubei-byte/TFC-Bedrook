@@ -4,7 +4,7 @@ import {
   createSoilState, evaluateCropGrowth, applyNutrientUptake, applyFertilizer,
   advanceCropStage, advanceSoilHydration, calculateCropGrowthPoints,
   advanceSoilDay, applySoilCompost, inferSoilTypeFromBlockId,
-  advanceCropGrowthProgress, applyCropNutrientEffects, getSoilFertilityMultiplier
+  advanceCropGrowthProgress, applyCropNutrientEffects, getSoilFertilityMultiplier, inferSoilFertilityClassFromBiomeId
 } from "../packs/behavior_pack/scripts/core/agriculture-service.mjs";
 
 const wheat = {
@@ -81,4 +81,15 @@ test("crop nutrient effects consume and replenish NPK by crop profile",()=>{
   assert.deepEqual([wheatSoil.nitrogen,wheatSoil.phosphorus,wheatSoil.potassium],[48,51,51]);
   const potatoSoil=applyCropNutrientEffects({nitrogen:50,phosphorus:50,potassium:50},{nitrogen:-1,phosphorus:-1,potassium:-1},1);
   assert.deepEqual([potatoSoil.nitrogen,potatoSoil.phosphorus,potatoSoil.potassium],[49,49,49]);
+});
+
+test("biome proxies infer TFC soil fertility classes",()=>{
+ assert.equal(inferSoilFertilityClassFromBiomeId("minecraft:basalt_deltas"),"andisol");
+ assert.equal(inferSoilFertilityClassFromBiomeId("minecraft:river"),"fluvisol");
+ assert.equal(inferSoilFertilityClassFromBiomeId("minecraft:forest"),"alfisol");
+ assert.equal(inferSoilFertilityClassFromBiomeId("minecraft:snowy_plains"),"mollisol");
+ assert.equal(inferSoilFertilityClassFromBiomeId("minecraft:taiga"),"podzol");
+ assert.equal(inferSoilFertilityClassFromBiomeId("minecraft:desert"),"aridisol");
+ assert.equal(inferSoilFertilityClassFromBiomeId("minecraft:jungle"),"oxisol");
+ assert.equal(inferSoilFertilityClassFromBiomeId("minecraft:plains"),"entisol");
 });
