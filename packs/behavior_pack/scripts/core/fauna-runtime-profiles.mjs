@@ -25,7 +25,10 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "minecraft:apple"
     ],
     "grazeBlocks": [
-      "minecraft:grass_block"
+      "minecraft:grass_block",
+      "minecraft:short_grass",
+      "minecraft:tall_grass",
+      "minecraft:fern"
     ],
     "predatorDiet": [],
     "predationDamage": 0,
@@ -147,7 +150,10 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "minecraft:beetroot"
     ],
     "grazeBlocks": [
-      "minecraft:grass_block"
+      "minecraft:grass_block",
+      "minecraft:short_grass",
+      "minecraft:tall_grass",
+      "minecraft:fern"
     ],
     "predatorDiet": [],
     "predationDamage": 0,
@@ -180,7 +186,10 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "minecraft:beetroot"
     ],
     "grazeBlocks": [
-      "minecraft:grass_block"
+      "minecraft:grass_block",
+      "minecraft:short_grass",
+      "minecraft:tall_grass",
+      "minecraft:fern"
     ],
     "predatorDiet": [],
     "predationDamage": 0
@@ -210,7 +219,10 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "minecraft:beetroot"
     ],
     "grazeBlocks": [
-      "minecraft:grass_block"
+      "minecraft:grass_block",
+      "minecraft:short_grass",
+      "minecraft:tall_grass",
+      "minecraft:fern"
     ],
     "predatorDiet": [],
     "predationDamage": 0
@@ -492,7 +504,10 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "minecraft:pumpkin_seeds"
     ],
     "grazeBlocks": [
-      "minecraft:grass_block"
+      "minecraft:grass_block",
+      "minecraft:short_grass",
+      "minecraft:tall_grass",
+      "minecraft:fern"
     ],
     "predatorDiet": [],
     "predationDamage": 0,
@@ -523,7 +538,10 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "minecraft:beetroot"
     ],
     "grazeBlocks": [
-      "minecraft:grass_block"
+      "minecraft:grass_block",
+      "minecraft:short_grass",
+      "minecraft:tall_grass",
+      "minecraft:fern"
     ],
     "predatorDiet": [],
     "predationDamage": 0
@@ -618,7 +636,10 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "minecraft:beetroot"
     ],
     "grazeBlocks": [
-      "minecraft:grass_block"
+      "minecraft:grass_block",
+      "minecraft:short_grass",
+      "minecraft:tall_grass",
+      "minecraft:fern"
     ],
     "predatorDiet": [],
     "predationDamage": 0
@@ -914,10 +935,12 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
     "wooly": false,
     "kind": "aquatic",
     "domestic": false,
-    "hungerPerDay": 0,
+    "hungerPerDay": 8,
     "thirstPerDay": 0,
     "feedItems": [],
-    "grazeBlocks": [],
+    "grazeBlocks": [
+      "minecraft:seagrass"
+    ],
     "predatorDiet": [],
     "predationDamage": 0
   },
@@ -946,7 +969,10 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "minecraft:beetroot"
     ],
     "grazeBlocks": [
-      "minecraft:grass_block"
+      "minecraft:grass_block",
+      "minecraft:short_grass",
+      "minecraft:tall_grass",
+      "minecraft:fern"
     ],
     "predatorDiet": [],
     "predationDamage": 0,
@@ -978,7 +1004,10 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "minecraft:wheat"
     ],
     "grazeBlocks": [
-      "minecraft:grass_block"
+      "minecraft:grass_block",
+      "minecraft:short_grass",
+      "minecraft:tall_grass",
+      "minecraft:fern"
     ],
     "predatorDiet": [],
     "predationDamage": 0,
@@ -1141,7 +1170,10 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "minecraft:beetroot"
     ],
     "grazeBlocks": [
-      "minecraft:grass_block"
+      "minecraft:grass_block",
+      "minecraft:short_grass",
+      "minecraft:tall_grass",
+      "minecraft:fern"
     ],
     "predatorDiet": [],
     "predationDamage": 0
@@ -1174,7 +1206,12 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "minecraft:grass_block"
     ],
     "predatorDiet": [],
-    "predationDamage": 0
+    "predationDamage": 0,
+    "fishForageItems": [
+      "minecraft:cod",
+      "minecraft:salmon",
+      "minecraft:tropical_fish"
+    ]
   },
   "tfc:pheasant": {
     "speciesId": "pheasant",
@@ -1201,7 +1238,10 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "minecraft:beetroot"
     ],
     "grazeBlocks": [
-      "minecraft:grass_block"
+      "minecraft:grass_block",
+      "minecraft:short_grass",
+      "minecraft:tall_grass",
+      "minecraft:fern"
     ],
     "predatorDiet": [],
     "predationDamage": 0
@@ -1239,7 +1279,10 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "minecraft:pumpkin_seeds"
     ],
     "grazeBlocks": [
-      "minecraft:grass_block"
+      "minecraft:grass_block",
+      "minecraft:short_grass",
+      "minecraft:tall_grass",
+      "minecraft:fern"
     ],
     "predatorDiet": [],
     "predationDamage": 0,
@@ -1448,7 +1491,10 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "minecraft:beetroot"
     ],
     "grazeBlocks": [
-      "minecraft:grass_block"
+      "minecraft:grass_block",
+      "minecraft:short_grass",
+      "minecraft:tall_grass",
+      "minecraft:fern"
     ],
     "predatorDiet": [],
     "predationDamage": 0
@@ -1478,7 +1524,10 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "minecraft:beetroot"
     ],
     "grazeBlocks": [
-      "minecraft:grass_block"
+      "minecraft:grass_block",
+      "minecraft:short_grass",
+      "minecraft:tall_grass",
+      "minecraft:fern"
     ],
     "predatorDiet": [],
     "predationDamage": 0,
@@ -1510,7 +1559,10 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "minecraft:wheat"
     ],
     "grazeBlocks": [
-      "minecraft:grass_block"
+      "minecraft:grass_block",
+      "minecraft:short_grass",
+      "minecraft:tall_grass",
+      "minecraft:fern"
     ],
     "predatorDiet": [],
     "predationDamage": 0,
