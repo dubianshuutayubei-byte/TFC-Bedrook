@@ -13,6 +13,8 @@ test("sneak-use clay ball opens pottery shaping and consumes the selected clay a
  assert.match(runtime,/world\.afterEvents\.itemUse\.subscribe[\s\S]*?player\.isSneaking&&stack\?\.typeId==="minecraft:clay_ball"/);
  assert.match(runtime,/tfc:clay_vessel/);
  assert.match(runtime,/tfc:unfired_ingot_mold/);
+ assert.match(runtime,/tfc:unfired_crucible/);
+ assert.equal((runtime.match(/world\.afterEvents\.itemUse\.subscribe/g)||[]).length,1,"pottery input handler must only be subscribed once");
 });
 
 test("crucible stores metal additions, validates bronze ratio, temperature and fired mold",()=>{
@@ -41,4 +43,17 @@ test("drying rack exposes crop-specific preservation recipes",()=>{
  for(const id of ["tfc:beet","tfc:cabbage","tfc:carrot","tfc:potato","tfc:tomato","tfc:melon"]){
   assert.ok(recipes.some(recipe=>Object.hasOwn(recipe.inputs,id)),id+" should have a drying recipe");
  }
+});
+
+test("saltwater harvesting and smokehouse heating are connected",()=>{
+ assert.match(runtime,/getBiome\(block\.location\).*ocean/);
+ assert.match(runtime,/tfc:brine_vessel/);
+ assert.match(runtime,/function hasActiveSmokeSource\(block\)/);
+ assert.match(runtime,/fire\.burnTicks>0&&fire\.temperatureC>=80/);
+ assert.match(runtime,/id==="smokehouse"&&!hasActiveSmokeSource\(block\)/);
+});
+test("ceramic crucible is shaped, fired, and assembled into the crucible block",()=>{
+ const recipes=getStationRecipes("pit_kiln");
+ assert.ok(recipes.some(r=>r.inputs["tfc:unfired_crucible"]&&r.outputs["tfc:fired_crucible"]));
+ assert.match(runtime,/粘土玉: 8個/);
 });
