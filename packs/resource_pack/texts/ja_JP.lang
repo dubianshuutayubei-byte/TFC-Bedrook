@@ -78,3 +78,16 @@ item.tfc:cabbage.name=キャベツ
 item.tfc:carrot_seed.name=ニンジンの種
 item.tfc:carrot.name=ニンジン
 item.tfc:water_vessel.name=水入り土器
+
+item.tfc:garlic_seed.name=ニンニクの種
+item.tfc:garlic.name=ニンニク
+item.tfc:onion_seed.name=タマネギの種
+item.tfc:onion.name=タマネギ
+item.tfc:squash_seed.name=カボチャの種
+item.tfc:squash.name=カボチャ
+item.tfc:lentils_seed.name=レンズ豆の種
+item.tfc:lentils.name=レンズ豆
+item.tfc:soybean_seed.name=大豆の種
+item.tfc:soybean.name=大豆
+item.tfc:peanuts_seed.name=落花生の種
+item.tfc:peanuts.name=落花生
