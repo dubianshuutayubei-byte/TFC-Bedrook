@@ -254,3 +254,5 @@ test("TFC leopard seal and pond turtle are amphibious and can breathe in both ai
   assert.equal(breathable.breathes_water,true,id+" must breathe water");
  }
 });
+
+test("leopard seal hunger state enables its source-derived small-fish hunting behavior",()=>{const entry=runtime.match(/"tfc:leopard_seal":\{[^}]*\}/)?.[0]??"";assert.match(entry,/hungerPerDay:8/);assert.match(entry,/thirstPerDay:0/);assert.match(entry,/healthLossPerDay:0/);});
