@@ -66,3 +66,21 @@ test("pregnancy progress never moves backwards",()=>{
  assert.equal(result.animal.pregnancyDays,4);
  assert.equal(result.birthReady,false);
 });
+
+test("official fauna habitat checks rainfall, forest density and water depth",()=>{
+ const profile={minTemperatureC:-10,maxTemperatureC:20,minRainfall:100,maxRainfall:400,minForest:"edge",maxForest:"normal",belowSeaLevel:5,maxBrightness:8};
+ const good=evaluateHabitat(profile,{temperatureC:10,rainfall:200,forestType:"normal",belowSeaLevel:6,brightness:4});
+ assert.equal(good.suitable,true);
+ assert.deepEqual(good.failures,[]);
+ const bad=evaluateHabitat(profile,{temperatureC:10,rainfall:50,forestType:"none",belowSeaLevel:2,brightness:12});
+ assert.equal(bad.suitable,false);
+ assert.ok(bad.failures.includes("rainfall_low"));
+ assert.ok(bad.failures.includes("forest_below_minimum"));
+ assert.ok(bad.failures.includes("water_too_shallow"));
+ assert.ok(bad.failures.includes("brightness_high"));
+});
+test("official fauna habitat does not treat missing climate measurements as suitable",()=>{
+ const result=evaluateHabitat({minTemperatureC:0,minRainfall:100},{});
+ assert.equal(result.suitable,false);
+ assert.deepEqual(result.missing,["minTemperatureC","minRainfall"]);
+});
