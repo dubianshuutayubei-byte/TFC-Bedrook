@@ -25,3 +25,16 @@ test("missing official constraints remain unspecified rather than becoming zero"
  assert.equal(Object.hasOwn(rabbit,"minTemperatureC"),false);
  assert.equal(Object.hasOwn(rabbit,"maxTemperatureC"),false);
 });
+
+test("all official fauna profiles include their exact official spawn placement",()=>{
+ const profiles=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/official-fauna-profiles.json"),"utf8"));
+ const spawn=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/fauna-spawn-types.json"),"utf8"));
+ const expected=new Map(spawn.species.map(x=>[x.id,x]));
+ for(const p of profiles.species){
+  const source=expected.get(p.id);
+  assert.ok(source, "missing official spawn source for "+p.id);
+  assert.equal(p.placement,source.placement,p.id);
+  assert.equal(p.heightmap,source.heightmap,p.id);
+ }
+ assert.deepEqual(profiles.spawnPlacementAudit.placementCounts,spawn.placementCounts);
+});
