@@ -114,3 +114,42 @@ test("all 80 runtime fauna profiles define feed and grazing arrays with register
     assert.ok(registeredItems.has(id), id + " is referenced by an animal diet but has no registered item definition");
   }
 });
+
+
+test("domestic and tameable fauna diets follow official Java 1.21.1 food-tag categories", () => {
+  const audit = readJson("packs/behavior_pack/data/official-animal-food-tags-1.21.1-4.2.16.json");
+  assert.equal(audit.source.version, "1.21.1-4.2.16");
+  assert.equal(audit.source.tag, "v4.2.16");
+  const entityIds = {
+    alpaca: "tfc:alpaca", cow: "minecraft:cow", goat: "minecraft:goat",
+    horse: "minecraft:horse", donkey: "minecraft:donkey", mule: "minecraft:mule",
+    sheep: "minecraft:sheep", musk_ox: "tfc:musk_ox", yak: "tfc:yak",
+    chicken: "tfc:chicken", duck: "tfc:duck", quail: "tfc:quail",
+    pig: "minecraft:pig", rabbit: "minecraft:rabbit", frog: "minecraft:frog",
+    ocelot: "minecraft:ocelot", penguin: "tfc:penguin", leopard_seal: "tfc:leopard_seal",
+    bactrian_camel: "tfc:bactrian_camel", dromedary_camel: "tfc:dromedary_camel",
+    turtle: "minecraft:turtle", pond_turtle: "tfc:pond_turtle"
+  };
+  const registered = new Set(readdirSync(join(root, "packs/behavior_pack/items"))
+    .filter(name => name.endsWith(".json")).map(name => "tfc:" + name.slice(0, -5)));
+  for (const diet of audit.diets) {
+    for (const species of diet.species) {
+      const entityId = entityIds[species];
+      assert.ok(entityId, species + " must map to a runtime entity");
+      const escaped = entityId.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const line = runtime.split("\\n").find(value => value.includes('"' + entityId + '":{'));
+      assert.ok(line, entityId + " runtime profile missing");
+      const match = line.match(/"?feedItems"?\\s*:\\s*(\\[[^\\]]*\\])/);
+      assert.ok(match, entityId + " feedItems missing");
+      const actual = JSON.parse(match[1]);
+      for (const id of diet.bedrockFeedItems) assert.ok(actual.includes(id), entityId + " missing official diet equivalent " + id);
+      for (const id of actual.filter(value => value.startsWith("tfc:"))) {
+        assert.ok(registered.has(id), entityId + " references unregistered item " + id);
+      }
+      assert.ok(!actual.includes("tfc:spoiled_food"), entityId + " must not accept spoiled food as a TFC diet item");
+    }
+  }
+  const turtleDiet = audit.diets.find(diet => diet.species.includes("turtle"));
+  assert.deepEqual(turtleDiet.missingBedrockItems, ["tfc:food/dried_kelp", "tfc:food/dried_seaweed"]);
+  assert.deepEqual(turtleDiet.bedrockFeedItems, [], "do not substitute seagrass for the official dried seaweed diet");
+});
