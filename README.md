@@ -15,6 +15,7 @@ Minecraft Bedrock Edition 26.60 向けに TerraFirmaCraft（TFC）Java 1.21.1-4.
 ## プレイヤー向け説明書
 
 - [日本語プレイヤー完全ガイド（開発中・未実機検証の機能を明記）](docs/manual/PLAYER_MANUAL_JA.md)
+- [2026-11-29 実装進捗（ゲーム内畜産ガイド・説明書・テスト）](docs/implementation-progress-2026-11-29.md)
 
 ## 設計・調査資料
 
