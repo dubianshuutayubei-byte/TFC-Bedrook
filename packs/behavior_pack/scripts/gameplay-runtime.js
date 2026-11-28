@@ -304,10 +304,11 @@ async function crucibleStation(player,block,state){
  if(!copperRecipe||!tinRecipe||!bronzeRecipe){player.sendMessage("§cるつぼの加工レシピが登録されていません。");return;}
  const valid=findMatchingAlloys({copper,tin},{recipes:[{id:bronzeRecipe.alloyId,components:bronzeRecipe.alloyComponents}]}).includes(bronzeRecipe.alloyId);
  const copperRange=bronzeRecipe.alloyComponents.copper,tinRange=bronzeRecipe.alloyComponents.tin;
+ const copperOreAmount=Object.entries(copperRecipe.inputs).find(([id])=>id.endsWith("_ore"))?.[1]??0,tinOreAmount=Object.entries(tinRecipe.inputs).find(([id])=>id.endsWith("_ore"))?.[1]??0;
  const body="§7るつぼ温度: "+Math.floor(state.temperatureC)+"°C\n§7燃料残り: "+Math.ceil(state.burnTicks/20)+"秒\n\n投入済み合金材料\n銅インゴット: "+copper+" / 錫インゴット: "+tin+"\n配合: "+(copper+tin?Math.round(copper/(copper+tin)*100)+"% 銅 / "+Math.round(tin/(copper+tin)*100)+"% 錫":"未投入")+"\n青銅判定: "+(valid?"§a配合範囲内":"§e未成立")+"\n必要配合: 銅"+Math.round(copperRange[0]*100)+"〜"+Math.round(copperRange[1]*100)+"% / 錫"+Math.round(tinRange[0]*100)+"〜"+Math.round(tinRange[1]*100)+"%\n\n鉱石鋳造・合金配合は登録済み加工レシピを参照します。";
  const form=new ActionFormData().title("Crucible｜投入・配合・鋳造").body(body)
- .button("銅鉱石×"+Object.values(copperRecipe.inputs).reduce((a,b)=>a+b,0)+"を溶融・鋳造")
- .button("錫鉱石×"+Object.values(tinRecipe.inputs).reduce((a,b)=>a+b,0)+"を溶融・鋳造")
+ .button("銅鉱石×"+copperOreAmount+"を溶融・鋳造")
+ .button("錫鉱石×"+tinOreAmount+"を溶融・鋳造")
  .button("銅インゴットを1個投入（青銅用）")
  .button("錫インゴットを1個投入（青銅用）")
  .button("配合を確認して青銅を鋳造")
