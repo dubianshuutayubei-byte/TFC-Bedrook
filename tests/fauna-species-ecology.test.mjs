@@ -68,6 +68,7 @@ test("aquatic fauna distinguish swimming fish from seafloor shellfish",()=>{
   if(shellfish.has(id)){
    assert.ok(e["minecraft:navigation.walk"],id+" must move along the water floor");
    assert.ok(e["minecraft:behavior.avoid_mob_type"],id+" must avoid predators");
+   assert.ok(e["minecraft:behavior.avoid_mob_type"].entity_types.some(t=>t.filters?.value==="tfc_ocean_predator"),id+" must avoid ocean predators");
    assert.equal(e["minecraft:behavior.swim_wander"],undefined,id+" should not swim freely");
   }else{
    assert.ok(e["minecraft:navigation.swim"],id+" missing swim navigation");
@@ -102,6 +103,18 @@ test("boar, wildebeest and moose have species-specific ramming behavior",()=>{
  assert.match(runtime,/function tickRamming\(entity,profile,state,currentDay\)/);
  assert.match(runtime,/target\.applyDamage\(profile\.ramDamage\?\?6\)/);
  assert.match(runtime,/target\.applyKnockback/);
+});
+
+test("freshwater fish flee players and ocean predators only",()=>{
+ for(const id of ["bluegill","crappie","lake_trout","largemouth_bass","rainbow_trout","smallmouth_bass"]){
+  const e=read("packs/behavior_pack/entities/"+id+".json")["minecraft:entity"].components;
+  const families=e["minecraft:behavior.avoid_mob_type"].entity_types.map(t=>t.filters?.value);
+  assert.ok(families.includes("player"),id);
+  assert.ok(families.includes("tfc_ocean_predator"),id);
+  assert.ok(!families.includes("tfc_predator"),id);
+ }
+ const orca=read("packs/behavior_pack/entities/orca.json")["minecraft:entity"].components["minecraft:type_family"].family;
+ assert.ok(orca.includes("tfc_ocean_predator"));
 });
 
 test("custom prey avoid predator family while predator archetypes can target prey",()=>{
