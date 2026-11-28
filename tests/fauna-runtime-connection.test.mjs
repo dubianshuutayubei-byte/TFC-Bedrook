@@ -75,3 +75,10 @@ test("dropped-food pickup is actually invoked by the periodic animal tick",()=>{
  const tick=runtime.slice(start,end);
  assert.match(tick,/state=consumeDroppedAnimalFood\(entity,profile,state\)/);
 });
+
+test("players can restore terrestrial animal thirst with a water vessel",()=>{
+ assert.match(runtime,/if\(held\.typeId==="tfc:water_vessel"\)/);
+ assert.match(runtime,/profile\.kind==="aquatic"/);
+ assert.match(runtime,/state=waterAnimal\(state,40\);saveAnimal\(entity,state\)/);
+ assert.match(runtime,/give\(player,"tfc:fired_vessel",1\)/);
+});
