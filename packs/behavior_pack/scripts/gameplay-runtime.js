@@ -223,6 +223,6 @@ world.afterEvents.playerInteractWithBlock.subscribe(event=>{
  if(!held?.typeId?.endsWith("_hoe"))return;
  const block=event.block;
  if(!["minecraft:dirt","minecraft:grass_block","minecraft:coarse_dirt","minecraft:rooted_dirt","minecraft:farmland"].includes(block.typeId))return;
- try{block.setType("tfc:farmland");const soil=readSoil(block);writeWorldState(soilKey(block),soil);event.player.sendMessage("§a耕作土を作りました。種を持って操作すると植えられます。");}catch(error){console.warn("[TFC-Bedrook] farmland conversion failed:",error);}
+ try{const originalSoilType=inferSoilTypeFromBlockId(block.typeId);block.setType("tfc:farmland");const soil=createSoilState({...readSoil(block),soilType:originalSoilType});writeWorldState(soilKey(block),soil);event.player.sendMessage("§a耕作土を作りました。土質: "+({loam:"壌土",silt:"シルト",clay:"粘土質"}[soil.soilType]??soil.soilType)+"。種を持って操作すると植えられます。");}catch(error){console.warn("[TFC-Bedrook] farmland conversion failed:",error);}
 });world.afterEvents.playerSpawn.subscribe(event=>{if(event.player)recoverPlayerStationJobs(event.player);});
 }
