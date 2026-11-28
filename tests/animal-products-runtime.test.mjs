@@ -42,3 +42,12 @@ test("milk and wool cooldowns use fractional world days, not animal age",()=>{
  assert.match(runtime,/const currentDay=currentAnimalDay\(\);/);
  assert.match(runtime,/cooldownDays:profile\.productCooldownDays\?\?7,currentDay:currentAnimalDay\(\)/);
 });
+
+test("sheep shearing uses TFC wool production familiarity, cooldown and per-animal uses",()=>{
+ assert.match(runtime,/world\.beforeEvents\.playerInteractWithEntity\.subscribe/);
+ assert.match(runtime,/target\?\.typeId!=="minecraft:sheep"\|\|event\.itemStack\?\.typeId!=="minecraft:shears"/);
+ assert.match(runtime,/function shearAnimal\(player,entity\)/);
+ assert.match(runtime,/requiredFamiliarity:profile\.productFamiliarityMin\?\?16,cooldownDays:profile\.productCooldownDays\?\?7/);
+ assert.match(runtime,/give\(player,"tfc:wool",amount\)/);
+ assert.match(runtime,/durability\.damage\+=1/);
+});
