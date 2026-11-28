@@ -595,7 +595,15 @@ function consumeDroppedAnimalFood(entity,profile,state){
  return state;
 }
 function tickPredation(entity,profile,state,currentDay){
- if(!profile.predatorDiet?.length||state.hunger<55||state.dead)return state;
+ if(!profile.predatorDiet?.length||state.dead)return state;
+ // TFC predators are neutral until they have recently made a kill.
+ if(state.lastHuntAt>=0&&currentDay-state.lastHuntAt<=0.25&&currentDay-state.lastPlayerAttackAt>=0.05){
+  try{for(const player of entity.dimension.getEntities({type:"minecraft:player",location:entity.location,maxDistance:2.2})){
+   if(typeof player.applyDamage==="function"){player.applyDamage(profile.playerAttackDamage??3);state.lastPlayerAttackAt=currentDay;break;}
+  }}catch(error){console.warn("[TFC-Bedrook] predator threat response failed:",error);}
+ }
+ if(state.hunger<55)return state;
+ if(profile.diurnal!==undefined){const daytime=world.getTimeOfDay()>=0&&world.getTimeOfDay()<12000;if(daytime!==profile.diurnal)return state;}
  if(state.lastHuntAt>=0&&currentDay-state.lastHuntAt<0.15)return state;
  try{
   for(const prey of entity.dimension.getEntities({location:entity.location,maxDistance:2.2})){
