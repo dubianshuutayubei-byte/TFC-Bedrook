@@ -360,7 +360,7 @@
       "id": "pond_turtle",
       "group": "reptile",
       "status": "custom_entity_scaffold",
-      "note": "Behavior entity, client entity, archetype geometry and coarse spawn rule scaffolded from a related species. Species-specific model/texture, exact spawn climate, AI and gameplay parity remain incomplete."
+      "note": "Behavior entity, client entity, archetype geometry and coarse spawn rule scaffolded from a related species. Official dried-kelp and dried-seaweed feed items are registered and connected to manual feeding. Species-specific model/texture, exact spawn climate, AI, reproduction and in-game parity remain incomplete."
     },
     {
       "id": "pufferfish",
