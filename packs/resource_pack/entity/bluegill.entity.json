@@ -10,7 +10,7 @@
         "default": "textures/entity/tfc_fauna_atlas"
       },
       "geometry": {
-        "default": "geometry.tfc.bluegill"
+        "default": "geometry.tfc.fauna.bluegill"
       },
       "render_controllers": [
         "controller.render.tfc_fauna"

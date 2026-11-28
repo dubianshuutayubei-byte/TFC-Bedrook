@@ -10,7 +10,7 @@
         "default": "textures/entity/tfc_fauna_atlas"
       },
       "geometry": {
-        "default": "geometry.tfc.fauna.lake_trout"
+        "default": "geometry.tfc.lake_trout"
       },
       "render_controllers": [
         "controller.render.tfc_fauna"

@@ -3,17 +3,12 @@
   "minecraft:spawn_rules": {
     "description": {
       "identifier": "tfc:grizzly_bear",
-      "population_control": "animal"
+      "population_control": "monster"
     },
     "conditions": [
       {
-        "minecraft:brightness_filter": {
-          "min": 0,
-          "max": 15,
-          "adjust_for_weather": true
-        },
         "minecraft:weight": {
-          "default": 1
+          "default": 2
         },
         "minecraft:herd": {
           "min_size": 1,
@@ -23,22 +18,40 @@
           "any_of": [
             {
               "test": "has_biome_tag",
-              "operator": "==",
+              "value": "plains"
+            },
+            {
+              "test": "has_biome_tag",
+              "value": "forest"
+            },
+            {
+              "test": "has_biome_tag",
               "value": "taiga"
             },
             {
               "test": "has_biome_tag",
-              "operator": "==",
-              "value": "snowy"
+              "value": "savanna"
             },
             {
               "test": "has_biome_tag",
-              "operator": "==",
+              "value": "jungle"
+            },
+            {
+              "test": "has_biome_tag",
+              "value": "swamp"
+            },
+            {
+              "test": "has_biome_tag",
               "value": "mountain"
             }
           ]
         },
-        "minecraft:spawns_on_surface": {}
+        "minecraft:spawns_on_surface": {},
+        "minecraft:brightness_filter": {
+          "min": 0,
+          "max": 15,
+          "adjust_for_weather": true
+        }
       }
     ]
   }
