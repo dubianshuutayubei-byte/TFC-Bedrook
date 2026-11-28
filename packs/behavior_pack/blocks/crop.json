@@ -28,8 +28,14 @@
       },
       "minecraft:collision_box": false,
       "minecraft:selection_box": false,
-      "minecraft:random_ticking": true,
-      "tfc:crop_growth": {}
+      "tfc:crop_growth": {},
+      "minecraft:tick": {
+        "interval_range": [
+          1200,
+          2400
+        ],
+        "looping": true
+      }
     }
   }
 }
