@@ -147,3 +147,6 @@ tile.tfc:smokehouse.name=燻製設備
 
 item.tfc:wool.name=羊毛
 tile.tfc:nest_box.name=巣箱
+
+item.tfc:food/dried_kelp.name=乾燥ケルプ
+item.tfc:food/dried_seaweed.name=乾燥海藻
