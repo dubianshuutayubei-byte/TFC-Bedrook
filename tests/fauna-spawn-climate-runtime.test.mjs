@@ -21,3 +21,6 @@ test("natural spawn validation uses official TFC profile constraints only for na
 test("spawn environment sampler provides temperature, rainfall, depth, light and forest density",()=>{
  for(const token of ["temperatureC:currentTemperatureC","rainfall:rainfallForBiome","belowSeaLevel:Math.max(0,63-blockLocation.y)","brightness","forestType:forestTypeAt"])assert.ok(source.includes(token),token);
 });
+
+
+test("natural fauna spawn sampler supplies TFC calendar month",()=>{\n assert.match(runtime,/month:tfcMonthFromDay\\(world\\.getDay\\(\\)\\)/);\n});\n
