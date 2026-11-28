@@ -9,7 +9,7 @@ test("vanilla livestock relies on vanilla breeding and avoids duplicate feed con
  assert.match(runtime,/"minecraft:cow":\{[^}]*customBreeding:false/);
  assert.match(runtime,/"minecraft:sheep":\{[^}]*customBreeding:false/);
  assert.match(runtime,/"minecraft:chicken":\{[^}]*customBreeding:false/);
- assert.ok(runtime.includes('if(entity.typeId==="tfc:deer"&&!take(player,held.typeId,1))return;'));
+ assert.ok(runtime.includes('if(!entity.typeId.startsWith("minecraft:")&&!take(player,held.typeId,1))return;'));
  assert.match(runtime,/if\(profile\.customBreeding&&state\.sex==="female"/);
 });
 test("custom deer retains its own pregnancy and birth cycle",()=>{
@@ -20,8 +20,8 @@ test("custom deer retains its own pregnancy and birth cycle",()=>{
 test("custom pregnancy is confined to deer; vanilla livestock uses native breeding",()=>{
  assert.match(runtime,/if\(profile\.customBreeding&&state\.pregnancyDays>0\)/);
  assert.match(runtime,/if\(profile\.customBreeding&&state\.sex==="female"/);
- assert.match(runtime,/other\.lastBreedAt=other\.ageDays/);
- assert.match(runtime,/entity\.dimension\.spawnEntity\(entity\.typeId/);
+ assert.match(runtime,/other\.lastBreedAt=breedingTime/);
+ assert.match(runtime,/entity\.dimension\.spawnEntity\(entity\.typeId\+"<tfc:spawn_baby>"/);
 });
 test("animal needs and age update on the periodic loaded-entity tick",()=>{
  assert.match(runtime,/advanceAnimalNeeds\(state,0\.05,/);

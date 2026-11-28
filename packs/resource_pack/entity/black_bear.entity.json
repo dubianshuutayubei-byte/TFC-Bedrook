@@ -1,0 +1,20 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "tfc:black_bear",
+      "materials": {
+        "default": "entity_alphatest"
+      },
+      "textures": {
+        "default": "textures/entity/tfc_fauna_atlas"
+      },
+      "geometry": {
+        "default": "geometry.tfc.black_bear"
+      },
+      "render_controllers": [
+        "controller.render.tfc_fauna"
+      ]
+    }
+  }
+}

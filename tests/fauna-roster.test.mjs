@@ -20,8 +20,8 @@ test("current Bedrock animal profiles are explicitly distinguished from planned 
 });
 test("runtime coverage is explicit and does not claim all 63 species are implemented",()=>{
  assert.equal(coverage.total,63);
- assert.equal(coverage.runtimeTrackedCount,23);
- assert.equal(coverage.runtimeTrackedSpecies.length,23);
+ assert.equal(coverage.runtimeTrackedCount,63);
+ assert.equal(coverage.runtimeTrackedSpecies.length,63);
  assert.equal(coverage.requiresSpeciesImplementation.length,40);
  for(const id of coverage.runtimeTrackedSpecies)assert.ok(roster.species.some(x=>x.id===id));
  for(const id of coverage.requiresSpeciesImplementation)assert.ok(roster.species.some(x=>x.id===id));

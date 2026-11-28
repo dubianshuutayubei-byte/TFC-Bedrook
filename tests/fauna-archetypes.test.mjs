@@ -22,16 +22,16 @@ test("official predator, prey, livestock, fish and aquatic classes are preserved
 
 const coverage=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/fauna-runtime-coverage.json"),"utf8"));
 const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
-test("runtime fauna coverage is an exact partition of the 63-species official roster",()=>{
+test("all 63 fauna are runtime-tracked while 40 still need species-specific TFC behavior",()=>{
  assert.equal(coverage.total,63);
- assert.equal(coverage.runtimeTrackedCount,coverage.runtimeTrackedSpecies.length);
- assert.equal(coverage.remainingCount,coverage.requiresSpeciesImplementation.length);
- assert.equal(coverage.runtimeTrackedCount+coverage.remainingCount,63);
+ assert.equal(coverage.runtimeTrackedCount,63);
+ assert.equal(coverage.runtimeTrackedSpecies.length,63);
+ assert.equal(coverage.remainingCount,40);
  const tracked=new Set(coverage.runtimeTrackedSpecies);
  const remaining=new Set(coverage.requiresSpeciesImplementation);
- assert.equal(tracked.size,coverage.runtimeTrackedSpecies.length);
- assert.equal(remaining.size,coverage.requiresSpeciesImplementation.length);
+ assert.equal(tracked.size,63);
+ assert.equal(remaining.size,40);
  for(const id of tracked){assert.ok(roster.species.some(x=>x.id===id),id);assert.ok(runtime.includes('speciesId:"'+id+'"'),id);}
- for(const id of remaining){assert.ok(roster.species.some(x=>x.id===id),id);assert.ok(!tracked.has(id),id);}
- for(const x of roster.species)assert.ok(tracked.has(x.id)||remaining.has(x.id),x.id);
+ for(const id of remaining){assert.ok(roster.species.some(x=>x.id===id),id);assert.ok(tracked.has(id),id);}
+ for(const x of roster.species)assert.ok(tracked.has(x.id),x.id);
 });

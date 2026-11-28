@@ -1,0 +1,96 @@
+{
+  "format_version": "1.21.0",
+  "minecraft:entity": {
+    "description": {
+      "identifier": "tfc:caribou",
+      "is_spawnable": true,
+      "is_summonable": true,
+      "is_experimental": false
+    },
+    "components": {
+      "minecraft:type_family": {
+        "family": [
+          "animal",
+          "mob",
+          "tfc_fauna",
+          "tfc_prey",
+          "tfc_caribou"
+        ]
+      },
+      "minecraft:nameable": {},
+      "minecraft:health": {
+        "value": 18,
+        "max": 18
+      },
+      "minecraft:collision_box": {
+        "width": 1,
+        "height": 1.4
+      },
+      "minecraft:movement": {
+        "value": 0.22
+      },
+      "minecraft:navigation.walk": {
+        "can_path_over_water": true,
+        "avoid_water": true
+      },
+      "minecraft:movement.basic": {},
+      "minecraft:jump.static": {},
+      "minecraft:physics": {},
+      "minecraft:pushable": {
+        "is_pushable": true,
+        "is_pushable_by_piston": true
+      },
+      "minecraft:behavior.float": {
+        "priority": 0
+      },
+      "minecraft:behavior.panic": {
+        "priority": 1,
+        "speed_multiplier": 1.4
+      },
+      "minecraft:behavior.random_stroll": {
+        "priority": 6,
+        "speed_multiplier": 0.8
+      },
+      "minecraft:behavior.look_at_player": {
+        "priority": 7,
+        "look_distance": 6
+      },
+      "minecraft:behavior.tempt": {
+        "priority": 4,
+        "speed_multiplier": 1.05,
+        "items": [
+          "minecraft:wheat",
+          "minecraft:carrot"
+        ]
+      }
+    },
+    "component_groups": {
+      "tfc:baby": {
+        "minecraft:is_baby": {},
+        "minecraft:scale": {
+          "value": 0.55
+        },
+        "minecraft:behavior.follow_parent": {
+          "priority": 5,
+          "speed_multiplier": 1.1
+        }
+      }
+    },
+    "events": {
+      "tfc:spawn_baby": {
+        "add": {
+          "component_groups": [
+            "tfc:baby"
+          ]
+        }
+      },
+      "tfc:grow_up": {
+        "remove": {
+          "component_groups": [
+            "tfc:baby"
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "format_version": "1.21.0",
+  "minecraft:entity": {
+    "description": {
+      "identifier": "tfc:crayfish",
+      "is_spawnable": true,
+      "is_summonable": true,
+      "is_experimental": false
+    },
+    "components": {
+      "minecraft:type_family": {
+        "family": [
+          "animal",
+          "mob",
+          "tfc_fauna",
+          "tfc_prey",
+          "tfc_crayfish"
+        ]
+      },
+      "minecraft:nameable": {},
+      "minecraft:health": {
+        "value": 8,
+        "max": 8
+      },
+      "minecraft:collision_box": {
+        "width": 0.8,
+        "height": 0.6
+      },
+      "minecraft:movement": {
+        "value": 0.18
+      },
+      "minecraft:navigation.generic": {},
+      "minecraft:movement.generic": {},
+      "minecraft:underwater_movement": {
+        "value": 0.08
+      },
+      "minecraft:physics": {},
+      "minecraft:pushable": {
+        "is_pushable": true,
+        "is_pushable_by_piston": true
+      },
+      "minecraft:behavior.float": {
+        "priority": 0
+      },
+      "minecraft:behavior.swim_wander": {
+        "priority": 6,
+        "look_ahead": 5
+      }
+    },
+    "component_groups": {
+      "tfc:baby": {
+        "minecraft:is_baby": {},
+        "minecraft:scale": {
+          "value": 0.55
+        },
+        "minecraft:behavior.follow_parent": {
+          "priority": 5,
+          "speed_multiplier": 1.1
+        }
+      }
+    },
+    "events": {
+      "tfc:spawn_baby": {
+        "add": {
+          "component_groups": [
+            "tfc:baby"
+          ]
+        }
+      },
+      "tfc:grow_up": {
+        "remove": {
+          "component_groups": [
+            "tfc:baby"
+          ]
+        }
+      }
+    }
+  }
+}
