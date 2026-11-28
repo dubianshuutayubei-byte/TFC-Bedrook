@@ -141,8 +141,9 @@ test("runtime uses official TFC maturity, gestation and production limits for su
   ["minecraft:goat",96,60],["minecraft:sheep",56,60],["tfc:chicken",24,100]
  ]){
   const entry=runtime.match(new RegExp('"'+entity+'":\\{[^}]*\\}'))?.[0]??"";
-  assert.match(entry,new RegExp("adultAgeDays:"+age));
-  assert.match(entry,new RegExp("maxUses:"+uses));
+  const key=entity==="minecraft:pig"?"pig":entity==="minecraft:horse"?"horse":entity==="minecraft:donkey"?"donkey":entity==="minecraft:mule"?"mule":entity==="minecraft:rabbit"?"rabbit":entity==="minecraft:cow"?"cow":entity==="minecraft:goat"?"goat":entity==="minecraft:sheep"?"sheep":"chicken";
+  assert.match(entry,new RegExp("adultAgeDays:OFFICIAL_LIVESTOCK_LIFECYCLE\\."+key+"\\.adultAgeDays"));
+  assert.match(entry,new RegExp("maxUses:OFFICIAL_LIVESTOCK_LIFECYCLE\\."+key+"\\.maxUses"));
  }
 });
 test("dairy production applies TFC familiarity, cooldown and use limits",()=>{
