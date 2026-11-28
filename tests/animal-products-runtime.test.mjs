@@ -36,3 +36,8 @@ test("sheep shearing is gated by TFC familiarity, maturity, cooldown and lifetim
  assert.match(runtime,/canProduce\(state,\{requiredFamiliarity:profile\.productFamiliarityMin\?\?0,cooldownDays:profile\.productCooldownDays\?\?7,currentDay:world\.getDay\(\),minimumAgeDays:profile\.adultAgeDays\?\?0,maxUses:profile\.maxUses\?\?Infinity\}\)/);
  assert.match(runtime,/state=recordProduct\(state,world\.getDay\(\),\{maxUses:profile\.maxUses\?\?Infinity\}\)/);
 });
+
+test("milk cooldown uses world day rather than animal age",()=>{
+ assert.match(runtime,/if\(profile\.dairy&&held\.typeId===\"minecraft:glass_bottle\"\)[\s\S]*?const currentDay=world\.getDay\(\);/);
+ assert.doesNotMatch(runtime,/const currentDay=state\.ageDays;/);
+});
