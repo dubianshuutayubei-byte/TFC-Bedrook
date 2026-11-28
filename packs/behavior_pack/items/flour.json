@@ -1,0 +1,13 @@
+{
+  "format_version":"1.26.60",
+  "minecraft:item":{
+    "description":{"identifier":"tfc:flour","menu_category":{"category":"items"}},
+    "components":{
+      "minecraft:icon":"tfc_flour",
+      "minecraft:display_name":{"value":"小麦粉"},
+      "minecraft:max_stack_size":64,
+      "minecraft:use_modifiers":{"use_duration":0.1,"movement_modifier":1.0},
+      "tfc:mix_dough":{}
+    }
+  }
+}
