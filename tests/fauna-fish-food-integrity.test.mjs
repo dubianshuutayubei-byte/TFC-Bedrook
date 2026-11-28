@@ -46,10 +46,10 @@ test("runtime food decay rates exactly match every registered food profile", () 
 
 test("every official 1.21.x livestock lifecycle entry resolves to a runtime species profile", () => {
   const lifecycle = readJson("packs/behavior_pack/data/official-animal-lifecycle.json");
-  const profileBlock = runtime.match(/const ANIMAL_PROFILES\\s*=\\s*\\{([\\s\\S]*?)\\n\\};/);
+  const profileBlock = runtime.match(/const ANIMAL_PROFILES\s*=\s*\{([\s\S]*?)\n\};/);
   assert.ok(profileBlock, "ANIMAL_PROFILES runtime table must exist");
   const runtimeSpecies = new Set(
-    profileBlock[1].split("\\n").map((line) => line.match(/speciesId"?\\s*:\\s*"([^"]+)"/)?.[1]).filter(Boolean)
+    profileBlock[1].split("\n").map((line) => line.match(/speciesId"?\s*:\s*"([^"]+)"/)?.[1]).filter(Boolean)
   );
   for (const species of lifecycle.species) {
     assert.ok(runtimeSpecies.has(species.id), species.id + " lifecycle data must resolve to an entity runtime profile");
