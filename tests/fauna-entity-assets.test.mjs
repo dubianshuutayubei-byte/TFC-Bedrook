@@ -78,3 +78,17 @@ test("every custom fauna client entity resolves to a model or an explicit vanill
   assert.deepEqual(sorted([...modelIds]), sorted([...usedModelIds]),
     "every custom geometry must be used by a client entity");
 });
+
+test("TFC cat and dog have Japanese and English entity and spawn-egg names", () => {
+  const ja = readFileSync(join(root, "packs/resource_pack/texts/ja_JP.lang"), "utf8");
+  const en = readFileSync(join(root, "packs/resource_pack/texts/en_US.lang"), "utf8");
+  for (const [id, jaName, enName] of [
+    ["cat", "ネコ", "Cat"],
+    ["dog", "イヌ", "Dog"]
+  ]) {
+    assert.ok(ja.includes("entity.tfc:" + id + ".name=" + jaName));
+    assert.ok(en.includes("entity.tfc:" + id + ".name=" + enName));
+    assert.ok(ja.includes("item.tfc:" + id + "_spawn_egg.name=" + jaName + "の召喚アイテム"));
+    assert.ok(en.includes("item.tfc:" + id + "_spawn_egg.name=" + enName + " Spawn Egg"));
+  }
+});
