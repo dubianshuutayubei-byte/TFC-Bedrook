@@ -159,3 +159,24 @@ export function getSeasonName(dayOfYear) {
   const normalized = ((day % DEFAULTS.yearLengthDays) + DEFAULTS.yearLengthDays) % DEFAULTS.yearLengthDays;
   return ["冬", "春", "夏", "秋"][Math.floor(normalized / 24)];
 }
+
+
+/**
+ * Approximate regional climate defaults inferred from vanilla biome families.
+ * These are intentionally a bridge until the project's TFC climate/terrain data
+ * can replace the broad family mapping.
+ */
+export function getBiomeClimateProfile(biomeId) {
+  const id = String(biomeId ?? "").toLowerCase().replace(/^minecraft:/, "");
+  if (/(desert|badlands)/.test(id)) return { meanAnnualTempC: 22, seasonalAmplitudeC: 16 };
+  if (/(jungle|bamboo_jungle|mangrove_swamp)/.test(id)) return { meanAnnualTempC: 24, seasonalAmplitudeC: 8 };
+  if (/(savanna)/.test(id)) return { meanAnnualTempC: 20, seasonalAmplitudeC: 13 };
+  if (/(snowy|ice_spikes|frozen|grove)/.test(id)) return { meanAnnualTempC: -2, seasonalAmplitudeC: 18 };
+  if (/(taiga|old_growth_pine|old_growth_spruce)/.test(id)) return { meanAnnualTempC: 3, seasonalAmplitudeC: 16 };
+  if (/(swamp)/.test(id)) return { meanAnnualTempC: 16, seasonalAmplitudeC: 10 };
+  if (/(mushroom_fields)/.test(id)) return { meanAnnualTempC: 15, seasonalAmplitudeC: 8 };
+  if (/(windswept|stony_peaks|jagged_peaks|frozen_peaks)/.test(id)) return { meanAnnualTempC: 4, seasonalAmplitudeC: 17 };
+  if (/(ocean|beach|shore)/.test(id)) return { meanAnnualTempC: 11, seasonalAmplitudeC: 9 };
+  if (/(forest|birch|cherry_grove|flower_forest)/.test(id)) return { meanAnnualTempC: 10, seasonalAmplitudeC: 13 };
+  return { meanAnnualTempC: 12, seasonalAmplitudeC: 14 };
+}
