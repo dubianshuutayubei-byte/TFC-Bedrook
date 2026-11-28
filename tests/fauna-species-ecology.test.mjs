@@ -51,7 +51,7 @@ test("duck and quail use automatic nest-box laying with eight-day incubation",()
   assert.equal(p.hatchDays,8);
  }
  assert.match(runtime,/function eggNestTick\(block\)/);
- assert.match(runtime,/profile\.eggProduct\|\|bird\.typeId==="minecraft:chicken"/);
+ assert.match(runtime,/!profile\?\.eggProduct\|\|bird\.typeId==="minecraft:chicken"/);
  assert.match(runtime,/const maleNearby=nearby\.some/);
  assert.match(runtime,/requiredDays:profile\.hatchDays\?\?8/);
  assert.match(runtime,/recordProduct\(state,day/);
