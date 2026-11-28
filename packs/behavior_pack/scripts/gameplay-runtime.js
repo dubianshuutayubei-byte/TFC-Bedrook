@@ -525,7 +525,7 @@ function cropTick(block){
  }
 }
 function fireTick(block){const key=posKey(block,"fire");const state=advanceFire(readWorldState(key,{}),20);writeWorldState(key,state);}
-function animalState(entity){const profile=ANIMAL_PROFILES[entity.typeId];try{const raw=entity.getDynamicProperty("tfc:animal_state");const base=typeof raw==="string"?JSON.parse(raw):{};const isBaby=entity.hasComponent("minecraft:is_baby");return initializeAnimalLifeStage({...base,species:profile?.speciesId??base.species??entity.typeId.replace(":","_")},{isBaby,adultAgeDays:profile?.adultAgeDays??null,maxUses:profile?.maxUses??Infinity});}catch{return initializeAnimalLifeStage({species:profile?.speciesId??entity.typeId.replace(":","_")},{isBaby:false,adultAgeDays:profile?.adultAgeDays??null,maxUses:profile?.maxUses??Infinity});}}
+function animalState(entity){const profile=ANIMAL_PROFILES[entity.typeId];try{const raw=entity.getDynamicProperty("tfc:animal_state");const base=typeof raw==="string"?JSON.parse(raw):{};const isBaby=entity.hasComponent("minecraft:is_baby");return initializeAnimalLifeStage({...base,species:profile?.speciesId??base.species??entity.typeId.replace(":","_")},{isBaby,adultAgeDays:profile?.adultAgeDays??null,maxUses:profile?.maxUses??Infinity,currentDay:world.getDay()});}catch{return initializeAnimalLifeStage({species:profile?.speciesId??entity.typeId.replace(":","_")},{isBaby:false,adultAgeDays:profile?.adultAgeDays??null,maxUses:profile?.maxUses??Infinity,currentDay:world.getDay()});}}
 function saveAnimal(entity,state){try{entity.setDynamicProperty("tfc:animal_state",JSON.stringify(state));}catch(error){console.warn("[TFC-Bedrook] animal state save:",error);}}
 function consumeDroppedAnimalFood(entity,profile,state){
  if(!profile.feedItems?.length||state.hunger<25)return state;
@@ -548,7 +548,7 @@ function animalTick(entity){
  let state=animalState(entity);
   try{const health=entity.getComponent("minecraft:health");if(health)state=syncAnimalHealth(state,health.currentValue,health.effectiveMax);}catch{}
   state=advanceAnimalNeeds(state,0.05,{hungerPerDay:profile.hungerPerDay??8,thirstPerDay:profile.thirstPerDay??(profile.kind==="aquatic"?0:12),healthLossPerDay:2});
- state=advanceAnimalFamiliarityDecay(state,world.getDay(),{decayLimit:30,decayPerDay:2});
+ const currentDay=world.getDay();\n state=advanceAnimalFamiliarityDecay(state,currentDay,{decayLimit:30,decayPerDay:2});\n if(profile.maxUses>0&&state.uses>profile.maxUses&&state.oldDay<0)state.oldDay=currentDay+1+Math.floor(Math.random()*5);\n if(state.oldDay>=0&&currentDay>state.oldDay)state.lifeStage="old";
  state=consumeDroppedAnimalFood(entity,profile,state);
  try{
   const base={x:Math.floor(entity.location.x),y:Math.floor(entity.location.y),z:Math.floor(entity.location.z)};
@@ -575,7 +575,7 @@ function animalTick(entity){
  if(profile.customBreeding&&state.pregnancyDays>0){const result=advancePregnancy(state,0.05,profile.gestationDays);state=result.animal;if(result.birthReady){let born=false;try{entity.dimension.spawnEntity(entity.typeId,{x:entity.location.x+1,y:entity.location.y,z:entity.location.z});born=true;}catch(error){console.warn("[TFC-Bedrook] animal birth deferred:",error);}if(born){state.pregnancyDays=0;state.fertilized=false;}}}
  if(state.sex==="unknown")state.sex=Math.random()<0.5?"male":"female";
  if(profile.customBreeding&&state.sex==="female"&&state.ageDays>=profile.adultAgeDays&&state.familiarity>=profile.requiredFamiliarity&&state.hunger<60&&state.thirst<60&&state.pregnancyDays===0){
-  try{const nearby=entity.dimension.getEntities({type:entity.typeId,location:entity.location,maxDistance:6});for(const partner of nearby){if(partner.id===entity.id)continue;const other=animalState(partner);if(canBreed(state,other,profile)){const started=beginPregnancy(state,other,profile);if(started.started){state=started.animal;other.lastBreedAt=other.ageDays;saveAnimal(partner,other);break;}}}}catch{}
+  try{const nearby=entity.dimension.getEntities({type:entity.typeId,location:entity.location,maxDistance:6});for(const partner of nearby){if(partner.id===entity.id)continue;const other=animalState(partner);if(canBreed(state,other,profile)){const started=beginPregnancy(state,other,profile);if(started.started){state=started.animal;other.lastBreedAt=other.ageDays;other.uses=(other.uses??0)+5;if(profile.maxUses>0&&other.uses>profile.maxUses&&other.oldDay<0)other.oldDay=world.getDay()+1+Math.floor(Math.random()*5);saveAnimal(partner,other);break;}}}}catch{}
  }
  saveAnimal(entity,state);
 }
@@ -593,7 +593,7 @@ async function animalInteract(player,entity){
  if(!held){
   const names=Object.fromEntries(Object.entries(ANIMAL_PROFILES).map(([id,p])=>[id,p.displayName]));
   const products=profile.dairy?(entity.typeId==="minecraft:goat"?"\n産出: 山羊乳（メスの成体・健康/空腹/渇き条件を満たすと空き瓶で採取、1日間隔）":"\n産出: 牛乳（メスの成体・健康/空腹/渇き条件を満たすと空き瓶で採取、1日間隔）"):entity.typeId==="minecraft:sheep"?"\n産出: 羊毛（バニラのハサミ操作で採取）":entity.typeId==="minecraft:chicken"?"\n産出: 卵（バニラの産卵AI）":"";
-  const usesInfo=profile.productCooldownDays!=null?"\n産出回数: "+state.uses+"/"+profile.maxUses+(state.lifeStage==="old"?"（産出限界）":""):"";\n  const status="性別: "+(state.sex==="female"?"メス":"オス")+"\n年齢: "+state.ageDays.toFixed(1)+"日 / 成熟目安: "+(profile.adultAgeDays==null?"未設定":profile.adultAgeDays+"日")+"\n空腹: "+Math.floor(state.hunger)+" / 100\n渇き: "+Math.floor(state.thirst)+" / 100\n健康: "+Math.floor(state.health)+" / 100\nなつき度: "+Math.floor(state.familiarity)+" / 100"+usesInfo+(state.pregnancyDays>0?"\n妊娠: "+Math.floor(state.pregnancyDays)+"日":"")+products;
+  const usesInfo=profile.productCooldownDays!=null?"\n産出回数: "+state.uses+"/"+profile.maxUses+(state.lifeStage==="old"?"（老齢）":state.oldDay>=0?"（老齢化予定: "+state.oldDay+"日）":""):"";\n  const status="性別: "+(state.sex==="female"?"メス":"オス")+"\n年齢: "+state.ageDays.toFixed(1)+"日 / 成熟目安: "+(profile.adultAgeDays==null?"未設定":profile.adultAgeDays+"日")+"\n空腹: "+Math.floor(state.hunger)+" / 100\n渇き: "+Math.floor(state.thirst)+" / 100\n健康: "+Math.floor(state.health)+" / 100\nなつき度: "+Math.floor(state.familiarity)+" / 100"+usesInfo+(state.pregnancyDays>0?"\n妊娠: "+Math.floor(state.pregnancyDays)+"日":"")+products;
   const feedHint=profile.feedItems.length?"給餌可能: "+profile.feedItems.map(id=>ITEM_LABELS[id]??id).join(" / ")+"\n餌を手に持ってもう一度操作してください。":"この種への手動給餌は未対応です。";
   const form=new ActionFormData().title((names[entity.typeId]??entity.typeId)+"の状態").body(status+"\n\n"+feedHint).button("閉じる");
   try{await form.show(player);}catch(error){player.sendMessage("§e状態を表示できませんでした。");}
@@ -606,7 +606,7 @@ async function animalInteract(player,entity){
   if(!canProduce(state,{requiredFamiliarity:profile.productFamiliarityMin??0,cooldownDays:profile.productCooldownDays??1,currentDay,requiredSex:"female",minimumAgeDays:profile.adultAgeDays,minimumHealth:40,maximumHunger:60,maximumThirst:60,maxUses:profile.maxUses??Infinity})){player.sendMessage("§eこの動物は健康・空腹・渇き、または補充時間の条件を満たしていません。");return;}
   if(!take(player,"minecraft:glass_bottle",1)){player.sendMessage("§c空き瓶を取り出せません。");return;}
   give(player,"tfc:milk_bottle",1);
-  saveAnimal(entity,recordProduct(state,currentDay,{maxUses:profile.maxUses??Infinity}));
+  saveAnimal(entity,recordProduct(state,currentDay,{maxUses:profile.maxUses??Infinity,oldDayDelay:1+Math.floor(Math.random()*5)}));
   player.sendMessage("§a乳を採取しました。");
   return;
  }
