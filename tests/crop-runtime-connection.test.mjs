@@ -44,3 +44,11 @@ test("rice, climbing crops and peppers enforce their special growth rules",()=>{
  assert.match(runtime,/if\(profile\.pickable\)/);
  assert.match(runtime,/setPermutation\(b\.permutation\.withState\("tfc:age",1\)\)/);
 });
+
+test("pumpkin and melon spread to adjacent farmland without recursive spreading",()=>{
+ assert.match(runtime,/function trySpreadCrop\(block,cropType\)/);
+ assert.match(runtime,/profile\.spreading&&nextAge===3/);
+ assert.match(runtime,/crop_spread_used/);
+ assert.match(runtime,/crop_spread_parent/);
+ assert.match(runtime,/soil\?\.typeId!=="tfc:farmland"\|\|!target\?\.isAir/);
+});
