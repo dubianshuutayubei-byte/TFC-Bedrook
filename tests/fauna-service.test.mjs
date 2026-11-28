@@ -187,3 +187,10 @@ test("fuzzy fauna climate follows official TFC center-weighted probability",()=>
  assert.equal(edge.suitable,false);
  assert.ok(edge.failures.includes("fuzzy_climate"));
 });
+
+test("TFC animal products require familiarity strictly above the configured threshold",()=>{
+ const base={species:"sheep",sex:"female",ageDays:56,health:100,hunger:0,thirst:0,lastProductAt:0,lifeStage:"adult"};
+ const rules={requiredFamiliarity:15,cooldownDays:0,currentDay:1,minimumAgeDays:56};
+ assert.equal(canProduce({...base,familiarity:15},rules),false);
+ assert.equal(canProduce({...base,familiarity:16},rules),true);
+});
