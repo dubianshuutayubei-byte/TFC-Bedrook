@@ -1,12 +1,12 @@
 import { ActionFormData } from "@minecraft/server-ui";
 import { world } from "@minecraft/server";
-import { calculateAmbientTemperatureC, getSeasonName } from "../core/climate-service.mjs";
+import { calculateAmbientTemperatureC, getSeasonName, getBiomeClimateProfile } from "../core/climate-service.mjs";
 import { deserializePlayerState } from "../core/player-state-service.mjs";
 
 const UI_TITLE = "TerraFirmaCraft: Bedrook";
 const PLAYER_STATE_KEY = "tfc:player_state";
 const FOOD_FRESHNESS_KEY = "tfc:food_freshness";
-const FOOD_LABELS = Object.freeze({ "tfc:raw_meat":"生肉", "tfc:cooked_meat":"焼いた肉", "tfc:grain":"穀物", "tfc:maize":"トウモロコシ", "tfc:potato":"ジャガイモ", "tfc:vegetable":"野菜", "tfc:fruit":"果物", "tfc:milk_bottle":"牛乳瓶", "tfc:dried_meat":"干し肉", "tfc:dried_fruit":"干し果物", "tfc:dried_vegetables":"干し野菜", "tfc:barley":"大麦", "tfc:oat":"オーツ麦", "tfc:rye":"ライ麦", "tfc:beet":"ビーツ", "tfc:cabbage":"キャベツ", "tfc:carrot":"ニンジン","tfc:bread":"パン","tfc:garlic":"ニンニク","tfc:onion":"タマネギ","tfc:squash":"カボチャ","tfc:lentils":"レンズ豆","tfc:soybean":"大豆","tfc:peanuts":"落花生","tfc:bread":"パン" });
+const FOOD_LABELS = Object.freeze({ "tfc:raw_meat":"生肉", "tfc:cooked_meat":"焼いた肉", "tfc:grain":"穀物", "tfc:maize":"トウモロコシ", "tfc:potato":"ジャガイモ", "tfc:vegetable":"野菜", "tfc:fruit":"果物", "tfc:milk_bottle":"牛乳瓶", "tfc:dried_meat":"干し肉", "tfc:dried_fruit":"干し果物", "tfc:dried_vegetables":"干し野菜", "tfc:barley":"大麦", "tfc:oat":"オーツ麦", "tfc:rye":"ライ麦", "tfc:beet":"ビーツ", "tfc:cabbage":"キャベツ", "tfc:carrot":"ニンジン","tfc:garlic":"ニンニク","tfc:onion":"タマネギ","tfc:squash":"カボチャ","tfc:lentils":"レンズ豆","tfc:soybean":"大豆","tfc:peanuts":"落花生","tfc:bread":"パン" });
 const NUTRITION_LABELS = Object.freeze({
   grain: "穀物", fruit: "果物", vegetables: "野菜", protein: "タンパク質", dairy: "乳製品"
 });
@@ -62,7 +62,9 @@ async function showPlayerStatus(player) {
   const state = deserializePlayerState(typeof raw === "string" ? raw : "");
   const dayOfYear = ((world.getDay() % 96) + 96) % 96;
   const season = getSeasonName(dayOfYear);
-  const temperatureC = calculateAmbientTemperatureC({ meanAnnualTempC: 12, seasonalAmplitudeC: 14, dayOfYear, timeOfDay: world.getTimeOfDay(), elevationM: Math.max(0, player.location.y - 63), diurnalAmplitudeC: 3 });
+  let biomeId = "minecraft:plains";
+  try { biomeId = player.dimension.getBiome({ x: Math.floor(player.location.x), y: Math.floor(player.location.y), z: Math.floor(player.location.z) }).id; } catch {}
+  const temperatureC = calculateAmbientTemperatureC({ ...getBiomeClimateProfile(biomeId), dayOfYear, timeOfDay: world.getTimeOfDay(), elevationM: Math.max(0, player.location.y - 63), diurnalAmplitudeC: 3 });
   const nutrition = Object.entries(state.nutrition)
     .map(([key, value]) => `${NUTRITION_LABELS[key] ?? key}: ${Math.round(value)} / 100`)
     .join("\n");
