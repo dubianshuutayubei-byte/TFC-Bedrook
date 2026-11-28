@@ -1,0 +1,20 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "tfc:duck",
+      "materials": {
+        "default": "entity_alphatest"
+      },
+      "textures": {
+        "default": "textures/entity/tfc_fauna_atlas"
+      },
+      "geometry": {
+        "default": "geometry.tfc.fauna.duck"
+      },
+      "render_controllers": [
+        "controller.render.tfc_fauna"
+      ]
+    }
+  }
+}
