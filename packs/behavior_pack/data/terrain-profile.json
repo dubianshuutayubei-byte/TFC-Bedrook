@@ -3,22 +3,52 @@
   "status": "prototype_not_connected_to_world_generation",
   "seed": 26060,
   "seaLevel": 63,
-  "continentalScale": 512,
-  "mountainScale": 128,
-  "detailScale": 32,
-  "baseRelief": 48,
-  "mountainGain": 96,
-  "detailGain": 8,
+  "continentalScale": 4096,
+  "mountainScale": 1024,
+  "detailScale": 160,
+  "baseRelief": 112,
+  "mountainGain": 150,
+  "detailGain": 9,
   "designTargets": {
-    "landforms": ["continents", "oceans", "mountain_ranges", "valleys", "plains", "hills", "cliffs", "volcanic_regions"],
-    "hydrology": ["rivers", "lakes", "watersheds", "coastlines"],
-    "geology": ["regional_rock_layers", "ore_bearing_strata", "surface_outcrops"],
-    "biomes": ["temperature_bands", "rainfall_bands", "seasonal_vegetation", "snow_lines"]
+    "landforms": [
+      "continents",
+      "oceans",
+      "mountain_ranges",
+      "valleys",
+      "plains",
+      "hills",
+      "cliffs",
+      "volcanic_regions"
+    ],
+    "hydrology": [
+      "rivers",
+      "lakes",
+      "watersheds",
+      "coastlines"
+    ],
+    "geology": [
+      "regional_rock_layers",
+      "ore_bearing_strata",
+      "surface_outcrops"
+    ],
+    "biomes": [
+      "temperature_bands",
+      "rainfall_bands",
+      "seasonal_vegetation",
+      "snow_lines"
+    ]
   },
   "constraints": [
     "Do not change world height bounds without a dedicated compatibility test.",
     "Do not continuously rewrite terrain with Script API.",
     "Treat this numeric sampler as a design prototype, not a replacement for Bedrock's base terrain generator.",
-    "Use official biome and feature generation systems where supported; validate each schema against the target Bedrock build."
-  ]
+    "Use official biome and feature generation systems where supported; validate each schema against the target Bedrock build.",
+    "Terrain fields are smooth deterministic design signals only; they do not alter Minecraft chunks.",
+    "River and valley masks are prototype signals and do not create water blocks or carve channels."
+  ],
+  "valleyScale": 640,
+  "riverScale": 1800,
+  "valleyDepth": 34,
+  "riverWidth": 0.055,
+  "method": "deterministic_smooth_value_noise_prototype"
 }
