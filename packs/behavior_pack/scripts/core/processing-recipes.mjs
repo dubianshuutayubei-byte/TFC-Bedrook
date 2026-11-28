@@ -23,7 +23,9 @@ export const PROCESSING_RECIPES = Object.freeze({
  drying_rack:Object.freeze([
   Object.freeze({id:"tfc:dried_meat",station:"drying_rack",title:"肉を乾燥",description:"生肉を時間をかけて乾燥保存します。",inputs:Object.freeze({"tfc:raw_meat":1}),outputs:Object.freeze({"tfc:dried_meat":1}),minimumTemperatureC:0,durationTicks:24000}),
   Object.freeze({id:"tfc:dried_fruit",station:"drying_rack",title:"果物を乾燥",description:"果物の水分を減らして保存性を高めます。",inputs:Object.freeze({"tfc:fruit":1}),outputs:Object.freeze({"tfc:dried_fruit":1}),minimumTemperatureC:0,durationTicks:18000}),
-  Object.freeze({id:"tfc:dried_vegetables",station:"drying_rack",title:"野菜を乾燥",description:"野菜の水分を減らして保存性を高めます。",inputs:Object.freeze({"tfc:vegetable":1}),outputs:Object.freeze({"tfc:dried_vegetables":1}),minimumTemperatureC:0,durationTicks:18000})
+  Object.freeze({id:"tfc:dried_vegetables",station:"drying_rack",title:"野菜を乾燥",description:"野菜の水分を減らして保存性を高めます。",inputs:Object.freeze({"tfc:vegetable":1}),outputs:Object.freeze({"tfc:dried_vegetables":1}),minimumTemperatureC:0,durationTicks:18000}),
+  ...["beet","cabbage","carrot","garlic","onion","squash","potato","lentils","soybean","peanuts","cassava","green_beans","pumpkin","tomato","green_bell_pepper","radish"].map(item=>Object.freeze({id:"tfc:dried_"+item,station:"drying_rack",title:item+"を乾燥",description:"個別の作物を乾燥させて保存性を高めます。",inputs:Object.freeze({["tfc:"+item]:1}),outputs:Object.freeze({"tfc:dried_vegetables":1}),minimumTemperatureC:0,durationTicks:18000})),
+  ...["melon"].map(item=>Object.freeze({id:"tfc:dried_"+item,station:"drying_rack",title:item+"を乾燥",description:"果実を乾燥させて保存性を高めます。",inputs:Object.freeze({["tfc:"+item]:1}),outputs:Object.freeze({"tfc:dried_fruit":1}),minimumTemperatureC:0,durationTicks:18000}))
  ]),
 
  composter:Object.freeze([
