@@ -40,7 +40,7 @@ test("chance and deep-water constraints remain raw source values",()=>{
 test("derived habitat fields exactly match every retained Java builder expression",()=>{
  const argument=(expression,method)=>{
   const escaped=method.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
-  const match=expression.match(new RegExp("(?:^|\\\\.)"+escaped+"\\\\(([^)]*)\\)"));
+  const match=expression.match(new RegExp("\\b"+escaped+"\\(([^)]*)\\)"));
   return match?match[1].split(",").map(value=>Number(value.trim())):null;
  };
  for(const profile of habitat.species){
