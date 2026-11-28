@@ -14,8 +14,10 @@ function readIdentifiers(folder,kind){
   });
 }
 test("registered item and block identifiers are unique",()=>{
-  const ids=[...readIdentifiers("packs/behavior_pack/items","minecraft:item"),...readIdentifiers("packs/behavior_pack/blocks","minecraft:block")];
-  assert.equal(new Set(ids).size,ids.length,"duplicate item/block identifier detected");
+  const itemIds=readIdentifiers("packs/behavior_pack/items","minecraft:item");
+  const blockIds=readIdentifiers("packs/behavior_pack/blocks","minecraft:block");
+  assert.equal(new Set(itemIds).size,itemIds.length,"duplicate item identifier detected");
+  assert.equal(new Set(blockIds).size,blockIds.length,"duplicate block identifier detected");
 });
 test("catalog registeredIdentifiers all exist in item or block files",()=>{
   const actual=new Set([...readIdentifiers("packs/behavior_pack/items","minecraft:item"),...readIdentifiers("packs/behavior_pack/blocks","minecraft:block")]);
