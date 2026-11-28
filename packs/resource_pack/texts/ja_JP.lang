@@ -132,3 +132,5 @@ tile.tfc:trellis.name=作物用トレリス
 
 tile.tfc:pumpkin_fruit.name=カボチャの実
 tile.tfc:melon_fruit.name=メロンの実
+
+item.tfc:clay_seal.name=粘土の封印具
