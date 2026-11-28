@@ -205,3 +205,12 @@ test("animal state persists a partially delivered litter count",()=>{
  const state=createAnimalState({pregnancyDays:210,birthsRemaining:2});
  assert.equal(state.birthsRemaining,2);
 });
+
+test("lifetime product limit blocks production at and beyond the configured maximum",()=>{
+ const animal={species:"sheep",sex:"female",ageDays:80,familiarity:30,health:100,hunger:0,thirst:0,lastProductAt:0,lifeStage:"adult",uses:4};
+ const rules={requiredFamiliarity:15,cooldownDays:0,currentDay:10,minimumAgeDays:56,maxUses:5};
+ assert.equal(canProduce(animal,rules),true);
+ assert.equal(canProduce({...animal,uses:5},rules),false);
+ assert.equal(canProduce({...animal,uses:6},rules),false);
+ assert.equal(canProduce(animal,{...rules,maxUses:Infinity}),true);
+});
