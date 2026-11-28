@@ -71,3 +71,18 @@ export function getMetalTier(metalDatabase, metalId) {
   const metal = metalDatabase.metals.find(entry => entry.id === metalId);
   return metal ? metal.tier : null;
 }
+
+/**
+ * Progresses the simplified Bedrock sheet-forming interaction.
+ * Plans contain only non-weapon sheet products; a wrong action resets progress.
+ */
+export function advanceSheetForming(progress, action, plan) {
+  if (!Array.isArray(plan) || plan.length === 0) throw new TypeError("plan must be a non-empty array");
+  const current = Math.floor(finite(progress, "progress"));
+  if (current < 0 || current > plan.length) throw new RangeError("progress is outside the plan");
+  if (current === plan.length) return { progress: current, accepted: false, complete: true };
+  if (!plan.includes(action)) throw new Error("unknown sheet-forming action");
+  if (plan[current] !== action) return { progress: 0, accepted: false, complete: false };
+  const next = current + 1;
+  return { progress: next, accepted: true, complete: next === plan.length };
+}
