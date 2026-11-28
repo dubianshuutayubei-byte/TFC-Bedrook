@@ -31,6 +31,9 @@
     },
     "tfc_deer": {
       "textures": "textures/items/tfc_deer"
+    },
+    "tfc_farmland": {
+      "textures": "textures/blocks/tfc_farmland"
     }
   }
 }
