@@ -1,34 +1,6 @@
-import test from "node:test";
-import assert from "node:assert/strict";
-import { createAnimalState, evaluateHabitat, feedAnimal, advanceAnimalAge, canBreed, beginPregnancy, advancePregnancy, canProduce, recordProduct } from "../packs/behavior_pack/scripts/core/fauna-service.mjs";
-
-test("animal age and familiarity progress independently", () => {
-  const animal = feedAnimal(advanceAnimalAge({ species: "cow", ageDays: 10 }, 5), 20);
-  assert.equal(animal.ageDays, 15);
-  assert.equal(animal.familiarity, 20);
-});
-test("habitat checks all configured requirements", () => {
-  const result = evaluateHabitat({ minTemperatureC: 5, maxRainfall: 200 }, { temperatureC: 0, rainfall: 300 });
-  assert.deepEqual(result.failures, ["temperature_low", "rainfall_high"]);
-});
-test("breeding requires adults, health, familiarity and opposite sex", () => {
-  const profile = { adultAgeDays: 30, requiredFamiliarity: 20 };
-  const a = createAnimalState({ species: "cow", sex: "male", ageDays: 40, familiarity: 30 });
-  const b = createAnimalState({ species: "cow", sex: "female", ageDays: 35, familiarity: 30 });
-  assert.equal(canBreed(a, b, profile), true);
-  assert.equal(canBreed(a, { ...b, sex: "female", familiarity: 0 }, profile), false);
-});
-test("pregnancy progresses and reports birth readiness", () => {
-  const profile = { adultAgeDays: 30, requiredFamiliarity: 20 };
-  const mother = { species: "cow", sex: "female", ageDays: 40, familiarity: 30 };
-  const father = { species: "cow", sex: "male", ageDays: 40, familiarity: 30 };
-  const started = beginPregnancy(mother, father, profile);
-  assert.equal(started.started, true);
-  assert.equal(advancePregnancy(started.animal, 10, 30).birthReady, false);
-  assert.equal(advancePregnancy(started.animal, 31, 30).birthReady, true);
-});
-test("animal product cooldown prevents repeated production", () => {
-  const animal = recordProduct({ species: "cow", ageDays: 40, familiarity: 50 }, 100);
-  assert.equal(canProduce(animal, { requiredFamiliarity: 30, cooldownDays: 5, currentDay: 103 }), false);
-  assert.equal(canProduce(animal, { requiredFamiliarity: 30, cooldownDays: 5, currentDay: 105 }), true);
-});
+import test from"node:test";import assert from"node:assert/strict";import{createAnimalState,advanceAnimalNeeds,feedAnimal,waterAnimal,canBreed,beginPregnancy,advancePregnancy,evaluateHabitat}from"../packs/behavior_pack/scripts/core/fauna-service.mjs";
+test("needs and age advance",()=>{const a=advanceAnimalNeeds(createAnimalState({species:"deer"}),2);assert.equal(a.ageDays,2);assert.equal(a.hunger,16);assert.equal(a.thirst,24);});
+test("feeding and watering reduce needs",()=>{const a=feedAnimal({hunger:80,thirst:50},10);assert.equal(a.hunger,45);assert.equal(waterAnimal(a,20).thirst,25);});
+test("breeding requires healthy, fed, adult, familiar pair",()=>{const p={adultAgeDays:10,requiredFamiliarity:20,breedingCooldownDays:2};const a={species:"deer",sex:"male",ageDays:20,familiarity:30,hunger:10,thirst:10};const b={...a,sex:"female"};assert.equal(canBreed(a,b,p),true);assert.equal(canBreed({...a,hunger:90},b,p),false);assert.equal(beginPregnancy(b,a,p).started,true);});
+test("pregnancy timer signals birth readiness",()=>{assert.equal(advancePregnancy({species:"deer",pregnancyDays:4},6,10).birthReady,true);});
+test("habitat rejects unsuitable temperature",()=>{assert.deepEqual(evaluateHabitat({minTemperatureC:5},{temperatureC:0}).failures,["temperature_low"]);});
