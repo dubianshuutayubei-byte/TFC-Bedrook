@@ -48,3 +48,10 @@ test("fuzzy panda climate uses both random rolls and rain variance",()=>{
  const fail=evaluateOfficialFaunaHabitat(p,{temperatureC:28,averageGroundwater:500,forestDensity:4,rainVariance:1,randomFloats:[0.1,0.1]});
  assert.ok(fail.failures.includes("fuzzy_climate_roll"));
 });
+
+test("unavailable solid-ground and sea-level samples remain missing, not guessed",()=>{
+ const solid=evaluateOfficialFaunaHabitat({solidGround:true},{});
+ assert.deepEqual(solid.missing,["solidGround"]);
+ const depth=evaluateOfficialFaunaHabitat({distanceBelowSeaLevel:20},{y:10});
+ assert.deepEqual(depth.missing,["seaLevel"]);
+});
