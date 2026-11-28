@@ -14,7 +14,7 @@ test("custom deer has explicit juvenile and adult transition events",()=>{
  assert.deepEqual(deer.events["tfc:grow_up"].remove.component_groups,["tfc:baby"]);
 });
 test("deer birth creates a juvenile entity with inherited familiarity",()=>{
- assert.match(runtime,/spawnEntity\(entity\.typeId\+"<tfc:spawn_baby>"/);
+ assert.match(runtime,/const spawnType=entity\.typeId\.startsWith\("minecraft:"\)\?entity\.typeId:entity\.typeId\+"<tfc:spawn_baby>"/);
  assert.match(runtime,/saveAnimal\(baby,createAnimalOffspringState\(state,profile\.speciesId/);
  assert.match(runtime,/entity\.triggerEvent\("tfc:grow_up"\)/);
 });
