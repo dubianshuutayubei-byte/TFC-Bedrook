@@ -129,3 +129,6 @@ item.tfc:papyrus.name=Papyrus
 item.tfc:papyrus_seed.name=Papyrus Seeds
 item.tfc:trellis.name=Crop Trellis
 tile.tfc:trellis.name=Crop Trellis
+
+tile.tfc:pumpkin_fruit.name=Pumpkin Fruit
+tile.tfc:melon_fruit.name=Melon Fruit
