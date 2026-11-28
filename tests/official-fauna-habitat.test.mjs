@@ -36,3 +36,25 @@ test("chance and deep-water constraints remain raw source values",()=>{
  assert.equal(byId.octopoteuthis.distanceBelowSeaLevel,40);
  assert.equal(byId.octopoteuthis.maxBrightness,0);
 });
+
+test("derived habitat fields exactly match every retained Java builder expression",()=>{
+ const argument=(expression,method)=>{
+  const escaped=method.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
+  const match=expression.match(new RegExp("(?:^|\\\\.)"+escaped+"\\\\(([^)]*)\\)"));
+  return match?match[1].split(",").map(value=>Number(value.trim())):null;
+ };
+ for(const profile of habitat.species){
+  const expression=profile.sourceExpression;
+  const temperature=argument(expression,"temperature");
+  if(temperature)assert.deepEqual([profile.minTemperatureC,profile.maxTemperatureC],temperature,profile.id+" temperature()");
+  for(const [method,key] of [["minTemperature","minTemperatureC"],["maxTemperature","maxTemperatureC"],["minGroundwater","minGroundwater"],["maxGroundwater","maxGroundwater"],["minForest","minForestDensity"],["maxForest","maxForestDensity"],["distanceBelowSeaLevel","distanceBelowSeaLevel"],["maxBrightness","maxBrightness"],["chance","chance"]]){
+   const values=argument(expression,method);
+   if(values)assert.equal(profile[key],values[0],profile.id+" "+method+"()");
+  }
+  const groundwater=argument(expression,"groundwater");
+  if(groundwater)assert.deepEqual([profile.minGroundwater,profile.maxGroundwater],groundwater,profile.id+" groundwater()");
+  assert.equal(Boolean(profile.ignoreRivers),expression.includes(".ignoreRivers()"),profile.id+" ignoreRivers()");
+  assert.equal(Boolean(profile.fuzzy),expression.includes(".fuzzy()"),profile.id+" fuzzy()");
+  if(expression.includes(".months(FRESHWATER_FISH_MONTHS)"))assert.deepEqual(profile.months,["MAY","JUNE","JULY","AUGUST","SEPTEMBER","OCTOBER"],profile.id+" months()");
+ }
+});
