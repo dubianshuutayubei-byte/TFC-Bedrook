@@ -45,10 +45,13 @@ test("rice, climbing crops and peppers enforce their special growth rules",()=>{
  assert.match(runtime,/setPermutation\(b\.permutation\.withState\("tfc:age",1\)\)/);
 });
 
-test("pumpkin and melon spread to adjacent farmland without recursive spreading",()=>{
- assert.match(runtime,/function trySpreadCrop\(block,cropType\)/);
- assert.match(runtime,/profile\.spreading&&nextAge===3/);
- assert.match(runtime,/crop_spread_used/);
- assert.match(runtime,/crop_spread_parent/);
- assert.match(runtime,/soil\?\.typeId!=="tfc:farmland"\|\|!target\?\.isAir/);
+test("pumpkin and melon create harvestable fruit blocks beside mature plants",()=>{
+ assert.match(runtime,/function trySpreadFruit\(block,profile\)/);
+ assert.match(runtime,/const fruitBlock=profile\.fruitBlock/);
+ assert.match(runtime,/existing>=2/);
+ assert.match(runtime,/candidates\[Math\.floor\(Math\.random\(\)\*candidates\.length\)\]\.setType\(fruitBlock\)/);
+ assert.match(runtime,/if\(profile\.spreading\)trySpreadFruit\(block,profile\)/);
+ assert.match(runtime,/brokenId==="tfc:pumpkin_fruit"/);
+ assert.match(runtime,/brokenId==="tfc:melon_fruit"/);
+ assert.match(runtime,/if\(profile\.spreading\)\{p\.sendMessage/);
 });
