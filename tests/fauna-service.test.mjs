@@ -381,3 +381,10 @@ test("TFC 1.21.x livestock defaults match the NeoForge reference audit",()=>{
  assert.equal(OFFICIAL_LIVESTOCK_LIFECYCLE.dromedary_camel.gestationDays,19);
  assert.equal(OFFICIAL_LIVESTOCK_LIFECYCLE.bactrian_camel.productCooldownDays,7);
 });
+
+test("livestock enters the old-age schedule exactly when it reaches the configured use limit",()=>{
+ const animal={species:"sheep",lifeStage:"adult",uses:1};
+ const result=recordProduct(animal,12,{maxUses:2,oldDayDelay:3});
+ assert.equal(result.uses,2);
+ assert.equal(result.oldDay,15);
+});
