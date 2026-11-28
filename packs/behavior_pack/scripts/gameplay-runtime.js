@@ -28,19 +28,19 @@ const FUELS={
 const RECIPES={
 firepit:{title:"焚き火",description:"生肉を加熱調理します。",input:"tfc:raw_meat",amount:1,output:"tfc:cooked_meat",minTemp:180,duration:100},
 pit_kiln:{title:"Pit Kiln",description:"粘土容器を焼成します。",input:"tfc:clay_vessel",amount:1,output:"tfc:fired_vessel",minTemp:550,duration:600},
-crucible:{title:"るつぼ",description:"銅鉱石2個を溶解して銅インゴットを作ります。",input:"tfc:copper_ore",amount:2,output:"tfc:copper_ingot",minTemp:1085,duration:200},
-anvil:{title:"金床",description:"十分に加熱した銅素材を成形します。",input:"tfc:copper_ingot",amount:1,output:"tfc:copper_sheet",minTemp:600,duration:60}
+crucible:{title:"るつぼ",description:"銅鉱石2個を高温処理して加熱済み銅インゴットを作ります（鋳型工程は今後接続）。",input:"tfc:copper_ore",amount:2,output:"tfc:heated_copper_ingot",minTemp:1085,duration:200},
+anvil:{title:"金床",description:"加熱済み銅インゴットを成形します。金床自体に燃料は不要です。",input:"tfc:heated_copper_ingot",amount:1,output:"tfc:copper_sheet",minTemp:0,duration:60}
 };
 async function station(player,id,block){
 const recipe=RECIPES[id];if(!recipe)return;
 const key=posKey(block,"fire"),state=createFireState(readWorldState(key,{}));
 const held=inv(player)?.getItem(player.selectedSlotIndex);
-const fuel=held?FUELS[held.typeId]:null;
+const fuel=id==="anvil"?null:(held?FUELS[held.typeId]:null);
 if(fuel){if(!take(player,held.typeId,1)){player.sendMessage("§c燃料を取り出せません。");return;}writeWorldState(key,addFuel(state,fuel));player.sendMessage("§a燃料を投入しました。燃焼時間: "+Math.round(fuel.duration/20)+"秒");return;}
 const form=new ActionFormData().title(recipe.title).body(recipe.description+"\n\n温度: "+Math.floor(state.temperatureC)+"°C\n燃料残り: "+Math.ceil(state.burnTicks/20)+"秒\n必要温度: "+recipe.minTemp+"°C").button("加工を開始").button("閉じる");
 let response;try{response=await form.show(player);}catch(e){player.sendMessage("§c設備UIを開けませんでした。");return;}
 if(response.canceled||response.selection!==0)return;
-if(!canProcessAtTemperature(state,recipe.minTemp)){player.sendMessage("§c温度不足です。燃料を追加して加熱してください。");return;}
+if(id!=="anvil"&&!canProcessAtTemperature(state,recipe.minTemp)){player.sendMessage("§c温度不足です。燃料を追加して加熱してください。");return;}
 if(!take(player,recipe.input,recipe.amount)){player.sendMessage("§c材料が足りません。");return;}
 player.sendMessage("§e加工中…");
 system.runTimeout(()=>{try{give(player,recipe.output);player.sendMessage("§a加工完了: "+recipe.output);}catch(e){try{block.dimension.spawnItem(new ItemStack(recipe.output,1),block.location);}catch{}}},recipe.duration);
