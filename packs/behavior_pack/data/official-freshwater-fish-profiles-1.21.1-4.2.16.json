@@ -1,0 +1,169 @@
+{
+  "source": {
+    "project": "TerraFirmaCraft",
+    "version": "1.21.1-4.2.16",
+    "tag": "v4.2.16",
+    "path": "src/main/java/net/dries007/tfc/common/entities/aquatic/Fish.java",
+    "url": "https://github.com/TerraFirmaCraft/TerraFirmaCraft/blob/v4.2.16/src/main/java/net/dries007/tfc/common/entities/aquatic/Fish.java",
+    "relatedPath": "src/main/java/net/dries007/tfc/common/entities/aquatic/FreshwaterFish.java",
+    "relatedUrl": "https://github.com/TerraFirmaCraft/TerraFirmaCraft/blob/v4.2.16/src/main/java/net/dries007/tfc/common/entities/aquatic/FreshwaterFish.java"
+  },
+  "count": 16,
+  "sharedClass": "FreshwaterFish",
+  "sharedClassBehaviors": [
+    "TFC fish movement controller",
+    "GetHookedGoal",
+    "replacement avoid-entity goal",
+    "bucket pickup interaction",
+    "spawn only in water fluid",
+    "ambient sound only while in water",
+    "TFC ignored-plants movement speed exception"
+  ],
+  "entries": [
+    {
+      "id": "bluegill",
+      "identifier": "tfc:bluegill",
+      "width": 0.5,
+      "height": 0.3,
+      "sound": "tfc_registered_fish_sound",
+      "spawnPlacement": "in_water",
+      "waterFluid": "minecraft:water"
+    },
+    {
+      "id": "crappie",
+      "identifier": "tfc:crappie",
+      "width": 0.7,
+      "height": 0.4,
+      "sound": "tfc_registered_fish_sound",
+      "spawnPlacement": "in_water",
+      "waterFluid": "minecraft:water"
+    },
+    {
+      "id": "lake_trout",
+      "identifier": "tfc:lake_trout",
+      "width": 0.7,
+      "height": 0.4,
+      "sound": "tfc_registered_fish_sound",
+      "spawnPlacement": "in_water",
+      "waterFluid": "minecraft:water"
+    },
+    {
+      "id": "largemouth_bass",
+      "identifier": "tfc:largemouth_bass",
+      "width": 0.7,
+      "height": 0.4,
+      "sound": "tfc_registered_fish_sound",
+      "spawnPlacement": "in_water",
+      "waterFluid": "minecraft:water"
+    },
+    {
+      "id": "rainbow_trout",
+      "identifier": "tfc:rainbow_trout",
+      "width": 0.7,
+      "height": 0.4,
+      "sound": "tfc_registered_fish_sound",
+      "spawnPlacement": "in_water",
+      "waterFluid": "minecraft:water"
+    },
+    {
+      "id": "salmon",
+      "identifier": "tfc:salmon",
+      "width": 0.7,
+      "height": 0.4,
+      "sound": "vanilla_salmon_sound_events",
+      "spawnPlacement": "in_water",
+      "waterFluid": "minecraft:water"
+    },
+    {
+      "id": "smallmouth_bass",
+      "identifier": "tfc:smallmouth_bass",
+      "width": 0.7,
+      "height": 0.4,
+      "sound": "tfc_registered_fish_sound",
+      "spawnPlacement": "in_water",
+      "waterFluid": "minecraft:water"
+    },
+    {
+      "id": "northern_pike",
+      "identifier": "tfc:northern_pike",
+      "width": 0.7,
+      "height": 0.4,
+      "sound": "tfc_registered_fish_sound",
+      "spawnPlacement": "in_water",
+      "waterFluid": "minecraft:water"
+    },
+    {
+      "id": "burbot",
+      "identifier": "tfc:burbot",
+      "width": 0.7,
+      "height": 0.4,
+      "sound": "tfc_registered_fish_sound",
+      "spawnPlacement": "in_water",
+      "waterFluid": "minecraft:water"
+    },
+    {
+      "id": "arctic_char",
+      "identifier": "tfc:arctic_char",
+      "width": 0.7,
+      "height": 0.4,
+      "sound": "tfc_registered_fish_sound",
+      "spawnPlacement": "in_water",
+      "waterFluid": "minecraft:water"
+    },
+    {
+      "id": "muksun",
+      "identifier": "tfc:muksun",
+      "width": 0.7,
+      "height": 0.4,
+      "sound": "tfc_registered_fish_sound",
+      "spawnPlacement": "in_water",
+      "waterFluid": "minecraft:water"
+    },
+    {
+      "id": "tilapia",
+      "identifier": "tfc:tilapia",
+      "width": 0.7,
+      "height": 0.4,
+      "sound": "tfc_registered_fish_sound",
+      "spawnPlacement": "in_water",
+      "waterFluid": "minecraft:water"
+    },
+    {
+      "id": "spotted_gudgeon",
+      "identifier": "tfc:spotted_gudgeon",
+      "width": 0.7,
+      "height": 0.4,
+      "sound": "tfc_registered_fish_sound",
+      "spawnPlacement": "in_water",
+      "waterFluid": "minecraft:water"
+    },
+    {
+      "id": "peacock_bass",
+      "identifier": "tfc:peacock_bass",
+      "width": 0.7,
+      "height": 0.4,
+      "sound": "tfc_registered_fish_sound",
+      "spawnPlacement": "in_water",
+      "waterFluid": "minecraft:water"
+    },
+    {
+      "id": "pacu",
+      "identifier": "tfc:pacu",
+      "width": 0.7,
+      "height": 0.4,
+      "sound": "tfc_registered_fish_sound",
+      "spawnPlacement": "in_water",
+      "waterFluid": "minecraft:water"
+    },
+    {
+      "id": "red_piranha",
+      "identifier": "tfc:red_piranha",
+      "width": 0.7,
+      "height": 0.4,
+      "sound": "tfc_registered_fish_sound",
+      "spawnPlacement": "in_water",
+      "waterFluid": "minecraft:water"
+    }
+  ],
+  "caveat": "This is a source-derived entity profile inventory, not a claim that all 16 Bedrock entities, models, textures, spawn rules, bucket items, or sound assets are implemented."
+}
