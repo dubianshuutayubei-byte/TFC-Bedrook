@@ -10,11 +10,11 @@ import {
 
 test("shared lifecycle advances juvenile to adult to old and records death cause", () => {
   const juvenile = createAnimalState({ ageDays: 2, lifeStage: "juvenile", health: 100 });
-  const adult = advanceAnimalLifecycle(juvenile, 3, { juvenileDays: 4, oldAgeDays: 20, lifespanDays: 30 }).animal;
+  const adult = advanceAnimalLifecycle(juvenile, 3, { adultDays: 4, oldAgeDays: 20, lifespanDays: 30 }).animal;
   assert.equal(adult.lifeStage, "adult");
-  const old = advanceAnimalLifecycle(adult, 18, { juvenileDays: 4, oldAgeDays: 20, lifespanDays: 30 }).animal;
+  const old = advanceAnimalLifecycle(adult, 18, { adultDays: 4, oldAgeDays: 20, lifespanDays: 30 }).animal;
   assert.equal(old.lifeStage, "old");
-  const dead = advanceAnimalLifecycle(old, 12, { juvenileDays: 4, oldAgeDays: 20, lifespanDays: 30 }).animal;
+  const dead = advanceAnimalLifecycle(old, 12, { adultDays: 4, oldAgeDays: 20, lifespanDays: 30 }).animal;
   assert.equal(dead.dead, true);
   assert.equal(dead.lifeStage, "dead");
   assert.equal(dead.deathCause, "old_age");
