@@ -71,8 +71,9 @@ export function applyNutrientUptake(soilInput, nutrient, amount) {
 
 export function applyFertilizer(soilInput, fertilizer) {
   const soil = createSoilState(soilInput);
+  const multiplier = getSoilFertilityMultiplier(soil);
   for (const nutrient of ["nitrogen", "phosphorus", "potassium"]) {
-    soil[nutrient] = clamp(soil[nutrient] + Math.max(0, finiteOr(fertilizer[nutrient], 0)), 0, 100);
+    soil[nutrient] = clamp(soil[nutrient] + Math.max(0, finiteOr(fertilizer[nutrient], 0)) * multiplier, 0, 100);
   }
   return soil;
 }
@@ -117,4 +118,14 @@ export function advanceCropGrowthProgress(currentProgress, growthMultiplier, gro
   const total = current + multiplier * growthPointsPerTick;
   const stageAdvanced = total >= threshold;
   return { progress: stageAdvanced ? total - threshold : total, stageAdvanced };
+}
+
+export function applyCropNutrientEffects(soilInput, effects = {}, intensity = 1) {
+  const soil = createSoilState(soilInput);
+  const scale = Math.max(0, finiteOr(intensity, 1));
+  for (const nutrient of ["nitrogen", "phosphorus", "potassium"]) {
+    const change = finiteOr(effects[nutrient], 0) * scale;
+    soil[nutrient] = clamp(soil[nutrient] + change, 0, 100);
+  }
+  return soil;
 }
