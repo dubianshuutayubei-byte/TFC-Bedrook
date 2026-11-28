@@ -385,3 +385,14 @@ test("livestock enters the old-age schedule exactly when it reaches the configur
  assert.equal(result.uses,2);
  assert.equal(result.oldDay,15);
 });
+
+
+test("egg laying applies the same lifetime-use and old-age grace period as milk and wool",()=>{
+ const female={species:"chicken",sex:"female",lifeStage:"adult",ageDays:24,familiarity:30,health:100,hunger:0,thirst:0,lastFedDay:10,lastEggAt:8,uses:1};
+ assert.equal(canLayEgg(female,{currentDay:10,cooldownDays:1,minimumAgeDays:24,maxUses:2}),true);
+ const used=recordEggLaid(female,10,{maxUses:2,oldDayDelay:3});
+ assert.equal(used.uses,2);
+ assert.equal(used.oldDay,13);
+ assert.equal(canLayEgg(used,{currentDay:12,cooldownDays:1,minimumAgeDays:24,maxUses:2}),true);
+ assert.equal(canLayEgg(used,{currentDay:14,cooldownDays:1,minimumAgeDays:24,maxUses:2}),false);
+});
