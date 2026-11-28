@@ -1,6 +1,6 @@
 # TFC-Bedrook
 
-Minecraft Bedrock Edition 向けに TerraFirmaCraft（TFC）Java 1.20.1-3.2.26 の主要なゲーム体験を独立再現するプロジェクト。
+Minecraft Bedrock Edition 26.60 向けに TerraFirmaCraft（TFC）Java 1.21.1-4.2.16 のゲーム体験を独立再現するプロジェクト。
 
 ## 開発方針
 
@@ -78,8 +78,8 @@ GitHub ActionsでJSON・manifestの静的検査、JavaScript構文検査、Node.
 
 ## 公式参照元
 
-- [TFC Field Guide 1.20.1](https://terrafirmacraft.github.io/Field-Guide/20/en_us/)
-- [TFC Documentation 1.20.x](https://terrafirmacraft.github.io/Documentation/1.20.x/)
+- [TFC Field Guide 1.21.x](https://terrafirmacraft.github.io/Field-Guide/20/en_us/)
+- [TFC Documentation 1.21.x](https://terrafirmacraft.github.io/Documentation/1.20.x/)
 - [Minecraft Creator Documentation](https://learn.microsoft.com/en-us/minecraft/creator/)
 
 ## 現在の状態
