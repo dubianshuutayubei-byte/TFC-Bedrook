@@ -23,6 +23,7 @@
       "tfc:station_ui": {
         "station": "crucible"
       },
+      "tfc:heated_station_tick": {},
       "minecraft:display_name": "tile.tfc:crucible.name",
       "minecraft:tick": {
         "interval_range": [
