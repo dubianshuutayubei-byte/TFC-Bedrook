@@ -20,7 +20,7 @@ const CROP_PROFILES={
  maize:{minTemperatureC:-7,maxTemperatureC:27,minHydration:50,maxHydration:100,nutrientDemand:{nitrogen:90},nutrientEffects:{nitrogen:-0.9,phosphorus:0.25,potassium:0.25},seed:"tfc:maize_seed",harvest:"tfc:maize"},
  potato:{minTemperatureC:-7,maxTemperatureC:22,minHydration:35,maxHydration:90,nutrientDemand:{nitrogen:40,phosphorus:20,potassium:60},nutrientEffects:{nitrogen:-0.4,phosphorus:-0.2,potassium:-0.6},seed:"tfc:potato_seed",harvest:"tfc:potato"}
 };
-const ITEM_LABELS={"tfc:raw_meat":"生肉","tfc:cooked_meat":"焼いた肉","tfc:clay_vessel":"未焼成土器","tfc:fired_vessel":"焼成土器","tfc:unfired_ingot_mold":"未焼成鋳型","tfc:fired_ingot_mold":"焼成鋳型","tfc:copper_ore":"銅鉱石","tfc:heated_copper_ingot":"加熱銅インゴット","tfc:copper_ingot":"銅インゴット","tfc:tin_ore":"錫鉱石","tfc:heated_tin_ingot":"加熱錫インゴット","tfc:tin_ingot":"錫インゴット","tfc:heated_bronze_ingot":"加熱青銅インゴット","tfc:bronze_ingot":"青銅インゴット","tfc:fruit":"果物","tfc:vegetable":"野菜","tfc:dried_meat":"干し肉","tfc:dried_fruit":"干し果物","tfc:dried_vegetables":"干し野菜"};
+const ITEM_LABELS={"tfc:raw_meat":"生肉","tfc:cooked_meat":"焼いた肉","tfc:clay_vessel":"未焼成土器","tfc:fired_vessel":"焼成土器","tfc:unfired_ingot_mold":"未焼成鋳型","tfc:fired_ingot_mold":"焼成鋳型","tfc:copper_ore":"銅鉱石","tfc:heated_copper_ingot":"加熱銅インゴット","tfc:copper_ingot":"銅インゴット","tfc:tin_ore":"錫鉱石","tfc:heated_tin_ingot":"加熱錫インゴット","tfc:tin_ingot":"錫インゴット","tfc:heated_bronze_ingot":"加熱青銅インゴット","tfc:bronze_ingot":"青銅インゴット","tfc:fruit":"果物","tfc:vegetable":"野菜","tfc:dried_meat":"干し肉","tfc:dried_fruit":"干し果物","tfc:dried_vegetables":"干し野菜","tfc:compost":"堆肥","minecraft:oak_leaves":"落ち葉"};
 const WEATHER_BY_DIMENSION=new Map([["overworld","clear"]]);
 const ANIMAL_PROFILES={
  "tfc:deer":{adultAgeDays:30,requiredFamiliarity:35,breedingCooldownDays:20,gestationDays:210,customBreeding:true,feedItems:["minecraft:wheat","minecraft:wheat_seeds"],grazeBlocks:["minecraft:grass_block","minecraft:tallgrass"]},
@@ -139,12 +139,12 @@ async function station(player,id,block){
   try{await form.show(player);}catch{}return;
  }
  const state=createFireState(readWorldState(posKey(block,"fire"),{}));
- const held=inv(player)?.getItem(player.selectedSlotIndex),fuel=(id==="anvil"||id==="drying_rack")?null:(held?FUELS[held.typeId]:null);
+ const held=inv(player)?.getItem(player.selectedSlotIndex),fuel=(id==="anvil"||id==="drying_rack"||id==="composter")?null:(held?FUELS[held.typeId]:null);
  if(fuel){if(!take(player,held.typeId,1)){player.sendMessage("§c燃料を取り出せません。");return;}writeWorldState(posKey(block,"fire"),addFuel(state,fuel));player.sendMessage("§a燃料投入: "+Math.round(fuel.duration/20)+"秒分");return;}
  const tempLabels={unheated:"未加熱",warming:"暖まり中",hot:"熱い",very_hot:"非常に熱い",faint_red:"かすかな赤熱",dark_red:"暗赤色",bright_red:"明るい赤熱",orange:"橙熱",yellow:"黄色熱",yellow_white:"黄白色",white:"白熱",brilliant_white:"強白熱"};
- const body=recipes.map((r,i)=>{const inputs=Object.entries(r.inputs).map(([itemId,amount])=>(count(player,itemId)>=amount?"§a":"§c")+(ITEM_LABELS[itemId]??itemId)+" ×"+amount+"§r").join("、");const outputs=Object.entries(r.outputs).map(([itemId,amount])=>(ITEM_LABELS[itemId]??itemId)+" ×"+amount).join("、");return(i+1)+". "+r.title+"\n   "+(id==="drying_rack"?"所要時間 "+Math.ceil(r.durationTicks/20)+"秒":"必要温度 "+r.minimumTemperatureC+"°C / "+Math.ceil(r.durationTicks/20)+"秒")+"\n   材料: "+inputs+"\n   完成品: "+outputs;}).join("\n\n");
- const status=id==="drying_rack"?"\n\n常温・時間式乾燥です。燃料は必要ありません。":"\n\n現在温度: "+Math.floor(state.temperatureC)+"°C（"+tempLabels[classifyTemperature(state.temperatureC)]+"）\n燃料残り: "+Math.ceil(state.burnTicks/20)+"秒";
- const form=new ActionFormData().title(id==="anvil"?"金床":id==="drying_rack"?"乾燥棚":"加工設備").body(body+status);
+ const body=recipes.map((r,i)=>{const inputs=Object.entries(r.inputs).map(([itemId,amount])=>(count(player,itemId)>=amount?"§a":"§c")+(ITEM_LABELS[itemId]??itemId)+" ×"+amount+"§r").join("、");const outputs=Object.entries(r.outputs).map(([itemId,amount])=>(ITEM_LABELS[itemId]??itemId)+" ×"+amount).join("、");return(i+1)+". "+r.title+"\n   "+(id==="drying_rack"||id==="composter"?"所要時間 "+Math.ceil(r.durationTicks/20)+"秒":"必要温度 "+r.minimumTemperatureC+"°C / "+Math.ceil(r.durationTicks/20)+"秒")+"\n   材料: "+inputs+"\n   完成品: "+outputs;}).join("\n\n");
+ const status=id==="drying_rack"?"\n\n常温・時間式乾燥です。燃料は必要ありません。":id==="composter"?"\n\n常温で約10日間発酵させます。緑の素材と茶色の素材が必要です。":"\n\n現在温度: "+Math.floor(state.temperatureC)+"°C（"+tempLabels[classifyTemperature(state.temperatureC)]+"）\n燃料残り: "+Math.ceil(state.burnTicks/20)+"秒";
+ const form=new ActionFormData().title(id==="anvil"?"金床":id==="drying_rack"?"乾燥棚":id==="composter"?"コンポスター":"加工設備").body(body+status);
  for(const recipe of recipes)form.button(recipe.title);
  if(id==="anvil")form.button("水で冷却");
  form.button("閉じる");
@@ -160,7 +160,7 @@ async function station(player,id,block){
  if(response.selection>=recipes.length)return;
  const recipe=recipes[response.selection];
  if(recipe.alloyId){const matches=findMatchingAlloys(recipe.metalInputs,{recipes:[{id:recipe.alloyId,components:recipe.alloyComponents}]});if(!matches.includes(recipe.alloyId)){player.sendMessage("§c合金の配合比が範囲外です。");return;}}
- if(id!=="anvil"&&!canProcessAtTemperature(state,recipe.minimumTemperatureC)){player.sendMessage("§c温度不足です。");return;}
+ if(!["anvil","drying_rack","composter"].includes(id)&&!canProcessAtTemperature(state,recipe.minimumTemperatureC)){player.sendMessage("§c温度不足です。");return;}
  for(const [itemId,amount] of Object.entries(recipe.inputs)){if(count(player,itemId)<amount){player.sendMessage("§c材料不足: "+itemId+" ×"+amount);return;}}
  const consumedInputs={};
  for(const [itemId,amount] of Object.entries(recipe.inputs)){if(!take(player,itemId,amount)){for(const [rollbackId,rollbackAmount] of Object.entries(consumedInputs))give(player,rollbackId,rollbackAmount);player.sendMessage("§c材料の取り出しに失敗したため、投入済み材料を返却しました。");return;}consumedInputs[itemId]=amount;}
@@ -186,7 +186,7 @@ function soilTick(block){const soil=readSoil(block);let nearbyWater=false;for(le
 async function farmlandInteract(player,block){if(!player||!block)return;const held=inv(player)?.getItem(player.selectedSlotIndex);const soil=readSoil(block);
 const seedProfile=Object.values(CROP_PROFILES).find(profile=>profile.seed===held?.typeId);
 if(seedProfile){const top=block.above();if(!top?.isAir){player.sendMessage("§c耕作土の上に空間が必要です。");return;}if(take(player,seedProfile.seed,1)){writeWorldState(soilKey(block),soil);top.setType("tfc:crop");top.setPermutation(top.permutation.withState("tfc:crop_type",Object.keys(CROP_PROFILES).find(key=>CROP_PROFILES[key]===seedProfile)));writeWorldState(posKey(top,"crop_progress"),0);player.sendMessage("§a"+(seedProfile.harvest==="tfc:grain"?"小麦":seedProfile.harvest==="tfc:maize"?"トウモロコシ":"ジャガイモ")+"を植えました。");}return;}
-if(held?.typeId==="minecraft:bone_meal"){if(take(player,"minecraft:bone_meal",1)){writeWorldState(soilKey(block),applyFertilizer(soil,{phosphorus:10}));player.sendMessage("§a骨粉を肥料として混ぜました。リンが回復しました。");}return;}
+if(held?.typeId==="tfc:compost"){if(take(player,"tfc:compost",1)){writeWorldState(soilKey(block),applySoilCompost(soil));player.sendMessage("§a堆肥を混ぜました。窒素とカリウムが回復しました。");}return;}\nif(held?.typeId==="minecraft:bone_meal"){if(take(player,"minecraft:bone_meal",1)){writeWorldState(soilKey(block),applyFertilizer(soil,{phosphorus:10}));player.sendMessage("§a骨粉を肥料として混ぜました。リンが回復しました。");}return;}
 const soilNames={loam:"壌土",silt:"シルト",clay:"粘土質"};const fertilityNames={entisol:"エンティソル",andisol:"アンドソル",fluvisol:"フルビソル",alfisol:"アルフィソル",mollisol:"モリソル",podzol:"ポドゾル",aridisol:"アリディソル",oxisol:"オキシソル"};const form=new ActionFormData().title("土壌状態").body("基質: "+(soilNames[soil.soilType]??soil.soilType)+"\n土壌肥沃度: "+(fertilityNames[soil.fertilityClass]??soil.fertilityClass)+"（肥料効果 ×"+({entisol:1,andisol:1.1,fluvisol:1.1,alfisol:1.1,mollisol:1.2,podzol:0.9,aridisol:0.9,oxisol:0.8}[soil.fertilityClass]??1).toFixed(1)+"）\n推定気温: "+currentTemperatureC(block.location.y-63).toFixed(1)+"°C\n水分: "+Math.floor(soil.hydration)+"%\n窒素: "+Math.floor(soil.nitrogen)+"\nリン: "+Math.floor(soil.phosphorus)+"\nカリウム: "+Math.floor(soil.potassium)+"\n\n骨粉を持って操作すると肥料として使えます。").button("閉じる");try{await form.show(player);}catch{}
 }
 function currentTemperatureC(elevationM=0){return calculateAmbientTemperatureC({meanAnnualTempC:12,seasonalAmplitudeC:14,dayOfYear:((world.getDay()%96)+96)%96,timeOfDay:world.getTimeOfDay(),elevationM:Math.max(0,elevationM),diurnalAmplitudeC:3});}
