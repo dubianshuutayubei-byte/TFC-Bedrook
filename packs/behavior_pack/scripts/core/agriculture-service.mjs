@@ -149,3 +149,10 @@ export function inferSoilFertilityClassFromBiomeId(biomeId) {
   if (id.includes("snowy_plains") || id.includes("ice_spikes") || id.includes("meadow")) return "mollisol";
   return "entisol";
 }
+
+/** Convert the weakest nutrient sufficiency recorded during a crop's life into a conservative harvest count. */
+export function calculateCropYield(baseYield, nutrientFactor) {
+  const base = Math.max(1, Math.floor(finiteOr(baseYield, 1)));
+  const quality = clamp(finiteOr(nutrientFactor, 1), 0, 1);
+  return Math.max(1, Math.floor(base * (0.4 + 0.6 * quality)));
+}
