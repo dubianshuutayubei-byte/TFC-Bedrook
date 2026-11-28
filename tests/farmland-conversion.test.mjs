@@ -17,3 +17,8 @@ test("farmland conversion preserves the original soil block type",()=>{
  assert.match(runtime,/const originalSoilType=inferSoilTypeFromBlockId\(block\.typeId\)/);
  assert.match(runtime,/soilType:originalSoilType/);
 });
+
+test("farmland conversion stores biome-derived fertility class",()=>{
+ assert.match(runtime,/block\.dimension\.getBiome\(block\.location\)\.id/);
+ assert.match(runtime,/fertilityClass\}\)/);
+});
