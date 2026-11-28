@@ -206,7 +206,7 @@ async function processQuernManually(player,block,recipe){
  if(missing.length){player.sendMessage("§c材料不足: "+missing.map(([id,n])=>(ITEM_LABELS[id]??id)+" ×"+n).join("、"));return;}
  for(let turn=0;turn<3;turn++){
   const form=new ActionFormData().title("石臼").body("穀物を挽いています。\n手動回転: "+(turn+1)+" / 3\n上臼石を回してください。").button("上臼を回す").button("中止");
-  const response=await form.show(player);
+  let response;try{response=await form.show(player);}catch{player.sendMessage("§e石臼UIを開けませんでした。材料は消費されていません。");return;}
   if(response.canceled||response.selection!==0){player.sendMessage("§e粉挽きを中止しました。材料は消費されていません。");return;}
   const current=inv(player)?.getItem(player.selectedSlotIndex);
   if(current?.typeId!=="tfc:handstone"||block.typeId!=="tfc:quern"){player.sendMessage("§c石臼か上臼石が手元からなくなりました。");return;}
