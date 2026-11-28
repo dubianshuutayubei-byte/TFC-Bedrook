@@ -13,8 +13,10 @@ test("cow milk requires an adult female meeting health and needs thresholds",()=
  assert.match(runtime,/recordProduct\(state,currentDay,\{maxUses:profile\.maxUses\?\?Infinity,oldDayDelay:1\+Math\.floor\(Math\.random\(\)\*5\)\}\)/);
 });
 
-test("sheep wool and chicken eggs use native Bedrock collection systems",()=>{
- assert.match(runtime,/産出: 羊毛（バニラのハサミ操作で採取）/);
+test("sheep wool uses TFC product logic while chicken eggs retain native laying",()=>{
+ assert.match(runtime,/産出: 羊毛（TFC式のハサミ操作、7日間隔）/);
+ assert.match(runtime,/function shearAnimal\(player,entity\)/);
+ assert.match(runtime,/give\(player,"tfc:wool",amount\)/);
  assert.match(runtime,/産出: 卵（バニラの産卵AI）/);
  assert.doesNotMatch(runtime,/spawnItem\(new ItemStack\("minecraft:egg"/);
  assert.doesNotMatch(runtime,/spawnItem\(new ItemStack\("minecraft:white_wool"/);
@@ -29,13 +31,6 @@ test("milk collection uses the exact official TFC minimum familiarity of 0.15",(
  assert.ok(runtime.includes('"minecraft:goat":{speciesId:"goat",displayName:"ヤギ",adultAgeDays:96,gestationDays:32,childCount:2,maxUses:60,productCooldownDays:3,productFamiliarityMin:15'));
 });
 
-test("sheep shearing is gated by TFC familiarity, maturity, cooldown and lifetime use limit",()=>{
- assert.match(runtime,/world\.beforeEvents\.playerInteractWithEntity\.subscribe\(event=>\{/);
- assert.match(runtime,/event\.itemStack\?\.typeId!=="minecraft:shears"/);
- assert.match(runtime,/target\.hasComponent\("minecraft:is_sheared"\)/);
- assert.match(runtime,/canProduce\(state,\{requiredFamiliarity:profile\.productFamiliarityMin\?\?0,cooldownDays:profile\.productCooldownDays\?\?7,currentDay:currentAnimalDay\(\),minimumAgeDays:profile\.adultAgeDays\?\?0,maxUses:profile\.maxUses\?\?Infinity\}\)/);
- assert.match(runtime,/state=recordProduct\(state,currentAnimalDay\(\),\{maxUses:profile\.maxUses\?\?Infinity\}\)/);
-});
 
 test("milk and wool cooldowns use fractional world days, not animal age",()=>{
  assert.match(runtime,/function currentAnimalDay\(\)\{return world\.getDay\(\)\+world\.getTimeOfDay\(\)\/24000;\}/);
