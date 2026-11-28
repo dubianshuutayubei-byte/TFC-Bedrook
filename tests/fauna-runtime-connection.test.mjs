@@ -68,3 +68,10 @@ test("aquatic species do not lose health from terrestrial hunger and thirst simu
   assert.match(entry,/thirstPerDay:0/);
  }
 });
+
+test("dropped-food pickup is actually invoked by the periodic animal tick",()=>{
+ const start=runtime.indexOf("function animalTick");
+ const end=runtime.indexOf("function animalInteract",start);
+ const tick=runtime.slice(start,end);
+ assert.match(tick,/state=consumeDroppedAnimalFood\(entity,profile,state\)/);
+});
