@@ -1,4 +1,7 @@
 import { OFFICIAL_FAUNA_PROFILES, OFFICIAL_FAUNA_HABITAT_EXTENSIONS, OFFICIAL_LIVESTOCK_LIFECYCLE } from "../packs/behavior_pack/scripts/core/fauna-profiles.mjs";
+import { readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { dirname, join } from "node:path";
 import test from"node:test";import assert from"node:assert/strict";import{createAnimalState,createAnimalOffspringState,initializeAnimalLifeStage,canFeedAnimal,advanceAnimalFamiliarityDecay,syncAnimalHealth,advanceAnimalNeeds,feedAnimal,waterAnimal,canBreed,beginPregnancy,advancePregnancy,evaluateHabitat,evaluateFaunaSpawn,canProduce,recordProduct,canLayEgg,recordEggLaid,getOffspringCount} from"../packs/behavior_pack/scripts/core/fauna-service.mjs";
 test("needs and age advance",()=>{const a=advanceAnimalNeeds(createAnimalState({species:"deer"}),2);assert.equal(a.ageDays,2);assert.equal(a.hunger,16);assert.equal(a.thirst,24);});
 test("feeding and watering reduce needs",()=>{const a=feedAnimal({hunger:80,thirst:50},10);assert.equal(a.hunger,45);assert.equal(waterAnimal(a,20).thirst,25);});
@@ -339,8 +342,9 @@ test("verified TFC 1.21 livestock lifecycle values stay centralized and exact",(
  assert.deepEqual([OFFICIAL_LIVESTOCK_LIFECYCLE.pig.childCountMin,OFFICIAL_LIVESTOCK_LIFECYCLE.pig.childCountMax],[1,10]);
 });
 
-test("all ecology prey references resolve to one of the 63 supported fauna species",()=>{
- const supported=new Set(Object.keys(OFFICIAL_FAUNA_PROFILES));
+test("all ecology prey references resolve to the pinned 78-species TFC roster",()=>{
+ const spawnProfiles=JSON.parse(readFileSync(join(dirname(fileURLToPath(import.meta.url)),"../packs/behavior_pack/data/official-fauna-spawn-profiles.json"),"utf8"));
+ const supported=new Set(spawnProfiles.species.map(profile=>profile.id));
  for(const [predator,profile] of Object.entries(FAUNA_ECOLOGY)){
   for(const prey of profile.prey)assert.ok(supported.has(prey),predator+" references missing prey "+prey);
  }
