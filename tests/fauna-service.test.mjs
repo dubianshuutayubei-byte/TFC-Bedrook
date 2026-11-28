@@ -483,3 +483,10 @@ test("TFC 1.21.x camel cat and dog defaults match ServerConfig",()=>{
  const growth=runtime.slice(runtime.indexOf('if(["tfc:deer"'),runtime.indexOf('state.sex==="unknown"',runtime.indexOf('if(["tfc:deer"')));
  for(const id of ["tfc:dromedary_camel","tfc:bactrian_camel","tfc:cat","tfc:dog"])assert.ok(growth.includes('"'+id+'"'),id+" juvenile growth event missing");
 });
+
+
+test("TFC groundwater habitat bounds are checked independently from rainfall",()=>{
+ assert.deepEqual(evaluateHabitat({maxGroundwater:100},{groundwater:125}).failures,["groundwater_high"]);
+ assert.deepEqual(evaluateHabitat({minGroundwater:50},{groundwater:25}).failures,["groundwater_low"]);
+ assert.deepEqual(evaluateHabitat({maxGroundwater:100},{rainfall:25}).missing,["groundwater"]);
+});
