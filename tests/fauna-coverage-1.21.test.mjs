@@ -83,3 +83,10 @@ test("juvenile maturity transitions are profile-driven, not a manually maintaine
   );
   assert.doesNotMatch(runtime, /\["tfc:deer","tfc:chicken","tfc:duck"/);
 });
+
+test("all species with max-use limits expose breeding and production usage in the animal status UI", () => {
+  assert.match(
+    runtime,
+    /const usesInfo=profile\.maxUses>0\?"\\n繁殖・産出使用回数:/
+  );
+});
