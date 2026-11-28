@@ -100,6 +100,42 @@
     },
     "tfc_wood_ash": {
       "textures": "textures/items/tfc_grain"
+    },
+    "tfc_barley_seed": {
+      "textures": "textures/items/tfc_seed"
+    },
+    "tfc_barley": {
+      "textures": "textures/items/tfc_grain"
+    },
+    "tfc_oat_seed": {
+      "textures": "textures/items/tfc_seed"
+    },
+    "tfc_oat": {
+      "textures": "textures/items/tfc_grain"
+    },
+    "tfc_rye_seed": {
+      "textures": "textures/items/tfc_seed"
+    },
+    "tfc_rye": {
+      "textures": "textures/items/tfc_grain"
+    },
+    "tfc_beet_seed": {
+      "textures": "textures/items/tfc_seed"
+    },
+    "tfc_beet": {
+      "textures": "textures/items/tfc_grain"
+    },
+    "tfc_cabbage_seed": {
+      "textures": "textures/items/tfc_seed"
+    },
+    "tfc_cabbage": {
+      "textures": "textures/items/tfc_grain"
+    },
+    "tfc_carrot_seed": {
+      "textures": "textures/items/tfc_seed"
+    },
+    "tfc_carrot": {
+      "textures": "textures/items/tfc_grain"
     }
   }
 }
