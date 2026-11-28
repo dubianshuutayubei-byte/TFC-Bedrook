@@ -137,3 +137,13 @@ test("animal status UI reports product uses only for animals with configured pro
  assert.match(runtime,/const usesInfo=profile\.productCooldownDays!=null/);
  assert.match(runtime,/産出回数: .*state\.uses.*profile\.maxUses/);
 });
+
+test("animal dropped-food pickup consumes one item and preserves the remainder of a stack",()=>{
+ const start=runtime.indexOf("function consumeDroppedAnimalFood");
+ const end=runtime.indexOf("function animalTick",start);
+ const pickup=runtime.slice(start,end);
+ assert.match(pickup,/if\(stack\.amount>1\)/);
+ assert.match(pickup,/new ItemStack\(stack\.typeId,stack\.amount-1\)/);
+ assert.match(pickup,/entity\.dimension\.spawnItem\(new ItemStack\(stack\.typeId,stack\.amount-1\),dropped\.location\)/);
+ assert.match(pickup,/dropped\.kill\(\)/);
+});
