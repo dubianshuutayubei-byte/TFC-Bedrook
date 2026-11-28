@@ -628,7 +628,7 @@ function tickPredation(entity,profile,state,currentDay){
    const result=evaluatePredation(state,preyState,{predatorDiet:profile.predatorDiet,preySpecies:preyProfile.speciesId??preyState.species,predatorHungerThreshold:profile.predatorHungerThreshold??0,herdDefense:Math.min(0.6,herd*0.12)});
    if(!result.eligible||Math.random()>result.successChance)continue;
    const hp=prey.getComponent("minecraft:health");if(!hp)continue;
-   const remaining=Math.max(0,hp.currentValue-(profile.predationDamage??5));hp.setCurrentValue(remaining);
+   const remaining=Math.max(0,hp.currentValue-(profile.predationDamage??5));if(remaining<=0)try{prey.setDynamicProperty("tfc:predated",true);}catch{}hp.setCurrentValue(remaining);
    if(remaining<=0){state.hunger=Math.max(0,state.hunger-28);state.lastHuntAt=currentDay;}
    break;
   }
@@ -958,7 +958,7 @@ function dropFaunaLoot(event){
  const entity=event.deadEntity;if(!entity?.typeId?.startsWith("tfc:"))return;
  const drops=FAUNA_DEATH_LOOT[entity.typeId];if(!drops?.length)return;
  const killer=event.damageSource?.damagingEntity,killerProfile=killer?ANIMAL_PROFILES[killer.typeId]:null;
- const playerKill=killer?.typeId==="minecraft:player",predated=Boolean(killerProfile?.predatorDiet?.length);
+ const playerKill=killer?.typeId==="minecraft:player";let predated=Boolean(killerProfile?.predatorDiet?.length);try{predated=predated||entity.getDynamicProperty("tfc:predated")===true;}catch{}
  for(const drop of drops){
   if(drop.playerKillOnly&&!playerKill)continue;
   if(drop.notPredated&&predated)continue;
