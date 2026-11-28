@@ -136,6 +136,9 @@
     },
     "tfc_carrot": {
       "textures": "textures/items/tfc_grain"
+    },
+    "tfc_water_vessel": {
+      "textures": "textures/items/tfc_pottery"
     }
   }
 }
