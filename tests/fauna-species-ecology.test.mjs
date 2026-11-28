@@ -57,6 +57,15 @@ test("official livestock values are represented for alpaca, musk ox and yak",()=
  assert.equal(yak.dairy,true);
 });
 
+test("native fox, panda, rabbit and chicken adapters forage from world blocks",()=>{
+ assert.match(runtime,/"minecraft:fox":\{[^}]*grazeBlocks:\["minecraft:sweet_berry_bush"\]/);
+ assert.match(runtime,/"minecraft:panda":\{[^}]*grazeBlocks:\["minecraft:bamboo"\]/);
+ assert.match(runtime,/"minecraft:rabbit":\{[^}]*grazeBlocks:\["minecraft:carrots","minecraft:dandelion"/);
+ assert.match(runtime,/"minecraft:chicken":\{[^}]*grazeBlocks:\["minecraft:grass_block"/);
+ assert.match(runtime,/forage\.typeId==="minecraft:sweet_berry_bush"/);
+ assert.match(runtime,/forage\.typeId==="minecraft:bamboo"/);
+});
+
 test("birds, herbivores and manatees have natural forage sources",()=>{
  for(const id of ["alpaca","musk_ox","yak","boar","bongo","caribou","gazelle","moose","wildebeest","duck","quail","grouse","peafowl","pheasant","turkey"]){
   assert.ok(CUSTOM_FAUNA_PROFILES["tfc:"+id].grazeBlocks.includes("minecraft:grass_block"),id+" missing grass forage");
