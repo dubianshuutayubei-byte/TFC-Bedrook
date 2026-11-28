@@ -47,7 +47,8 @@
     "farming": [
       "crop_seed",
       "fertilizer",
-      "farmland"
+      "farmland",
+      "compost"
     ],
     "equipment": [
       "firepit",
@@ -55,7 +56,8 @@
       "charcoal_forge",
       "crucible",
       "anvil",
-      "drying_rack"
+      "drying_rack",
+      "composter"
     ],
     "geology_tools": [
       "prospecting_tool"
@@ -72,7 +74,8 @@
     "小麦・トウモロコシ・ジャガイモの作物種別と種・収穫物を登録。",
     "食品の個体別鮮度はプレイヤー単位・食品種類単位で管理し、腐敗時に腐敗食品へ変換。アイテム移動後の個体識別は未対応。",
     "野菜・果物の食品アイテムと簡易食材レシピを追加。",
-    "錫の鋳造と銅/錫の青銅合金鋳造を追加。錫鉱石の自然生成は地形工程で実装予定。"
+    "錫の鋳造と銅/錫の青銅合金鋳造を追加。錫鉱石の自然生成は地形工程で実装予定。",
+    "緑の素材と落ち葉を約10日発酵させるコンポスター、N/K補給用の堆肥を追加。"
   ],
   "registeredIdentifiers": [
     "tfc:flint",
@@ -114,6 +117,8 @@
     "tfc:dried_fruit",
     "tfc:dried_vegetables",
     "tfc:drying_rack",
-    "tfc:prospecting_tool"
+    "tfc:prospecting_tool",
+    "tfc:compost",
+    "tfc:composter"
   ]
 }
