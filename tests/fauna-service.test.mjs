@@ -217,3 +217,29 @@ test("animal needs use loaded time while TFC age can advance by world-calendar e
  assert.equal(next.hunger,20.4);
  assert.equal(next.thirst,20.6);
 });
+
+test("configured animal lifespan causes a persisted old-age death exactly at the limit",()=>{
+ const start={species:"deer",ageDays:9.5,lifespanDays:10,health:100,hunger:0,thirst:0,lifeStage:"adult"};
+ const alive=advanceAnimalNeeds(start,0.25,{hungerPerDay:0,thirstPerDay:0,healthLossPerDay:0});
+ assert.equal(alive.isAlive,true);
+ assert.equal(alive.ageDays,9.75);
+ const dead=advanceAnimalNeeds(alive,0.25,{hungerPerDay:0,thirstPerDay:0,healthLossPerDay:0});
+ assert.equal(dead.isAlive,false);
+ assert.equal(dead.deathReason,"old_age");
+ assert.equal(dead.lifeStage,"dead");
+ assert.equal(dead.health,0);
+});
+test("dead animals remain dead and cannot breed or produce",()=>{
+ const dead={species:"cow",sex:"female",ageDays:200,lifeStage:"dead",isAlive:false,deathReason:"old_age",health:0,familiarity:40,lastFedDay:10,lastBreedAt:0};
+ const male={...dead,sex:"male"};
+ assert.equal(canBreed(dead,male,{adultAgeDays:100,requiredFamiliarity:20,currentDay:10,currentTime:10}),false);
+ assert.equal(canProduce(dead,{currentDay:10,requiredFamiliarity:10}),false);
+ const unchanged=advanceAnimalNeeds(dead,10);
+ assert.equal(unchanged.isAlive,false);
+ assert.equal(unchanged.deathReason,"old_age");
+});
+test("animals without a verified lifespan do not receive a fabricated death age",()=>{
+ const animal=advanceAnimalNeeds({species:"wolf",ageDays:1000,health:100},10,{hungerPerDay:0,thirstPerDay:0,healthLossPerDay:0});
+ assert.equal(animal.isAlive,true);
+ assert.equal(animal.lifespanDays,null);
+});
