@@ -10,7 +10,7 @@
     "components": {
       "minecraft:icon": "tfc_potato_seed",
       "minecraft:display_name": {
-        "value": "ジャガイモの種"
+        "value": "ジャガイモの種芋"
       },
       "minecraft:max_stack_size": 64
     }
