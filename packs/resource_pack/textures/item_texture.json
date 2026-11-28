@@ -274,6 +274,9 @@
     },
     "tfc_trellis": {
       "textures": "textures/items/tfc_pottery"
+    },
+    "tfc_clay_seal": {
+      "textures": "textures/items/tfc_pottery"
     }
   }
 }
