@@ -44,3 +44,16 @@ test("dried food profiles apply a recognized preservation multiplier", () => {
 test("food profile validation rejects unknown preservation methods", () => {
   assert.throws(() => validateFoodDatabase({ foods: [{ id: "bad_food", preservation: "sun_magic" }] }), /unknown preservation/);
 });
+
+test("smoked meat uses a distinct preservation method from ordinary cooked food", () => {
+  const smoked = createFoodFromProfile({ id: "smoked_meat", freshness: 100, baseDecayPerHour: 1, preservation: "smoked", cooked: true });
+  const cooked = createFoodState({ id: "cooked_meat", freshness: 100, baseDecayPerHour: 1, preservation: "cooked", cooked: true });
+  assert.equal(smoked.preservation, "smoked");
+  assert.ok(advanceFoodDecay(smoked, 10, { baseDecayPerHour: 1 }).freshness > advanceFoodDecay(cooked, 10, { baseDecayPerHour: 1 }).freshness);
+});
+
+test("food database exposes a recognized smoked preservation profile", () => {
+  const database = JSON.parse(readFileSync(new URL("../packs/behavior_pack/data/food-profiles.json", import.meta.url), "utf8"));
+  assert.equal(validateFoodDatabase(database).foodCount, database.foods.length);
+  assert.equal(database.foods.find(food => food.id === "smoked_meat").preservation, "smoked");
+});
