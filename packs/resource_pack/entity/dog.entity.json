@@ -1,0 +1,32 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "tfc:dog",
+      "materials": { "default": "entity_alphatest" },
+      "textures": { "default": "textures/entity/wolf/wolf" },
+      "geometry": { "default": "geometry.wolf" },
+      "animations": {
+        "wolf_setup": "animation.wolf.setup",
+        "wolf_look_at": "animation.common.look_at_target",
+        "wolf_head_rot_z": "animation.wolf.head_rot_z",
+        "wolf_tail_default": "animation.wolf.tail_default",
+        "wolf_angry": "animation.wolf.angry",
+        "wolf_sitting": "animation.wolf.sitting",
+        "wolf_leg_default": "animation.wolf.leg_default"
+      },
+      "scripts": {
+        "animate": [
+          "wolf_setup",
+          "wolf_look_at",
+          "wolf_head_rot_z",
+          "wolf_tail_default",
+          "wolf_angry",
+          "wolf_sitting",
+          "wolf_leg_default"
+        ]
+      },
+      "render_controllers": ["controller.render.tfc_fauna"]
+    }
+  }
+}
