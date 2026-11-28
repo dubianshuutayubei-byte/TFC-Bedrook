@@ -19,6 +19,7 @@ const CROP_PROFILES={
  maize:{minTemperatureC:12,maxTemperatureC:35,minHydration:30,maxHydration:100,preferredNutrient:"nitrogen",minPreferredNutrient:15,optimalNutrient:65,soilTypes:["loam","silt"],seed:"tfc:maize_seed",harvest:"tfc:maize"},
  potato:{minTemperatureC:4,maxTemperatureC:25,minHydration:20,maxHydration:90,preferredNutrient:"potassium",minPreferredNutrient:10,optimalNutrient:55,soilTypes:["loam","silt"],seed:"tfc:potato_seed",harvest:"tfc:potato"}
 };
+const ITEM_LABELS={"tfc:raw_meat":"生肉","tfc:cooked_meat":"焼いた肉","tfc:clay_vessel":"未焼成土器","tfc:fired_vessel":"焼成土器","tfc:unfired_ingot_mold":"未焼成鋳型","tfc:fired_ingot_mold":"焼成鋳型","tfc:copper_ore":"銅鉱石","tfc:heated_copper_ingot":"加熱銅インゴット","tfc:copper_ingot":"銅インゴット","tfc:tin_ore":"錫鉱石","tfc:heated_tin_ingot":"加熱錫インゴット","tfc:tin_ingot":"錫インゴット","tfc:heated_bronze_ingot":"加熱青銅インゴット","tfc:bronze_ingot":"青銅インゴット","tfc:fruit":"果物","tfc:vegetable":"野菜","tfc:dried_meat":"干し肉","tfc:dried_fruit":"干し果物","tfc:dried_vegetables":"干し野菜"};
 const WEATHER_BY_DIMENSION=new Map([["overworld","clear"]]);
 const ANIMAL_PROFILES={
  "tfc:deer":{adultAgeDays:30,requiredFamiliarity:35,breedingCooldownDays:20,gestationDays:210,customBreeding:true,feedItems:["minecraft:wheat","minecraft:wheat_seeds"],grazeBlocks:["minecraft:grass_block","minecraft:tallgrass"]},
@@ -111,7 +112,7 @@ async function station(player,id,block){
  const held=inv(player)?.getItem(player.selectedSlotIndex),fuel=(id==="anvil"||id==="drying_rack")?null:(held?FUELS[held.typeId]:null);
  if(fuel){if(!take(player,held.typeId,1)){player.sendMessage("§c燃料を取り出せません。");return;}writeWorldState(posKey(block,"fire"),addFuel(state,fuel));player.sendMessage("§a燃料投入: "+Math.round(fuel.duration/20)+"秒分");return;}
  const tempLabels={unheated:"未加熱",warming:"暖まり中",hot:"熱い",very_hot:"非常に熱い",faint_red:"かすかな赤熱",dark_red:"暗赤色",bright_red:"明るい赤熱",orange:"橙熱",yellow:"黄色熱",yellow_white:"黄白色",white:"白熱",brilliant_white:"強白熱"};
- const body=recipes.map((r,i)=>(i+1)+". "+r.title+"\n   "+(id==="drying_rack"?"所要時間 "+Math.ceil(r.durationTicks/20)+"秒":"必要温度 "+r.minimumTemperatureC+"°C / "+Math.ceil(r.durationTicks/20)+"秒")).join("\n\n");
+ const body=recipes.map((r,i)=>{const inputs=Object.entries(r.inputs).map(([itemId,amount])=>(count(player,itemId)>=amount?"§a":"§c")+(ITEM_LABELS[itemId]??itemId)+" ×"+amount+"§r").join("、");const outputs=Object.entries(r.outputs).map(([itemId,amount])=>(ITEM_LABELS[itemId]??itemId)+" ×"+amount).join("、");return(i+1)+". "+r.title+"\n   "+(id==="drying_rack"?"所要時間 "+Math.ceil(r.durationTicks/20)+"秒":"必要温度 "+r.minimumTemperatureC+"°C / "+Math.ceil(r.durationTicks/20)+"秒")+"\n   材料: "+inputs+"\n   完成品: "+outputs;}).join("\n\n");
  const status=id==="drying_rack"?"\n\n常温・時間式乾燥です。燃料は必要ありません。":"\n\n現在温度: "+Math.floor(state.temperatureC)+"°C（"+tempLabels[classifyTemperature(state.temperatureC)]+"）\n燃料残り: "+Math.ceil(state.burnTicks/20)+"秒";
  const form=new ActionFormData().title(id==="anvil"?"金床":id==="drying_rack"?"乾燥棚":"加工設備").body(body+status);
  for(const recipe of recipes)form.button(recipe.title);
