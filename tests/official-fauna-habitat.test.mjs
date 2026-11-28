@@ -11,6 +11,11 @@ test("official 1.21.x BuiltinFauna provides exact habitat data for all 78 fauna"
  assert.equal(habitat.source.version,"TerraFirmaCraft 1.21.1-4.2.16");
  assert.equal(habitat.source.tag,"v4.2.16");
  assert.equal(habitat.source.blobs["src/data/java/net/dries007/tfc/data/providers/BuiltinFauna.java"],"5290c4ef69ff7ba768406e2ee2157052c25ee4b2");
+ assert.equal(habitat.source.blobs["src/main/java/net/dries007/tfc/common/entities/Faunas.java"],"5ac152295b832d0e6317539d9d714110f6515d76");
+ assert.equal(habitat.source.blobs["src/main/java/net/dries007/tfc/world/placement/ClimatePlacement.java"],"3f3ba3826a584040cd40bac6bbebfcc454239e45");
+ assert.equal(habitat.source.blobs["src/main/java/net/dries007/tfc/world/chunkdata/ChunkData.java"],"0420d41f6c9155cc2c2f7dda553997bc713937be");
+ assert.equal(habitat.source.blobs["src/main/java/net/dries007/tfc/util/climate/OverworldClimateModel.java"],"ed0c53f52b87be990269476e333184db00d474eb");
+ assert.equal(habitat.source.blobs["src/main/java/net/dries007/tfc/util/climate/ClimateModel.java"],"200efb9bb06e47eeb901dad0dec8eed2175a96cf");
  assert.equal(habitat.count,78);
  assert.equal(habitat.species.length,78);
  assert.equal(new Set(habitat.species.map(x=>x.id)).size,78);
