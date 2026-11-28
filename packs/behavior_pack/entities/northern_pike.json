@@ -13,7 +13,8 @@
           "animal",
           "mob",
           "tfc_aquatic",
-          "tfc_fauna_northern_pike"
+          "tfc_fauna_northern_pike",
+          "tfc_small_fish"
         ]
       },
       "minecraft:nameable": {},
