@@ -1,7 +1,7 @@
 const clamp=(v,min,max)=>Math.min(max,Math.max(min,v));
 const finiteOr=(v,f)=>Number.isFinite(Number(v))?Number(v):f;
 export function createAnimalState(i={}){return{species:i.species??"unknown",sex:i.sex??"unknown",ageDays:Math.max(0,finiteOr(i.ageDays,0)),familiarity:clamp(finiteOr(i.familiarity,0),0,100),pregnancyDays:Math.max(0,finiteOr(i.pregnancyDays,0)),health:clamp(finiteOr(i.health,100),0,100),hunger:clamp(finiteOr(i.hunger,0),0,100),thirst:clamp(finiteOr(i.thirst,0),0,100),lastProductAt:Math.max(0,finiteOr(i.lastProductAt,0)),lastBreedAt:Math.max(0,finiteOr(i.lastBreedAt,0))};}
-const FOREST_RANK={none:0,edge:1,normal:2,old_growth:3};
+const FOREST_RANK={none:0,sparse:1,edge:2,normal:3,old_growth:4};
 export function evaluateHabitat(p,e){
  const failures=[],missing=[];
  const check=(profileKey,environmentKey,condition,fail)=>{if(p[profileKey]===undefined||p[profileKey]===null)return;if(e[environmentKey]===undefined||e[environmentKey]===null){missing.push(environmentKey);return;}if(condition(e[environmentKey]))failures.push(fail);};
