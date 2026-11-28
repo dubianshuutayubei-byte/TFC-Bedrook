@@ -15,6 +15,7 @@ Minecraft Bedrock Edition 向けに TerraFirmaCraft（TFC）Java 1.20.1-3.2.26 �
 ## 設計・調査資料
 
 - [地形生成リファレンス監査](docs/research/terrain-generation-reference-audit.md)
+- [ユーザー提供カスタム高山バイオームJSON監査](docs/research/bedrock-custom-biome-snippet-review.md)
 - [独自地形再構成方式の検討](docs/research/terrain-reconstruction-design.md)
 - [地形削り・Air置換の実現可能性調査](docs/research/air-replacement-feasibility.md)
 - [TFC機能マッピング](docs/spec/tfc-feature-mapping.md)
