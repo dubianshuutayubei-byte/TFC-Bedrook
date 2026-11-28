@@ -956,7 +956,7 @@ function forestTypeAt(dimension,location){
  const score=leaves+logs*2;
  return score>=24?"old_growth":score>=10?"normal":score>=2?"edge":"none";
 }
-function sampleAnimalEnvironment(entity){
+function sampleAnimalEnvironment(entity,profile=null){
  const location=entity.location,dimension=entity.dimension;
  const blockLocation={x:Math.floor(location.x),y:Math.floor(location.y),z:Math.floor(location.z)};
  let biomeId="minecraft:plains",brightness=null,currentBlock=null,groundBlock=null;
@@ -969,7 +969,10 @@ function sampleAnimalEnvironment(entity){
  const onGround=validSpawnGround&&!inWater;
  const terrain=/mountain|windswept|peaks|highlands/.test(biomeId)?"highlands":/plains|savanna/.test(biomeId)?"plains":/forest|taiga|jungle/.test(biomeId)?"forest":"other";
  const waterType=/ocean|beach/.test(biomeId)?"saltwater":"freshwater";
- return {y:blockLocation.y,seaLevel:63,month:tfcMonthFromDay(world.getDay()),onGround,inWater,validSpawnGround,temperatureC:currentTemperatureC(location.y-63,biomeId),rainfall:rainfallForBiome(biomeId),belowSeaLevel:Math.max(0,63-blockLocation.y),brightness,forestType:forestTypeAt(dimension,location),terrain,waterType,biomeId};
+ // Forest density costs up to 75 block lookups. Only sample it for species
+ // whose official TFC habitat profile actually constrains forest density.
+ const needsForest=profile?.minForest!=null||profile?.maxForest!=null;
+ return {y:blockLocation.y,seaLevel:63,month:tfcMonthFromDay(world.getDay()),onGround,inWater,validSpawnGround,temperatureC:currentTemperatureC(location.y-63,biomeId),rainfall:rainfallForBiome(biomeId),belowSeaLevel:Math.max(0,63-blockLocation.y),brightness,forestType:needsForest?forestTypeAt(dimension,location):null,terrain,waterType,biomeId};
 }
 function validateNaturalFaunaSpawn(event){
  if(event?.cause!=="Spawned")return;
@@ -980,7 +983,7 @@ function validateNaturalFaunaSpawn(event){
  system.run(()=>{
   try{
    if(!entity.isValid())return;
-   const environment=sampleAnimalEnvironment(entity),result=evaluateFaunaSpawn(official,environment);
+   const environment=sampleAnimalEnvironment(entity,official),result=evaluateFaunaSpawn(official,environment);
    if(result.missing.length){console.warn("[TFC-Bedrook] fauna spawn validation skipped; missing:",profile.speciesId,result.missing);return;}
    if(!result.suitable){entity.remove();}
   }catch(error){console.warn("[TFC-Bedrook] fauna spawn climate validation skipped:",profile.speciesId,error);}
