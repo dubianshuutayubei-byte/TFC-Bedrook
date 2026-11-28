@@ -107,12 +107,15 @@ test("runtime wires lifecycle, predation and egg nest incubation into gameplay",
  assert.match(runtime,/tickPredation\(entity,profile,state,currentDay\)/);
  assert.match(runtime,/registerCustomComponent\("tfc:egg_nest"/);
  assert.match(runtime,/function eggNestTick\(block\)/);
+ assert.match(runtime,/valid=\["minecraft:egg","tfc:chicken_egg","tfc:duck_egg","tfc:quail_egg"\]/);
+ assert.match(runtime,/stack\.typeId==="minecraft:egg"\?"chicken"/);
 });
 
 test("egg nest block, item and three bird egg items are registered",()=>{
  const block=read("packs/behavior_pack/blocks/egg_nest.json")["minecraft:block"];
  assert.equal(block.description.identifier,"tfc:egg_nest");
  assert.ok(block.components["minecraft:tick"]);
+ assert.deepEqual(block.components["minecraft:tick"].interval_range,[1200,1200]);
  assert.ok(block.components["tfc:egg_nest"]);
  assert.equal(read("packs/behavior_pack/items/egg_nest.json")["minecraft:item"].components["minecraft:block_placer"].block,"tfc:egg_nest");
  for(const id of ["chicken","duck","quail"])assert.equal(read("packs/behavior_pack/items/"+id+"_egg.json")["minecraft:item"].description.identifier,"tfc:"+id+"_egg");
