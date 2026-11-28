@@ -59,8 +59,8 @@ const ITEM_LABELS={"tfc:raw_meat":"生肉","tfc:cooked_meat":"焼いた肉","tfc
 const WILD_SEED_DROPS=Object.freeze({
  "minecraft:short_grass":["tfc:barley_seed","tfc:oat_seed","tfc:rye_seed","tfc:lentils_seed","tfc:soybean_seed","tfc:peanuts_seed"],
  "minecraft:tall_grass":["tfc:barley_seed","tfc:oat_seed","tfc:rye_seed","tfc:lentils_seed","tfc:soybean_seed","tfc:peanuts_seed"],
- "minecraft:fern":["tfc:beet_seed","tfc:cabbage_seed","tfc:carrot_seed","tfc:garlic_seed","tfc:onion_seed","tfc:squash_seed","tfc:lentils_seed","tfc:soybean_seed","tfc:peanuts_seed"],
- "minecraft:large_fern":["tfc:beet_seed","tfc:cabbage_seed","tfc:carrot_seed","tfc:garlic_seed","tfc:onion_seed","tfc:squash_seed","tfc:lentils_seed","tfc:soybean_seed","tfc:peanuts_seed"]
+ "minecraft:fern":["tfc:beet_seed","tfc:cabbage_seed","tfc:carrot_seed","tfc:garlic_seed","tfc:onion_seed","tfc:squash_seed"],
+ "minecraft:large_fern":["tfc:beet_seed","tfc:cabbage_seed","tfc:carrot_seed","tfc:garlic_seed","tfc:onion_seed","tfc:squash_seed"]
 });
 const FERTILIZER_PROFILES=Object.freeze({
  "minecraft:bone_meal":{name:"骨粉",nutrients:{phosphorus:10}},
