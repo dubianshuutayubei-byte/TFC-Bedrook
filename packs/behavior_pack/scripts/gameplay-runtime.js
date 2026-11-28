@@ -11,6 +11,7 @@ import { createAnimalState, createAnimalOffspringState, initializeAnimalLifeStag
 import { OFFICIAL_FAUNA_PROFILES, OFFICIAL_FAUNA_HABITAT_EXTENSIONS, OFFICIAL_LIVESTOCK_LIFECYCLE } from "./core/fauna-profiles.mjs";
 import { addNestBoxEgg, advanceNestBoxIncubation, takeNestBoxEgg } from "./core/nest-box-service.mjs";
 import { getStationRecipes } from "./core/processing-recipes.mjs";
+import { initializeArmadilloScuteClock, isArmadilloScuteDue } from "./core/armadillo-service.mjs";
 import { isStationJobDue, getPendingStationOutputs, markStationOutputDelivered, markStationJobRecoverable } from "./core/station-job-service.mjs";
 import { normalizeDimensionId, normalizeWeather, getRainfallMm, inferBiomeRainfallMultiplierFromBiomeId } from "./core/environment-service.mjs";
 import { calculateAmbientTemperatureC, getBiomeClimateProfile } from "./core/climate-service.mjs";
@@ -650,6 +651,21 @@ async function nestBoxInteract(player,block){
   player.sendMessage("§a卵を回収しました。");
  }catch(error){player.sendMessage("§e巣箱UIを開けませんでした。");}
 }
+function tickArmadilloScuteProduction(entity,state){
+ if(entity.typeId!=="tfc:armadillo"||state.lifeStage!=="adult")return;
+ try{
+  const now=world.getAbsoluteTime();
+  let last=entity.getDynamicProperty("tfc:armadillo_last_scute_tick");
+  if(!Number.isFinite(Number(last))){
+   last=initializeArmadilloScuteClock(now,Math.random());
+   entity.setDynamicProperty("tfc:armadillo_last_scute_tick",last);
+   return;
+  }
+  if(!isArmadilloScuteDue(last,now))return;
+  const dropped=entity.dimension.spawnItem(new ItemStack("minecraft:armadillo_scute",1),entity.location);
+  if(dropped)entity.setDynamicProperty("tfc:armadillo_last_scute_tick",now);
+ }catch(error){console.warn("[TFC-Bedrook] armadillo scute production deferred:",error);}
+}
 function animalState(entity){const profile=ANIMAL_PROFILES[entity.typeId];try{const raw=entity.getDynamicProperty("tfc:animal_state");const base=typeof raw==="string"?JSON.parse(raw):{};const isBaby=entity.hasComponent("minecraft:is_baby");return initializeAnimalLifeStage({...base,species:profile?.speciesId??base.species??entity.typeId.replace(":","_")},{isBaby,adultAgeDays:profile?.adultAgeDays??null,maxUses:profile?.maxUses??Infinity,currentDay:currentAnimalDay()});}catch{return initializeAnimalLifeStage({species:profile?.speciesId??entity.typeId.replace(":","_")},{isBaby:false,adultAgeDays:profile?.adultAgeDays??null,maxUses:profile?.maxUses??Infinity,currentDay:currentAnimalDay()});}}
 function saveAnimal(entity,state){try{entity.setDynamicProperty("tfc:animal_state",JSON.stringify(state));}catch(error){console.warn("[TFC-Bedrook] animal state save:",error);}}
 function consumeDroppedAnimalFood(entity,profile,state){
@@ -747,6 +763,7 @@ function animalTick(entity){
  state.lastAgeUpdateAt=currentDay;
  state=advanceAnimalNeeds(state,elapsedAgeDays,{hungerPerDay:profile.hungerPerDay??8,thirstPerDay:profile.thirstPerDay??(profile.kind==="aquatic"?0:12),healthLossPerDay:profile.healthLossPerDay??2,ageElapsedDays:elapsedAgeDays});
  if(!state.isAlive){saveAnimal(entity,state);try{entity.remove();}catch{}return;}
+ tickArmadilloScuteProduction(entity,state);
  state=advanceAnimalFamiliarityDecay(state,currentDay,{decayLimit:30,decayPerDay:2});
  if(profile.maxUses>0&&state.uses>=profile.maxUses&&state.oldDay<0)state.oldDay=currentDay+1+Math.floor(Math.random()*5);
  if(state.oldDay>=0&&currentDay>state.oldDay)state.lifeStage="old";
