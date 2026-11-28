@@ -55,7 +55,10 @@
       "squash",
       "lentils",
       "soybean",
-      "peanuts"
+      "peanuts",
+      "flour",
+      "dough",
+      "bread"
     ],
     "farming": [
       "crop_seed",
@@ -83,7 +86,9 @@
       "crucible",
       "anvil",
       "drying_rack",
-      "composter"
+      "composter",
+      "quern",
+      "handstone"
     ],
     "geology_tools": [
       "prospecting_tool"
@@ -106,7 +111,8 @@
     "野菜・果物の食品アイテムと簡易食材レシピを追加。",
     "錫の鋳造と銅/錫の青銅合金鋳造を追加。錫鉱石の自然生成は地形工程で実装予定。",
     "緑の素材と落ち葉を約10日発酵させるコンポスター、N/K補給用の堆肥を追加。",
-    "焚き火設備を破壊すると木灰を1個取得でき、リン/カリウム肥料として使える。"
+    "焚き火設備を破壊すると木灰を1個取得でき、リン/カリウム肥料として使える。",
+    "石臼で穀物を粉砕し、水入り土器と小麦粉から生地を作り、焚き火でパンを焼く食品加工工程を追加。"
   ],
   "registeredIdentifiers": [
     "tfc:flint",
@@ -176,6 +182,11 @@
     "tfc:soybean_seed",
     "tfc:soybean",
     "tfc:peanuts_seed",
-    "tfc:peanuts"
+    "tfc:peanuts",
+    "tfc:quern",
+    "tfc:handstone",
+    "tfc:flour",
+    "tfc:dough",
+    "tfc:bread"
   ]
 }
