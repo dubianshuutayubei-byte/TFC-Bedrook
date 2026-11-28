@@ -17,8 +17,8 @@ test("opened storage containers are tracked persistently for food freshness",()=
 });
 
 test("container food uses the same per-stack freshness logic as player inventory",()=>{
- assert.match(runtime,/function tickFoodContainerFreshness\(container,dimension,location,nowTick\)/);
- assert.match(runtime,/advanceStackFreshness\(lore,nowTick,\{temperatureC,baseDecayPerHour\}\)/);
- assert.match(runtime,/tickFoodContainerFreshness\(container,dimension,entry\.location,nowTick\)/);
+ assert.match(runtime,/function tickFoodContainerFreshness\(container,dimension,location,nowTick,\{sealed=false\}=\{\}\)/);
+ assert.match(runtime,/advanceStackFreshness\(lore,nowTick,\{temperatureC,baseDecayPerHour:baseDecayPerHour\*\(sealed\?0\.5:1\)\}\)/);
+ assert.match(runtime,/tickFoodContainerFreshness\(container,dimension,entry\.location,nowTick,\{sealed:readWorldState\(posKey\(block,"container_sealed"\),false\)===true\}\)/);
  assert.match(runtime,/trackFoodContainer\(event\.block\)/);
 });
