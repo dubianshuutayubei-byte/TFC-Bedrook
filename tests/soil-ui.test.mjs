@@ -9,7 +9,7 @@ test("soil status UI displays substrate, TFC fertility class and ambient tempera
  assert.match(runtime,/title\("土壌状態"\)/);
  assert.match(runtime,/soilNames=\{loam:"壌土",silt:"シルト",clay:"粘土質"\}/);
  assert.match(runtime,/fertilityNames=\{entisol:"エンティソル"/);
- assert.match(runtime,/currentTemperatureC\(block\.location\.y-63\)\.toFixed\(1\)/);
+ assert.match(runtime,/temperatureAt\(block\.dimension,block\.location\)\.toFixed\(1\)/);
  assert.match(runtime,/骨粉・堆肥・木灰を持って操作すると/);
  assert.match(runtime,/FERTILIZER_PROFILES\[held\?\.typeId\]/);
 });
