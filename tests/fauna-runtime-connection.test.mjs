@@ -22,13 +22,10 @@ test("custom deer retains its own pregnancy and birth cycle",()=>{
  assert.match(runtime,/advancePregnancy\(state,elapsedAgeDays,profile\.gestationDays\)/);
 });
 
-test("TFC livestock rotten-food compatibility matches official species configuration",()=>{
- for(const id of ["minecraft:cow","minecraft:goat","minecraft:pig","minecraft:rabbit","tfc:chicken","tfc:quail"]){
+test("TFC livestock diets do not treat spoiled food as an official animal feed",()=>{
+ for(const id of ["minecraft:cow","minecraft:goat","minecraft:pig","minecraft:rabbit","tfc:chicken","tfc:quail","minecraft:sheep","minecraft:horse","minecraft:donkey","minecraft:mule","tfc:duck","tfc:alpaca","tfc:musk_ox","tfc:yak"]){
   const entry=runtime.split("\n").find(line=>line.includes('"'+id+'":{'))??"";
-  assert.match(entry,/tfc:spoiled_food/);
- }
- for(const id of ["minecraft:sheep","minecraft:horse","minecraft:donkey","minecraft:mule","tfc:duck","tfc:alpaca","tfc:musk_ox","tfc:yak"]){
-  const entry=runtime.split("\n").find(line=>line.includes('"'+id+'":{'))??"";
+  assert.ok(entry, id+" runtime profile missing");
   assert.doesNotMatch(entry,/tfc:spoiled_food/);
  }
 });
