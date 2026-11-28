@@ -39,6 +39,16 @@ test("all 78 fauna have official placement while only 63 carry sourced climate c
  assert.equal(byId.octopoteuthis.distanceBelowSeaLevel,33);
  for(const id of ["arctic_char","armadillo","bison","pond_turtle"])assert.equal(Object.hasOwn(byId[id],"minTemperatureC"),false,id+" climate must remain unspecified");
 });
+test("placement-only profiles can be validated without fabricated climate values",()=>{
+ const arcticChar=combined.species.find(x=>x.id==="arctic_char");
+ const valid=evaluateFaunaSpawn(arcticChar,{inWater:true,onGround:false});
+ assert.equal(valid.suitable,true);
+ assert.deepEqual(valid.failures,[]);
+ assert.deepEqual(valid.missing,[]);
+ const wrong=evaluateFaunaSpawn(arcticChar,{inWater:false,onGround:true});
+ assert.equal(wrong.suitable,false);
+ assert.ok(wrong.failures.includes("not_in_water"));
+});
 test("official spawn profile evaluator rejects wrong placement and unknown climate samples",()=>{
  const deer=combined.species.find(x=>x.id==="deer");
  const wrong=evaluateFaunaSpawn(deer,{onGround:false,temperatureC:10,rainfall:250,forestType:"normal",y:64,seaLevel:63,validSpawnGround:true});
