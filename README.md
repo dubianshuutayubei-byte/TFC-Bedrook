@@ -35,18 +35,9 @@ Minecraft Bedrock Edition 向けに TerraFirmaCraft（TFC）Java 1.20.1-3.2.26 �
 - [金属・合金サービス試作](docs/architecture/metal-service-prototype.md)
 - [熱・燃料サービス試作](docs/architecture/heat-service-prototype.md)
 
-## 実装済みデータ・サービス
-
-- [作物気候プロファイル（23種）](packs/behavior_pack/data/crop-climate-profiles.json)
-- [作物気候判定サービス](packs/behavior_pack/scripts/core/crop-service.mjs)
-- [作物気候テスト](tests/crop-service.test.mjs)
-- [野生植物気候プロファイル（20種）](packs/behavior_pack/data/plant-climate-profiles.json)
-- [野生植物気候判定サービス](packs/behavior_pack/scripts/core/plant-service.mjs)
-- [野生植物気候テスト](tests/plant-service.test.mjs)
-
 ## 検証環境
 
-GitHub ActionsでJSON・manifestの静的検査、JavaScript構文検査、Node.js単体テストを実行する。気候、作物・野生植物の環境適合判定、金属・合金、熱・燃料の純粋関数サービスを追加済み。作物23種・野生植物20種の気候プロファイルをデータ化した。なお、mainブランチではBehavior Pack / Resource Packのmanifestやゲーム内接続はまだ未実装。26.60向けパック初期化は別のDraft PRで検証中。
+GitHub ActionsでJSON・manifestの静的検査、JavaScript構文検査、Node.js単体テストを実行する。気候計算、金属・合金判定、熱・燃料の基礎計算に関する純粋関数プロトタイプを追加済み。Behavior Pack / Resource Packのmanifestやゲーム内機能はまだ未実装。
 
 - [静的検査ツール](tools/validate-pack.mjs)
 - [気候計算モジュール](packs/behavior_pack/scripts/core/climate-service.mjs)
@@ -71,4 +62,4 @@ GitHub ActionsでJSON・manifestの静的検査、JavaScript構文検査、Node.
 
 ## 現在の状態
 
-調査・仕様整理に加え、気候・作物・野生植物・金属・合金・熱の実行可能な純粋関数サービスとNode.jsテストを追加した段階。完成アドオンやMinecraft実機検証済みビルドはまだ存在しない。
+調査・仕様整理に加え、気候計算と金属・合金判定の実行可能プロトタイプを追加した段階。完成アドオンや実機検証済みビルドはまだ存在しない。
