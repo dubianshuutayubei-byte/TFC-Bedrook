@@ -41,7 +41,8 @@
     {
       "id": "chicken",
       "group": "bird",
-      "status": "not_implemented"
+      "status": "partial_state_tracking",
+      "note": "Bedrock runtime state integration exists; full TFC behavior, ecology, assets and habitat spawning are incomplete."
     },
     {
       "id": "cod",
@@ -56,7 +57,8 @@
     {
       "id": "cow",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "partial_state_tracking",
+      "note": "Bedrock runtime state integration exists; full TFC behavior, ecology, assets and habitat spawning are incomplete."
     },
     {
       "id": "crappie",
@@ -76,7 +78,8 @@
     {
       "id": "deer",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "partial_state_tracking",
+      "note": "Bedrock runtime state integration exists; full TFC behavior, ecology, assets and habitat spawning are incomplete."
     },
     {
       "id": "direwolf",
@@ -276,7 +279,8 @@
     {
       "id": "sheep",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "partial_state_tracking",
+      "note": "Bedrock runtime state integration exists; full TFC behavior, ecology, assets and habitat spawning are incomplete."
     },
     {
       "id": "smallmouth_bass",
