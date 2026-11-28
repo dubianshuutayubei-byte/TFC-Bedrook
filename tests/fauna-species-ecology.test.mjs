@@ -135,7 +135,7 @@ test("predator diets follow official TFC land-prey and ocean-prey entity tags",(
  const ocean=["isopod","lobster","crayfish","cod","tropical_fish","horseshoe_crab","bluegill","crappie","lake_trout","largemouth_bass","rainbow_trout","salmon","smallmouth_bass"];
  for(const id of ["black_bear","grizzly_bear","cougar","panther","lion","sabertooth","tiger","hyena","direwolf","crocodile"])assert.deepEqual(CUSTOM_FAUNA_PROFILES["tfc:"+id].predatorDiet,land,id);
  assert.deepEqual(CUSTOM_FAUNA_PROFILES["tfc:orca"].predatorDiet,ocean);
- assert.match(runtime,/"minecraft:dolphin":\{predatorDiet:\["isopod","lobster","crayfish"/);
+ assert.match(runtime,/"minecraft:dolphin":\{territorial:false,attackPlayers:false,pacifiesAfterHunt:false,predatorDiet:\["isopod","lobster","crayfish"/);
  assert.doesNotMatch(runtime,/"minecraft:fox":\{predatorDiet/);
 });
 
