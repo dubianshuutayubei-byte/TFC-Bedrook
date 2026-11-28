@@ -170,7 +170,10 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "minecraft:grass_block"
     ],
     "predatorDiet": [],
-    "predationDamage": 0
+    "predationDamage": 0,
+    "ramming": true,
+    "ramDamage": 6,
+    "ramKnockback": 2.5
   },
   "tfc:bongo": {
     "speciesId": "bongo",
@@ -978,7 +981,10 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "minecraft:grass_block"
     ],
     "predatorDiet": [],
-    "predationDamage": 0
+    "predationDamage": 0,
+    "ramming": true,
+    "ramDamage": 6,
+    "ramKnockback": 2.5
   },
   "tfc:musk_ox": {
     "speciesId": "musk_ox",
@@ -1501,7 +1507,10 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "minecraft:grass_block"
     ],
     "predatorDiet": [],
-    "predationDamage": 0
+    "predationDamage": 0,
+    "ramming": true,
+    "ramDamage": 6,
+    "ramKnockback": 2.5
   },
   "tfc:yak": {
     "speciesId": "yak",
