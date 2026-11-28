@@ -1166,3 +1166,10 @@
 - 監査中に `gameplay-runtime.js` 内のエスケープ改行と `consume_food` コンポーネント登録の括弧不整合を発見し修正。現在、Runtime全体・fauna-service・関連テストのJavaScript構文検査は通過。巣箱/アヒル/ウズラJSONもJSON.parse検査通過。
 - この構文検査はパーサーによる静的構文確認であり、Bedrock Script APIの型/イベント互換性やNodeテストの実行結果を保証しない。GitHubのCI statusは空で、Minecraft 26.60実機検証も未実施。
 - 残作業: メスが巣箱へ移動する実際の誘導AI、種ごとの正確な公式孵化/成熟/産卵条件の照合、他の卵生種、巣箱の専用モデル/テクスチャ、実機での保存・孵化検証。
+
+
+### 追加実装（アヒル・ウズラの巣箱探索AI）
+- TFC Field Guideの「卵生動物は巣箱を自力で見つける」仕様に合わせ、アヒル/ウズラEntityへ `minecraft:behavior.move_to_block` を追加。最寄りの `tfc:nest_box` を探索し、経路移動・到達後の滞在を行う構成。
+- 探索範囲16ブロック、垂直範囲4ブロック、到達半径1、滞在1600 tick、40 tick間隔、開始確率0.35は実機調整前の暫定値。
+- ニワトリは現在バニラ `minecraft:chicken` を利用しているため、同じAIを個別に追加できていない。全卵生動物の自律探索完成とはまだ判定しない。
+- Duck/Quail JSONの構文検査、Runtime全体のJavaScript構文検査は通過。Script APIの実機互換性、AIの経路探索、滞在タイミング、産卵までの一連動作は未検証。
