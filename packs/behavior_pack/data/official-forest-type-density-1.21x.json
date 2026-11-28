@@ -1,0 +1,160 @@
+{
+  "source": {
+    "project": "TerraFirmaCraft",
+    "branch": "1.21.x",
+    "path": "src/main/java/net/dries007/tfc/world/chunkdata/ForestType.java",
+    "meaning": "ForestType.getDensity() values used by ClimatePlacement min_forest/max_forest checks."
+  },
+  "count": 29,
+  "densityRange": {
+    "min": 0,
+    "max": 4
+  },
+  "types": [
+    {
+      "id": "grassland",
+      "density": 0,
+      "javaName": "GRASSLAND"
+    },
+    {
+      "id": "clearing",
+      "density": 0,
+      "javaName": "CLEARING"
+    },
+    {
+      "id": "shrubland",
+      "density": 0,
+      "javaName": "SHRUBLAND"
+    },
+    {
+      "id": "sparse",
+      "density": 0,
+      "javaName": "SPARSE"
+    },
+    {
+      "id": "savanna_monoculture",
+      "density": 1,
+      "javaName": "SAVANNA_MONOCULTURE"
+    },
+    {
+      "id": "savanna_diverse",
+      "density": 1,
+      "javaName": "SAVANNA_DIVERSE"
+    },
+    {
+      "id": "savanna_alternate",
+      "density": 1,
+      "javaName": "SAVANNA_ALTERNATE"
+    },
+    {
+      "id": "savanna_shrub_monoculture",
+      "density": 1,
+      "javaName": "SAVANNA_SHRUB_MONOCULTURE"
+    },
+    {
+      "id": "savanna_shrub_diverse",
+      "density": 1,
+      "javaName": "SAVANNA_SHRUB_DIVERSE"
+    },
+    {
+      "id": "savanna_shrub_alternate",
+      "density": 1,
+      "javaName": "SAVANNA_SHRUB_ALTERNATE"
+    },
+    {
+      "id": "primary_monoculture",
+      "density": 3,
+      "javaName": "PRIMARY_MONOCULTURE"
+    },
+    {
+      "id": "primary_diverse",
+      "density": 4,
+      "javaName": "PRIMARY_DIVERSE"
+    },
+    {
+      "id": "primary_alternate",
+      "density": 4,
+      "javaName": "PRIMARY_ALTERNATE"
+    },
+    {
+      "id": "secondary_monoculture",
+      "density": 3,
+      "javaName": "SECONDARY_MONOCULTURE"
+    },
+    {
+      "id": "secondary_monoculture_tall",
+      "density": 3,
+      "javaName": "SECONDARY_MONOCULTURE_TALL"
+    },
+    {
+      "id": "secondary_diverse",
+      "density": 3,
+      "javaName": "SECONDARY_DIVERSE"
+    },
+    {
+      "id": "secondary_bamboo",
+      "density": 3,
+      "javaName": "SECONDARY_BAMBOO"
+    },
+    {
+      "id": "secondary_diverse_tall",
+      "density": 3,
+      "javaName": "SECONDARY_DIVERSE_TALL"
+    },
+    {
+      "id": "secondary_dense",
+      "density": 4,
+      "javaName": "SECONDARY_DENSE"
+    },
+    {
+      "id": "secondary_dense_tall",
+      "density": 4,
+      "javaName": "SECONDARY_DENSE_TALL"
+    },
+    {
+      "id": "secondary_alternate",
+      "density": 3,
+      "javaName": "SECONDARY_ALTERNATE"
+    },
+    {
+      "id": "edge_monoculture",
+      "density": 2,
+      "javaName": "EDGE_MONOCULTURE"
+    },
+    {
+      "id": "edge_diverse",
+      "density": 2,
+      "javaName": "EDGE_DIVERSE"
+    },
+    {
+      "id": "edge_alternate",
+      "density": 2,
+      "javaName": "EDGE_ALTERNATE"
+    },
+    {
+      "id": "edge_bamboo",
+      "density": 2,
+      "javaName": "EDGE_BAMBOO"
+    },
+    {
+      "id": "dead_monoculture",
+      "density": 2,
+      "javaName": "DEAD_MONOCULTURE"
+    },
+    {
+      "id": "dead_diverse",
+      "density": 2,
+      "javaName": "DEAD_DIVERSE"
+    },
+    {
+      "id": "dead_alternate",
+      "density": 3,
+      "javaName": "DEAD_ALTERNATE"
+    },
+    {
+      "id": "dead_bamboo",
+      "density": 3,
+      "javaName": "DEAD_BAMBOO"
+    }
+  ]
+}
