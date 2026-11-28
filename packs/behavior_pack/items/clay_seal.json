@@ -1,0 +1,19 @@
+{
+  "format_version": "1.26.60",
+  "minecraft:item": {
+    "description": {
+      "identifier": "tfc:clay_seal",
+      "menu_category": {
+        "category": "tools"
+      }
+    },
+    "components": {
+      "minecraft:icon": "tfc_clay_seal",
+      "minecraft:display_name": {
+        "value": "粘土の封印具"
+      },
+      "minecraft:max_stack_size": 1,
+      "tfc:clay_seal": {}
+    }
+  }
+}
