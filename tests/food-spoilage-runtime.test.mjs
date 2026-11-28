@@ -1,13 +1,13 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import { resolve, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { ticksToHours } from "../packs/behavior_pack/scripts/core/food-service.mjs";
 import { readStackFreshness } from "../packs/behavior_pack/scripts/core/food-stack-service.mjs";
 const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
-const ids=["raw_meat","cooked_meat","grain","maize","potato","vegetable","fruit","milk_bottle","dried_meat","dried_fruit","dried_vegetables","barley","oat","rye","beet","cabbage","carrot","garlic","onion","squash","lentils","soybean","peanuts","bread","rice","cassava","green_beans","pumpkin","melon","tomato","green_bell_pepper","radish"];
+const ids=["raw_meat","cooked_meat","grain","maize","potato","vegetable","fruit","milk_bottle","dried_meat","dried_fruit","dried_vegetables","barley","oat","rye","beet","cabbage","carrot","garlic","onion","squash","lentils","soybean","peanuts","bread","rice","cassava","green_beans","pumpkin","melon","tomato","green_bell_pepper","radish","salted_meat","smoked_meat"];
 test("inventory food freshness is stored on each ItemStack lore",()=>{
  assert.match(runtime,/advanceStackFreshness\(lore,nowTick,\{temperatureC,baseDecayPerHour:baseDecayPerHour\*\(sealed\?0\.5:1\)\}\)/);
  assert.match(runtime,/stack\.setLore\(result\.lore\);container\.setItem\(slot,stack\)/);
@@ -27,4 +27,17 @@ test("Bedrock ticks convert to real elapsed hours for food spoilage",()=>{
  assert.equal(ticksToHours(1200),1/60);
  assert.equal(ticksToHours(0),0);
  assert.equal(ticksToHours(-100),0);
+});
+
+test("every edible item has a freshness decay profile",()=>{
+ const files=readdirSync(join(root,"packs/behavior_pack/items")).filter(name=>name.endsWith(".json"));
+ const profileSource=runtime.match(/const FOOD_DECAY_PROFILES=\{([^;]+)\};/);
+ assert.ok(profileSource,"freshness profile registry exists");
+ const profiles=Function("return ({"+profileSource[1]+"})")();
+ const missing=[];
+ for(const file of files){
+  const item=JSON.parse(readFileSync(join(root,"packs/behavior_pack/items",file),"utf8"))["minecraft:item"];
+  if(item.components?.["tfc:consume_food"]&&!Object.hasOwn(profiles,item.description.identifier))missing.push(item.description.identifier);
+ }
+ assert.deepEqual(missing,[]);
 });
