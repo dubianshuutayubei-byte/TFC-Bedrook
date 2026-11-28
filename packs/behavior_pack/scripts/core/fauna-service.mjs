@@ -13,3 +13,11 @@ export function canProduce(i,{requiredFamiliarity=0,cooldownDays=0,currentDay=0}
 export function recordProduct(i,d){const a=createAnimalState(i);a.lastProductAt=Math.max(a.lastProductAt,finiteOr(d,a.lastProductAt));return a;}
 
 export function grazeAnimal(input,{hungerReduction=2,thirstReduction=0}={}){const a=createAnimalState(input);a.hunger=clamp(a.hunger-Math.max(0,finiteOr(hungerReduction,0)),0,100);a.thirst=clamp(a.thirst-Math.max(0,finiteOr(thirstReduction,0)),0,100);return a;}
+
+export function syncAnimalHealth(input,currentHealth,effectiveMax){
+  const animal=createAnimalState(input);
+  const current=Number(currentHealth),maximum=Number(effectiveMax);
+  if(!Number.isFinite(current)||!Number.isFinite(maximum)||maximum<=0)return animal;
+  animal.health=clamp((current/maximum)*100,0,100);
+  return animal;
+}
