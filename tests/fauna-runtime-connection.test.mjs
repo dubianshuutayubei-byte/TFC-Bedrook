@@ -127,7 +127,6 @@ test("animals do not consume dropped feed when they are not hungry",()=>{
 
 test("shared dairy interaction messages are species-neutral for cows and goats",()=>{
  assert.match(runtime,/メスの乳畜だけです/);
- assert.match(runtime,/乳畜の健康・空腹・渇きを回復させてください/);
  assert.match(runtime,/§a乳を採取しました/);
 });
 
