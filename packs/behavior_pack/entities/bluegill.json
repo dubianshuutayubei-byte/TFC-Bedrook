@@ -59,6 +59,41 @@
         "breathes_air": false,
         "breathes_water": true
       }
+    },
+    "component_groups": {
+      "tfc:baby": {
+        "minecraft:is_baby": {},
+        "minecraft:scale": {
+          "value": 0.55
+        },
+        "minecraft:collision_box": {
+          "width": 0.45,
+          "height": 0.85
+        },
+        "minecraft:movement": {
+          "value": 0.22
+        },
+        "minecraft:behavior.follow_parent": {
+          "priority": 5,
+          "speed_multiplier": 1.1
+        }
+      }
+    },
+    "events": {
+      "tfc:spawn_baby": {
+        "add": {
+          "component_groups": [
+            "tfc:baby"
+          ]
+        }
+      },
+      "tfc:grow_up": {
+        "remove": {
+          "component_groups": [
+            "tfc:baby"
+          ]
+        }
+      }
     }
   }
 }
