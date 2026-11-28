@@ -144,3 +144,5 @@ item.tfc:fired_crucible.name=焼成済みるつぼ
 item.tfc:tin_sheet.name=錫板
 item.tfc:smokehouse.name=燻製設備
 tile.tfc:smokehouse.name=燻製設備
+
+item.tfc:wool.name=羊毛
