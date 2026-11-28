@@ -180,3 +180,26 @@ export function getBiomeClimateProfile(biomeId) {
   if (/(forest|birch|cherry_grove|flower_forest)/.test(id)) return { meanAnnualTempC: 10, seasonalAmplitudeC: 13 };
   return { meanAnnualTempC: 12, seasonalAmplitudeC: 14 };
 }
+
+/** Exact TFC 4.2.16 annual groundwater formula: min(base groundwater + annual rainfall, 500). */
+export function calculateTfcAverageGroundwater(baseGroundwater, averageRainfall) {
+  const base = finite(baseGroundwater, "baseGroundwater");
+  const rainfall = finite(averageRainfall, "averageRainfall");
+  return Math.min(base + rainfall, 500);
+}
+
+/** Exact TFC 4.2.16 average temperature adjustment above sea level. */
+export function adjustTfcAverageTemperatureForElevation(y, averageSeaLevelTemperature, seaLevel = 63) {
+  const height = finite(y, "y");
+  const temperature = finite(averageSeaLevelTemperature, "averageSeaLevelTemperature");
+  const level = finite(seaLevel, "seaLevel");
+  if (height <= level) return temperature;
+  const offset = clamp((height - level) * 0.16225, 0, 17.822);
+  return temperature - offset;
+}
+
+/** Exact ClimatePlacement hemisphere sign handling for non-absolute rain variance. */
+export function adjustTfcRainVarianceForHemisphere(rainVariance, isNorthernHemisphere, absolute = false) {
+  const value = finite(rainVariance, "rainVariance");
+  return absolute ? Math.abs(value) : value * (isNorthernHemisphere ? 1 : -1);
+}
