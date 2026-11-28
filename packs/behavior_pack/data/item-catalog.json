@@ -118,7 +118,8 @@
       "drying_rack",
       "composter",
       "quern",
-      "handstone"
+      "handstone",
+      "clay_seal"
     ],
     "geology_tools": [
       "prospecting_tool"
@@ -247,6 +248,7 @@
     "tfc:papyrus",
     "tfc:trellis",
     "tfc:pumpkin_fruit",
-    "tfc:melon_fruit"
+    "tfc:melon_fruit",
+    "tfc:clay_seal"
   ]
 }
