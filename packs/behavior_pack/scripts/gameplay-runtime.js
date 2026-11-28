@@ -9,6 +9,7 @@ import { getStationRecipes } from "./core/processing-recipes.mjs";
 import { isStationJobDue, getPendingStationOutputs, markStationOutputDelivered, markStationJobRecoverable } from "./core/station-job-service.mjs";
 import { normalizeDimensionId, normalizeWeather, getRainfallMm } from "./core/environment-service.mjs";
 import { calculateAmbientTemperatureC } from "./core/climate-service.mjs";
+import { findMatchingAlloys } from "./core/metal-service.mjs";
 
 const STATE_KEY="tfc:player_state",PROGRESS_KEY="tfc:knapping_progress",FOOD_FRESHNESS_KEY="tfc:food_freshness";
 const FOOD_DECAY_PROFILES={"tfc:raw_meat":0.16,"tfc:cooked_meat":0.12,"tfc:grain":0.025,"tfc:maize":0.025,"tfc:potato":0.1,"tfc:vegetable":0.1,"tfc:fruit":0.11,"tfc:milk_bottle":0.18};
@@ -119,11 +120,12 @@ async function station(player,id,block){
   const heldNow=inv(player)?.getItem(player.selectedSlotIndex);let water=false;
   for(let x=-2;x<=2&&!water;x++)for(let z=-2;z<=2&&!water;z++)for(const y of [0,1]){try{const b=block.dimension.getBlock({x:block.location.x+x,y:block.location.y+y,z:block.location.z+z});if(b&&(b.typeId==="minecraft:water"||b.typeId==="minecraft:flowing_water")){water=true;break;}}catch{}}
   if(!water){player.sendMessage("§c近くに水が必要です。");return;}
-  if(heldNow?.typeId!=="tfc:heated_copper_ingot"||!take(player,"tfc:heated_copper_ingot",1)){player.sendMessage("§c加熱済み銅インゴットを手に持ってください。");return;}
-  give(player,"tfc:copper_ingot",1);player.sendMessage("§b銅インゴットを水で冷却しました。");return;
+  const coolingMap={"tfc:heated_copper_ingot":"tfc:copper_ingot","tfc:heated_tin_ingot":"tfc:tin_ingot","tfc:heated_bronze_ingot":"tfc:bronze_ingot"};const output=coolingMap[heldNow?.typeId];if(!output||!take(player,heldNow.typeId,1)){player.sendMessage("§c加熱済みの銅・錫・青銅インゴットを手に持ってください。");return;}
+  give(player,output,1);player.sendMessage("§b金属インゴットを水で冷却しました。");return;
  }
  if(response.selection>=recipes.length)return;
  const recipe=recipes[response.selection];
+ if(recipe.alloyId){const matches=findMatchingAlloys(recipe.metalInputs,{recipes:[{id:recipe.alloyId,components:recipe.alloyComponents}]});if(!matches.includes(recipe.alloyId)){player.sendMessage("§c合金の配合比が範囲外です。");return;}}
  if(id!=="anvil"&&!canProcessAtTemperature(state,recipe.minimumTemperatureC)){player.sendMessage("§c温度不足です。");return;}
  for(const [itemId,amount] of Object.entries(recipe.inputs)){if(count(player,itemId)<amount){player.sendMessage("§c材料不足: "+itemId+" ×"+amount);return;}}
  const consumedInputs={};
