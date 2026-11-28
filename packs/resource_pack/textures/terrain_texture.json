@@ -21,6 +21,9 @@
     },
     "tfc_drying_rack": {
       "textures": "textures/blocks/tfc_pottery"
+    },
+    "tfc_composter": {
+      "textures": "textures/blocks/tfc_pottery"
     }
   }
 }
