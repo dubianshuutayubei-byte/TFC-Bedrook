@@ -82,3 +82,9 @@ test("players can restore terrestrial animal thirst with a water vessel",()=>{
  assert.match(runtime,/state=waterAnimal\(state,40\);saveAnimal\(entity,state\)/);
  assert.match(runtime,/give\(player,"tfc:fired_vessel",1\)/);
 });
+
+test("animal age initialization reads the Bedrock baby component and uses verified maturity only",()=>{
+ assert.match(runtime,/entity\.hasComponent\("minecraft:is_baby"\)/);
+ assert.match(runtime,/initializeAnimalLifeStage\(\{\.\.\.base,species:profile\?\.speciesId/);
+ assert.match(runtime,/adultAgeDays:profile\?\.adultAgeDays\?\?null/);
+});
