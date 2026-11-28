@@ -317,4 +317,16 @@ test("horse and donkey can produce a persisted mule offspring while other cross-
  assert.equal(advanced.animal.pregnancyOffspringEntityType,"minecraft:mule");
 });
 
-test("fauna month restrictions use TFC 8-day calendar months",()=>{\n assert.equal(tfcMonthFromDay(0),"january");\n assert.equal(tfcMonthFromDay(8),"february");\n assert.equal(tfcMonthFromDay(95),"december");\n assert.equal(tfcMonthFromDay(96),"january");\n const profile={chance:1,placement:"no_restrictions",months:["march"]};\n const valid=evaluateFaunaSpawn(profile,{month:"march"},()=>0);\n const invalid=evaluateFaunaSpawn(profile,{month:"february"},()=>0);\n const missing=evaluateFaunaSpawn(profile,{},()=>0);\n assert.equal(valid.suitable,true);\n assert.deepEqual(invalid.failures,["wrong_month"]);\n assert.deepEqual(missing.missing,["month"]);\n});\n
+test("fauna month restrictions use TFC 8-day calendar months",()=>{
+ assert.equal(tfcMonthFromDay(0),"january");
+ assert.equal(tfcMonthFromDay(8),"february");
+ assert.equal(tfcMonthFromDay(95),"december");
+ assert.equal(tfcMonthFromDay(96),"january");
+ const profile={chance:1,placement:"no_restrictions",months:["march"]};
+ const valid=evaluateFaunaSpawn(profile,{month:"march"},()=>0);
+ const invalid=evaluateFaunaSpawn(profile,{month:"february"},()=>0);
+ const missing=evaluateFaunaSpawn(profile,{},()=>0);
+ assert.equal(valid.suitable,true);
+ assert.deepEqual(invalid.failures,["wrong_month"]);
+ assert.deepEqual(missing.missing,["month"]);
+});
