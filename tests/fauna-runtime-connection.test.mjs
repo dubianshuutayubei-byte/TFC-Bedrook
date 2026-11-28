@@ -196,7 +196,7 @@ test("animal tick derives age and pregnancy progress from elapsed world-calendar
  assert.match(runtime,/advancePregnancy\(state,elapsedAgeDays,profile\.gestationDays\)/);
 });
 
-test("custom breeding uses calendar-day feeding and fractional mating cooldown",()=>{
+test("custom breeding uses TFC 24-hour feeding and fractional mating cooldown",()=>{
  assert.match(runtime,/const breedingDay=world\.getDay\(\),breedingTime=currentAnimalDay\(\)/);
  assert.match(runtime,/canBreed\(state,other,breedingProfile\)/);
  assert.match(runtime,/beginPregnancy\(state,other,breedingProfile\)/);
