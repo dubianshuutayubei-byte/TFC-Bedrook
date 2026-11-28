@@ -344,7 +344,8 @@
       "hydration": 0,
       "baseDecayPerHour": 0.03,
       "cooked": true,
-      "preservation": "cooked"
+      "preservation": "smoked",
+      "notes": "燻製保存（燻製処理。単なる加熱調理とは別方式）"
     }
   ],
   "notes": [
