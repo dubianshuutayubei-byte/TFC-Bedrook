@@ -38,3 +38,8 @@ test("quern flour can be mixed with water and baked into bread",()=>{
  assert.match(runtime,/give\(player,"tfc:dough",1\)/);
  assert.match(recipes,/id:"tfc:bread",station:"firepit"/);
 });
+
+test("quern and dough interactions handle canceled UI and partial material failure safely",()=>{
+ assert.match(runtime,/if\(!response\|\|response\.canceled\|\|response\.selection!==0\)/);
+ assert.match(runtime,/if\(!take\(player,"tfc:water_vessel",1\)\)\{give\(player,"tfc:flour",1\)/);
+});
