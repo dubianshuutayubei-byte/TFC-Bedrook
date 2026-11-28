@@ -13,12 +13,14 @@ test("cow milk requires an adult female meeting health and needs thresholds",()=
  assert.match(runtime,/recordProduct\(state,currentDay,\{maxUses:profile\.maxUses\?\?Infinity,oldDayDelay:1\+Math\.floor\(Math\.random\(\)\*5\)\}\)/);
 });
 
-test("sheep wool uses TFC product logic while chicken eggs retain native laying",()=>{
+test("sheep wool uses TFC product logic and oviparous animals use nest boxes",()=>{
  assert.match(runtime,/産出: 羊毛（TFC式のハサミ操作、7日間隔）/);
  assert.match(runtime,/function shearAnimal\(player,entity\)/);
  assert.match(runtime,/give\(player,"tfc:wool",amount\)/);
- assert.match(runtime,/産出: 卵（バニラの産卵AI）/);
- assert.doesNotMatch(runtime,/spawnItem\(new ItemStack\("minecraft:egg"/);
+ assert.match(runtime,/産出: 卵（巣箱へ産卵）/);
+ assert.match(runtime,/function layAnimalEgg\(entity,state,profile,currentDay\)/);
+ assert.match(runtime,/eggSpecies:"chicken"/);
+ assert.match(runtime,/nearbyBreedingPair\(nest,entity\.typeId\)/);
  assert.doesNotMatch(runtime,/spawnItem\(new ItemStack\("minecraft:white_wool"/);
 });
 
