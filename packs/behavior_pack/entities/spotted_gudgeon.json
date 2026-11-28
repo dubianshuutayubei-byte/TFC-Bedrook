@@ -13,7 +13,8 @@
           "animal",
           "mob",
           "tfc_aquatic",
-          "tfc_fauna_spotted_gudgeon"
+          "tfc_fauna_spotted_gudgeon",
+          "tfc_small_fish"
         ]
       },
       "minecraft:nameable": {},
