@@ -3,11 +3,11 @@ import assert from "node:assert/strict";
 import { PROCESSING_RECIPES, getStationRecipes, validateProcessingRecipes } from "../packs/behavior_pack/scripts/core/processing-recipes.mjs";
 
 test("canonical station recipes are valid and unique",()=>{
-  assert.deepEqual(validateProcessingRecipes(),{count:36});
+  assert.deepEqual(validateProcessingRecipes(),{count:41});
 });
 test("pit kiln exposes both vessel and ingot-mold firing",()=>{
   const ids=getStationRecipes("pit_kiln").map(r=>r.id);
-  assert.deepEqual(ids,["tfc:fired_vessel","tfc:fired_ingot_mold"]);
+  assert.deepEqual(ids,["tfc:fired_vessel","tfc:fired_ingot_mold","tfc:fired_crucible"]);
 });
 test("copper casting returns the reusable fired mold",()=>{
   const recipe=getStationRecipes("crucible")[0];
@@ -78,4 +78,26 @@ test("bread baking consumes dough at cooking temperature",()=>{
  assert.equal(recipe.inputs["tfc:dough"],1);
  assert.equal(recipe.outputs["tfc:bread"],1);
  assert.equal(recipe.minimumTemperatureC,180);
+});
+
+test("brine can be evaporated into salt and an empty fired vessel",()=>{
+ const recipe=getStationRecipes("firepit").find(r=>r.id==="tfc:salt_from_brine");
+ assert.equal(recipe.inputs["tfc:brine_vessel"],1);
+ assert.equal(recipe.outputs["tfc:salt"],1);
+ assert.equal(recipe.outputs["tfc:fired_vessel"],1);
+ assert.equal(recipe.minimumTemperatureC,100);
+});
+test("salted meat and smoked meat are distinct preservation routes",()=>{
+ const salted=getStationRecipes("drying_rack").find(r=>r.id==="tfc:salted_meat");
+ const smoked=getStationRecipes("smokehouse").find(r=>r.id==="tfc:smoked_meat");
+ assert.equal(salted.inputs["tfc:salt"],1);
+ assert.equal(salted.inputs["tfc:raw_meat"],1);
+ assert.equal(smoked.inputs["minecraft:oak_leaves"],2);
+ assert.equal(smoked.outputs["tfc:smoked_meat"],1);
+});
+test("tin sheet can be formed from heated tin at its forging temperature",()=>{
+ const recipe=getStationRecipes("anvil").find(r=>r.id==="tfc:tin_sheet");
+ assert.equal(recipe.inputs["tfc:heated_tin_ingot"],1);
+ assert.equal(recipe.outputs["tfc:tin_sheet"],1);
+ assert.equal(recipe.minimumTemperatureC,138);
 });
