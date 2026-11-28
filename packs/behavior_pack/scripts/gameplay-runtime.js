@@ -8,6 +8,7 @@ import { createSoilState, advanceSoilHydration, evaluateCropGrowth, calculateCro
 import { CROP_PROFILES } from "./core/crop-profiles.mjs";
 import { createAnimalState, createAnimalOffspringState, initializeAnimalLifeStage, syncAnimalHealth, advanceAnimalNeeds, advanceAnimalFamiliarityDecay, canFeedAnimal, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct, evaluateHabitat, evaluateFaunaSpawn } from "./core/fauna-service.mjs";
 import { OFFICIAL_FAUNA_PROFILES } from "./core/fauna-profiles.mjs";
+import { addNestBoxEgg, advanceNestBoxIncubation, takeNestBoxEgg } from "./core/nest-box-service.mjs";
 import { getStationRecipes } from "./core/processing-recipes.mjs";
 import { isStationJobDue, getPendingStationOutputs, markStationOutputDelivered, markStationJobRecoverable } from "./core/station-job-service.mjs";
 import { normalizeDimensionId, normalizeWeather, getRainfallMm, inferBiomeRainfallMultiplierFromBiomeId } from "./core/environment-service.mjs";
@@ -566,6 +567,67 @@ function cropTick(block){
 }
 function fireTick(block){const key=posKey(block,"fire");const state=advanceFire(readWorldState(key,{}),20);writeWorldState(key,state);}
 function currentAnimalDay(){return world.getDay()+world.getTimeOfDay()/24000;}
+function nearbyChickenPair(block){
+ let male=false,female=false;
+ try{
+  const nearby=block.dimension.getEntities({type:"minecraft:chicken",location:block.location,maxDistance:6});
+  for(const entity of nearby){
+   let state=animalState(entity);
+   if(state.sex==="unknown"){state.sex=Math.random()<0.5?"male":"female";saveAnimal(entity,state);}
+   if(state.lifeStage!=="adult"||state.ageDays<(ANIMAL_PROFILES["minecraft:chicken"].adultAgeDays??24))continue;
+   if(state.sex==="male")male=true;
+   if(state.sex==="female")female=true;
+  }
+ }catch(error){console.warn("[TFC-Bedrook] nest box nearby chicken scan failed:",error);}
+ return male&&female;
+}
+function nestBoxTick(block){
+ const key=posKey(block,"nest_box"),day=currentAnimalDay();
+ const stored=readWorldState(key,{eggs:[],lastUpdateDay:day});
+ const elapsed=Math.max(0,day-(Number.isFinite(Number(stored.lastUpdateDay))?Number(stored.lastUpdateDay):day));
+ let state={...stored,...advanceNestBoxIncubation(stored,elapsed),lastUpdateDay:day};
+ for(const egg of [...state.eggs]){
+  if(!egg.fertilized||!egg.hatchReady||egg.species!=="chicken")continue;
+  try{
+   const baby=block.dimension.spawnEntity("minecraft:chicken",{x:block.location.x+0.5,y:block.location.y+0.2,z:block.location.z+0.5});
+   try{baby.triggerEvent("minecraft:ageable_set_baby");}catch(error){console.warn("[TFC-Bedrook] chicken hatch baby event unavailable:",error);}
+   saveAnimal(baby,createAnimalOffspringState({familiarity:0},"chicken","unknown"));
+   state={...state,eggs:takeNestBoxEgg(state,egg.id).state.eggs};
+  }catch(error){console.warn("[TFC-Bedrook] nest box hatch deferred:",error);}
+ }
+ writeWorldState(key,state);
+}
+async function nestBoxInteract(player,block){
+ if(!player||!block)return;
+ const key=posKey(block,"nest_box"),day=currentAnimalDay();
+ let state=readWorldState(key,{eggs:[],lastUpdateDay:day});
+ const container=inv(player),held=container?.getItem(player.selectedSlotIndex);
+ if(held?.typeId==="minecraft:egg"){
+  if(!take(player,"minecraft:egg",1))return;
+  const added=addNestBoxEgg(state,{id:"egg-"+system.currentTick+"-"+Math.floor(Math.random()*1000000),species:"chicken",laidAtDay:day,fertilized:nearbyChickenPair(block),hatchDays:ANIMAL_PROFILES["minecraft:chicken"].hatchDays??8});
+  if(!added.added){give(player,"minecraft:egg",1);player.sendMessage("§c卵を巣箱に入れられませんでした。");return;}
+  state={...state,eggs:added.state.eggs,lastUpdateDay:day};
+  if(!writeWorldState(key,state)){give(player,"minecraft:egg",1);player.sendMessage("§c巣箱の状態を保存できませんでした。卵を返却しました。");return;}
+  player.sendMessage(added.state.eggs.at(-1).fertilized?"§a受精卵を巣箱に入れました。孵化まで最大8日です。":"§a卵を巣箱に入れました。近くに成体のオスとメスがいないため、孵化しません。");
+  return;
+ }
+ const eggs=Array.isArray(state.eggs)?state.eggs:[];
+ const fertilized=eggs.filter(egg=>egg.fertilized);
+ const progress=fertilized.map(egg=>Math.floor(Math.min(100,egg.incubationDays/egg.hatchDays*100))+"%");
+ const body="保管中の卵: "+eggs.length+"個\n受精卵: "+fertilized.length+"個\n孵化進行度: "+(progress.join(" / ")||"なし")+"\n\n手にニワトリの卵を持って操作すると巣箱に入れられます。";
+ const form=new ActionFormData().title("巣箱").body(body).button("未受精卵を1個回収").button("閉じる");
+ try{
+  const response=await form.show(player);
+  if(response.canceled||response.selection!==0)return;
+  const egg=eggs.find(value=>!value.fertilized);
+  if(!egg){player.sendMessage("§e回収できる未受精卵はありません。");return;}
+  const result=takeNestBoxEgg(state,egg.id);
+  state={...state,eggs:result.state.eggs};
+  if(!writeWorldState(key,state)){player.sendMessage("§c巣箱の状態を更新できませんでした。");return;}
+  block.dimension.spawnItem(new ItemStack("minecraft:egg",1),{x:block.location.x+0.5,y:block.location.y+1,z:block.location.z+0.5});
+  player.sendMessage("§a卵を回収しました。");
+ }catch(error){player.sendMessage("§e巣箱UIを開けませんでした。");}
+}
 function animalState(entity){const profile=ANIMAL_PROFILES[entity.typeId];try{const raw=entity.getDynamicProperty("tfc:animal_state");const base=typeof raw==="string"?JSON.parse(raw):{};const isBaby=entity.hasComponent("minecraft:is_baby");return initializeAnimalLifeStage({...base,species:profile?.speciesId??base.species??entity.typeId.replace(":","_")},{isBaby,adultAgeDays:profile?.adultAgeDays??null,maxUses:profile?.maxUses??Infinity,currentDay:currentAnimalDay()});}catch{return initializeAnimalLifeStage({species:profile?.speciesId??entity.typeId.replace(":","_")},{isBaby:false,adultAgeDays:profile?.adultAgeDays??null,maxUses:profile?.maxUses??Infinity,currentDay:currentAnimalDay()});}}
 function saveAnimal(entity,state){try{entity.setDynamicProperty("tfc:animal_state",JSON.stringify(state));}catch(error){console.warn("[TFC-Bedrook] animal state save:",error);}}
 function consumeDroppedAnimalFood(entity,profile,state){
@@ -728,6 +790,7 @@ event.itemComponentRegistry.registerCustomComponent("tfc:drink_water",{onUse:a=>
 event.itemComponentRegistry.registerCustomComponent("tfc:mix_dough",{onUse:a=>{if(a.source?.typeId==="minecraft:player")mixDough(a.source);}});
 event.blockComponentRegistry.registerCustomComponent("tfc:station_ui",{onPlayerInteract:a=>{if(a.player)void station(a.player,a.block.typeId.split(":")[1],a.block);}});event.blockComponentRegistry.registerCustomComponent("tfc:heated_station_tick",{onTick:a=>fireTick(a.block)});
 event.blockComponentRegistry.registerCustomComponent("tfc:farmland_interaction",{onPlayerInteract:a=>void farmlandInteract(a.player,a.block),onTick:a=>soilTick(a.block)});
+event.blockComponentRegistry.registerCustomComponent("tfc:nest_box_interaction",{onPlayerInteract:a=>{if(a.player)void nestBoxInteract(a.player,a.block);},onTick:a=>nestBoxTick(a.block)});
 event.blockComponentRegistry.registerCustomComponent("tfc:crop_growth",{onTick:a=>cropTick(a.block),onPlayerInteract:a=>{const p=a.player,clicked=a.block;if(!p||!clicked)return;const b=clicked.permutation.getState("tfc:part")==="upper"?clicked.below():clicked;if(!b||b.typeId!=="tfc:crop")return;if(b.permutation.getState("tfc:part")==="upper")return;const cropType=b.permutation.getState("tfc:crop_type")??"wheat";const profile=CROP_PROFILES[cropType]??CROP_PROFILES.wheat;const age=b.permutation.getState("tfc:age");const quality=Number(readWorldState(posKey(b,"crop_quality"),1));if(profile.pickable){if(typeof age!=="number"||age<2){p.sendMessage("§e収穫できる状態まで成長していません。");return;}const yieldCount=calculateCropYield(1,quality);give(p,profile.harvest,yieldCount);b.setPermutation(b.permutation.withState("tfc:age",1));writeWorldState(posKey(b,"crop_progress"),0);writeWorldState(posKey(b,"crop_quality"),1);p.sendMessage("§a実を収穫しました。株は残り、再び成長します。");return;}if(profile.spreading){p.sendMessage("§e実は周囲の果実ブロックに実っています。果実ブロックを壊して収穫してください。");return;}if(age!==3){p.sendMessage("§e成長中: "+Math.floor(Number(readWorldState(posKey(b,"crop_progress"),0)))+"%");return;}const yieldCount=calculateCropYield(cropType==="potato"?2:3,quality);give(p,profile.harvest,yieldCount);give(p,profile.seed,1);if(profile.twoBlock){const upper=b.above();if(upper?.typeId==="tfc:crop"&&upper.permutation.getState("tfc:part")==="upper")upper.setType("minecraft:air");}b.setPermutation(b.permutation.withState("tfc:age",0));writeWorldState(posKey(b,"crop_progress"),0);writeWorldState(posKey(b,"crop_quality"),1);if(profile.spreading)writeWorldState(posKey(b,"crop_spread_used"),false);p.sendMessage("§a収穫しました。収穫量補正: "+Math.floor(quality*100)+"% / "+yieldCount+"個");}});
 system.runInterval(()=>{for(const dimensionId of ["overworld","nether","the_end"]){try{const dimension=world.getDimension(dimensionId);for(const type of Object.keys(ANIMAL_PROFILES))for(const entity of dimension.getEntities({type}))animalTick(entity);}catch(error){}}},1200);
 system.runInterval(()=>{for(const player of world.getAllPlayers()){try{tickFoodFreshness(player,system.currentTick);}catch(error){console.warn("[TFC-Bedrook] food freshness tick failed:",error);}}},1200);
