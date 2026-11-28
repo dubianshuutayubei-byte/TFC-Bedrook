@@ -127,13 +127,14 @@ export function advanceAnimalFamiliarityDecay(input,currentDay,{decayLimit=30,de
 }
 
 
-export function advanceAnimalLifecycle(input,currentDay,{adultAgeDays=null}={}){
+export function advanceAnimalLifecycle(input,currentDay,{adultAgeDays=null,elapsedDays=0,oldAgeHealthLossPerDay=0.15}={}){
  const animal=createAnimalState(input);
  if(animal.dead){animal.lifeStage="dead";return animal;}
- const day=finiteOr(currentDay,0);
- if(animal.health<=0){animal.dead=true;animal.deathCause=animal.thirst>=95?"dehydration":animal.hunger>=95?"starvation":"illness";animal.lifeStage="dead";return animal;}
+ const day=finiteOr(currentDay,0),days=Math.max(0,finiteOr(elapsedDays,0));
  if(animal.oldDay>=0&&day>animal.oldDay)animal.lifeStage="old";
  else if(animal.lifeStage==="juvenile"&&Number.isFinite(Number(adultAgeDays))&&animal.ageDays>=Number(adultAgeDays))animal.lifeStage="adult";
+ if(animal.lifeStage==="old")animal.health=clamp(animal.health-days*Math.max(0,finiteOr(oldAgeHealthLossPerDay,0)),0,100);
+ if(animal.health<=0){animal.dead=true;animal.deathCause=animal.lifeStage==="old"?"old_age":animal.thirst>=95?"dehydration":animal.hunger>=95?"starvation":"illness";animal.lifeStage="dead";return animal;}
  animal.lastLifecycleDay=Math.max(finiteOr(animal.lastLifecycleDay,-1),day);
  return animal;
 }
