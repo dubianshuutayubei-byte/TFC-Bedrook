@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readdirSync, readFileSync } from "node:fs";
+import { readdirSync, readFileSync, existsSync } from "node:fs";
 import { dirname, resolve, join } from "node:path";
 import { fileURLToPath } from "node:url";
 const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
@@ -21,4 +21,24 @@ test("all registered block textures and names have resource-pack entries",()=>{
  const gaps=[];
  for(const file of files){const block=readJson("packs/behavior_pack/blocks/"+file)["minecraft:block"];const id=block.description.identifier;for(const material of Object.values(block.components?.["minecraft:material_instances"]??{}))if(material.texture&&!atlas[material.texture])gaps.push(file+": missing terrain atlas "+material.texture);if(!lang.includes("tile."+id+".name="))gaps.push(file+": missing Japanese block name");}
  assert.deepEqual(gaps,[]);
+});
+
+test("every texture atlas path resolves to an existing PNG asset",()=>{
+ const atlases=[
+  "packs/resource_pack/textures/item_texture.json",
+  "packs/resource_pack/textures/terrain_texture.json"
+ ];
+ const missing=[];
+ for(const atlasPath of atlases){
+  const data=readJson(atlasPath).texture_data??{};
+  for(const [key,entry] of Object.entries(data)){
+   const values=Array.isArray(entry.textures)?entry.textures:[entry.textures];
+   for(const value of values){
+    if(typeof value!=="string")continue;
+    const asset=join(root,"packs/resource_pack",value+".png");
+    if(!existsSync(asset))missing.push(atlasPath+" "+key+" -> "+value);
+   }
+  }
+ }
+ assert.deepEqual(missing,[]);
 });
