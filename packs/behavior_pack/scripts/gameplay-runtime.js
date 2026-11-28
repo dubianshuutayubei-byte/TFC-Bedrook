@@ -11,7 +11,7 @@ import { normalizeDimensionId, normalizeWeather, getRainfallMm } from "./core/en
 import { calculateAmbientTemperatureC } from "./core/climate-service.mjs";
 
 const STATE_KEY="tfc:player_state",PROGRESS_KEY="tfc:knapping_progress",FOOD_FRESHNESS_KEY="tfc:food_freshness";
-const FOOD_DECAY_PROFILES={"tfc:raw_meat":0.16,"tfc:cooked_meat":0.12,"tfc:grain":0.025,"tfc:maize":0.025,"tfc:potato":0.1,"tfc:milk_bottle":0.18};
+const FOOD_DECAY_PROFILES={"tfc:raw_meat":0.16,"tfc:cooked_meat":0.12,"tfc:grain":0.025,"tfc:maize":0.025,"tfc:potato":0.1,"tfc:vegetable":0.1,"tfc:fruit":0.11,"tfc:milk_bottle":0.18};
 const CROP_PROFILES={
  wheat:{minTemperatureC:5,maxTemperatureC:30,minHydration:25,maxHydration:100,preferredNutrient:"nitrogen",minPreferredNutrient:10,optimalNutrient:60,soilTypes:["loam","silt","clay"],seed:"tfc:crop_seed",harvest:"tfc:grain"},
  maize:{minTemperatureC:12,maxTemperatureC:35,minHydration:30,maxHydration:100,preferredNutrient:"nitrogen",minPreferredNutrient:15,optimalNutrient:65,soilTypes:["loam","silt"],seed:"tfc:maize_seed",harvest:"tfc:maize"},
