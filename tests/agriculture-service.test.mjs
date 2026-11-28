@@ -27,3 +27,10 @@ test("growth points depend on elapsed time and suitable conditions", () => {
 
 test("soil loses moisture and nutrients over time but rainfall restores hydration",()=>{const next=advanceSoilDay({hydration:40,nitrogen:50},{rainfallMm:5,evaporation:2,nutrientLeaching:1});assert.equal(next.hydration,43);assert.equal(next.nitrogen,49);});
 test("compost replenishes all three soil nutrients",()=>{const next=applySoilCompost({nitrogen:10,phosphorus:10,potassium:10});assert.equal(next.nitrogen,25);assert.equal(next.phosphorus,18);assert.equal(next.potassium,22);});
+
+test("soil type inference maps common substrate blocks to TFC soil classes", () => {
+  assert.equal(inferSoilTypeFromBlockId("minecraft:clay"), "clay");
+  assert.equal(inferSoilTypeFromBlockId("minecraft:mud"), "silt");
+  assert.equal(inferSoilTypeFromBlockId("minecraft:grass_block"), "loam");
+  assert.equal(inferSoilTypeFromBlockId("minecraft:unknown"), "loam");
+});
