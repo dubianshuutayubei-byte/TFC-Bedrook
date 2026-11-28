@@ -11,32 +11,38 @@
     {
       "id": "alpaca",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "black_bear",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "bluegill",
       "group": "aquatic",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "boar",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "bongo",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "caribou",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "chicken",
@@ -53,7 +59,8 @@
     {
       "id": "cougar",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "cow",
@@ -64,17 +71,20 @@
     {
       "id": "crappie",
       "group": "aquatic",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "crayfish",
       "group": "aquatic",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "crocodile",
       "group": "reptile",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "deer",
@@ -85,7 +95,8 @@
     {
       "id": "direwolf",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "dolphin",
@@ -102,7 +113,8 @@
     {
       "id": "duck",
       "group": "bird",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "fox",
@@ -119,7 +131,8 @@
     {
       "id": "gazelle",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "goat",
@@ -130,12 +143,14 @@
     {
       "id": "grizzly_bear",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "grouse",
       "group": "bird",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "horse",
@@ -146,52 +161,62 @@
     {
       "id": "horseshoe_crab",
       "group": "aquatic",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "hyena",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "isopod",
       "group": "aquatic",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "jellyfish",
       "group": "aquatic",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "lake_trout",
       "group": "aquatic",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "largemouth_bass",
       "group": "aquatic",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "lion",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "lobster",
       "group": "aquatic",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "manatee",
       "group": "aquatic",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "moose",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "mule",
@@ -202,7 +227,8 @@
     {
       "id": "musk_ox",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "ocelot",
@@ -213,12 +239,14 @@
     {
       "id": "octopoteuthis",
       "group": "aquatic",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "orca",
       "group": "aquatic",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "panda",
@@ -229,22 +257,26 @@
     {
       "id": "panther",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "peafowl",
       "group": "bird",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "penguin",
       "group": "bird",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "pheasant",
       "group": "bird",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "pig",
@@ -267,7 +299,8 @@
     {
       "id": "quail",
       "group": "bird",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "rabbit",
@@ -278,12 +311,14 @@
     {
       "id": "rainbow_trout",
       "group": "aquatic",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "sabertooth",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "salmon",
@@ -300,7 +335,8 @@
     {
       "id": "smallmouth_bass",
       "group": "aquatic",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "squid",
@@ -311,7 +347,8 @@
     {
       "id": "tiger",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "tropical_fish",
@@ -322,7 +359,8 @@
     {
       "id": "turkey",
       "group": "bird",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "turtle",
@@ -333,7 +371,8 @@
     {
       "id": "wildebeest",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     },
     {
       "id": "wolf",
@@ -344,7 +383,8 @@
     {
       "id": "yak",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "custom_entity_scaffold",
+      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
     }
   ]
 }
