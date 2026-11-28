@@ -38,8 +38,8 @@ const CROP_PROFILES={
  rice:{minTemperatureC:8,maxTemperatureC:31,minHydration:35,maxHydration:100,nutrientDemand:{nitrogen:40,phosphorus:30,potassium:30},nutrientEffects:{nitrogen:-0.4,phosphorus:-0.3,potassium:-0.3},seed:"tfc:rice_seed",harvest:"tfc:rice",requiresWater:true},
  cassava:{minTemperatureC:10,maxTemperatureC:31,minHydration:45,maxHydration:100,nutrientDemand:{phosphorus:40,potassium:20},nutrientEffects:{nitrogen:0.5,phosphorus:-0.4,potassium:-0.2},seed:"tfc:cassava_seed",harvest:"tfc:cassava"},
  green_beans:{minTemperatureC:-2,maxTemperatureC:25,minHydration:25,maxHydration:90,nutrientDemand:{phosphorus:50,potassium:40},nutrientEffects:{nitrogen:0.8,phosphorus:-0.5,potassium:-0.4},seed:"tfc:green_beans_seed",harvest:"tfc:green_beans",twoBlock:true,supportRequired:true},
- pumpkin:{minTemperatureC:-7,maxTemperatureC:27,minHydration:20,maxHydration:85,nutrientDemand:{nitrogen:40,phosphorus:30,potassium:60},nutrientEffects:{nitrogen:-0.4,phosphorus:-0.3,potassium:-0.6},seed:"tfc:pumpkin_seed",harvest:"tfc:pumpkin",spreading:true},
- melon:{minTemperatureC:5,maxTemperatureC:31,minHydration:35,maxHydration:100,nutrientDemand:{nitrogen:30,phosphorus:40,potassium:65},nutrientEffects:{nitrogen:-0.3,phosphorus:-0.4,potassium:-0.65},seed:"tfc:melon_seed",harvest:"tfc:melon",spreading:true},
+ pumpkin:{minTemperatureC:-7,maxTemperatureC:27,minHydration:20,maxHydration:85,nutrientDemand:{nitrogen:40,phosphorus:30,potassium:60},nutrientEffects:{nitrogen:-0.4,phosphorus:-0.3,potassium:-0.6},seed:"tfc:pumpkin_seed",harvest:"tfc:pumpkin",spreading:true,fruitBlock:"tfc:pumpkin_fruit"},
+ melon:{minTemperatureC:5,maxTemperatureC:31,minHydration:35,maxHydration:100,nutrientDemand:{nitrogen:30,phosphorus:40,potassium:65},nutrientEffects:{nitrogen:-0.3,phosphorus:-0.4,potassium:-0.65},seed:"tfc:melon_seed",harvest:"tfc:melon",spreading:true,fruitBlock:"tfc:melon_fruit"},
  tomato:{minTemperatureC:2,maxTemperatureC:31,minHydration:20,maxHydration:85,nutrientDemand:{nitrogen:40,phosphorus:50,potassium:60},nutrientEffects:{nitrogen:-0.4,phosphorus:-0.5,potassium:-0.6},seed:"tfc:tomato_seed",harvest:"tfc:tomato",twoBlock:true,supportRequired:true},
  red_bell_pepper:{minTemperatureC:11,maxTemperatureC:31,minHydration:30,maxHydration:95,nutrientDemand:{nitrogen:30,phosphorus:40,potassium:50},nutrientEffects:{nitrogen:-0.3,phosphorus:-0.4,potassium:-0.5},seed:"tfc:red_bell_pepper_seed",harvest:"tfc:green_bell_pepper",pickable:true},
  yellow_bell_pepper:{minTemperatureC:11,maxTemperatureC:31,minHydration:30,maxHydration:95,nutrientDemand:{nitrogen:30,phosphorus:40,potassium:50},nutrientEffects:{nitrogen:-0.3,phosphorus:-0.4,potassium:-0.5},seed:"tfc:yellow_bell_pepper_seed",harvest:"tfc:green_bell_pepper",pickable:true},
@@ -389,6 +389,21 @@ function trySpreadCrop(block,cropType){
  }
  return false;
 }
+function trySpreadFruit(block,profile){
+ const fruitBlock=profile.fruitBlock;if(!fruitBlock)return;
+ const dirs=[[1,0],[-1,0],[0,1],[0,-1]];
+ let existing=0;const candidates=[];
+ for(const [dx,dz] of dirs){
+  const location={x:block.location.x+dx,y:block.location.y,z:block.location.z+dz};
+  const target=block.dimension.getBlock(location);
+  if(target?.typeId===fruitBlock){existing++;continue;}
+  const below=target?.below();
+  const soilIds=["tfc:farmland","minecraft:farmland","minecraft:dirt","minecraft:grass_block","minecraft:coarse_dirt"];
+  if(target?.isAir&&soilIds.includes(below?.typeId))candidates.push(target);
+ }
+ if(existing>=2||candidates.length===0||Math.random()>=0.2)return;
+ candidates[Math.floor(Math.random()*candidates.length)].setType(fruitBlock);
+}
 function cropTick(block){
  if(block.permutation.getState("tfc:part")==="upper")return;
  const age=block.permutation.getState("tfc:age");
@@ -486,6 +501,8 @@ world.afterEvents.playerBreakBlock.subscribe(event=>{
  const brokenId=event.brokenBlockPermutation?.type?.id,player=event.player;if(!player)return;
  try{
   if(brokenId==="tfc:firepit")player.dimension.spawnItem(new ItemStack("tfc:wood_ash",1),event.block.location);
+  if(brokenId==="tfc:pumpkin_fruit")player.dimension.spawnItem(new ItemStack("tfc:pumpkin",1),event.block.location);
+  if(brokenId==="tfc:melon_fruit")player.dimension.spawnItem(new ItemStack("tfc:melon",1),event.block.location);
   if(brokenId==="tfc:crop"){
    const cropType=event.brokenBlockPermutation?.getState("tfc:crop_type"),profile=CROP_PROFILES[cropType];
    if(profile?.twoBlock){const part=event.brokenBlockPermutation.getState("tfc:part")??"lower";const otherLocation={x:event.block.location.x,y:event.block.location.y+(part==="upper"?-1:1),z:event.block.location.z};const other=player.dimension.getBlock(otherLocation);if(other?.typeId==="tfc:crop"&&other.permutation.getState("tfc:crop_type")===cropType)other.setType("minecraft:air");}
