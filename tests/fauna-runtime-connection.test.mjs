@@ -9,7 +9,7 @@ test("vanilla livestock relies on vanilla breeding and avoids duplicate feed con
  assert.match(runtime,/"minecraft:cow":\{[^}]*customBreeding:false/);
  assert.match(runtime,/"minecraft:sheep":\{[^}]*customBreeding:false/);
  assert.match(runtime,/"minecraft:chicken":\{[^}]*customBreeding:false/);
- assert.match(runtime,/if\(entity\.typeId==="tfc:deer"&&!take\(player,held\.typeId,1\)\)return/);
+ assert.ok(runtime.includes('if(entity.typeId==="tfc:deer"&&!take(player,held.typeId,1))return;'));
  assert.match(runtime,/if\(profile\.customBreeding&&state\.sex==="female"/);
 });
 test("custom deer retains its own pregnancy and birth cycle",()=>{
