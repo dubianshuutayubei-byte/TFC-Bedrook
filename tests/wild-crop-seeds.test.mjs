@@ -15,7 +15,7 @@ test("grass and ferns can provide seeds for the six additional crops",()=>{
 });
 
 test("seed collection and crop return are described in the field guide",()=>{
- assert.match(ui,/レンズ豆・大豆・落花生の種は草地、ビーツ・キャベツ・ニンジン・ニンニク・タマネギ・カボチャの種はシダを壊すと低確率で見つかります/);
+ assert.match(ui,/大麦・オーツ麦・ライ麦の種は草地、ビーツ・キャベツ・ニンジン・ニンニク・タマネギ・カボチャ・レンズ豆・大豆・落花生の種はシダを壊すと低確率で見つかります/);
  assert.match(ui,/成熟作物を収穫すると対応する種が1つ戻ります/);
 });
 
