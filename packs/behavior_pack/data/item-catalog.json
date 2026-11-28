@@ -63,7 +63,8 @@
       "prospecting_tool"
     ],
     "agriculture": [
-      "compost"
+      "compost",
+      "wood_ash"
     ]
   },
   "implementationStatus": "partially_registered",
@@ -122,6 +123,7 @@
     "tfc:drying_rack",
     "tfc:prospecting_tool",
     "tfc:compost",
-    "tfc:composter"
+    "tfc:composter",
+    "tfc:wood_ash"
   ]
 }
