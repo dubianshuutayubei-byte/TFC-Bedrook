@@ -6,7 +6,7 @@ import { deserializePlayerState } from "../core/player-state-service.mjs";
 const UI_TITLE = "TerraFirmaCraft: Bedrook";
 const PLAYER_STATE_KEY = "tfc:player_state";
 const FOOD_FRESHNESS_KEY = "tfc:food_freshness";
-const FOOD_LABELS = Object.freeze({ "tfc:raw_meat":"生肉", "tfc:cooked_meat":"焼いた肉", "tfc:grain":"穀物", "tfc:maize":"トウモロコシ", "tfc:potato":"ジャガイモ", "tfc:milk_bottle":"牛乳瓶" });
+const FOOD_LABELS = Object.freeze({ "tfc:raw_meat":"生肉", "tfc:cooked_meat":"焼いた肉", "tfc:grain":"穀物", "tfc:maize":"トウモロコシ", "tfc:potato":"ジャガイモ", "tfc:vegetable":"野菜", "tfc:fruit":"果物", "tfc:milk_bottle":"牛乳瓶" });
 const NUTRITION_LABELS = Object.freeze({
   grain: "穀物", fruit: "果物", vegetables: "野菜", protein: "タンパク質", dairy: "乳製品"
 });
