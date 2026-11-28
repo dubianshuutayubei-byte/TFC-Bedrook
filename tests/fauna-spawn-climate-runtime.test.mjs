@@ -15,7 +15,7 @@ test("natural spawn validation uses official TFC profile constraints only for na
  assert.match(source,/world\.afterEvents\.entitySpawn\.subscribe\(validateNaturalFaunaSpawn\)/);
  assert.match(source,/event\?\.cause!=="Spawned"/);
  assert.match(source,/OFFICIAL_FAUNA_PROFILES\[profile\.speciesId\]/);
- assert.match(source,/evaluateHabitat\(official,environment\)/);
+ assert.match(source,/evaluateFaunaSpawn\(official,environment,Math\.random\)/);
  assert.match(source,/if\(!result\.suitable\)\{?entity\.remove\(\)/);
 });
 test("spawn environment sampler provides temperature, rainfall, depth, light and forest density",()=>{
