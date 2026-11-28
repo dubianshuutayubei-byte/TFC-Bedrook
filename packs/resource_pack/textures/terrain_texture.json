@@ -18,6 +18,9 @@
     },
     "tfc_crop": {
       "textures": "textures/blocks/tfc_crop"
+    },
+    "tfc_drying_rack": {
+      "textures": "textures/blocks/tfc_firepit"
     }
   }
 }
