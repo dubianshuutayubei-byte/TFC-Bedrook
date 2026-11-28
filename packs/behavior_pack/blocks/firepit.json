@@ -22,7 +22,9 @@
       "minecraft:selection_box": true,
       "tfc:station_ui": {
         "station": "firepit"
-      }
+      },
+      "minecraft:display_name": "tile.tfc:firepit.name",
+      "minecraft:light_emission": 10
     }
   }
 }
