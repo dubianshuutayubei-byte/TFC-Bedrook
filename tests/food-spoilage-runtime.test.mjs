@@ -46,7 +46,7 @@ test("runtime decay rates stay synchronized with canonical food profiles",()=>{
  assert.notEqual(start,-1);
  const end=runtime.indexOf(";",start);
  const source=runtime.slice(start,end);
- const runtimeRates=new Map([...source.matchAll(/"([^"]+)":([0-9]+(?:\\.[0-9]+)?)/g)].map(match=>[match[1],Number(match[2])]));
+ const runtimeRates=new Map([...source.matchAll(/"([^"]+)":([0-9]+[.]?[0-9]*)/g)].map(match=>[match[1],Number(match[2])]));
  const aliases={milk:"milk_bottle"};
  const expected=new Map(database.foods.map(food=>["tfc:"+(aliases[food.id]??food.id),food.baseDecayPerHour]));
  assert.deepEqual([...runtimeRates].sort(([a],[b])=>a.localeCompare(b)),[...expected].sort(([a],[b])=>a.localeCompare(b)));
