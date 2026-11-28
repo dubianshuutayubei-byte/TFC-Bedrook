@@ -1,0 +1,28 @@
+{
+  "format_version": "1.20.10",
+  "minecraft:recipe_shaped": {
+    "description": {
+      "identifier": "tfc:smokehouse"
+    },
+    "tags": [
+      "crafting_table"
+    ],
+    "pattern": [
+      "PPP",
+      "PCP",
+      "PPP"
+    ],
+    "key": {
+      "P": {
+        "item": "minecraft:oak_planks"
+      },
+      "C": {
+        "item": "minecraft:campfire"
+      }
+    },
+    "result": {
+      "item": "tfc:smokehouse",
+      "count": 1
+    }
+  }
+}
