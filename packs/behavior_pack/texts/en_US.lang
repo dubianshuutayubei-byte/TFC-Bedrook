@@ -1,2 +1,6 @@
 pack.name=TFC-Bedrook Behavior Pack
 pack.description=TerraFirmaCraft-inspired survival systems
+calendar.season.winter=Winter
+calendar.season.spring=Spring
+calendar.season.summer=Summer
+calendar.season.autumn=Autumn
