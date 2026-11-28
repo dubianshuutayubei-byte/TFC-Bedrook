@@ -1,0 +1,18 @@
+{
+  "format_version": "1.26.60",
+  "minecraft:item": {
+    "description": {
+      "identifier": "tfc:papyrus",
+      "menu_category": {
+        "category": "items"
+      }
+    },
+    "components": {
+      "minecraft:icon": "tfc_papyrus",
+      "minecraft:display_name": {
+        "value": "パピルス"
+      },
+      "minecraft:max_stack_size": 64
+    }
+  }
+}
