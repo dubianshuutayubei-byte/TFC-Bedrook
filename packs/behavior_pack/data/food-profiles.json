@@ -52,7 +52,7 @@
       "cooked": false
     },
     {
-      "id": "milk",
+      "id": "milk_bottle",
       "displayName": "ミルク",
       "nutrition": {
         "dairy": 14
