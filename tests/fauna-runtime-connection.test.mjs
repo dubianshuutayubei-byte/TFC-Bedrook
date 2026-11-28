@@ -88,3 +88,9 @@ test("animal age initialization reads the Bedrock baby component and uses verifi
  assert.match(runtime,/initializeAnimalLifeStage\(\{\.\.\.base,species:profile\?\.speciesId/);
  assert.match(runtime,/adultAgeDays:profile\?\.adultAgeDays\?\?null/);
 });
+
+test("animal status UI only advertises manual feeding for species with configured food items",()=>{
+ assert.match(runtime,/const feedHint=profile\.feedItems\.length\?/);
+ assert.match(runtime,/給餌可能: .*profile\.feedItems\.map/);
+ assert.match(runtime,/この種への手動給餌は未対応です/);
+});
