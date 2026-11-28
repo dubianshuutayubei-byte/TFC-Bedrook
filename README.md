@@ -33,6 +33,7 @@ Minecraft Bedrock Edition 向けに TerraFirmaCraft（TFC）Java 1.20.1-3.2.26 �
 - [ランタイム状態・セーブデータ設計](docs/architecture/runtime-state-model.md)
 - [気候サービス試作](docs/architecture/climate-service-prototype.md)
 - [気候プロファイルデータベース](docs/architecture/climate-profiles.md)
+- [Thirstサービス試作](docs/architecture/thirst-service-prototype.md)
 - [地質層サービス試作](docs/architecture/geology-service-prototype.md)
 - [金属・合金サービス試作](docs/architecture/metal-service-prototype.md)
 - [熱・燃料サービス試作](docs/architecture/heat-service-prototype.md)
@@ -50,13 +51,17 @@ Minecraft Bedrock Edition 向けに TerraFirmaCraft（TFC）Java 1.20.1-3.2.26 �
 
 ## 検証環境
 
-GitHub ActionsでJSON・manifestの静的検査、JavaScript構文検査、Node.js単体テストを実行し、開発用mcaddonを生成する。気候・暦、地質層、金属・合金、熱・燃料の純粋関数プロトタイプを追加済み。Behavior Pack / Resource Packのmanifestと暦のScript接続は実装済みだが、ゲーム内ロードと地形生成は未検証。
+GitHub ActionsでJSON・manifestの静的検査、JavaScript構文検査、Node.js単体テストを実行し、開発用mcaddonを生成する。気候・暦、作物・野生植物の環境判定、地質層、Thirst、金属・合金、熱・燃料の純粋関数プロトタイプを追加済み。Behavior Pack / Resource Packのmanifestと暦のScript接続は実装済みだが、ゲーム内ロードと地形生成は未検証。
 
 - [静的検査ツール](tools/validate-pack.mjs)
 - [気候計算モジュール](packs/behavior_pack/scripts/core/climate-service.mjs)
 - [気候計算テスト](tests/climate-service.test.mjs)
 - [作物・植物気候プロファイル](packs/behavior_pack/data/climate-profiles.json)
 - [作物・植物気候プロファイルテスト](tests/climate-profiles.test.mjs)
+- [作物・野生植物環境判定サービス](packs/behavior_pack/scripts/core/crop-plant-service.mjs)
+- [作物・野生植物環境判定テスト](tests/crop-plant-service.test.mjs)
+- [Thirst計算モジュール](packs/behavior_pack/scripts/core/thirst-service.mjs)
+- [Thirstテスト](tests/thirst-service.test.mjs)
 - [地質層データ](packs/behavior_pack/data/geology-layers.json)
 - [地質層計算モジュール](packs/behavior_pack/scripts/core/geology-service.mjs)
 - [地質層テスト](tests/geology-service.test.mjs)
