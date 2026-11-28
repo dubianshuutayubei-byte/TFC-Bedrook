@@ -9,6 +9,7 @@ item.tfc:clay_vessel.name=未焼成の土器
 item.tfc:fired_vessel.name=焼成済みの土器
 item.tfc:copper_ore.name=銅鉱石
 item.tfc:copper_ingot.name=銅インゴット
+item.tfc:heated_copper_ingot.name=加熱済み銅インゴット
 item.tfc:copper_sheet.name=銅板
 item.tfc:firepit.name=焚き火設備
 item.tfc:pit_kiln.name=Pit Kiln
