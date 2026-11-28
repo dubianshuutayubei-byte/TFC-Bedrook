@@ -474,7 +474,7 @@ world.afterEvents.playerBreakBlock.subscribe(event=>{
 });system.beforeEvents.startup.subscribe(event=>{
 event.itemComponentRegistry.registerCustomComponent("tfc:open_knapping",{onUse:a=>{if(a.source?.typeId==="minecraft:player")void knap(a.source);}});
 event.itemComponentRegistry.registerCustomComponent("tfc:prospect",{onUseOn:a=>{if(a.source?.typeId==="minecraft:player")prospect(a.source,a.block);}});
-event.itemComponentRegistry.registerCustomComponent("tfc:clay_seal",{onUseOn:a=>{const player=a.source,block=a.block;if(player?.typeId!=="minecraft:player"||!block)return;const container=getBlockInventoryContainer(block);if(!container){player.sendMessage("§cこのブロックは食品を保存できる容器ではありません。");return;}const key=posKey(block,"container_sealed"),sealed=readWorldState(key,false)===true;writeWorldState(key,!sealed);trackFoodContainer(block);player.sendMessage(!sealed?"§a容器を封印しました。内部の食品は2倍長持ちします。":"§e容器の封印を解除しました。");}});
+event.itemComponentRegistry.registerCustomComponent("tfc:clay_seal",{onUseOn:a=>{const player=a.source,block=a.block;if(player?.typeId!=="minecraft:player"||!block)return;const container=getBlockInventoryContainer(block);if(!container){player.sendMessage("§cこのブロックは食品を保存できる容器ではありません。");return;}const key=posKey(block,"container_sealed"),sealed=readWorldState(key,false)===true;if(!writeWorldState(key,!sealed)){player.sendMessage("§c封印状態を保存できませんでした。");return;}trackFoodContainer(block);player.sendMessage(!sealed?"§a容器を封印しました。開くと封印が解除され、内部の食品は封印中に2倍長持ちします。":"§e容器の封印を解除しました。");}});
 event.itemComponentRegistry.registerCustomComponent("tfc:consume_food",{onConsume:(a,p)=>food(a,p.params??{})}});
 event.itemComponentRegistry.registerCustomComponent("tfc:fill_water_vessel",{onUseOn:a=>{if(a.source?.typeId==="minecraft:player")fillWaterVessel(a.source,a.block);}});
 event.itemComponentRegistry.registerCustomComponent("tfc:drink_water",{onUse:a=>{if(a.source?.typeId==="minecraft:player")drinkWaterVessel(a.source);}});
@@ -493,6 +493,8 @@ world.afterEvents.playerInteractWithBlock.subscribe(event=>{
  if(!event.isFirstEvent)return;
  trackFoodContainer(event.block);
  const held=event.beforeItemStack??event.itemStack;
+ const sealKey=posKey(event.block,"container_sealed");
+ if(readWorldState(sealKey,false)===true&&held?.typeId!=="tfc:clay_seal"){writeWorldState(sealKey,false);event.player?.sendMessage("§e容器を開いたため封印が解除されました。");}
  if(!held?.typeId?.endsWith("_hoe"))return;
  const block=event.block;
  if(!["minecraft:dirt","minecraft:grass_block","minecraft:coarse_dirt","minecraft:rooted_dirt","minecraft:farmland"].includes(block.typeId))return;
