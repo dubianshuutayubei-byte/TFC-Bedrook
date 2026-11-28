@@ -166,3 +166,9 @@ test("loaded animal lifecycle uses fractional world time for decay and old-age t
  assert.match(runtime,/const currentDay=currentAnimalDay\(\);\s*state=advanceAnimalFamiliarityDecay\(state,currentDay/);
  assert.match(runtime,/currentDay>state\.oldDay/);
 });
+
+test("animal tick derives age and pregnancy progress from elapsed world-calendar days",()=>{
+ assert.match(runtime,/lastAgeUpdateAt=state\.lastAgeUpdateAt>=0\?state\.lastAgeUpdateAt:currentDay,elapsedAgeDays=Math\.max\(0,currentDay-lastAgeUpdateAt\)/);
+ assert.match(runtime,/ageElapsedDays:elapsedAgeDays/);
+ assert.match(runtime,/advancePregnancy\(state,elapsedAgeDays,profile\.gestationDays\)/);
+});
