@@ -7,6 +7,9 @@ const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const roster=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/fauna-roster.json"),"utf8"));
 const spawn=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/fauna-spawn-types.json"),"utf8"));
 test("all 78 official TFC 1.21.x fauna have source-derived spawn placements",()=>{
+ assert.equal(spawn.officialSourceVersion,"TerraFirmaCraft 1.21.1-4.2.16");
+ assert.equal(spawn.officialSourceTag,"v4.2.16");
+ assert.equal(spawn.officialSourceBlobs["src/main/java/net/dries007/tfc/common/entities/aquatic/Fish.java"],"a3765670f52f68abed08c6057b68e248c8f0fbf9");
  assert.equal(spawn.total,78);
  assert.equal(spawn.species.length,78);
  assert.equal(new Set(spawn.species.map(x=>x.id)).size,78);
