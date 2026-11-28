@@ -589,7 +589,7 @@ function animalTick(entity){
   try{const health=entity.getComponent("minecraft:health");if(health)state=syncAnimalHealth(state,health.currentValue,health.effectiveMax);}catch{}
   const currentDay=currentAnimalDay(),lastAgeUpdateAt=state.lastAgeUpdateAt>=0?state.lastAgeUpdateAt:currentDay,elapsedAgeDays=Math.max(0,currentDay-lastAgeUpdateAt);
  state.lastAgeUpdateAt=currentDay;
- state=advanceAnimalNeeds(state,0.05,{hungerPerDay:profile.hungerPerDay??8,thirstPerDay:profile.thirstPerDay??(profile.kind==="aquatic"?0:12),healthLossPerDay:2,ageElapsedDays:elapsedAgeDays});
+ state=advanceAnimalNeeds(state,0.05,{hungerPerDay:profile.hungerPerDay??8,thirstPerDay:profile.thirstPerDay??(profile.kind==="aquatic"?0:12),healthLossPerDay:profile.healthLossPerDay??2,ageElapsedDays:elapsedAgeDays});
  state=advanceAnimalFamiliarityDecay(state,currentDay,{decayLimit:30,decayPerDay:2});
  if(profile.maxUses>0&&state.uses>profile.maxUses&&state.oldDay<0)state.oldDay=currentDay+1+Math.floor(Math.random()*5);
  if(state.oldDay>=0&&currentDay>state.oldDay)state.lifeStage="old";
