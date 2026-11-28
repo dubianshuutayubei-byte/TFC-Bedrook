@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
-  createSoilState, evaluateCropGrowth, applyNutrientUptake, applyFertilizer,
+  calculateCropYield, createSoilState, evaluateCropGrowth, applyNutrientUptake, applyFertilizer,
   advanceCropStage, advanceSoilHydration, calculateCropGrowthPoints,
   advanceSoilDay, applySoilCompost, inferSoilTypeFromBlockId,
   advanceCropGrowthProgress, applyCropNutrientEffects, getSoilFertilityMultiplier, inferSoilFertilityClassFromBiomeId
