@@ -119,7 +119,7 @@ export function syncAnimalHealth(input,currentHealth,effectiveMax){
 }
 
 /**
- * Mirrors the official TFC v3.2.26 fauna spawn-condition order.
+ * Mirrors the official TFC 1.21.1-4.2.16 fauna spawn-condition order.
  * The caller must supply sampled environment values; unavailable measurements
  * are reported as missing and never silently treated as suitable.
  */
