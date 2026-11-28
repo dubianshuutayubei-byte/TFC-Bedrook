@@ -28,7 +28,7 @@ export const PROCESSING_RECIPES = Object.freeze({
   Object.freeze({id:"tfc:dried_vegetables",station:"drying_rack",title:"野菜を乾燥",description:"野菜の水分を減らして保存性を高めます。",inputs:Object.freeze({"tfc:vegetable":1}),outputs:Object.freeze({"tfc:dried_vegetables":1}),minimumTemperatureC:0,durationTicks:18000}),
   ...["beet","cabbage","carrot","garlic","onion","squash","potato","lentils","soybean","peanuts","cassava","green_beans","pumpkin","tomato","green_bell_pepper","radish"].map(item=>Object.freeze({id:"tfc:dried_"+item,station:"drying_rack",title:item+"を乾燥",description:"個別の作物を乾燥させて保存性を高めます。",inputs:Object.freeze({["tfc:"+item]:1}),outputs:Object.freeze({"tfc:dried_vegetables":1}),minimumTemperatureC:0,durationTicks:18000})),
   ...["melon"].map(item=>Object.freeze({id:"tfc:dried_"+item,station:"drying_rack",title:item+"を乾燥",description:"果実を乾燥させて保存性を高めます。",inputs:Object.freeze({["tfc:"+item]:1}),outputs:Object.freeze({"tfc:dried_fruit":1}),minimumTemperatureC:0,durationTicks:18000})),
-  Object.freeze({id:"tfc:salted_meat",station:"drying_rack",title:"肉を塩漬け保存",description:"塩をすり込んだ肉を時間をかけて塩漬けにします。",inputs:Object.freeze({"tfc:raw_meat":1,"tfc:salt":1}),outputs:Object.freeze({"tfc:salted_meat":1}),minimumTemperatureC:0,durationTicks:12000})
+  Object.freeze({id:"tfc:salted_meat",station:"drying_rack",title:"肉を塩漬け保存",description:"塩をすり込んだ肉を時間をかけて塩漬けにします。",inputs:Object.freeze({"tfc:raw_meat":1,"tfc:salt":1}),outputs:Object.freeze({"tfc:salted_meat":1}),minimumTemperatureC:0,durationTicks:18000})
  ]),
 
  smokehouse:Object.freeze([
