@@ -21,7 +21,14 @@
       "minecraft:collision_box": true,
       "minecraft:selection_box": true,
       "tfc:farmland_interaction": {},
-      "minecraft:display_name": "tile.tfc:farmland.name"
+      "minecraft:display_name": "tile.tfc:farmland.name",
+      "minecraft:tick": {
+        "interval_range": [
+          1200,
+          1200
+        ],
+        "looping": true
+      }
     }
   }
 }
