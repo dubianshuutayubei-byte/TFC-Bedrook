@@ -58,7 +58,8 @@
     "牛の成体から空き瓶で採取する牛乳を食品アイテムとして登録。",
     "小麦・トウモロコシ・ジャガイモの作物種別と種・収穫物を登録。",
     "食品の個体別鮮度はプレイヤー単位・食品種類単位で管理し、腐敗時に腐敗食品へ変換。アイテム移動後の個体識別は未対応。",
-    "野菜・果物の食品アイテムと簡易食材レシピを追加。"
+    "野菜・果物の食品アイテムと簡易食材レシピを追加。",
+    "錫の鋳造と銅/錫の青銅合金鋳造を追加。錫鉱石の自然生成は地形工程で実装予定。"
   ],
   "registeredIdentifiers": [
     "tfc:flint",
@@ -89,6 +90,12 @@
     "tfc:potato",
     "tfc:spoiled_food",
     "tfc:vegetable",
-    "tfc:fruit"
+    "tfc:fruit",
+    "tfc:tin_ore",
+    "tfc:heated_tin_ingot",
+    "tfc:tin_ingot",
+    "tfc:heated_bronze_ingot",
+    "tfc:bronze_ingot",
+    "tfc:bronze_sheet"
   ]
 }
