@@ -21,11 +21,11 @@ test("custom deer retains its own pregnancy and birth cycle",()=>{
 
 test("TFC livestock rotten-food compatibility matches official species configuration",()=>{
  for(const id of ["minecraft:cow","minecraft:goat","minecraft:pig","minecraft:rabbit","tfc:chicken","tfc:quail"]){
-  const entry=runtime.match(new RegExp('"'+id+'":\\\\{[^}]*\\\\}'))?.[0]??"";
+  const entry=runtime.split("\\n").find(line=>line.includes("\\""+id+"\\":{"))??"";
   assert.match(entry,/tfc:spoiled_food/);
  }
  for(const id of ["minecraft:sheep","minecraft:horse","minecraft:donkey","minecraft:mule","tfc:duck","tfc:alpaca","tfc:musk_ox","tfc:yak"]){
-  const entry=runtime.match(new RegExp('"'+id+'":\\\\{[^}]*\\\\}'))?.[0]??"";
+  const entry=runtime.split("\\n").find(line=>line.includes("\\""+id+"\\":{"))??"";
   assert.doesNotMatch(entry,/tfc:spoiled_food/);
  }
 });
