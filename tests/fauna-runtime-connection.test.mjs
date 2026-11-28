@@ -5,9 +5,9 @@ import { resolve, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
-test("vanilla livestock relies on vanilla breeding while TFC chicken uses custom husbandry",()=>{
- assert.match(runtime,/"minecraft:cow":\{[^}]*customBreeding:false/);
- assert.match(runtime,/"minecraft:sheep":\{[^}]*customBreeding:false/);
+test("TFC mammal livestock uses shared breeding while hybrid mules remain non-breeding",()=>{
+ assert.match(runtime,/"minecraft:cow":\{[^}]*customBreeding:true/);
+ assert.match(runtime,/"minecraft:sheep":\{[^}]*customBreeding:true/);
  assert.match(runtime,/"tfc:chicken":\{[^}]*customBreeding:false/);
  assert.ok(runtime.includes('if(!entity.typeId.startsWith("minecraft:")&&!take(player,held.typeId,1))return;'));
  assert.match(runtime,/if\(profile\.customBreeding&&state\.sex==="female"/);
@@ -17,12 +17,12 @@ test("custom deer retains its own pregnancy and birth cycle",()=>{
  assert.match(runtime,/advancePregnancy\(state,elapsedAgeDays,profile\.gestationDays\)/);
 });
 
-test("custom pregnancy is confined to deer; vanilla livestock uses native breeding",()=>{
+test("custom pregnancy uses shared TFC birth and juvenile events for vanilla and custom livestock",()=>{
  assert.match(runtime,/if\(profile\.customBreeding&&state\.pregnancyDays>0\)/);
  assert.match(runtime,/if\(profile\.customBreeding&&state\.sex==="female"/);
  assert.match(runtime,/other\.lastBreedAt=breedingTime/);
  assert.match(runtime,/entity\.dimension\.spawnEntity\(entity\.typeId,\{x:entity\.location\.x\+1/);
- assert.match(runtime,/baby\.triggerEvent\("tfc:spawn_baby"\)/);
+ assert.match(runtime,/birthEvent=entity\.typeId\.startsWith\("tfc:"\)\?"tfc:spawn_baby":"minecraft:entity_born"/);\n assert.match(runtime,/growthEvent=entity\.typeId\.startsWith\("tfc:"\)\?"tfc:grow_up":"minecraft:ageable_grow_up"/);\n assert.match(runtime,/getOffspringCount\(profile\)/);
 });
 test("animal needs and age update on the periodic loaded-entity tick",()=>{
  assert.match(runtime,/advanceAnimalNeeds\(state,0\.05,/);
