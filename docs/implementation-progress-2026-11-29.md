@@ -102,3 +102,21 @@
 - テストに2日ちょうどでは減衰しないこと、2.5日で2ポイント減衰すること、端数時間の保持を追加。
 
 **公式参照:** [TFCAnimalProperties.java](https://github.com/TerraFirmaCraft/TerraFirmaCraft/blob/1.21.x/src/main/java/net/dries007/tfc/common/entities/livestock/TFCAnimalProperties.java)
+
+
+## 追加作業：カスタム動物Entityと表示アセットの接続監査
+
+- Behavior PackとResource PackのEntity一覧を比較し、カスタムTFC Entityの登録漏れを検出。
+- ランタイムには `tfc:cat` / `tfc:dog` の種別プロファイルがある一方、BP Entity定義とRP Client Entity定義が存在しないことを発見。
+- `tfc:cat` / `tfc:dog` のBP定義を追加。個体名、体力、移動、受動的な移動/注視/誘惑AI、幼体化・成長イベントを登録。
+- 対応するRP Client Entity定義を追加。Mojang Bedrock Samplesで確認した `geometry.cat` / `geometry.wolf` とバニラの猫・オオカミ用テクスチャ/アニメーションを参照し、共通TFC描画コントローラーへ接続。
+- カスタムTFCランタイムプロファイル59件、BP Entity 59件、RP Client Entity 59件が一致することを静的照合。欠落・余分なIDは0件。
+- 公式78種の生息条件プロファイルは、引き続き78件すべてランタイムプロファイルへ接続されている。59件は専用TFC Entity、残りはバニラEntityを利用する構成。
+- `tests/fauna-entity-assets.test.mjs` を追加。BP/RP IDの一対一対応、ランタイムプロファイルとの一致、Geometry参照、Render Controller、Texture指定を自動監査する。
+- カスタムGeometryは既存の56件を利用し、猫・オオカミ・ニワトリはBedrock標準Geometryを使う。独自モデルが不足していると誤判定しないよう明示的な許可リストを追加。
+
+### 検証状態
+- 新規cat/dogの4 JSONファイル：JSONとして読み取り可能。
+- ランタイム59 / BP59 / RP59のID照合：一致。
+- モデル/Client Entityの完全なNodeテスト：CI実行結果未取得。成功扱いにしない。
+- Bedrock 26.60での描画・AI・繁殖・保存復元：未実機検証。
