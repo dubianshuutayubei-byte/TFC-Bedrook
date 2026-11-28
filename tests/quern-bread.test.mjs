@@ -33,7 +33,7 @@ test("quern recipes return the reusable handstone and produce flour",()=>{
   assert.equal(recipe.outputs["tfc:flour"],1);
  }
  assert.match(runtime,/id==="quern"\|\|id==="smokehouse"\)\?null/);
- assert.match(runtime,/!\["anvil","drying_rack","composter","quern"\]\.includes\(id\)/);
+ assert.match(runtime,/!["anvil","drying_rack","composter","quern","smokehouse"].includes(id)/);
 });
 
 test("flour can be mixed with a filled vessel to make dough and return the vessel",()=>{
