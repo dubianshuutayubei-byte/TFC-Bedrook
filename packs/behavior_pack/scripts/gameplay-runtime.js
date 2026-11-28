@@ -370,25 +370,6 @@ const soilNames={loam:"壌土",silt:"シルト",clay:"粘土質"};const fertilit
 }
 function currentTemperatureC(elevationM=0,biomeId="minecraft:plains"){const profile=getBiomeClimateProfile(biomeId);return calculateAmbientTemperatureC({...profile,dayOfYear:((world.getDay()%96)+96)%96,timeOfDay:world.getTimeOfDay(),elevationM:Math.max(0,elevationM),diurnalAmplitudeC:3});}
 function temperatureAt(dimension,location){let biomeId="minecraft:plains";try{biomeId=dimension.getBiome({x:Math.floor(location.x),y:Math.floor(location.y),z:Math.floor(location.z)}).id;}catch{}return currentTemperatureC(location.y-63,biomeId);}
-function trySpreadCrop(block,cropType){
- if(readWorldState(posKey(block,"crop_spread_used"),false)||readWorldState(posKey(block,"crop_spread_parent"),null))return false;
- const origin=block.location;
- for(const [dx,dz] of [[1,0],[-1,0],[0,1],[0,-1]]){
-  try{
-   const soil=block.dimension.getBlock({x:Math.floor(origin.x)+dx,y:Math.floor(origin.y)-1,z:Math.floor(origin.z)+dz});
-   const target=soil?.above();
-   if(soil?.typeId!=="tfc:farmland"||!target?.isAir)continue;
-   target.setType("tfc:crop");
-   target.setPermutation(target.permutation.withState("tfc:crop_type",cropType).withState("tfc:part","lower").withState("tfc:age",0));
-   writeWorldState(posKey(target,"crop_progress"),0);
-   writeWorldState(posKey(target,"crop_quality"),1);
-   writeWorldState(posKey(target,"crop_spread_parent"),posKey(block,"crop_progress"));
-   writeWorldState(posKey(block,"crop_spread_used"),true);
-   return true;
-  }catch{}
- }
- return false;
-}
 function trySpreadFruit(block,profile){
  const fruitBlock=profile.fruitBlock;if(!fruitBlock)return;
  const dirs=[[1,0],[-1,0],[0,1],[0,-1]];
@@ -519,7 +500,7 @@ event.itemComponentRegistry.registerCustomComponent("tfc:drink_water",{onUse:a=>
 event.itemComponentRegistry.registerCustomComponent("tfc:mix_dough",{onUse:a=>{if(a.source?.typeId==="minecraft:player")mixDough(a.source);}});
 event.blockComponentRegistry.registerCustomComponent("tfc:station_ui",{onPlayerInteract:a=>{if(a.player)void station(a.player,a.block.typeId.split(":")[1],a.block);}});event.blockComponentRegistry.registerCustomComponent("tfc:heated_station_tick",{onTick:a=>fireTick(a.block)});
 event.blockComponentRegistry.registerCustomComponent("tfc:farmland_interaction",{onPlayerInteract:a=>void farmlandInteract(a.player,a.block),onTick:a=>soilTick(a.block)});
-event.blockComponentRegistry.registerCustomComponent("tfc:crop_growth",{onTick:a=>cropTick(a.block),onPlayerInteract:a=>{const p=a.player,clicked=a.block;if(!p||!clicked)return;const b=clicked.permutation.getState("tfc:part")==="upper"?clicked.below():clicked;if(!b||b.typeId!=="tfc:crop")return;if(b.permutation.getState("tfc:part")==="upper")return;const cropType=b.permutation.getState("tfc:crop_type")??"wheat";const profile=CROP_PROFILES[cropType]??CROP_PROFILES.wheat;const age=b.permutation.getState("tfc:age");const quality=Number(readWorldState(posKey(b,"crop_quality"),1));if(profile.pickable){if(typeof age!=="number"||age<2){p.sendMessage("§e収穫できる状態まで成長していません。");return;}const yieldCount=calculateCropYield(1,quality);give(p,profile.harvest,yieldCount);b.setPermutation(b.permutation.withState("tfc:age",1));writeWorldState(posKey(b,"crop_progress"),0);writeWorldState(posKey(b,"crop_quality"),1);p.sendMessage("§a実を収穫しました。株は残り、再び成長します。");return;}if(age!==3){p.sendMessage("§e成長中: "+Math.floor(Number(readWorldState(posKey(b,"crop_progress"),0)))+"%");return;}const yieldCount=calculateCropYield(cropType==="potato"?2:3,quality);give(p,profile.harvest,yieldCount);give(p,profile.seed,1);if(profile.twoBlock){const upper=b.above();if(upper?.typeId==="tfc:crop"&&upper.permutation.getState("tfc:part")==="upper")upper.setType("minecraft:air");}b.setPermutation(b.permutation.withState("tfc:age",0));writeWorldState(posKey(b,"crop_progress"),0);writeWorldState(posKey(b,"crop_quality"),1);if(profile.spreading)writeWorldState(posKey(b,"crop_spread_used"),false);p.sendMessage("§a収穫しました。収穫量補正: "+Math.floor(quality*100)+"% / "+yieldCount+"個");}});
+event.blockComponentRegistry.registerCustomComponent("tfc:crop_growth",{onTick:a=>cropTick(a.block),onPlayerInteract:a=>{const p=a.player,clicked=a.block;if(!p||!clicked)return;const b=clicked.permutation.getState("tfc:part")==="upper"?clicked.below():clicked;if(!b||b.typeId!=="tfc:crop")return;if(b.permutation.getState("tfc:part")==="upper")return;const cropType=b.permutation.getState("tfc:crop_type")??"wheat";const profile=CROP_PROFILES[cropType]??CROP_PROFILES.wheat;const age=b.permutation.getState("tfc:age");const quality=Number(readWorldState(posKey(b,"crop_quality"),1));if(profile.pickable){if(typeof age!=="number"||age<2){p.sendMessage("§e収穫できる状態まで成長していません。");return;}const yieldCount=calculateCropYield(1,quality);give(p,profile.harvest,yieldCount);b.setPermutation(b.permutation.withState("tfc:age",1));writeWorldState(posKey(b,"crop_progress"),0);writeWorldState(posKey(b,"crop_quality"),1);p.sendMessage("§a実を収穫しました。株は残り、再び成長します。");return;}if(profile.spreading){p.sendMessage("§e実は周囲の果実ブロックに実っています。果実ブロックを壊して収穫してください。");return;}if(age!==3){p.sendMessage("§e成長中: "+Math.floor(Number(readWorldState(posKey(b,"crop_progress"),0)))+"%");return;}const yieldCount=calculateCropYield(cropType==="potato"?2:3,quality);give(p,profile.harvest,yieldCount);give(p,profile.seed,1);if(profile.twoBlock){const upper=b.above();if(upper?.typeId==="tfc:crop"&&upper.permutation.getState("tfc:part")==="upper")upper.setType("minecraft:air");}b.setPermutation(b.permutation.withState("tfc:age",0));writeWorldState(posKey(b,"crop_progress"),0);writeWorldState(posKey(b,"crop_quality"),1);if(profile.spreading)writeWorldState(posKey(b,"crop_spread_used"),false);p.sendMessage("§a収穫しました。収穫量補正: "+Math.floor(quality*100)+"% / "+yieldCount+"個");}});
 system.runInterval(()=>{for(const dimensionId of ["overworld","nether","the_end"]){try{const dimension=world.getDimension(dimensionId);for(const type of Object.keys(ANIMAL_PROFILES))for(const entity of dimension.getEntities({type}))animalTick(entity);}catch(error){}}},1200);
 system.runInterval(()=>{for(const player of world.getAllPlayers()){try{tickFoodFreshness(player,system.currentTick);}catch(error){console.warn("[TFC-Bedrook] food freshness tick failed:",error);}}},1200);
 system.runInterval(()=>{try{tickTrackedFoodContainers(system.currentTick);}catch(error){console.warn("[TFC-Bedrook] tracked food container tick failed:",error);}},1200);
