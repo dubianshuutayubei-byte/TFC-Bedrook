@@ -243,6 +243,86 @@
       "hydration": 0,
       "baseDecayPerHour": 0.05,
       "cooked": true
+    },
+    {
+      "id": "rice",
+      "displayName": "米",
+      "nutrition": {
+        "grain": 14
+      },
+      "hydration": 0,
+      "baseDecayPerHour": 0.025,
+      "cooked": false
+    },
+    {
+      "id": "cassava",
+      "displayName": "キャッサバ",
+      "nutrition": {
+        "vegetables": 12
+      },
+      "hydration": 5,
+      "baseDecayPerHour": 0.1,
+      "cooked": false
+    },
+    {
+      "id": "green_beans",
+      "displayName": "インゲン",
+      "nutrition": {
+        "vegetables": 12
+      },
+      "hydration": 5,
+      "baseDecayPerHour": 0.1,
+      "cooked": false
+    },
+    {
+      "id": "pumpkin",
+      "displayName": "パンプキン",
+      "nutrition": {
+        "vegetables": 12
+      },
+      "hydration": 5,
+      "baseDecayPerHour": 0.1,
+      "cooked": false
+    },
+    {
+      "id": "melon",
+      "displayName": "メロン",
+      "nutrition": {
+        "fruit": 14
+      },
+      "hydration": 15,
+      "baseDecayPerHour": 0.11,
+      "cooked": false
+    },
+    {
+      "id": "tomato",
+      "displayName": "トマト",
+      "nutrition": {
+        "vegetables": 12
+      },
+      "hydration": 5,
+      "baseDecayPerHour": 0.1,
+      "cooked": false
+    },
+    {
+      "id": "green_bell_pepper",
+      "displayName": "ピーマン",
+      "nutrition": {
+        "vegetables": 12
+      },
+      "hydration": 5,
+      "baseDecayPerHour": 0.1,
+      "cooked": false
+    },
+    {
+      "id": "radish",
+      "displayName": "ラディッシュ",
+      "nutrition": {
+        "vegetables": 8
+      },
+      "hydration": 4,
+      "baseDecayPerHour": 0.1,
+      "cooked": false
     }
   ],
   "notes": [
@@ -255,6 +335,7 @@
     "石臼で挽いた穀物粉を水入り土器と混ぜて生地にし、焚き火で焼くパン工程を追加。",
     "食品ItemStackのLoreへ鮮度と最終更新tickを保存し、スタックごとに腐敗計算します。",
     "インベントリ間/プレイヤー間の移動ではLoreと一緒に鮮度を引き継ぐ設計。同じスタック内の食品は同じ鮮度を共有します。",
-    "Loreの保存・分割/統合・摂取イベント挙動はBedrock 26.60実機確認待ち。"
+    "Loreの保存・分割/統合・摂取イベント挙動はBedrock 26.60実機確認待ち。",
+    "TFC 1.21.1の追加作物（米、キャッサバ、インゲン、パンプキン、メロン、トマト、パプリカ、ラディッシュ）を食品プロファイルへ追加。栄養値・腐敗速度はBedrook仮値。"
   ]
 }
