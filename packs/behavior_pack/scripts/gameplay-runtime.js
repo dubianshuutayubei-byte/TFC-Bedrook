@@ -305,8 +305,9 @@ async function station(player,id,block){
 }
 async function knap(player){
 let selected=[];try{selected=JSON.parse(String(player.getDynamicProperty(PROGRESS_KEY)??"[]"));}catch{selected=[];}if(!Array.isArray(selected))selected=[];
-const form=new ActionFormData().title("石器成形").body("3×3の打撃位置を選択してください。\n正解パターン: 左上・中央・右下\n選択済み: "+selected.length+"/3");
-for(let i=0;i<9;i++)form.button((selected.includes(i)?"§a[選択] ":"§7[ ] ")+"位置 "+(i+1));
+const grid=Array.from({length:3},(_,row)=>Array.from({length:3},(_,col)=>{const n=row*3+col;return selected.includes(n)?"[●]":"[ ]";}).join(" ")).join("\n");
+const form=new ActionFormData().title("石器成形").body("3×3の打撃位置を選択してください。\n"+grid+"\n\n選択済み: "+selected.length+"/3\n同じ位置を再選択すると解除できます。");
+for(let i=0;i<9;i++)form.button((selected.includes(i)?"§a● ":"§7○ ")+"位置 "+(i+1));
 let response;try{response=await form.show(player);}catch{return;}if(response.canceled||response.selection===undefined)return;
 const index=response.selection;if(selected.includes(index))selected=selected.filter(v=>v!==index);else if(selected.length<3)selected.push(index);
 if(selected.length<3){player.setDynamicProperty(PROGRESS_KEY,JSON.stringify(selected));player.sendMessage("§e打撃位置を記録しました。");return;}
@@ -426,7 +427,7 @@ function animalTick(entity){
  }
  saveAnimal(entity,state);
 }
-function animalInteract(player,entity){
+async function animalInteract(player,entity){
  if(!player||!entity)return;
  const profile=ANIMAL_PROFILES[entity.typeId];if(!profile)return;
  let state=animalState(entity);
@@ -434,7 +435,9 @@ function animalInteract(player,entity){
  const held=inv(player)?.getItem(player.selectedSlotIndex);
  if(!held){
   const names={"tfc:deer":"シカ","minecraft:cow":"ウシ","minecraft:sheep":"ヒツジ","minecraft:chicken":"ニワトリ"};
-  player.sendMessage("§e"+(names[entity.typeId]??entity.typeId)+"\n性別: "+(state.sex==="female"?"メス":"オス")+"\n年齢: "+state.ageDays.toFixed(1)+"日\n空腹: "+Math.floor(state.hunger)+" / 100\n渇き: "+Math.floor(state.thirst)+" / 100\n健康: "+Math.floor(state.health)+" / 100\nなつき度: "+Math.floor(state.familiarity)+" / 100"+(state.pregnancyDays>0?"\n妊娠: "+Math.floor(state.pregnancyDays)+"日":""));
+  const status="性別: "+(state.sex==="female"?"メス":"オス")+"\n年齢: "+state.ageDays.toFixed(1)+"日 / 成熟目安: "+profile.adultAgeDays+"日\n空腹: "+Math.floor(state.hunger)+" / 100\n渇き: "+Math.floor(state.thirst)+" / 100\n健康: "+Math.floor(state.health)+" / 100\nなつき度: "+Math.floor(state.familiarity)+" / 100"+(state.pregnancyDays>0?"\n妊娠: "+Math.floor(state.pregnancyDays)+"日":"");
+  const form=new ActionFormData().title((names[entity.typeId]??entity.typeId)+"の状態").body(status+"\n\n餌を手に持ってもう一度操作すると給餌できます。"+(entity.typeId==="minecraft:cow"?"\nメスの成体には空き瓶を使うと搾乳できます。":"")).button("閉じる");
+  try{await form.show(player);}catch(error){player.sendMessage("§e状態を表示できませんでした。");}
   return;
  }
  if(entity.typeId==="minecraft:cow"&&held.typeId==="minecraft:glass_bottle"){
