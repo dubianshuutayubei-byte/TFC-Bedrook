@@ -1,0 +1,9 @@
+{
+  "format_version": "1.20.10",
+  "minecraft:recipe_shapeless": {
+    "description": { "identifier": "tfc:potato_seed" },
+    "tags": ["crafting_table"],
+    "ingredients": [{ "item": "minecraft:potato" }],
+    "result": { "item": "tfc:potato_seed", "count": 1 }
+  }
+}
