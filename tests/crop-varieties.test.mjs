@@ -8,7 +8,7 @@ const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runti
 const crop=JSON.parse(readFileSync(join(root,"packs/behavior_pack/blocks/crop.json"),"utf8"));
 const catalog=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/item-catalog.json"),"utf8"));
 test("crop block distinguishes wheat maize and potato",()=>{
- assert.deepEqual(crop["minecraft:block"].description.states["tfc:crop_type"],["wheat","maize","potato","barley","oat","rye","beet","cabbage","carrot","garlic","onion","squash","lentils","soybean","peanuts"]);
+ assert.deepEqual(crop["minecraft:block"].description.states["tfc:crop_type"],["wheat","maize","potato","barley","oat","rye","beet","cabbage","carrot","garlic","onion","squash","lentils","soybean","peanuts","rice","cassava","green_beans","pumpkin","melon","tomato","red_bell_pepper","yellow_bell_pepper","alfalfa","canola","radish","sugarcane","jute","papyrus"]);
  assert.match(runtime,/maize:\{minTemperatureC:-7,maxTemperatureC:27/);
  assert.match(runtime,/potato:\{minTemperatureC:-7,maxTemperatureC:22/);
  assert.match(runtime,/const cropType=block\.permutation\.getState\("tfc:crop_type"\)/);
@@ -28,7 +28,7 @@ test("additional single-block crops have matching profiles, seeds and harvest fo
 });
 
 test("breaking either maize plant half removes its paired half",()=>{
- assert.match(runtime,/brokenId==="tfc:crop"&&event\.brokenBlockPermutation\?\.getState\("tfc:crop_type"\)==="maize"/);
+ assert.match(runtime,/const cropType=event\.brokenBlockPermutation\?\.getState\("tfc:crop_type"\),profile=CROP_PROFILES\[cropType\]/);\n assert.match(runtime,/if\(profile\?\.twoBlock\)/);
  assert.match(runtime,/part==="upper"\?-1:1/);
  assert.match(runtime,/other\.setType\("minecraft:air"\)/);
 });
