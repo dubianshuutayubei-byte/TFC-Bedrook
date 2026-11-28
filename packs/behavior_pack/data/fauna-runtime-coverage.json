@@ -110,7 +110,7 @@
     "yak"
   ],
   "remainingCount": 40,
-  "caveat": "All 63 species now have a Bedrock entity definition, shared runtime state tracking, and a spawn-rule entry. The 40 custom entities use shared archetype models and generic AI; exact per-species TFC behavior, diets, breeding, products, drops, genetics, spawn climate/density and in-game validation remain incomplete. The 23 existing adapters still retain some vanilla AI/behavior.",
+  "caveat": "63 species have runtime state tracking and natural-spawn entries. The 40 custom species now have dedicated entity definitions, geometry, spawn rules, spawn eggs and shared profiles; their species-specific AI, diets, breeding, products, drops, exact climate/density parity and in-game validation remain open.",
   "customEntitySpecies": [
     "alpaca",
     "black_bear",
@@ -198,5 +198,6 @@
     "turkey",
     "wildebeest",
     "yak"
-  ]
+  ],
+  "remainingSpeciesSpecificWorkCount": 40
 }

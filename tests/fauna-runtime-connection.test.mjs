@@ -5,11 +5,12 @@ import { resolve, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
-test("vanilla livestock relies on vanilla breeding and avoids duplicate feed consumption",()=>{
- assert.match(runtime,/"minecraft:cow":\{[^}]*customBreeding:false/);
- assert.match(runtime,/"minecraft:sheep":\{[^}]*customBreeding:false/);
- assert.match(runtime,/"minecraft:chicken":\{[^}]*customBreeding:false/);
- assert.ok(runtime.includes('if(!entity.typeId.startsWith("minecraft:")&&!take(player,held.typeId,1))return;'));
+test("configured native livestock uses shared breeding and intercepted feed",()=>{
+ assert.match(runtime,/for\(const id of \["minecraft:cow","minecraft:sheep","minecraft:pig","minecraft:goat","minecraft:horse","minecraft:donkey","minecraft:mule","minecraft:rabbit"\]\)if\(ANIMAL_PROFILES\[id\]\?\.gestationDays\)ANIMAL_PROFILES\[id\]\.customBreeding=true/);
+ assert.match(runtime,/world\.beforeEvents\.playerInteractWithEntity\.subscribe\(event=>\{/);
+ assert.match(runtime,/event\.cancel=true/);
+ assert.match(runtime,/if\(!firstFeedToday\)/);
+ assert.match(runtime,/if\(!take\(player,held\.typeId,1\)\)return/);
  assert.match(runtime,/if\(profile\.customBreeding&&state\.sex==="female"/);
 });
 test("custom deer retains its own pregnancy and birth cycle",()=>{
@@ -17,12 +18,14 @@ test("custom deer retains its own pregnancy and birth cycle",()=>{
  assert.match(runtime,/advancePregnancy\(state,elapsedAgeDays,profile\.gestationDays\)/);
 });
 
-test("custom pregnancy is confined to deer; vanilla livestock uses native breeding",()=>{
+test("shared pregnancy supports native and custom births with the appropriate baby event",()=>{
  assert.match(runtime,/if\(profile\.customBreeding&&state\.pregnancyDays>0\)/);
  assert.match(runtime,/if\(profile\.customBreeding&&state\.sex==="female"/);
  assert.match(runtime,/other\.lastBreedAt=breedingTime/);
- assert.match(runtime,/entity\.dimension\.spawnEntity\(entity\.typeId\+"<tfc:spawn_baby>"/);
+ assert.ok(runtime.includes('entity.dimension.spawnEntity(entity.typeId+"<tfc:spawn_baby>",birthLocation)'));
+ assert.match(runtime,/baby\.triggerEvent\("minecraft:entity_born"\)/);
 });
+
 test("animal needs and age update on the periodic loaded-entity tick",()=>{
  assert.match(runtime,/advanceAnimalNeeds\(state,0\.05,/);
  assert.match(runtime,/system\.runInterval\(\(\)=>\{for\(const dimensionId of \["overworld","nether","the_end"\]\)/);
@@ -151,12 +154,12 @@ test("animal dropped-food pickup consumes one item and preserves the remainder o
 test("animal runtime applies daily familiarity decay and capped TFC feeding gains",()=>{
  assert.ok(runtime.includes("state=advanceAnimalFamiliarityDecay(state,currentDay,{decayLimit:30,decayPerDay:2});"));
  assert.match(runtime,/canFeedAnimal\(state,currentDay\)/);
- assert.match(runtime,/feedAnimal\(state,firstFeedToday\?6:0,healPercent,\{currentDay,adultFamiliarityCap:profile\.familiarityCap\?\?100\}\)/);
+ assert.match(runtime,/feedAnimal\(state,6,healPercent,\{currentDay,adultFamiliarityCap:profile\.familiarityCap\?\?100\}\)/);
  for(const id of ["cow","goat","sheep","chicken","pig","horse","donkey","mule","rabbit"])assert.match(runtime,new RegExp('"minecraft:'+id+'":\\{[^}]*familiarityCap:35'));
 });
 
 test("custom births trigger juvenile state and persist remaining litter count",()=>{
- assert.match(runtime,/spawnEntity\(entity\.typeId\+"<tfc:spawn_baby>"/);
+ assert.ok(runtime.includes('entity.dimension.spawnEntity(entity.typeId+"<tfc:spawn_baby>",birthLocation)'));
  assert.match(runtime,/createAnimalOffspringState\(state,profile\.speciesId/);
  assert.match(runtime,/state\.birthsRemaining=Math\.max\(1,Math\.floor\(profile\.childCount\?\?1\)\)/);
  assert.match(runtime,/state\.birthsRemaining-=1/);

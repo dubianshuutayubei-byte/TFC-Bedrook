@@ -6,43 +6,43 @@
     "sourceUrl": "https://github.com/TerraFirmaCraft/TerraFirmaCraft/tree/v3.2.26/src/main/resources/data/tfc/tfc/fauna",
     "count": 63
   },
-  "note": "This is the full species coverage target, not a claim that all Bedrock entities are implemented. Entity assets, spawn rules, behavior, breeding, products and drops are tracked separately.",
+  "note": "公式TFC 3.2.26の63種。22種はBedrock標準エンティティ、シカは専用エンティティ、残る40種も専用エンティティ・モデル・自然スポーン規則を登録済み。全種の個別挙動と実機検証は継続中。",
   "species": [
     {
       "id": "alpaca",
       "group": "mammal",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "black_bear",
       "group": "mammal",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "bluegill",
       "group": "aquatic",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "boar",
       "group": "mammal",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "bongo",
       "group": "mammal",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "caribou",
       "group": "mammal",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "chicken",
@@ -59,8 +59,8 @@
     {
       "id": "cougar",
       "group": "mammal",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "cow",
@@ -71,20 +71,20 @@
     {
       "id": "crappie",
       "group": "aquatic",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "crayfish",
       "group": "aquatic",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "crocodile",
       "group": "reptile",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "deer",
@@ -95,8 +95,8 @@
     {
       "id": "direwolf",
       "group": "mammal",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "dolphin",
@@ -113,8 +113,8 @@
     {
       "id": "duck",
       "group": "bird",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "fox",
@@ -131,8 +131,8 @@
     {
       "id": "gazelle",
       "group": "mammal",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "goat",
@@ -143,14 +143,14 @@
     {
       "id": "grizzly_bear",
       "group": "mammal",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "grouse",
       "group": "bird",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "horse",
@@ -161,62 +161,62 @@
     {
       "id": "horseshoe_crab",
       "group": "aquatic",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "hyena",
       "group": "mammal",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "isopod",
       "group": "aquatic",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "jellyfish",
       "group": "aquatic",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "lake_trout",
       "group": "aquatic",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "largemouth_bass",
       "group": "aquatic",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "lion",
       "group": "mammal",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "lobster",
       "group": "aquatic",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "manatee",
       "group": "aquatic",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "moose",
       "group": "mammal",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "mule",
@@ -227,8 +227,8 @@
     {
       "id": "musk_ox",
       "group": "mammal",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "ocelot",
@@ -239,14 +239,14 @@
     {
       "id": "octopoteuthis",
       "group": "aquatic",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "orca",
       "group": "aquatic",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "panda",
@@ -257,26 +257,26 @@
     {
       "id": "panther",
       "group": "mammal",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "peafowl",
       "group": "bird",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "penguin",
       "group": "bird",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "pheasant",
       "group": "bird",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "pig",
@@ -299,8 +299,8 @@
     {
       "id": "quail",
       "group": "bird",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "rabbit",
@@ -311,14 +311,14 @@
     {
       "id": "rainbow_trout",
       "group": "aquatic",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "sabertooth",
       "group": "mammal",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "salmon",
@@ -335,8 +335,8 @@
     {
       "id": "smallmouth_bass",
       "group": "aquatic",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "squid",
@@ -347,8 +347,8 @@
     {
       "id": "tiger",
       "group": "mammal",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "tropical_fish",
@@ -359,8 +359,8 @@
     {
       "id": "turkey",
       "group": "bird",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "turtle",
@@ -371,8 +371,8 @@
     {
       "id": "wildebeest",
       "group": "mammal",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     },
     {
       "id": "wolf",
@@ -383,8 +383,8 @@
     {
       "id": "yak",
       "group": "mammal",
-      "status": "custom_entity_scaffold",
-      "note": "Custom Bedrock entity, archetype geometry/texture atlas, coarse spawn rule and shared state UI are present. Species-specific TFC diet, AI, breeding, products, drops and climate fidelity remain incomplete."
+      "status": "custom_entity_registered",
+      "note": "専用Bedrockエンティティ、クライアントモデル、個別ジオメトリ、自然スポーン規則、召喚アイテム、共通ランタイムプロファイルを登録済み。種別固有の生態・ゲーム内検証は継続中。"
     }
   ]
 }
