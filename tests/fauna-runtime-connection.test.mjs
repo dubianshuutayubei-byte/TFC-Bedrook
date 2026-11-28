@@ -59,7 +59,7 @@ test("animal runtime applies species-specific needs and natural dropped-food pic
  assert.match(runtime,/thirstPerDay:profile\.thirstPerDay\?\?\(profile\.kind==="aquatic"\?0:12\)/);
  assert.match(runtime,/function consumeDroppedAnimalFood\(entity,profile,state\)/);
  assert.match(runtime,/getEntities\(\{type:"minecraft:item",location:entity\.location,maxDistance:1\.5\}\)/);
- assert.match(runtime,/grazeAnimal\(state,\{hungerReduction:35,thirstReduction:3\}\)/);
+ assert.match(runtime,/grazeAnimal\(state,\{hungerReduction:35,thirstReduction:3,currentDay:world\.getDay\(\)\}\)/);
 });
 test("aquatic species do not lose health from terrestrial hunger and thirst simulation",()=>{
  for(const id of ["cod","salmon","tropicalfish","pufferfish","squid"]){
