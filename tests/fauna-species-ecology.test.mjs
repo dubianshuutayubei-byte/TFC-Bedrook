@@ -21,6 +21,8 @@ test("all 40 custom species have an official-source-mapped death loot profile",(
  assert.match(runtime,/dropFaunaLoot\(event\)/);
  assert.match(runtime,/drop\.playerKillOnly&&!playerKill/);
  assert.match(runtime,/drop\.notPredated&&predated/);
+ assert.match(runtime,/prey\.setDynamicProperty\("tfc:predated",true\)/);
+ assert.match(runtime,/entity\.getDynamicProperty\("tfc:predated"\)===true/);
 });
 
 test("TFC livestock litter sizes are rolled within documented ranges",()=>{
