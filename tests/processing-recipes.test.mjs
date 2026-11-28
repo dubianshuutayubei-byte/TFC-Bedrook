@@ -60,3 +60,19 @@ test("composter provides two green-and-brown compost recipes",()=>{
  assert.equal(recipes[1].outputs["tfc:compost"],1);
  assert.equal(recipes[0].durationTicks,240000);
 });
+
+test("quern grinds five grain crops into flour and returns its handstone",()=>{
+ const recipes=getStationRecipes("quern");
+ assert.equal(recipes.length,5);
+ for(const recipe of recipes){
+  assert.equal(recipe.inputs["tfc:handstone"],1);
+  assert.equal(recipe.outputs["tfc:handstone"],1);
+  assert.equal(recipe.outputs["tfc:flour"],1);
+ }
+});
+test("bread baking consumes dough at cooking temperature",()=>{
+ const recipe=getStationRecipes("firepit").find(r=>r.id==="tfc:bread");
+ assert.equal(recipe.inputs["tfc:dough"],1);
+ assert.equal(recipe.outputs["tfc:bread"],1);
+ assert.equal(recipe.minimumTemperatureC,180);
+});
