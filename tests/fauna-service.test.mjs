@@ -1,4 +1,4 @@
-import { OFFICIAL_FAUNA_PROFILES, OFFICIAL_LIVESTOCK_LIFECYCLE } from "../packs/behavior_pack/scripts/core/fauna-profiles.mjs";
+import { OFFICIAL_FAUNA_PROFILES, OFFICIAL_FAUNA_HABITAT_EXTENSIONS, OFFICIAL_LIVESTOCK_LIFECYCLE } from "../packs/behavior_pack/scripts/core/fauna-profiles.mjs";
 import test from"node:test";import assert from"node:assert/strict";import{createAnimalState,createAnimalOffspringState,initializeAnimalLifeStage,canFeedAnimal,advanceAnimalFamiliarityDecay,syncAnimalHealth,advanceAnimalNeeds,feedAnimal,waterAnimal,canBreed,beginPregnancy,advancePregnancy,evaluateHabitat,evaluateFaunaSpawn,canProduce,recordProduct,canLayEgg,recordEggLaid,getOffspringCount} from"../packs/behavior_pack/scripts/core/fauna-service.mjs";
 test("needs and age advance",()=>{const a=advanceAnimalNeeds(createAnimalState({species:"deer"}),2);assert.equal(a.ageDays,2);assert.equal(a.hunger,16);assert.equal(a.thirst,24);});
 test("feeding and watering reduce needs",()=>{const a=feedAnimal({hunger:80,thirst:50},10);assert.equal(a.hunger,45);assert.equal(waterAnimal(a,20).thirst,25);});
@@ -489,4 +489,15 @@ test("TFC groundwater habitat bounds are checked independently from rainfall",()
  assert.deepEqual(evaluateHabitat({maxGroundwater:100},{groundwater:125}).failures,["groundwater_high"]);
  assert.deepEqual(evaluateHabitat({minGroundwater:50},{groundwater:25}).failures,["groundwater_low"]);
  assert.deepEqual(evaluateHabitat({maxGroundwater:100},{rainfall:25}).missing,["groundwater"]);
+});
+
+
+test("camel spawn habitat uses official groundwater and temperature constraints",()=>{
+ const dromedary=OFFICIAL_FAUNA_HABITAT_EXTENSIONS.dromedary_camel;
+ const bactrian=OFFICIAL_FAUNA_HABITAT_EXTENSIONS.bactrian_camel;
+ assert.deepEqual(evaluateHabitat(dromedary,{groundwater:80,temperatureC:-4}).failures,[]);
+ assert.deepEqual(evaluateHabitat(dromedary,{groundwater:120,temperatureC:-4}).failures,["groundwater_high"]);
+ assert.deepEqual(evaluateHabitat(dromedary,{groundwater:80,temperatureC:-6}).failures,["temperature_low"]);
+ assert.deepEqual(evaluateHabitat(bactrian,{groundwater:80,temperatureC:-6}).failures,[]);
+ assert.deepEqual(evaluateHabitat(bactrian,{groundwater:80,temperatureC:0}).failures,["temperature_high"]);
 });
