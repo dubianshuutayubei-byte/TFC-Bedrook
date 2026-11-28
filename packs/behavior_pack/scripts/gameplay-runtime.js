@@ -50,7 +50,7 @@ function tickFoodFreshness(player,nowTick){
 }
 function posKey(block,kind){const l=block.location;return "tfc:"+kind+":"+block.dimension.id+":"+Math.floor(l.x)+","+Math.floor(l.y)+","+Math.floor(l.z);}
 function readWorldState(key,fallback){try{const raw=world.getDynamicProperty(key);return typeof raw==="string"?JSON.parse(raw):fallback;}catch{return fallback;}}
-function writeWorldState(key,value){try{world.setDynamicProperty(key,JSON.stringify(value));}catch(error){console.warn("[TFC-Bedrook] world state save:",error);}}
+function writeWorldState(key,value){try{world.setDynamicProperty(key,JSON.stringify(value));return true;}catch(error){console.warn("[TFC-Bedrook] world state save:",error);return false;}}
 const FUELS={
 "minecraft:coal":{id:"coal",duration:2200,temperatureC:1415},
 "minecraft:charcoal":{id:"charcoal",duration:1800,temperatureC:1350},
@@ -126,9 +126,11 @@ async function station(player,id,block){
  const recipe=recipes[response.selection];
  if(id!=="anvil"&&!canProcessAtTemperature(state,recipe.minimumTemperatureC)){player.sendMessage("§c温度不足です。");return;}
  for(const [itemId,amount] of Object.entries(recipe.inputs)){if(count(player,itemId)<amount){player.sendMessage("§c材料不足: "+itemId+" ×"+amount);return;}}
- for(const [itemId,amount] of Object.entries(recipe.inputs)){if(!take(player,itemId,amount)){player.sendMessage("§c材料を取り出せませんでした。処理を中止しました。");return;}}
+ const consumedInputs={};
+ for(const [itemId,amount] of Object.entries(recipe.inputs)){if(!take(player,itemId,amount)){for(const [rollbackId,rollbackAmount] of Object.entries(consumedInputs))give(player,rollbackId,rollbackAmount);player.sendMessage("§c材料の取り出しに失敗したため、投入済み材料を返却しました。");return;}consumedInputs[itemId]=amount;}
  const now=Date.now(),job={status:"running",recipeId:recipe.id,outputs:recipe.outputs,playerId:player.id,startedAt:now,endsAt:now+recipe.durationTicks*50,dimensionId:block.dimension.id,location:{x:block.location.x,y:block.location.y,z:block.location.z}};
- writeWorldState(key,job);player.sendMessage("§e加工を開始しました。途中退出後もジョブを保存します。");
+ if(!writeWorldState(key,job)){for(const [rollbackId,rollbackAmount] of Object.entries(consumedInputs))give(player,rollbackId,rollbackAmount);player.sendMessage("§c加工状態を保存できなかったため、材料を返却しました。");return;}
+ player.sendMessage("§e加工を開始しました。途中退出後もジョブを保存します。");
  scheduleStationJob(key,block.dimension,block.location,recipe.durationTicks);
 }
 async function knap(player){
