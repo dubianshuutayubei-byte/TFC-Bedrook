@@ -25,5 +25,5 @@ test("runtime grazing consumes one nearby forage block only when hungry",()=>{
   assert.match(runtime,/if\(state\.hunger>=25&&forageCandidates\.length\)/);
   assert.match(runtime,/forage\.setType\("minecraft:dirt"\)/);
   assert.match(runtime,/forage\.setType\("minecraft:air"\)/);
-  assert.match(runtime,/grazeAnimal\(state,\{hungerReduction:15,currentDay:world\.getDay\(\)\}\)/);
+  assert.match(runtime,/grazeAnimal\(state,\{hungerReduction:15,currentTime:currentDay\}\)/);
 });
