@@ -1,10 +1,10 @@
 {
-  "source": "TerraFirmaCraft v3.2.26 src/main/java/net/dries007/tfc/common/entities/Faunas.java",
-  "total": 63,
+  "source": "TerraFirmaCraft Java 1.21.x src/main/java/net/dries007/tfc/common/entities/Faunas.java + aquatic/Fish.java",
+  "total": 78,
   "placementCounts": {
-    "in_water": 20,
+    "in_water": 29,
     "no_restrictions": 1,
-    "on_ground": 42
+    "on_ground": 48
   },
   "species": [
     {
@@ -12,6 +12,30 @@
       "placement": "on_ground",
       "heightmap": "motion_blocking_no_leaves",
       "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "arctic_char",
+      "placement": "in_water",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java FISH.values() -> registerFish"
+    },
+    {
+      "id": "armadillo",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerAnimal"
+    },
+    {
+      "id": "bactrian_camel",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerAnimal"
+    },
+    {
+      "id": "bison",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerAnimal"
     },
     {
       "id": "black_bear",
@@ -36,6 +60,12 @@
       "placement": "on_ground",
       "heightmap": "motion_blocking_no_leaves",
       "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "burbot",
+      "placement": "in_water",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java FISH.values() -> registerFish"
     },
     {
       "id": "caribou",
@@ -108,6 +138,12 @@
       "placement": "on_ground",
       "heightmap": "motion_blocking_no_leaves",
       "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "dromedary_camel",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerAnimal"
     },
     {
       "id": "duck",
@@ -194,6 +230,12 @@
       "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
     },
     {
+      "id": "leopard_seal",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerAnimal"
+    },
+    {
       "id": "lion",
       "placement": "on_ground",
       "heightmap": "motion_blocking_no_leaves",
@@ -218,6 +260,12 @@
       "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
     },
     {
+      "id": "muksun",
+      "placement": "in_water",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java FISH.values() -> registerFish"
+    },
+    {
       "id": "mule",
       "placement": "on_ground",
       "heightmap": "motion_blocking_no_leaves",
@@ -228,6 +276,12 @@
       "placement": "on_ground",
       "heightmap": "motion_blocking_no_leaves",
       "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "northern_pike",
+      "placement": "in_water",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java FISH.values() -> registerFish"
     },
     {
       "id": "ocelot",
@@ -248,6 +302,12 @@
       "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
     },
     {
+      "id": "pacu",
+      "placement": "in_water",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java FISH.values() -> registerFish"
+    },
+    {
       "id": "panda",
       "placement": "on_ground",
       "heightmap": "motion_blocking_no_leaves",
@@ -258,6 +318,12 @@
       "placement": "on_ground",
       "heightmap": "motion_blocking_no_leaves",
       "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "peacock_bass",
+      "placement": "in_water",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java FISH.values() -> registerFish"
     },
     {
       "id": "peafowl",
@@ -290,6 +356,12 @@
       "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
     },
     {
+      "id": "pond_turtle",
+      "placement": "on_ground",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java registerAnimal"
+    },
+    {
       "id": "pufferfish",
       "placement": "in_water",
       "heightmap": "motion_blocking_no_leaves",
@@ -312,6 +384,12 @@
       "placement": "in_water",
       "heightmap": "motion_blocking_no_leaves",
       "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "red_piranha",
+      "placement": "in_water",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java FISH.values() -> registerFish"
     },
     {
       "id": "sabertooth",
@@ -338,6 +416,12 @@
       "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
     },
     {
+      "id": "spotted_gudgeon",
+      "placement": "in_water",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java FISH.values() -> registerFish"
+    },
+    {
       "id": "squid",
       "placement": "in_water",
       "heightmap": "motion_blocking_no_leaves",
@@ -348,6 +432,12 @@
       "placement": "on_ground",
       "heightmap": "motion_blocking_no_leaves",
       "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
+    },
+    {
+      "id": "tilapia",
+      "placement": "in_water",
+      "heightmap": "motion_blocking_no_leaves",
+      "source": "Faunas.java FISH.values() -> registerFish"
     },
     {
       "id": "tropical_fish",
