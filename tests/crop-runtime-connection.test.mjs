@@ -29,7 +29,9 @@ test("crop harvest yield is based on accumulated nutrient quality",()=>{
 test("maize requires two blocks of space, grows an upper segment and harvests from either segment",()=>{
  assert.match(runtime,/seedProfile\.twoBlock&&!top\.above\(\)\?\.isAir/);
  assert.match(runtime,/withState\("tfc:part","lower"\)/);
- assert.match(runtime,/if\(block\.permutation\.getState\("tfc:part"\)==="upper"\)return/);\n assert.match(runtime,/if\(profile\.twoBlock&&age===1&&!block\.above\(\)\?\.isAir\)return/);\n assert.match(runtime,/if\(profile\.twoBlock&&nextAge===2\)/);
+ assert.match(runtime,/if\(block\.permutation\.getState\("tfc:part"\)==="upper"\)return/);
+ assert.match(runtime,/if\(profile\.twoBlock&&age===1&&!block\.above\(\)\?\.isAir\)return/);
+ assert.match(runtime,/if\(profile\.twoBlock&&nextAge===2\)/);
  assert.match(runtime,/withState\("tfc:part","upper"\)/);
  assert.match(runtime,/clicked\.permutation\.getState\("tfc:part"\)==="upper"\?clicked\.below\(\):clicked/);
 });
