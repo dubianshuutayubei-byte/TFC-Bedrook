@@ -79,8 +79,8 @@ test("all four official TFC wool-producing mammals are connected, including Bact
  }
  const camel=runtime.split("\n").find(value=>value.includes('"tfc:bactrian_camel":'));
  assert.ok(camel,"Bactrian camel runtime profile must exist");
- assert.match(camel,/"adultAgeDays":OFFICIAL_LIVESTOCK_LIFECYCLE\.bactrian_camel\\.adultAgeDays/);
- assert.match(camel,/"productCooldownDays":OFFICIAL_LIVESTOCK_LIFECYCLE\.bactrian_camel\\.productCooldownDays/);
- assert.match(camel,/"maxUses":OFFICIAL_LIVESTOCK_LIFECYCLE\.bactrian_camel\\.maxUses/);
+ assert.match(camel,/"adultAgeDays":OFFICIAL_LIVESTOCK_LIFECYCLE\.bactrian_camel\.adultAgeDays/);
+ assert.match(camel,/"productCooldownDays":OFFICIAL_LIVESTOCK_LIFECYCLE\.bactrian_camel\.productCooldownDays/);
+ assert.match(camel,/"maxUses":OFFICIAL_LIVESTOCK_LIFECYCLE\.bactrian_camel\.maxUses/);
  assert.match(runtime,/give\(player,"tfc:wool",amount\)/);
 });
