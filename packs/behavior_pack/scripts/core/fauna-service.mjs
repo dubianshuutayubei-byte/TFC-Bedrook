@@ -40,7 +40,8 @@ export function canBreed(firstInput, secondInput, profile) {
   const b = createAnimalState(secondInput);
   const adultAge = Number(profile.adultAgeDays ?? 0);
   const requiredFamiliarity = Number(profile.requiredFamiliarity ?? 0);
-  return a.species === b.species && a.sex !== b.sex &&
+  const validSexPair = (a.sex === "male" && b.sex === "female") || (a.sex === "female" && b.sex === "male");
+  return a.species === b.species && validSexPair &&
     a.ageDays >= adultAge && b.ageDays >= adultAge &&
     a.health > 0 && b.health > 0 &&
     a.familiarity >= requiredFamiliarity && b.familiarity >= requiredFamiliarity &&
