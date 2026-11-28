@@ -623,7 +623,7 @@ function nestBoxTick(block){
     const baby=block.dimension.spawnEntity(entityType,hatchLocation);
     try{baby.setDynamicProperty("tfc:hatched_egg_id",egg.id);}catch(error){console.warn("[TFC-Bedrook] fauna hatch id save unavailable:",error);}
     try{baby.triggerEvent("tfc:spawn_baby");}catch(error){console.warn("[TFC-Bedrook] fauna hatch baby event unavailable:",error);}
-    saveAnimal(baby,createAnimalOffspringState({familiarity:0},egg.species,"unknown"));
+    saveAnimal(baby,createAnimalOffspringState({familiarity:0},egg.species,"unknown",day));
    }
    state={...state,eggs:takeNestBoxEgg(state,egg.id).state.eggs};
   }catch(error){console.warn("[TFC-Bedrook] nest box hatch deferred:",error);}
@@ -806,7 +806,7 @@ function animalTick(entity){
      try{baby.triggerEvent(birthEvent);}catch(error){console.warn("[TFC-Bedrook] juvenile event unavailable for",offspringSpecies,error);}
      state.birthsRemaining-=1;saveAnimal(entity,state);
      const offspringSex=ANIMAL_PROFILES[offspringEntityType]?.fixedSex??(offspringSpecies==="mule"?"male":Math.random()<0.5?"male":"female");
-      saveAnimal(baby,createAnimalOffspringState(state,offspringSpecies,offspringSex));
+      saveAnimal(baby,createAnimalOffspringState(state,offspringSpecies,offspringSex,currentDay));
     }catch(error){console.warn("[TFC-Bedrook] animal birth deferred:",error);break;}
    }
    if(state.birthsRemaining===0){state.pregnancyDays=0;state.fertilized=false;state.pregnancyOffspringSpecies=null;state.pregnancyOffspringEntityType=null;state.birthsTotal=0;}
