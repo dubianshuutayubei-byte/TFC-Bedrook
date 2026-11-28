@@ -43,21 +43,68 @@
       "minecraft:behavior.random_look_around": {
         "priority": 8
       },
-      "minecraft:navigation.swim": {
-        "can_path_over_water": true
-      },
-      "minecraft:movement.swim": {},
-      "minecraft:behavior.swim_wander": {
-        "priority": 6,
-        "interval": 120,
-        "look_ahead": 10,
-        "speed_multiplier": 1
-      },
       "minecraft:breathable": {
         "total_supply": 15,
         "suffocate_time": 0,
         "breathes_air": true,
         "breathes_water": true
+      },
+      "minecraft:movement.amphibious": {
+        "max_turn": 30
+      },
+      "minecraft:navigation.generic": {
+        "can_walk": true,
+        "can_swim": true,
+        "is_amphibious": true,
+        "can_path_over_water": false,
+        "can_sink": false,
+        "can_breach": true,
+        "avoid_damage_blocks": true
+      },
+      "minecraft:behavior.move_to_water": {
+        "priority": 4,
+        "search_range": 16,
+        "search_height": 5,
+        "goal_radius": 1.5
+      },
+      "minecraft:behavior.move_to_land": {
+        "priority": 6,
+        "search_range": 16,
+        "search_height": 5,
+        "goal_radius": 0.5
+      },
+      "minecraft:behavior.random_stroll": {
+        "priority": 7,
+        "speed_multiplier": 0.6
+      },
+      "minecraft:behavior.nearest_attackable_target": {
+        "priority": 2,
+        "within_radius": 16,
+        "must_see": true,
+        "reselect_targets": true,
+        "entity_types": [
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "tfc_small_fish"
+            },
+            "max_dist": 16
+          },
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "fish"
+            },
+            "max_dist": 16
+          }
+        ]
+      },
+      "minecraft:behavior.melee_attack": {
+        "priority": 3,
+        "speed_multiplier": 1.2,
+        "track_target": true
       }
     }
   }
