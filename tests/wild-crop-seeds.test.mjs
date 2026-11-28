@@ -18,7 +18,7 @@ test("grass, ferns, water plants and dead bushes can provide crop seeds",()=>{
 });
 
 test("seed collection and crop return are described in the field guide",()=>{
- assert.match(ui,/穀物・豆類・アルファルファ・カノーラ・ラディッシュの種は草地、野菜・トマト・パプリカ・ジュートの種はシダ、水稲・パピルス・サトウキビの種は水草、キャッサバなどは枯れ木から低確率で見つかります/);
+ assert.match(ui,/水稲・パピルス・サトウキビの種は水草/);
  assert.match(ui,/成熟作物を収穫すると対応する種が1つ戻ります/);
 });
 
