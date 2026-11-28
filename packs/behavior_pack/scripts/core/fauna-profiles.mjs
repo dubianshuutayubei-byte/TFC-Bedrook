@@ -524,6 +524,12 @@ export const OFFICIAL_FAUNA_PROFILES = Object.freeze({
 
 
 /** Verified TFC 1.21.x livestock lifecycle values from ServerConfig.java. Values absent from this table remain intentionally unknown. */
+/** Official Java 1.21.x fauna habitat constraints not present in the legacy 3.2.26 climate table. */
+export const OFFICIAL_FAUNA_HABITAT_EXTENSIONS = Object.freeze({
+  dromedary_camel: Object.freeze({ maxGroundwater: 100, minTemperatureC: -5 }),
+  bactrian_camel: Object.freeze({ maxGroundwater: 100, maxTemperatureC: -5 })
+});
+
 export const OFFICIAL_LIVESTOCK_LIFECYCLE = Object.freeze({
   pig: Object.freeze({ adultAgeDays: 80, maxUses: 60, gestationDays: 19, childCountMin: 1, childCountMax: 10 }),
   donkey: Object.freeze({ adultAgeDays: 80, maxUses: 60, gestationDays: 19 }),
