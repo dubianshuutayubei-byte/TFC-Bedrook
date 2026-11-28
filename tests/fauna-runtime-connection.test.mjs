@@ -5,7 +5,7 @@ import { resolve, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
-test("vanilla livestock relies on vanilla breeding and avoids duplicate feed consumption",()=>{
+test("vanilla livestock relies on vanilla breeding while TFC chicken uses custom husbandry",()=>{
  assert.match(runtime,/"minecraft:cow":\{[^}]*customBreeding:false/);
  assert.match(runtime,/"minecraft:sheep":\{[^}]*customBreeding:false/);
  assert.match(runtime,/"minecraft:chicken":\{[^}]*customBreeding:false/);
