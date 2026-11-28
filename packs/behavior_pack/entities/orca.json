@@ -81,6 +81,14 @@
               "value": "fish"
             },
             "max_dist": 24
+          },
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "tfc_shellfish"
+            },
+            "max_dist": 18
           }
         ]
       },
