@@ -129,3 +129,6 @@ item.tfc:papyrus.name=パピルス
 item.tfc:papyrus_seed.name=パピルスの種
 item.tfc:trellis.name=作物用トレリス
 tile.tfc:trellis.name=作物用トレリス
+
+tile.tfc:pumpkin_fruit.name=カボチャの実
+tile.tfc:melon_fruit.name=メロンの実
