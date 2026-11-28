@@ -30,6 +30,7 @@ Minecraft Bedrock Edition 向けに TerraFirmaCraft（TFC）Java 1.20.1-3.2.26 �
 - [TFC金属・合金データベース](docs/spec/tfc-metal-alloy-database.md)
 - [Bedrock互換性・API基準](docs/compatibility/bedrock-version-matrix.md)
 - [Bedrock実装アーキテクチャ](docs/architecture/bedrock-implementation-architecture.md)
+- [UI設計・初期実装](docs/architecture/ui-design.md)
 - [ランタイム状態・セーブデータ設計](docs/architecture/runtime-state-model.md)
 - [気候サービス試作](docs/architecture/climate-service-prototype.md)
 - [金属・合金サービス試作](docs/architecture/metal-service-prototype.md)
@@ -37,7 +38,7 @@ Minecraft Bedrock Edition 向けに TerraFirmaCraft（TFC）Java 1.20.1-3.2.26 �
 
 ## 検証環境
 
-GitHub ActionsでJSON・manifestの静的検査、JavaScript構文検査、Node.js単体テストを実行する。気候計算、金属・合金判定、熱・燃料の基礎計算に関する純粋関数プロトタイプを追加済み。Behavior Pack / Resource Packのmanifestやゲーム内機能はまだ未実装。
+GitHub ActionsでJSON・manifestの静的検査、JavaScript構文検査、Node.js単体テストを実行する。気候計算、金属・合金判定、熱・燃料の基礎計算に関する純粋関数プロトタイプを追加済み。Behavior Packのmanifest・Script API起動点・初期UIは追加済み。Resource Pack、専用ガイドアイテム、ゲーム内各機能との接続は未完成。
 
 - [静的検査ツール](tools/validate-pack.mjs)
 - [気候計算モジュール](packs/behavior_pack/scripts/core/climate-service.mjs)
@@ -62,4 +63,4 @@ GitHub ActionsでJSON・manifestの静的検査、JavaScript構文検査、Node.
 
 ## 現在の状態
 
-調査・仕様整理に加え、気候計算と金属・合金判定の実行可能プロトタイプを追加した段階。完成アドオンや実機検証済みビルドはまだ存在しない。
+調査・仕様整理に加え、気候計算、金属・合金、熱・燃料の基礎モジュールと単体テストを追加。Behavior PackのmanifestとScript API起動点、`/scriptevent tfc:menu` で開く日本語の初期UIを追加した。完成アドオンやMinecraft実機検証済みビルドはまだ存在しない。
