@@ -17,26 +17,26 @@
     {
       "id": "arctic_char",
       "group": "aquatic",
-      "status": "not_implemented",
-      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
+      "status": "custom_entity_scaffold",
+      "note": "Behavior entity, client entity, archetype geometry and coarse spawn rule scaffolded from a related species. Species-specific model/texture, exact spawn climate, AI and gameplay parity remain incomplete."
     },
     {
       "id": "armadillo",
       "group": "reptile",
-      "status": "not_implemented",
-      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
+      "status": "custom_entity_scaffold",
+      "note": "Behavior entity, client entity, archetype geometry and coarse spawn rule scaffolded from a related species. Species-specific model/texture, exact spawn climate, AI and gameplay parity remain incomplete."
     },
     {
       "id": "bactrian_camel",
       "group": "mammal",
-      "status": "not_implemented",
-      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
+      "status": "custom_entity_scaffold",
+      "note": "Behavior entity, client entity, archetype geometry and coarse spawn rule scaffolded from a related species. Species-specific model/texture, exact spawn climate, AI and gameplay parity remain incomplete."
     },
     {
       "id": "bison",
       "group": "mammal",
-      "status": "not_implemented",
-      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
+      "status": "custom_entity_scaffold",
+      "note": "Behavior entity, client entity, archetype geometry and coarse spawn rule scaffolded from a related species. Species-specific model/texture, exact spawn climate, AI and gameplay parity remain incomplete."
     },
     {
       "id": "black_bear",
@@ -65,8 +65,8 @@
     {
       "id": "burbot",
       "group": "aquatic",
-      "status": "not_implemented",
-      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
+      "status": "custom_entity_scaffold",
+      "note": "Behavior entity, client entity, archetype geometry and coarse spawn rule scaffolded from a related species. Species-specific model/texture, exact spawn climate, AI and gameplay parity remain incomplete."
     },
     {
       "id": "caribou",
@@ -143,8 +143,8 @@
     {
       "id": "dromedary_camel",
       "group": "mammal",
-      "status": "not_implemented",
-      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
+      "status": "custom_entity_scaffold",
+      "note": "Behavior entity, client entity, archetype geometry and coarse spawn rule scaffolded from a related species. Species-specific model/texture, exact spawn climate, AI and gameplay parity remain incomplete."
     },
     {
       "id": "duck",
@@ -233,8 +233,8 @@
     {
       "id": "leopard_seal",
       "group": "aquatic",
-      "status": "not_implemented",
-      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
+      "status": "custom_entity_scaffold",
+      "note": "Behavior entity, client entity, archetype geometry and coarse spawn rule scaffolded from a related species. Species-specific model/texture, exact spawn climate, AI and gameplay parity remain incomplete."
     },
     {
       "id": "lion",
@@ -263,8 +263,8 @@
     {
       "id": "muksun",
       "group": "aquatic",
-      "status": "not_implemented",
-      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
+      "status": "custom_entity_scaffold",
+      "note": "Behavior entity, client entity, archetype geometry and coarse spawn rule scaffolded from a related species. Species-specific model/texture, exact spawn climate, AI and gameplay parity remain incomplete."
     },
     {
       "id": "mule",
@@ -281,8 +281,8 @@
     {
       "id": "northern_pike",
       "group": "aquatic",
-      "status": "not_implemented",
-      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
+      "status": "custom_entity_scaffold",
+      "note": "Behavior entity, client entity, archetype geometry and coarse spawn rule scaffolded from a related species. Species-specific model/texture, exact spawn climate, AI and gameplay parity remain incomplete."
     },
     {
       "id": "ocelot",
@@ -305,8 +305,8 @@
     {
       "id": "pacu",
       "group": "aquatic",
-      "status": "not_implemented",
-      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
+      "status": "custom_entity_scaffold",
+      "note": "Behavior entity, client entity, archetype geometry and coarse spawn rule scaffolded from a related species. Species-specific model/texture, exact spawn climate, AI and gameplay parity remain incomplete."
     },
     {
       "id": "panda",
@@ -323,8 +323,8 @@
     {
       "id": "peacock_bass",
       "group": "aquatic",
-      "status": "not_implemented",
-      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
+      "status": "custom_entity_scaffold",
+      "note": "Behavior entity, client entity, archetype geometry and coarse spawn rule scaffolded from a related species. Species-specific model/texture, exact spawn climate, AI and gameplay parity remain incomplete."
     },
     {
       "id": "peafowl",
@@ -359,8 +359,8 @@
     {
       "id": "pond_turtle",
       "group": "reptile",
-      "status": "not_implemented",
-      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
+      "status": "custom_entity_scaffold",
+      "note": "Behavior entity, client entity, archetype geometry and coarse spawn rule scaffolded from a related species. Species-specific model/texture, exact spawn climate, AI and gameplay parity remain incomplete."
     },
     {
       "id": "pufferfish",
@@ -389,8 +389,8 @@
     {
       "id": "red_piranha",
       "group": "aquatic",
-      "status": "not_implemented",
-      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
+      "status": "custom_entity_scaffold",
+      "note": "Behavior entity, client entity, archetype geometry and coarse spawn rule scaffolded from a related species. Species-specific model/texture, exact spawn climate, AI and gameplay parity remain incomplete."
     },
     {
       "id": "sabertooth",
@@ -419,8 +419,8 @@
     {
       "id": "spotted_gudgeon",
       "group": "aquatic",
-      "status": "not_implemented",
-      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
+      "status": "custom_entity_scaffold",
+      "note": "Behavior entity, client entity, archetype geometry and coarse spawn rule scaffolded from a related species. Species-specific model/texture, exact spawn climate, AI and gameplay parity remain incomplete."
     },
     {
       "id": "squid",
@@ -437,8 +437,8 @@
     {
       "id": "tilapia",
       "group": "aquatic",
-      "status": "not_implemented",
-      "note": "Identified in the official Java 1.21.x Faunas/Fish registry; Bedrock entity, model, spawn, species AI and interactions have not yet been implemented."
+      "status": "custom_entity_scaffold",
+      "note": "Behavior entity, client entity, archetype geometry and coarse spawn rule scaffolded from a related species. Species-specific model/texture, exact spawn climate, AI and gameplay parity remain incomplete."
     },
     {
       "id": "tropical_fish",
