@@ -1,5 +1,5 @@
 {
-  "source": "TerraFirmaCraft 1.21.x src/main/java/net/dries007/tfc/config/ServerConfig.java (animal config section)",
+  "source": "TFC 1.21.x (TerraFirmaCraft) src/main/java/net/dries007/tfc/config/ServerConfig.java (animal config section)",
   "dayUnit": "TFC calendar days; product cooldownTicks are converted using 24000 ticks per day in the Bedrock runtime adapter.",
   "species": [
     {
