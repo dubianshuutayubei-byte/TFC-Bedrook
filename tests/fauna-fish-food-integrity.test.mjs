@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -87,4 +87,30 @@ test("the 78-species fauna coverage stays explicitly separate from terrain compl
   assert.ok(coverage.remainingCount > 0,
     "species scaffolds must not be reported as full species-specific implementation");
   assert.match(coverage.caveat, /in-game testing remains outstanding/i);
+});
+
+
+test("all 80 runtime fauna profiles define feed and grazing arrays with registered custom feed items", () => {
+  const profileBlock = runtime.match(/const ANIMAL_PROFILES\\s*=\\s*\\{([\\s\\S]*?)\\n\\};/);
+  assert.ok(profileBlock, "ANIMAL_PROFILES runtime table must exist");
+  const body = profileBlock[1];
+  const profileCount = [...body.matchAll(/^\\s*"[^"]+"\\s*:\\s*\\{/gm)].length;
+  const feedArrays = [...body.matchAll(/["']?feedItems["']?\\s*:\\s*\\[([^\\]]*)\\]/g)];
+  const grazeArrays = [...body.matchAll(/["']?grazeBlocks["']?\\s*:\\s*\\[([^\\]]*)\\]/g)];
+  assert.equal(profileCount, 80, "fauna profile count changed; update this coverage assertion");
+  assert.equal(feedArrays.length, profileCount, "every profile must provide feedItems because interaction handlers read it directly");
+  assert.equal(grazeArrays.length, profileCount, "every profile must provide grazeBlocks because grazing runtime reads it directly");
+
+  const itemDirectory = join(root, "packs/behavior_pack/items");
+  const registeredItems = new Set(
+    readdirSync(itemDirectory).filter((name) => name.endsWith(".json"))
+      .map((name) => "tfc:" + name.slice(0, -5))
+  );
+  const customFeedIds = new Set(feedArrays.flatMap((match) =>
+    [...match[1].matchAll(/["'](tfc:[a-z0-9_]+)["']/g)].map((item) => item[1])
+  ));
+  assert.ok(customFeedIds.size > 0, "expected custom TFC feed items to be exercised");
+  for (const id of customFeedIds) {
+    assert.ok(registeredItems.has(id), id + " is referenced by an animal diet but has no registered item definition");
+  }
 });
