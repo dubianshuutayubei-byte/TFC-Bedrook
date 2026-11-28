@@ -59,10 +59,29 @@ const FERTILIZER_PROFILES=Object.freeze({
 });
 const WEATHER_BY_DIMENSION=new Map([["overworld","clear"]]);
 const ANIMAL_PROFILES={
- "tfc:deer":{adultAgeDays:30,requiredFamiliarity:35,breedingCooldownDays:20,gestationDays:210,customBreeding:true,feedItems:["minecraft:wheat","minecraft:wheat_seeds"],grazeBlocks:["minecraft:grass_block","minecraft:tallgrass"]},
- "minecraft:cow":{adultAgeDays:192,requiredFamiliarity:30,customBreeding:false,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"]},
- "minecraft:sheep":{adultAgeDays:56,requiredFamiliarity:25,customBreeding:false,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"]},
- "minecraft:chicken":{adultAgeDays:24,requiredFamiliarity:20,customBreeding:false,feedItems:["minecraft:wheat_seeds","minecraft:beetroot_seeds","minecraft:melon_seeds","minecraft:pumpkin_seeds"],grazeBlocks:["minecraft:grass_block"]}
+ "tfc:deer":{speciesId:"deer",displayName:"シカ",adultAgeDays:30,requiredFamiliarity:35,breedingCooldownDays:20,gestationDays:210,customBreeding:true,feedItems:["minecraft:wheat","minecraft:wheat_seeds"],grazeBlocks:["minecraft:grass_block","minecraft:tallgrass"],kind:"terrestrial",domestic:false},
+ "minecraft:cow":{speciesId:"cow",displayName:"ウシ",adultAgeDays:192,requiredFamiliarity:30,customBreeding:false,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
+ "minecraft:sheep":{speciesId:"sheep",displayName:"ヒツジ",adultAgeDays:56,requiredFamiliarity:25,customBreeding:false,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
+ "minecraft:chicken":{speciesId:"chicken",displayName:"ニワトリ",adultAgeDays:24,requiredFamiliarity:20,customBreeding:false,feedItems:["minecraft:wheat_seeds","minecraft:beetroot_seeds","minecraft:melon_seeds","minecraft:pumpkin_seeds"],grazeBlocks:[],kind:"terrestrial",domestic:true},
+ "minecraft:pig":{speciesId:"pig",displayName:"ブタ",adultAgeDays:80,requiredFamiliarity:20,customBreeding:false,feedItems:["minecraft:carrot","minecraft:potato","minecraft:beetroot"],grazeBlocks:[],kind:"terrestrial",domestic:true},
+ "minecraft:goat":{speciesId:"goat",displayName:"ヤギ",adultAgeDays:90,requiredFamiliarity:25,customBreeding:false,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
+ "minecraft:horse":{speciesId:"horse",displayName:"ウマ",adultAgeDays:120,requiredFamiliarity:25,customBreeding:false,feedItems:["minecraft:wheat","minecraft:apple","minecraft:golden_carrot","minecraft:golden_apple"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
+ "minecraft:donkey":{speciesId:"donkey",displayName:"ロバ",adultAgeDays:120,requiredFamiliarity:25,customBreeding:false,feedItems:["minecraft:wheat","minecraft:apple","minecraft:golden_carrot","minecraft:golden_apple"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
+ "minecraft:mule":{speciesId:"mule",displayName:"ラバ",adultAgeDays:120,requiredFamiliarity:25,customBreeding:false,feedItems:["minecraft:wheat","minecraft:apple","minecraft:golden_carrot","minecraft:golden_apple"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
+ "minecraft:rabbit":{speciesId:"rabbit",displayName:"ウサギ",adultAgeDays:35,requiredFamiliarity:15,customBreeding:false,feedItems:["minecraft:carrot","minecraft:golden_carrot","minecraft:dandelion"],grazeBlocks:[],kind:"terrestrial",domestic:false},
+ "minecraft:wolf":{speciesId:"wolf",displayName:"オオカミ",adultAgeDays:60,requiredFamiliarity:20,customBreeding:false,feedItems:["minecraft:beef","minecraft:porkchop","minecraft:chicken","minecraft:mutton","minecraft:rabbit"],grazeBlocks:[],kind:"terrestrial",domestic:false},
+ "minecraft:fox":{speciesId:"fox",displayName:"キツネ",adultAgeDays:50,requiredFamiliarity:10,customBreeding:false,feedItems:["minecraft:sweet_berries","minecraft:glow_berries"],grazeBlocks:[],kind:"terrestrial",domestic:false},
+ "minecraft:polar_bear":{speciesId:"polar_bear",displayName:"ホッキョクグマ",adultAgeDays:180,requiredFamiliarity:0,customBreeding:false,feedItems:[],grazeBlocks:[],kind:"terrestrial",domestic:false},
+ "minecraft:panda":{speciesId:"panda",displayName:"パンダ",adultAgeDays:120,requiredFamiliarity:10,customBreeding:false,feedItems:["minecraft:bamboo"],grazeBlocks:[],kind:"terrestrial",domestic:false},
+ "minecraft:ocelot":{speciesId:"ocelot",displayName:"ヤマネコ",adultAgeDays:60,requiredFamiliarity:10,customBreeding:false,feedItems:["minecraft:cod","minecraft:salmon"],grazeBlocks:[],kind:"terrestrial",domestic:false},
+ "minecraft:dolphin":{speciesId:"dolphin",displayName:"イルカ",adultAgeDays:180,requiredFamiliarity:0,customBreeding:false,feedItems:["minecraft:cod","minecraft:salmon"],grazeBlocks:[],kind:"aquatic",domestic:false},
+ "minecraft:cod":{speciesId:"cod",displayName:"タラ",adultAgeDays:30,requiredFamiliarity:0,customBreeding:false,feedItems:[],grazeBlocks:[],kind:"aquatic",domestic:false},
+ "minecraft:salmon":{speciesId:"salmon",displayName:"サケ",adultAgeDays:30,requiredFamiliarity:0,customBreeding:false,feedItems:[],grazeBlocks:[],kind:"aquatic",domestic:false},
+ "minecraft:tropicalfish":{speciesId:"tropical_fish",displayName:"熱帯魚",adultAgeDays:20,requiredFamiliarity:0,customBreeding:false,feedItems:[],grazeBlocks:[],kind:"aquatic",domestic:false},
+ "minecraft:pufferfish":{speciesId:"pufferfish",displayName:"フグ",adultAgeDays:30,requiredFamiliarity:0,customBreeding:false,feedItems:[],grazeBlocks:[],kind:"aquatic",domestic:false},
+ "minecraft:turtle":{speciesId:"turtle",displayName:"ウミガメ",adultAgeDays:240,requiredFamiliarity:0,customBreeding:false,feedItems:["minecraft:seagrass"],grazeBlocks:[],kind:"aquatic",domestic:false},
+ "minecraft:frog":{speciesId:"frog",displayName:"カエル",adultAgeDays:30,requiredFamiliarity:0,customBreeding:false,feedItems:["minecraft:slime_ball"],grazeBlocks:[],kind:"amphibian",domestic:false},
+ "minecraft:squid":{speciesId:"squid",displayName:"イカ",adultAgeDays:30,requiredFamiliarity:0,customBreeding:false,feedItems:[],grazeBlocks:[],kind:"aquatic",domestic:false}
 };
 const inv=p=>p.getComponent("minecraft:inventory")?.container;
 function count(p,id){const c=inv(p);if(!c)return 0;let n=0;for(let i=0;i<c.size;i++){const s=c.getItem(i);if(s?.typeId===id)n+=s.amount;}return n;}
@@ -505,7 +524,7 @@ function cropTick(block){
  }
 }
 function fireTick(block){const key=posKey(block,"fire");const state=advanceFire(readWorldState(key,{}),20);writeWorldState(key,state);}
-function animalState(entity){try{const raw=entity.getDynamicProperty("tfc:animal_state");const base=typeof raw==="string"?JSON.parse(raw):{};return createAnimalState({...base,species:entity.typeId.replace(":","_")});}catch{return createAnimalState({species:entity.typeId.replace(":","_")});}}
+function animalState(entity){const profile=ANIMAL_PROFILES[entity.typeId];try{const raw=entity.getDynamicProperty("tfc:animal_state");const base=typeof raw==="string"?JSON.parse(raw):{};return createAnimalState({...base,species:profile?.speciesId??base.species??entity.typeId.replace(":","_")});}catch{return createAnimalState({species:profile?.speciesId??entity.typeId.replace(":","_")});}}
 function saveAnimal(entity,state){try{entity.setDynamicProperty("tfc:animal_state",JSON.stringify(state));}catch(error){console.warn("[TFC-Bedrook] animal state save:",error);}}
 function animalTick(entity){
  const profile=ANIMAL_PROFILES[entity.typeId];if(!profile)return;
@@ -548,7 +567,7 @@ async function animalInteract(player,entity){
  if(state.sex==="unknown"){state.sex=Math.random()<0.5?"male":"female";saveAnimal(entity,state);}
  const held=inv(player)?.getItem(player.selectedSlotIndex);
  if(!held){
-  const names={"tfc:deer":"シカ","minecraft:cow":"ウシ","minecraft:sheep":"ヒツジ","minecraft:chicken":"ニワトリ"};
+  const names=Object.fromEntries(Object.entries(ANIMAL_PROFILES).map(([id,p])=>[id,p.displayName]));
   const products=entity.typeId==="minecraft:cow"?"\n産出: 牛乳（メスの成体・健康/空腹/渇き条件を満たすと空き瓶で採取、1日間隔）":entity.typeId==="minecraft:sheep"?"\n産出: 羊毛（バニラのハサミ操作で採取）":entity.typeId==="minecraft:chicken"?"\n産出: 卵（バニラの産卵AI）":"";
   const status="性別: "+(state.sex==="female"?"メス":"オス")+"\n年齢: "+state.ageDays.toFixed(1)+"日 / 成熟目安: "+profile.adultAgeDays+"日\n空腹: "+Math.floor(state.hunger)+" / 100\n渇き: "+Math.floor(state.thirst)+" / 100\n健康: "+Math.floor(state.health)+" / 100\nなつき度: "+Math.floor(state.familiarity)+" / 100"+(state.pregnancyDays>0?"\n妊娠: "+Math.floor(state.pregnancyDays)+"日":"")+products;
   const form=new ActionFormData().title((names[entity.typeId]??entity.typeId)+"の状態").body(status+"\n\n餌を手に持ってもう一度操作すると給餌できます。").button("閉じる");
