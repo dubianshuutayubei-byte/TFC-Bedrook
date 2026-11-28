@@ -476,5 +476,11 @@
       "source": "Faunas.java registerFish/registerAnimal/registerAmphibiousPredator"
     }
   ],
-  "caveat": "This records official placement categories only. It is not a Bedrock spawn-rule implementation; per-species climate, light, sea-level, terrain, fluid and density checks still need Bedrock-compatible runtime sampling."
+  "caveat": "This records official placement categories only. It is not a Bedrock spawn-rule implementation; per-species climate, light, sea-level, terrain, fluid and density checks still need Bedrock-compatible runtime sampling.",
+  "officialSourceVersion": "TerraFirmaCraft 1.21.1-4.2.16",
+  "officialSourceTag": "v4.2.16",
+  "officialSourceBlobs": {
+    "src/main/java/net/dries007/tfc/common/entities/Faunas.java": "5ac152295b832d0e6317539d9d714110f6515d76",
+    "src/main/java/net/dries007/tfc/common/entities/aquatic/Fish.java": "a3765670f52f68abed08c6057b68e248c8f0fbf9"
+  }
 }
