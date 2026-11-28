@@ -13,7 +13,8 @@
           "animal",
           "mob",
           "tfc_aquatic",
-          "tfc_fauna_bluegill"
+          "tfc_fauna_bluegill",
+          "tfc_small_fish"
         ]
       },
       "minecraft:nameable": {},
