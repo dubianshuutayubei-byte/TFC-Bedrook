@@ -22,7 +22,8 @@
       "minecraft:selection_box": true,
       "tfc:station_ui": {
         "station": "crucible"
-      }
+      },
+      "minecraft:display_name": "tile.tfc:crucible.name"
     }
   }
 }
