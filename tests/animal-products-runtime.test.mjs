@@ -25,6 +25,8 @@ test("livestock status displays age, needs, health and product instructions",()=
 });
 
 test("milk collection uses the exact official TFC minimum familiarity of 0.15",()=>{
- assert.match(runtime,/productFamiliarityMin:15/);
- assert.doesNotMatch(runtime,/productFamiliarityMin:16/);
+ const cow=runtime.match(/"minecraft:cow":\\{[^}]*\\}/)?.[0]??"";
+ const goat=runtime.match(/"minecraft:goat":\\{[^}]*\\}/)?.[0]??"";
+ assert.match(cow,/productFamiliarityMin:15/);
+ assert.match(goat,/productFamiliarityMin:15/);
 });
