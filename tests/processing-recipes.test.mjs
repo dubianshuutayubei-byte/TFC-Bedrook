@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { PROCESSING_RECIPES, getStationRecipes, validateProcessingRecipes } from "../packs/behavior_pack/scripts/core/processing-recipes.mjs";
 
 test("canonical station recipes are valid and unique",()=>{
-  assert.deepEqual(validateProcessingRecipes(),{count:11});
+  assert.deepEqual(validateProcessingRecipes(),{count:13});
 });
 test("pit kiln exposes both vessel and ingot-mold firing",()=>{
   const ids=getStationRecipes("pit_kiln").map(r=>r.id);
@@ -49,4 +49,14 @@ test("drying rack preserves meat, fruit and vegetables",()=>{
  const recipes=getStationRecipes("drying_rack");
  assert.deepEqual(recipes.map(r=>r.id),["tfc:dried_meat","tfc:dried_fruit","tfc:dried_vegetables"]);
  assert.equal(recipes.find(r=>r.id==="tfc:dried_meat").inputs["tfc:raw_meat"],1);
+});
+
+test("composter provides two green-and-brown compost recipes",()=>{
+ const recipes=getStationRecipes("composter");
+ assert.equal(recipes.length,2);
+ assert.equal(recipes[0].inputs["tfc:vegetable"],4);
+ assert.equal(recipes[0].inputs["minecraft:oak_leaves"],16);
+ assert.equal(recipes[1].inputs["tfc:fruit"],4);
+ assert.equal(recipes[1].outputs["tfc:compost"],1);
+ assert.equal(recipes[0].durationTicks,240000);
 });
