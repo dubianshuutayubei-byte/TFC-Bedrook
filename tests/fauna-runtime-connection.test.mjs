@@ -21,7 +21,8 @@ test("custom pregnancy is confined to deer; vanilla livestock uses native breedi
  assert.match(runtime,/if\(profile\.customBreeding&&state\.pregnancyDays>0\)/);
  assert.match(runtime,/if\(profile\.customBreeding&&state\.sex==="female"/);
  assert.match(runtime,/other\.lastBreedAt=breedingTime/);
- assert.match(runtime,/entity\.dimension\.spawnEntity\(entity\.typeId\+"<tfc:spawn_baby>"/);
+ assert.match(runtime,/entity\.dimension\.spawnEntity\(entity\.typeId,\{x:entity\.location\.x\+1/);
+ assert.match(runtime,/baby\.triggerEvent\("tfc:spawn_baby"\)/);
 });
 test("animal needs and age update on the periodic loaded-entity tick",()=>{
  assert.match(runtime,/advanceAnimalNeeds\(state,0\.05,/);
@@ -156,7 +157,8 @@ test("animal runtime applies daily familiarity decay and capped TFC feeding gain
 });
 
 test("custom births trigger juvenile state and persist remaining litter count",()=>{
- assert.match(runtime,/spawnEntity\(entity\.typeId\+"<tfc:spawn_baby>"/);
+ assert.match(runtime,/spawnEntity\(entity\.typeId,\{x:entity\.location\.x\+1/);
+ assert.match(runtime,/baby\.triggerEvent\("tfc:spawn_baby"\)/);
  assert.match(runtime,/createAnimalOffspringState\(state,profile\.speciesId/);
  assert.match(runtime,/state\.birthsRemaining=Math\.max\(1,Math\.floor\(profile\.childCount\?\?1\)\)/);
  assert.match(runtime,/state\.birthsRemaining-=1/);
