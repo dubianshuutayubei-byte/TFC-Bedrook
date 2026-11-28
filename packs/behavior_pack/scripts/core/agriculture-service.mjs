@@ -92,3 +92,13 @@ const SOIL_TYPE_BY_BLOCK = Object.freeze({
 export function inferSoilTypeFromBlockId(blockId) {
   return SOIL_TYPE_BY_BLOCK[String(blockId ?? "")] ?? "loam";
 }
+
+export function advanceCropGrowthProgress(currentProgress, growthMultiplier, growthPointsPerTick = 25, threshold = 100) {
+  if (!Number.isFinite(growthPointsPerTick) || growthPointsPerTick <= 0) throw new RangeError("growthPointsPerTick must be positive");
+  if (!Number.isFinite(threshold) || threshold <= 0) throw new RangeError("threshold must be positive");
+  const current = clamp(finiteOr(currentProgress, 0), 0, threshold);
+  const multiplier = clamp(finiteOr(growthMultiplier, 0), 0, 1);
+  const total = current + multiplier * growthPointsPerTick;
+  const stageAdvanced = total >= threshold;
+  return { progress: stageAdvanced ? total - threshold : total, stageAdvanced };
+}
