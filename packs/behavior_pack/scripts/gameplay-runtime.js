@@ -19,10 +19,10 @@ const CROP_PROFILES={
 };
 const WEATHER_BY_DIMENSION=new Map([["overworld","clear"]]);
 const ANIMAL_PROFILES={
- "tfc:deer":{adultAgeDays:30,requiredFamiliarity:35,breedingCooldownDays:20,gestationDays:210,feedItems:["minecraft:wheat","minecraft:wheat_seeds"],grazeBlocks:["minecraft:grass_block","minecraft:tallgrass"]},
- "minecraft:cow":{adultAgeDays:30,requiredFamiliarity:30,breedingCooldownDays:20,gestationDays:280,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"]},
- "minecraft:sheep":{adultAgeDays:24,requiredFamiliarity:25,breedingCooldownDays:18,gestationDays:150,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"]},
- "minecraft:chicken":{adultAgeDays:12,requiredFamiliarity:20,breedingCooldownDays:10,gestationDays:21,feedItems:["minecraft:wheat_seeds","minecraft:beetroot_seeds","minecraft:melon_seeds","minecraft:pumpkin_seeds"],grazeBlocks:["minecraft:grass_block"]}
+ "tfc:deer":{adultAgeDays:30,requiredFamiliarity:35,breedingCooldownDays:20,gestationDays:210,customBreeding:true,feedItems:["minecraft:wheat","minecraft:wheat_seeds"],grazeBlocks:["minecraft:grass_block","minecraft:tallgrass"]},
+ "minecraft:cow":{adultAgeDays:30,requiredFamiliarity:30,customBreeding:false,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"]},
+ "minecraft:sheep":{adultAgeDays:24,requiredFamiliarity:25,customBreeding:false,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"]},
+ "minecraft:chicken":{adultAgeDays:12,requiredFamiliarity:20,customBreeding:false,feedItems:["minecraft:wheat_seeds","minecraft:beetroot_seeds","minecraft:melon_seeds","minecraft:pumpkin_seeds"],grazeBlocks:["minecraft:grass_block"]}
 };
 const inv=p=>p.getComponent("minecraft:inventory")?.container;
 function count(p,id){const c=inv(p);if(!c)return 0;let n=0;for(let i=0;i<c.size;i++){const s=c.getItem(i);if(s?.typeId===id)n+=s.amount;}return n;}
@@ -173,9 +173,9 @@ function animalTick(entity){
   if(forageNearby)state=grazeAnimal(state,{hungerReduction:2});
  }catch{}
  try{const hp=entity.getComponent("minecraft:health");if(hp)hp.setCurrentValue(Math.max(0,hp.effectiveMax*state.health/100));}catch{}
- if(state.pregnancyDays>0){const result=advancePregnancy(state,0.05,profile.gestationDays);state=result.animal;if(result.birthReady){let born=false;try{entity.dimension.spawnEntity(entity.typeId,{x:entity.location.x+1,y:entity.location.y,z:entity.location.z});born=true;}catch(error){console.warn("[TFC-Bedrook] animal birth deferred:",error);}if(born)state.pregnancyDays=0;}}
- if(state.sex==="unknown")state.sex=Math.random()<0.5?"male":"female";
- if(state.sex==="female"&&state.ageDays>=profile.adultAgeDays&&state.familiarity>=profile.requiredFamiliarity&&state.hunger<60&&state.thirst<60&&state.pregnancyDays===0){
+ if(profile.customBreeding&&state.pregnancyDays>0){const result=advancePregnancy(state,0.05,profile.gestationDays);state=result.animal;if(result.birthReady){let born=false;try{entity.dimension.spawnEntity(entity.typeId,{x:entity.location.x+1,y:entity.location.y,z:entity.location.z});born=true;}catch(error){console.warn("[TFC-Bedrook] animal birth deferred:",error);}if(born)state.pregnancyDays=0;}}
+ if(profile.customBreeding&&state.sex==="unknown")state.sex=Math.random()<0.5?"male":"female";
+ if(profile.customBreeding&&state.sex==="female"&&state.ageDays>=profile.adultAgeDays&&state.familiarity>=profile.requiredFamiliarity&&state.hunger<60&&state.thirst<60&&state.pregnancyDays===0){
   try{const nearby=entity.dimension.getEntities({type:entity.typeId,location:entity.location,maxDistance:6});for(const partner of nearby){if(partner.id===entity.id)continue;const other=animalState(partner);if(canBreed(state,other,profile)){const started=beginPregnancy(state,other,profile);if(started.started){state=started.animal;other.lastBreedAt=other.ageDays;saveAnimal(partner,other);break;}}}}catch{}
  }
  saveAnimal(entity,state);
@@ -196,7 +196,9 @@ function animalInteract(player,entity){
   return;
  }
  if(!held||!profile.feedItems.includes(held.typeId))return;
- if(!take(player,held.typeId,1))return;
+ // Vanilla livestock already consumes its breeding feed during the interaction event.
+ // Only the custom deer entity needs a manual inventory deduction.
+ if(entity.typeId==="tfc:deer"&&!take(player,held.typeId,1))return;
  const state=feedAnimal(animalState(entity),15,0);saveAnimal(entity,state);
  player.sendMessage("§a餌を与えました。なつき度: "+Math.floor(state.familiarity));
 }
