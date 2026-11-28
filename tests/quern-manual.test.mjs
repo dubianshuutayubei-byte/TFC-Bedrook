@@ -28,3 +28,13 @@ test("quern does not consume fuel or use a timed station job",()=>{
  assert.match(runtime,/id==="anvil"\|\|id==="drying_rack"\|\|id==="composter"\|\|id==="quern"/);
  assert.match(runtime,/id==="quern"\?"手動回転 3回"/);
 });
+
+test("quern flour can be mixed with water and baked into bread",()=>{
+ const flour=JSON.parse(readFileSync(join(root,"packs/behavior_pack/items/flour.json"),"utf8"))["minecraft:item"];
+ const bread=JSON.parse(readFileSync(join(root,"packs/behavior_pack/items/bread.json"),"utf8"))["minecraft:item"];
+ assert.ok(flour.components["tfc:mix_dough"]);
+ assert.equal(bread.description.identifier,"tfc:bread");
+ assert.match(runtime,/function mixDough\(player\)/);
+ assert.match(runtime,/give\(player,"tfc:dough",1\)/);
+ assert.match(recipes,/id:"tfc:bread",station:"firepit"/);
+});
