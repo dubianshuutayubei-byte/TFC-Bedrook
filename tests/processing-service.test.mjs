@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { validateRecipeDatabase, evaluateProcess, calculateProcessProgress } from "../packs/behavior_pack/scripts/core/processing-service.mjs";
+import { validateRecipeDatabase, evaluateProcess, executeProcess, calculateProcessProgress } from "../packs/behavior_pack/scripts/core/processing-service.mjs";
 
 const recipe = {
   id: "tfc:test_cast",
@@ -18,6 +18,18 @@ test("recipe database validates IDs and positive quantities", () => {
 test("process evaluation checks inventory, mold and temperature", () => {
   assert.equal(evaluateProcess(recipe, { inventory: { "tfc:molten_copper": 100 }, moldAvailable: true, temperatureC: 1100 }).allowed, true);
   assert.deepEqual(evaluateProcess(recipe, { inventory: {}, moldAvailable: false, temperatureC: 900 }).failures, ["mold_required", "temperature_too_low", "missing_input:tfc:molten_copper"]);
+});
+test("process execution consumes inputs and creates outputs atomically", () => {
+  const result = executeProcess(recipe, { inventory: { "tfc:molten_copper": 100, stick: 2 }, moldAvailable: true, temperatureC: 1100 });
+  assert.equal(result.executed, true);
+  assert.deepEqual(result.inventory, { stick: 2, "tfc:copper_ingot": 1 });
+});
+test("failed process execution preserves the original inventory", () => {
+  const inventory = { "tfc:molten_copper": 50 };
+  const result = executeProcess(recipe, { inventory, moldAvailable: false, temperatureC: 900 });
+  assert.equal(result.executed, false);
+  assert.deepEqual(result.inventory, inventory);
+  assert.deepEqual(inventory, { "tfc:molten_copper": 50 });
 });
 test("process progress is bounded and reports completion", () => {
   assert.deepEqual(calculateProcessProgress(25, 100), { progress: 0.25, complete: false, remainingSeconds: 75 });
