@@ -1,5 +1,50 @@
 {
-  "cow": { "adultAgeDays": 30, "requiredFamiliarity": 30, "minTemperatureC": -10, "maxTemperatureC": 30, "minRainfall": 100, "terrain": ["plains", "hills", "highlands"] },
-  "sheep": { "adultAgeDays": 24, "requiredFamiliarity": 25, "minTemperatureC": -15, "maxTemperatureC": 28, "terrain": ["plains", "hills", "highlands"] },
-  "chicken": { "adultAgeDays": 12, "requiredFamiliarity": 20, "minTemperatureC": -5, "maxTemperatureC": 35, "terrain": ["plains", "hills"] }
+  "cow": {
+    "adultAgeDays": 30,
+    "requiredFamiliarity": 30,
+    "minTemperatureC": -10,
+    "maxTemperatureC": 30,
+    "minRainfall": 100,
+    "terrain": [
+      "plains",
+      "hills",
+      "highlands"
+    ]
+  },
+  "sheep": {
+    "adultAgeDays": 24,
+    "requiredFamiliarity": 25,
+    "minTemperatureC": -15,
+    "maxTemperatureC": 28,
+    "terrain": [
+      "plains",
+      "hills",
+      "highlands"
+    ]
+  },
+  "chicken": {
+    "adultAgeDays": 12,
+    "requiredFamiliarity": 20,
+    "minTemperatureC": -5,
+    "maxTemperatureC": 35,
+    "terrain": [
+      "plains",
+      "hills"
+    ]
+  },
+  "deer": {
+    "adultAgeDays": 30,
+    "requiredFamiliarity": 35,
+    "breedingCooldownDays": 20,
+    "gestationDays": 210,
+    "minTemperatureC": -20,
+    "maxTemperatureC": 28,
+    "minRainfall": 80,
+    "terrain": [
+      "forest",
+      "plains",
+      "hills",
+      "highlands"
+    ]
+  }
 }
