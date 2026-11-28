@@ -111,8 +111,7 @@ test("official fauna spawn evaluator applies chance, placement, depth, climate a
 test("official fauna spawn evaluator never accepts missing required environment measurements",()=>{
  const result=evaluateFaunaSpawn({distanceBelowSeaLevel:10,minTemperatureC:0,solidGround:true},{});
  assert.equal(result.suitable,false);
- assert.ok(result.missing.includes("y"));
- assert.ok(result.missing.includes("seaLevel"));
+ assert.ok(result.missing.includes("belowSeaLevel"));
  assert.ok(result.missing.includes("temperatureC"));
  assert.ok(result.missing.includes("validSpawnGround"));
 });
