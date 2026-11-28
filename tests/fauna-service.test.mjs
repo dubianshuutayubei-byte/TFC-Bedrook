@@ -328,7 +328,6 @@ test("fauna ecology defines explicit predator and prey links without making ever
  assert.ok(Object.keys(FAUNA_ECOLOGY).length>=10);
 });
 
-import { OFFICIAL_LIVESTOCK_LIFECYCLE } from "../packs/behavior_pack/scripts/core/fauna-profiles.mjs";
 test("verified TFC 1.21 livestock lifecycle values stay centralized and exact",()=>{
  assert.deepEqual(OFFICIAL_LIVESTOCK_LIFECYCLE.cow,{adultAgeDays:192,maxUses:128,gestationDays:58,childCount:2,productCooldownDays:1});
  assert.equal(OFFICIAL_LIVESTOCK_LIFECYCLE.alpaca.adultAgeDays,98);
