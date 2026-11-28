@@ -8,6 +8,8 @@ const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runti
 test("TFC mammal livestock uses shared breeding while hybrid mules remain non-breeding",()=>{
  assert.match(runtime,/"minecraft:cow":\{[^}]*customBreeding:true/);
  assert.match(runtime,/"minecraft:sheep":\{[^}]*customBreeding:true/);
+ for(const id of ["minecraft:pig","minecraft:goat","minecraft:horse","minecraft:donkey","minecraft:rabbit"])assert.match(runtime,new RegExp("\\""+id+"\\":\\\\{[^}]*customBreeding:true"));
+ assert.match(runtime,/"minecraft:mule":\{[^}]*customBreeding:false/);
  assert.match(runtime,/"tfc:chicken":\{[^}]*customBreeding:false/);
  assert.ok(runtime.includes('if(!entity.typeId.startsWith("minecraft:")&&!take(player,held.typeId,1))return;'));
  assert.match(runtime,/if\(profile\.customBreeding&&state\.sex==="female"/);
@@ -15,6 +17,17 @@ test("TFC mammal livestock uses shared breeding while hybrid mules remain non-br
 test("custom deer retains its own pregnancy and birth cycle",()=>{
  assert.match(runtime,/"tfc:deer":\{[^}]*customBreeding:true/);
  assert.match(runtime,/advancePregnancy\(state,elapsedAgeDays,profile\.gestationDays\)/);
+});
+
+test("TFC livestock rotten-food compatibility matches official species configuration",()=>{
+ for(const id of ["minecraft:cow","minecraft:goat","minecraft:pig","minecraft:rabbit","tfc:chicken","tfc:quail"]){
+  const entry=runtime.match(new RegExp('"'+id+'":\\\\{[^}]*\\\\}'))?.[0]??"";
+  assert.match(entry,/tfc:spoiled_food/);
+ }
+ for(const id of ["minecraft:sheep","minecraft:horse","minecraft:donkey","minecraft:mule","tfc:duck","tfc:alpaca","tfc:musk_ox","tfc:yak"]){
+  const entry=runtime.match(new RegExp('"'+id+'":\\\\{[^}]*\\\\}'))?.[0]??"";
+  assert.doesNotMatch(entry,/tfc:spoiled_food/);
+ }
 });
 
 test("custom pregnancy uses shared TFC birth and juvenile events for vanilla and custom livestock",()=>{
