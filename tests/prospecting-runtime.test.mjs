@@ -14,7 +14,7 @@ test("prospecting tool registers block-use component and bounded scan",()=>{
  assert.match(runtime,/registerCustomComponent\("tfc:prospect",\{onUseOn:/);
  assert.match(runtime,/prospect\(a\.source,a\.block\)/);
  assert.match(runtime,/for\(let dx=-radius;dx<=radius;dx\+\+\)for\(let dz=-radius;dz<=radius;dz\+\+\)for\(let dy=-2;dy<=2;dy\+\+\)/);
- assert.match(runtime,/summarizeOreSamples\(counts\)/);
+ assert.match(runtime,/summarizeOreSamples\(counts\)/);\n assert.match(runtime,/new ActionFormData\(\)\.title\("地質調査結果"\)\.body\(body\)\.button\("閉じる"\)/);\n assert.match(runtime,/form\.show\(player\)\.catch/);
 });
 
 test("prospecting scans only a curated set of vanilla ore block IDs",()=>{
