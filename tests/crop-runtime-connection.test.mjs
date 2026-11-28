@@ -25,3 +25,11 @@ test("crop harvest yield is based on accumulated nutrient quality",()=>{
  assert.match(runtime,/Math\.min\(previousQuality,evaluation\.nutrientFactor\)/);
  assert.match(runtime,/writeWorldState\(posKey\(top,"crop_quality"\),1\)/);
 });
+
+test("maize requires two blocks of space, grows an upper segment and harvests from either segment",()=>{
+ assert.match(runtime,/cropType==="maize"&&!top\.above\(\)\?\.isAir/);
+ assert.match(runtime,/withState\("tfc:part","lower"\)/);
+ assert.match(runtime,/if\(block\.permutation\.getState\("tfc:part"\)==="upper"\)return/);
+ assert.match(runtime,/withState\("tfc:part","upper"\)/);
+ assert.match(runtime,/clicked\.permutation\.getState\("tfc:part"\)==="upper"\?clicked\.below\(\):clicked/);
+});
