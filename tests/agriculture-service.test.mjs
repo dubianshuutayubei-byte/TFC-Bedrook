@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createSoilState, evaluateCropGrowth, applyNutrientUptake, applyFertilizer, advanceCropStage, advanceSoilHydration, calculateCropGrowthPoints, advanceSoilDay, applySoilCompost } from "../packs/behavior_pack/scripts/core/agriculture-service.mjs";
+import { createSoilState, evaluateCropGrowth, applyNutrientUptake, applyFertilizer, advanceCropStage, advanceSoilHydration, calculateCropGrowthPoints, advanceSoilDay, applySoilCompost, inferSoilTypeFromBlockId } from "../packs/behavior_pack/scripts/core/agriculture-service.mjs";
 
 const wheat = { minTemperatureC: 5, maxTemperatureC: 30, minHydration: 25, maxHydration: 100, preferredNutrient: "nitrogen", minPreferredNutrient: 10, optimalNutrient: 60 };
 test("soil state is normalized", () => assert.equal(createSoilState({ hydration: 200 }).hydration, 100));
