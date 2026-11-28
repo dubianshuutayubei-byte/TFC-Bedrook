@@ -10,6 +10,7 @@ Primary source files:
 - `src/data/java/net/dries007/tfc/data/providers/BuiltinFauna.java` — species habitat builder expressions
 - `src/main/java/net/dries007/tfc/common/entities/Faunas.java` — spawn placement, spawn chance, aquatic checks, depth, season and ground checks
 - `src/main/java/net/dries007/tfc/world/placement/ClimatePlacement.java` — climate evaluation semantics
+- `src/main/java/net/dries007/tfc/world/chunkdata/ForestType.java` — exact forest density values
 
 The extracted data is stored in `packs/behavior_pack/data/official-fauna-habitat-1.21x.json`. It contains 78 unique species, each retaining the exact source builder chain in `sourceExpression`. The source expression is the audit anchor; derived numeric fields must not be edited independently without rechecking it.
 
@@ -24,6 +25,10 @@ The extracted data is stored in `packs/behavior_pack/data/official-fauna-habitat
 - `chance(n)` is a one-in-n spawn roll in `Faunas.java`; it is not a climate value or percentage.
 - `fuzzy()` applies the source random threshold after hard climate limits pass. It uses normalized temperature, groundwater/rainfall, and rain-variance deltas, with two random floats.
 - Java's spawn placement separately checks entity placement type, aquatic fluid compatibility, heightmap, optional valid solid ground, and season.
+
+## Forest density reference
+
+The 1.21.x `ForestType.java` enum has 29 entries. Its second constructor argument is the exact `getDensity()` value used by `ClimatePlacement` (0–4). The values are stored in `packs/behavior_pack/data/official-forest-type-density-1.21x.json` so habitat limits such as `minForest(3)` and `maxForest(2)` can be evaluated numerically without translating them into guessed labels.
 
 ## Bedrock implementation status
 
