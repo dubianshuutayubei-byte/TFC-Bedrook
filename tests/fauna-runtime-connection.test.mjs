@@ -245,3 +245,12 @@ test("all 13 fauna entity scaffolds missing from the prior runtime now receive s
   assert.match(entry,/feedItems:\[\]/);
  }
 });
+
+test("TFC leopard seal and pond turtle are amphibious and can breathe in both air and water",()=>{
+ for(const id of ["leopard_seal","pond_turtle"]){
+  const entity=JSON.parse(readFileSync(join(root,"packs/behavior_pack/entities",id+".json"),"utf8"))["minecraft:entity"];
+  const breathable=entity.components["minecraft:breathable"];
+  assert.equal(breathable.breathes_air,true,id+" must breathe air");
+  assert.equal(breathable.breathes_water,true,id+" must breathe water");
+ }
+});
