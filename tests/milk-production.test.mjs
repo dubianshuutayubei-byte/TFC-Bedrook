@@ -9,7 +9,7 @@ const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runti
 const item=JSON.parse(readFileSync(join(root,"packs/behavior_pack/items/milk_bottle.json"),"utf8"));
 const profiles=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/food-profiles.json"),"utf8"));
 
-test("adult female cows produce milk bottles with a per-animal cooldown",()=>{
+test("adult female dairy animals produce milk bottles with a per-animal cooldown",()=>{
   assert.match(runtime,/entity\.typeId==="minecraft:cow"&&held\.typeId==="minecraft:glass_bottle"/);
   assert.match(runtime,/canProduce\(state,\{requiredFamiliarity:0,cooldownDays:1,currentDay,requiredSex:"female",minimumAgeDays:profile\.adultAgeDays,minimumHealth:40,maximumHunger:60,maximumThirst:60\}\)/);
   assert.match(runtime,/state\.sex!=="female"/);
@@ -26,4 +26,9 @@ test("milk bottle is registered as the dairy food profile",()=>{
 
 test("milk production imports its runtime cooldown functions",()=>{
   assert.match(runtime,/import \{[^}]*canProduce[^}]*recordProduct[^}]*\} from "\.\/core\/fauna-service\.mjs"/);
+});
+
+test("goats are included in the dairy animal profile",()=>{
+ assert.match(runtime,/"minecraft:goat":\{[^}]*dairy:true/);
+ assert.match(runtime,/entity\.typeId==="minecraft:goat"\?"\\n産出: 山羊乳/);
 });
