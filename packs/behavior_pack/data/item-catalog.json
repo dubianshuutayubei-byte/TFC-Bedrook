@@ -42,14 +42,26 @@
       "salt",
       "dried_meat",
       "dried_fruit",
-      "dried_vegetables"
+      "dried_vegetables",
+      "barley",
+      "oat",
+      "rye",
+      "beet",
+      "cabbage",
+      "carrot"
     ],
     "farming": [
       "crop_seed",
       "fertilizer",
       "farmland",
       "compost",
-      "wood_ash"
+      "wood_ash",
+      "barley_seed",
+      "oat_seed",
+      "rye_seed",
+      "beet_seed",
+      "cabbage_seed",
+      "carrot_seed"
     ],
     "equipment": [
       "firepit",
@@ -126,6 +138,18 @@
     "tfc:prospecting_tool",
     "tfc:compost",
     "tfc:composter",
-    "tfc:wood_ash"
+    "tfc:wood_ash",
+    "tfc:barley_seed",
+    "tfc:barley",
+    "tfc:oat_seed",
+    "tfc:oat",
+    "tfc:rye_seed",
+    "tfc:rye",
+    "tfc:beet_seed",
+    "tfc:beet",
+    "tfc:cabbage_seed",
+    "tfc:cabbage",
+    "tfc:carrot_seed",
+    "tfc:carrot"
   ]
 }
