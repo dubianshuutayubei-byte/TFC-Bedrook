@@ -24,8 +24,9 @@ test("compost and composter item/block definitions are registered",()=>{
 test("composter is a passive station with long-duration preserved jobs",()=>{
  const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
  assert.match(runtime,/id==="anvil"\|\|id==="drying_rack"\|\|id==="composter"\)\?null/);
- assert.match(runtime,/tfc:compost.*applySoilCompost/);
- assert.match(runtime,/applySoilCompost\(soil\)/);
+ assert.match(runtime,/"tfc:compost":\{name:"堆肥",nutrients:\{nitrogen:20,potassium:20\}\}/);
+ assert.match(runtime,/const fertilizer=FERTILIZER_PROFILES\[held\?\.typeId\]/);
+ assert.match(runtime,/applyFertilizer\(soil,fertilizer\.nutrients\)/);
  assert.equal(getStationRecipes("composter").length,2);
  assert.ok(getStationRecipes("composter").every(r=>r.durationTicks===240000));
 });
