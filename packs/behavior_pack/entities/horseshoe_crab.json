@@ -66,7 +66,17 @@
             "filters": {
               "test": "is_family",
               "subject": "other",
-              "value": "tfc_predator"
+              "value": "tfc_ocean_predator"
+            },
+            "max_dist": 8,
+            "walk_speed_multiplier": 1.25,
+            "sprint_speed_multiplier": 1.5
+          },
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "dolphin"
             },
             "max_dist": 8,
             "walk_speed_multiplier": 1.25,
