@@ -6,7 +6,7 @@ import { fileURLToPath } from "node:url";
 const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
 test("empty-hand animal interaction shows husbandry state",()=>{
- assert.match(runtime,/if\(!held\)\{/);
+ assert.match(runtime,/if\s*\(!held\)\s*\{/);
  assert.match(runtime,/年齢: /);
  assert.match(runtime,/空腹: /);
  assert.match(runtime,/渇き: /);
