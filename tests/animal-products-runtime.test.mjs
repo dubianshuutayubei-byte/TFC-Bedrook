@@ -33,6 +33,12 @@ test("sheep shearing is gated by TFC familiarity, maturity, cooldown and lifetim
  assert.match(runtime,/world\.beforeEvents\.playerInteractWithEntity\.subscribe\(event=>\{/);
  assert.match(runtime,/event\.itemStack\?\.typeId!=="minecraft:shears"/);
  assert.match(runtime,/target\.hasComponent\("minecraft:is_sheared"\)/);
- assert.match(runtime,/canProduce\(state,\{requiredFamiliarity:profile\.productFamiliarityMin\?\?0,cooldownDays:profile\.productCooldownDays\?\?7,currentDay:world\.getDay\(\),minimumAgeDays:profile\.adultAgeDays\?\?0,maxUses:profile\.maxUses\?\?Infinity\}\)/);
- assert.match(runtime,/state=recordProduct\(state,world\.getDay\(\),\{maxUses:profile\.maxUses\?\?Infinity\}\)/);
+ assert.match(runtime,/canProduce\(state,\{requiredFamiliarity:profile\.productFamiliarityMin\?\?0,cooldownDays:profile\.productCooldownDays\?\?7,currentDay:currentAnimalDay\(\),minimumAgeDays:profile\.adultAgeDays\?\?0,maxUses:profile\.maxUses\?\?Infinity\}\)/);
+ assert.match(runtime,/state=recordProduct\(state,currentAnimalDay\(\),\{maxUses:profile\.maxUses\?\?Infinity\}\)/);
+});
+
+test("milk and wool cooldowns use fractional world days, not animal age",()=>{
+ assert.match(runtime,/function currentAnimalDay\(\)\{return world\.getDay\(\)\+world\.getTimeOfDay\(\)\/24000;\}/);
+ assert.match(runtime,/const currentDay=currentAnimalDay\(\);/);
+ assert.match(runtime,/cooldownDays:profile\.productCooldownDays\?\?7,currentDay:currentAnimalDay\(\)/);
 });
