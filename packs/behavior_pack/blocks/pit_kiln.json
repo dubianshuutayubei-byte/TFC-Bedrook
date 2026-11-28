@@ -22,7 +22,8 @@
       "minecraft:selection_box": true,
       "tfc:station_ui": {
         "station": "pit_kiln"
-      }
+      },
+      "minecraft:display_name": "tile.tfc:pit_kiln.name"
     }
   }
 }
