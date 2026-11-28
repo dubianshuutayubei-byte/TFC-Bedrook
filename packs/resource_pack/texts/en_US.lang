@@ -60,3 +60,5 @@ item.tfc:prospecting_tool.name=Prospecting Tool
 item.tfc:compost.name=Compost
 item.tfc:composter.name=Composter
 tile.tfc:composter.name=Composter
+
+item.tfc:wood_ash.name=Wood Ash
