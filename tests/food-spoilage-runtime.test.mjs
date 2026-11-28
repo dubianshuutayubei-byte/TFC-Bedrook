@@ -7,7 +7,7 @@ import { ticksToHours } from "../packs/behavior_pack/scripts/core/food-service.m
 import { readStackFreshness } from "../packs/behavior_pack/scripts/core/food-stack-service.mjs";
 const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
-const ids=["raw_meat","cooked_meat","grain","maize","potato","vegetable","fruit","milk_bottle","dried_meat","dried_fruit","dried_vegetables","barley","oat","rye","beet","cabbage","carrot","garlic","onion","squash","lentils","soybean","peanuts","bread"];
+const ids=["raw_meat","cooked_meat","grain","maize","potato","vegetable","fruit","milk_bottle","dried_meat","dried_fruit","dried_vegetables","barley","oat","rye","beet","cabbage","carrot","garlic","onion","squash","lentils","soybean","peanuts","bread","rice","cassava","green_beans","pumpkin","melon","tomato","green_bell_pepper","radish"];
 test("inventory food freshness is stored on each ItemStack lore",()=>{
  assert.match(runtime,/advanceStackFreshness\(lore,nowTick,\{temperatureC,baseDecayPerHour\}\)/);
  assert.match(runtime,/stack\.setLore\(result\.lore\);container\.setItem\(slot,stack\)/);
