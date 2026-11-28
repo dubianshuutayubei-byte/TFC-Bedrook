@@ -7,6 +7,7 @@ import {
   evaluateCropClimate,
   evaluateFaunaHabitat,
   normalizeHydration,
+  getBiomeClimateProfile,
 } from "../packs/behavior_pack/scripts/core/climate-service.mjs";
 
 test("temperature follows season and elevation", () => {
@@ -80,4 +81,12 @@ test("season labels align with day zero winter solstice", () => {
   assert.equal(getSeasonName(48), "夏");
   assert.equal(getSeasonName(72), "秋");
   assert.equal(getSeasonName(96), "冬");
+});
+
+test("biome climate profiles distinguish tropical, arid and cold regions",()=>{
+ assert.deepEqual(getBiomeClimateProfile("minecraft:jungle"),{meanAnnualTempC:24,seasonalAmplitudeC:8});
+ assert.deepEqual(getBiomeClimateProfile("minecraft:desert"),{meanAnnualTempC:22,seasonalAmplitudeC:16});
+ assert.deepEqual(getBiomeClimateProfile("minecraft:snowy_plains"),{meanAnnualTempC:-2,seasonalAmplitudeC:18});
+ assert.deepEqual(getBiomeClimateProfile("minecraft:taiga"),{meanAnnualTempC:3,seasonalAmplitudeC:16});
+ assert.deepEqual(getBiomeClimateProfile("minecraft:plains"),{meanAnnualTempC:12,seasonalAmplitudeC:14});
 });
