@@ -1,7 +1,7 @@
 {
   "source": "TerraFirmaCraft Java 1.21.x src/main/java/net/dries007/tfc/common/entities/Faunas.java + aquatic/Fish.java",
   "total": 78,
-  "archetypeCount": 29,
+  "archetypeCount": 32,
   "species": [
     {
       "id": "alpaca",
