@@ -153,7 +153,26 @@ function animalTick(entity){
  }
  saveAnimal(entity,state);
 }
-function animalInteract(player,entity){if(!player||!entity)return;const profile=ANIMAL_PROFILES[entity.typeId];if(!profile)return;const held=inv(player)?.getItem(player.selectedSlotIndex);if(!held||!profile.feedItems.includes(held.typeId))return;if(!take(player,held.typeId,1))return;const state=feedAnimal(animalState(entity),15,0);saveAnimal(entity,state);player.sendMessage("§a餌を与えました。なつき度: "+Math.floor(state.familiarity));}
+function animalInteract(player,entity){
+ if(!player||!entity)return;
+ const profile=ANIMAL_PROFILES[entity.typeId];if(!profile)return;
+ const held=inv(player)?.getItem(player.selectedSlotIndex);
+ if(entity.typeId==="minecraft:cow"&&held?.typeId==="minecraft:glass_bottle"){
+  const state=animalState(entity);
+  if(state.ageDays<profile.adultAgeDays){player.sendMessage("§eこの牛はまだ成長中です。");return;}
+  const currentDay=state.ageDays;
+  if(!canProduce(state,{requiredFamiliarity:0,cooldownDays:0.5,currentDay})){player.sendMessage("§eこの牛はまだミルクを補充中です。");return;}
+  if(!take(player,"minecraft:glass_bottle",1)){player.sendMessage("§c空き瓶を取り出せません。");return;}
+  give(player,"tfc:milk_bottle",1);
+  saveAnimal(entity,recordProduct(state,currentDay));
+  player.sendMessage("§a牛乳を採取しました。");
+  return;
+ }
+ if(!held||!profile.feedItems.includes(held.typeId))return;
+ if(!take(player,held.typeId,1))return;
+ const state=feedAnimal(animalState(entity),15,0);saveAnimal(entity,state);
+ player.sendMessage("§a餌を与えました。なつき度: "+Math.floor(state.familiarity));
+}
 export function initializeGameplay(){world.afterEvents.weatherChange.subscribe(event=>{const key=normalizeDimensionId(event.dimension?.id);if(key)WEATHER_BY_DIMENSION.set(key,normalizeWeather(event.newWeather));});system.beforeEvents.startup.subscribe(event=>{
 event.itemComponentRegistry.registerCustomComponent("tfc:open_knapping",{onUse:a=>{if(a.source?.typeId==="minecraft:player")void knap(a.source);}});
 event.itemComponentRegistry.registerCustomComponent("tfc:consume_food",{onConsume:(a,p)=>food(a.source,p.params??{})}});
