@@ -207,6 +207,8 @@
     "tfc:firepit",
     "tfc:flint",
     "tfc:flour",
+    "tfc:food/dried_kelp",
+    "tfc:food/dried_seaweed",
     "tfc:fruit",
     "tfc:garlic",
     "tfc:garlic_seed",
@@ -275,12 +277,12 @@
     "tfc:vegetable",
     "tfc:water_vessel",
     "tfc:wood_ash",
-    "tfc:yellow_bell_pepper_seed",
-    "tfc:wool"
+    "tfc:wool",
+    "tfc:yellow_bell_pepper_seed"
   ],
   "audit": {
     "scope": "Behavior Pack内の専用アイテム/ブロック定義ファイルとの照合",
-    "registeredItemCount": 110,
+    "registeredItemCount": 112,
     "registeredBlockCount": 14,
     "plannedButUnregistered": [
       "tfc:stone",
