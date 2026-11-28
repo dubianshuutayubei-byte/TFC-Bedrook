@@ -1,0 +1,54 @@
+{
+  "format_version": 2,
+  "header": {
+    "name": "TFC-Bedrook Behavior Pack",
+    "description": "TerraFirmaCraft-inspired survival systems for Minecraft Bedrock 26.60.",
+    "uuid": "009721ef-0c92-4362-8501-2f0994cc7a05",
+    "version": [
+      0,
+      1,
+      0
+    ],
+    "min_engine_version": [
+      1,
+      26,
+      50
+    ]
+  },
+  "modules": [
+    {
+      "type": "data",
+      "uuid": "e2f9f086-0f7d-4d91-8d0a-5736ca8e15e7",
+      "version": [
+        0,
+        1,
+        0
+      ]
+    },
+    {
+      "type": "script",
+      "language": "javascript",
+      "entry": "scripts/main.js",
+      "uuid": "953ac1c9-6e33-4ed5-98c3-333254b4ba66",
+      "version": [
+        0,
+        1,
+        0
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "module_name": "@minecraft/server",
+      "version": "2.11.0"
+    },
+    {
+      "uuid": "d8df8a83-29ce-4521-afad-25ee88c262b0",
+      "version": [
+        0,
+        1,
+        0
+      ]
+    }
+  ]
+}

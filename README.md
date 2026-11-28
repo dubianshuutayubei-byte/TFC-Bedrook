@@ -31,17 +31,46 @@ Minecraft Bedrock Edition 向けに TerraFirmaCraft（TFC）Java 1.20.1-3.2.26 �
 - [Bedrock互換性・API基準](docs/compatibility/bedrock-version-matrix.md)
 - [Bedrock実装アーキテクチャ](docs/architecture/bedrock-implementation-architecture.md)
 - [ランタイム状態・セーブデータ設計](docs/architecture/runtime-state-model.md)
+- [プレイヤー状態保存](docs/architecture/player-state-persistence.md)
+- [サバイバルHUD実装メモ](docs/architecture/survival-hud.md)
 - [気候サービス試作](docs/architecture/climate-service-prototype.md)
+- [気候プロファイルデータベース](docs/architecture/climate-profiles.md)
+- [Thirstサービス試作](docs/architecture/thirst-service-prototype.md)
+- [地質層サービス試作](docs/architecture/geology-service-prototype.md)
 - [金属・合金サービス試作](docs/architecture/metal-service-prototype.md)
 - [熱・燃料サービス試作](docs/architecture/heat-service-prototype.md)
 
+## アドオン本体の現状
+
+- Behavior Pack / Resource Packのmanifestと相互依存関係を追加済み。
+- Behavior PackのJavaScriptエントリーポイントを追加済み。
+- 日本語・英語の言語ファイルを追加済み。
+- 暦システムをBedrockのワールド日数に接続済み（96日/年、4季節）。初回スポーン時に暦を表示し、Action Barへ年・季節・日付を約2秒ごとに表示。季節の切り替わりも通知する。
+- TFC公式v3.2.26由来の作物23種・野生植物20種の気候閾値データを追加。地域気候・土壌水分の実測モデルは未実装。
+- TFC公式v3.2.26の地質層グラフ（20岩石、4地域区分）と、決定論的な岩石層サンプラーを追加。地形配置・層厚・鉱脈生成への接続は未実装。
+- 独自地形生成・地質の実際のブロック配置はまだ接続していない。
+- `min_engine_version` はN-1方針で `[1, 26, 50]`、Script APIはBedrock 26.60で安定版となった `@minecraft/server` 2.11.0を指定。実機ロード確認は未実施。
+
 ## 検証環境
 
-GitHub ActionsでJSON・manifestの静的検査、JavaScript構文検査、Node.js単体テストを実行する。気候計算、金属・合金判定、熱・燃料の基礎計算に関する純粋関数プロトタイプを追加済み。Behavior Pack / Resource Packのmanifestやゲーム内機能はまだ未実装。
+GitHub ActionsでJSON・manifestの静的検査、JavaScript構文検査、Node.js単体テストを実行し、開発用mcaddonを生成する。気候・暦、作物・野生植物の環境判定、地質層、Thirst、金属・合金、熱・燃料の純粋関数プロトタイプを追加済み。Behavior Pack / Resource Packのmanifestと暦のScript接続は実装済みだが、ゲーム内ロードと地形生成は未検証。
 
 - [静的検査ツール](tools/validate-pack.mjs)
 - [気候計算モジュール](packs/behavior_pack/scripts/core/climate-service.mjs)
 - [気候計算テスト](tests/climate-service.test.mjs)
+- [作物・植物気候プロファイル](packs/behavior_pack/data/climate-profiles.json)
+- [作物・植物気候プロファイルテスト](tests/climate-profiles.test.mjs)
+- [作物・野生植物環境判定サービス](packs/behavior_pack/scripts/core/crop-plant-service.mjs)
+- [作物・野生植物環境判定テスト](tests/crop-plant-service.test.mjs)
+- [Thirst計算モジュール](packs/behavior_pack/scripts/core/thirst-service.mjs)
+- [Thirstテスト](tests/thirst-service.test.mjs)
+- [プレイヤー状態サービス](packs/behavior_pack/scripts/core/player-state-service.mjs)
+- [プレイヤー状態テスト](tests/player-state-service.test.mjs)
+- [HUD表示モジュール](packs/behavior_pack/scripts/ui/hud-service.mjs)
+- [HUD表示テスト](tests/hud-service.test.mjs)
+- [地質層データ](packs/behavior_pack/data/geology-layers.json)
+- [地質層計算モジュール](packs/behavior_pack/scripts/core/geology-service.mjs)
+- [地質層テスト](tests/geology-service.test.mjs)
 - [金属データ](packs/behavior_pack/data/metals.json)
 - [合金比率データ](packs/behavior_pack/data/alloys.json)
 - [金属・合金計算モジュール](packs/behavior_pack/scripts/core/metal-service.mjs)
@@ -62,4 +91,4 @@ GitHub ActionsでJSON・manifestの静的検査、JavaScript構文検査、Node.
 
 ## 現在の状態
 
-調査・仕様整理に加え、気候計算と金属・合金判定の実行可能プロトタイプを追加した段階。完成アドオンや実機検証済みビルドはまだ存在しない。
+Behavior Pack / Resource Packの開発用パッケージ生成、ワールド暦のScript接続、気候・地質データ処理まで進行。CIの最新実行は成功している。完成版ではなく、Minecraft 26.60実機でのロード・表示・ワールド生成検証が残っている。
