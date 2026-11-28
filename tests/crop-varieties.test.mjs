@@ -20,7 +20,7 @@ test("planting and harvesting route through matching seed and produce ids",()=>{
 });
 
 test("additional single-block crops have matching profiles, seeds and harvest foods",()=>{
- for(const id of ["barley","oat","rye","beet","cabbage","carrot","garlic","onion","squash","lentils","soybean","peanuts"]){
+ for(const id of ["barley","oat","rye","beet","cabbage","carrot","garlic","onion","squash","lentils","soybean","peanuts","rice","cassava","green_beans","pumpkin","melon","tomato","red_bell_pepper","yellow_bell_pepper","alfalfa","canola","radish","sugarcane","jute","papyrus"]){
   assert.ok(runtime.includes(id+":{minTemperatureC:"));
   assert.ok(catalog.registeredIdentifiers.includes("tfc:"+id+"_seed"));
   assert.ok(catalog.registeredIdentifiers.includes("tfc:"+id));
@@ -32,4 +32,14 @@ test("breaking either maize plant half removes its paired half",()=>{
  assert.match(runtime,/if\(profile\?\.twoBlock\)/);
  assert.match(runtime,/part==="upper"\?-1:1/);
  assert.match(runtime,/other\.setType\("minecraft:air"\)/);
+});
+
+test("new crop profiles expose water, support, multi-block and repeat-harvest requirements",()=>{
+ assert.match(runtime,/rice:\{minTemperatureC:8,maxTemperatureC:31,minHydration:35,maxHydration:100/);
+ assert.match(runtime,/requiresWater:true/);
+ assert.match(runtime,/green_beans:\{[^}]*twoBlock:true,supportRequired:true/);
+ assert.match(runtime,/tomato:\{[^}]*twoBlock:true,supportRequired:true/);
+ assert.match(runtime,/red_bell_pepper:\{[^}]*pickable:true/);
+ assert.match(runtime,/yellow_bell_pepper:\{[^}]*pickable:true/);
+ assert.match(runtime,/profile\.spreading:true|spreading:true/);
 });
