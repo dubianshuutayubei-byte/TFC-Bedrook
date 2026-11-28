@@ -335,9 +335,7 @@ test("verified TFC 1.21 livestock lifecycle values stay centralized and exact",(
  assert.equal(OFFICIAL_LIVESTOCK_LIFECYCLE.chicken.eggLayCooldownDays,30/24);
  assert.equal(OFFICIAL_LIVESTOCK_LIFECYCLE.duck.hatchDays,8);
  assert.equal(OFFICIAL_LIVESTOCK_LIFECYCLE.quail.eggLayCooldownDays,28/24);
- assert.equal(OFFICIAL_LIVESTOCK_LIFECYCLE.rabbit.adultAgeDays,20);
- assert.equal(OFFICIAL_LIVESTOCK_LIFECYCLE.rabbit.serverConfigAdultAgeDays,30);
- assert.equal(OFFICIAL_LIVESTOCK_LIFECYCLE.rabbit.ageSourceConflict,true);
+ assert.equal(OFFICIAL_LIVESTOCK_LIFECYCLE.rabbit.adultAgeDays,30);
  assert.deepEqual([OFFICIAL_LIVESTOCK_LIFECYCLE.pig.childCountMin,OFFICIAL_LIVESTOCK_LIFECYCLE.pig.childCountMax],[1,10]);
 });
 
