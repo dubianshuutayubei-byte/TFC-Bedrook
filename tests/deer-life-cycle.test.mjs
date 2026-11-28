@@ -15,7 +15,7 @@ test("custom deer has explicit juvenile and adult transition events",()=>{
 });
 test("deer birth creates a juvenile entity with inherited familiarity",()=>{
  assert.match(runtime,/entity\.dimension\.spawnEntity\(offspringEntityType,\{x:entity\.location\.x\+1/);
- assert.match(runtime,/baby\.triggerEvent\("tfc:spawn_baby"\)/);
- assert.match(runtime,/saveAnimal\(baby,createAnimalOffspringState\(state,profile\.speciesId/);
+ assert.match(runtime,/baby\.triggerEvent\(birthEvent\)/);
+ assert.match(runtime,/saveAnimal\(baby,createAnimalOffspringState\(state,offspringSpecies/);
  assert.match(runtime,/growthEvent=entity\.typeId\.startsWith\("tfc:"\)\?"tfc:grow_up":"minecraft:ageable_grow_up"/);
 });
