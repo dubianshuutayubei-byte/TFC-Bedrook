@@ -1,0 +1,32 @@
+{
+  "format_version": "1.26.60",
+  "minecraft:item": {
+    "description": {
+      "identifier": "tfc:raw_meat",
+      "menu_category": {
+        "category": "items"
+      }
+    },
+    "components": {
+      "minecraft:icon": "tfc_meat_raw",
+      "minecraft:display_name": {
+        "value": "生肉"
+      },
+      "minecraft:max_stack_size": 64,
+      "minecraft:food": {
+        "nutrition": 2,
+        "saturation_modifier": 0.4
+      },
+      "minecraft:use_animation": "eat",
+      "minecraft:use_modifiers": {
+        "use_duration": 1.6,
+        "movement_modifier": 0.35
+      },
+      "tfc:consume_food": {
+        "hydration": 0,
+        "category": "protein",
+        "nutrition": 3
+      }
+    }
+  }
+}
