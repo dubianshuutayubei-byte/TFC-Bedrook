@@ -1,0 +1,472 @@
+{
+  "source": {
+    "profileSource": "TerraFirmaCraft v3.2.26 fauna JSON",
+    "placementSource": "TerraFirmaCraft v3.2.26 Faunas.java",
+    "note": "Combined spawn condition profiles; placement and climate data remain source-derived. Bedrock world sampling is not yet connected."
+  },
+  "total": 63,
+  "placementCounts": {
+    "in_water": 20,
+    "no_restrictions": 1,
+    "on_ground": 42
+  },
+  "species": [
+    {
+      "id": "alpaca",
+      "placement": "on_ground",
+      "minTemperatureC": -8,
+      "maxTemperatureC": 20,
+      "minRainfall": 250
+    },
+    {
+      "id": "black_bear",
+      "placement": "on_ground",
+      "minTemperatureC": 5,
+      "maxTemperatureC": 20,
+      "minRainfall": 250,
+      "minForest": "edge"
+    },
+    {
+      "id": "bluegill",
+      "placement": "in_water",
+      "minTemperatureC": -10,
+      "maxTemperatureC": 26
+    },
+    {
+      "id": "boar",
+      "placement": "on_ground",
+      "minTemperatureC": -5,
+      "maxTemperatureC": 25,
+      "minRainfall": 130,
+      "maxRainfall": 400,
+      "maxForest": "normal"
+    },
+    {
+      "id": "bongo",
+      "placement": "on_ground",
+      "minTemperatureC": 15,
+      "minRainfall": 230,
+      "maxRainfall": 500,
+      "minForest": "edge"
+    },
+    {
+      "id": "caribou",
+      "placement": "on_ground",
+      "maxTemperatureC": -9,
+      "minRainfall": 110,
+      "maxRainfall": 500
+    },
+    {
+      "id": "chicken",
+      "placement": "on_ground",
+      "minTemperatureC": 14,
+      "minRainfall": 225,
+      "minForest": "edge"
+    },
+    {
+      "id": "cod",
+      "placement": "in_water",
+      "maxTemperatureC": 18,
+      "distanceBelowSeaLevel": 5
+    },
+    {
+      "id": "cougar",
+      "placement": "on_ground",
+      "minTemperatureC": -10,
+      "maxTemperatureC": 21,
+      "minRainfall": 150
+    },
+    {
+      "id": "cow",
+      "placement": "on_ground",
+      "minTemperatureC": -10,
+      "maxTemperatureC": 35,
+      "minRainfall": 250
+    },
+    {
+      "id": "crappie",
+      "placement": "in_water",
+      "minTemperatureC": -10,
+      "maxTemperatureC": 26
+    },
+    {
+      "id": "crayfish",
+      "placement": "in_water",
+      "minTemperatureC": 5,
+      "minRainfall": 125,
+      "distanceBelowSeaLevel": 2
+    },
+    {
+      "id": "crocodile",
+      "placement": "no_restrictions",
+      "minTemperatureC": 15,
+      "distanceBelowSeaLevel": 0
+    },
+    {
+      "id": "deer",
+      "placement": "on_ground",
+      "minTemperatureC": -12,
+      "maxTemperatureC": 16,
+      "minRainfall": 160,
+      "maxRainfall": 500,
+      "minForest": "edge"
+    },
+    {
+      "id": "direwolf",
+      "placement": "on_ground",
+      "maxTemperatureC": -5,
+      "minRainfall": 150,
+      "maxRainfall": 420,
+      "maxForest": "normal"
+    },
+    {
+      "id": "dolphin",
+      "placement": "in_water",
+      "minTemperatureC": 10,
+      "minRainfall": 200,
+      "chance": 10,
+      "distanceBelowSeaLevel": 6
+    },
+    {
+      "id": "donkey",
+      "placement": "on_ground",
+      "minTemperatureC": -15,
+      "minRainfall": 130,
+      "maxRainfall": 400,
+      "maxForest": "edge"
+    },
+    {
+      "id": "duck",
+      "placement": "on_ground",
+      "minTemperatureC": -25,
+      "maxTemperatureC": 30,
+      "minRainfall": 100,
+      "maxForest": "edge"
+    },
+    {
+      "id": "fox",
+      "placement": "on_ground",
+      "maxTemperatureC": 25,
+      "minRainfall": 130,
+      "maxRainfall": 400,
+      "minForest": "edge"
+    },
+    {
+      "id": "frog",
+      "placement": "on_ground",
+      "minTemperatureC": -13,
+      "minRainfall": 150
+    },
+    {
+      "id": "gazelle",
+      "placement": "on_ground",
+      "minTemperatureC": 12,
+      "minRainfall": 90,
+      "maxRainfall": 380,
+      "maxForest": "edge"
+    },
+    {
+      "id": "goat",
+      "placement": "on_ground",
+      "minTemperatureC": -12,
+      "maxTemperatureC": 25,
+      "maxRainfall": 300
+    },
+    {
+      "id": "grizzly_bear",
+      "placement": "on_ground",
+      "minTemperatureC": -15,
+      "maxTemperatureC": 15,
+      "minRainfall": 200,
+      "minForest": "edge"
+    },
+    {
+      "id": "grouse",
+      "placement": "on_ground",
+      "minTemperatureC": -12,
+      "maxTemperatureC": 13,
+      "minRainfall": 150,
+      "maxRainfall": 400
+    },
+    {
+      "id": "horse",
+      "placement": "on_ground",
+      "minTemperatureC": -15,
+      "minRainfall": 130,
+      "maxRainfall": 400,
+      "maxForest": "edge"
+    },
+    {
+      "id": "horseshoe_crab",
+      "placement": "in_water",
+      "minTemperatureC": 10,
+      "maxTemperatureC": 21,
+      "maxRainfall": 400,
+      "distanceBelowSeaLevel": 1
+    },
+    {
+      "id": "hyena",
+      "placement": "on_ground",
+      "minTemperatureC": 15,
+      "minRainfall": 80,
+      "maxRainfall": 380,
+      "maxForest": "normal"
+    },
+    {
+      "id": "isopod",
+      "placement": "in_water",
+      "maxTemperatureC": 14,
+      "distanceBelowSeaLevel": 20
+    },
+    {
+      "id": "jellyfish",
+      "placement": "in_water",
+      "minTemperatureC": 18,
+      "distanceBelowSeaLevel": 3
+    },
+    {
+      "id": "lake_trout",
+      "placement": "in_water",
+      "maxTemperatureC": 23,
+      "minRainfall": 250
+    },
+    {
+      "id": "largemouth_bass",
+      "placement": "in_water",
+      "minTemperatureC": -14,
+      "maxTemperatureC": 20,
+      "minRainfall": 100,
+      "maxRainfall": 400
+    },
+    {
+      "id": "lion",
+      "placement": "on_ground",
+      "minTemperatureC": 16,
+      "minRainfall": 50,
+      "maxRainfall": 300,
+      "maxForest": "edge"
+    },
+    {
+      "id": "lobster",
+      "placement": "in_water",
+      "maxTemperatureC": 21,
+      "distanceBelowSeaLevel": 1
+    },
+    {
+      "id": "manatee",
+      "placement": "in_water",
+      "minTemperatureC": 20,
+      "minRainfall": 300,
+      "chance": 10,
+      "distanceBelowSeaLevel": 3
+    },
+    {
+      "id": "moose",
+      "placement": "on_ground",
+      "minTemperatureC": -15,
+      "maxTemperatureC": 10,
+      "minRainfall": 150,
+      "maxRainfall": 300,
+      "minForest": "edge"
+    },
+    {
+      "id": "mule",
+      "placement": "on_ground",
+      "minTemperatureC": -15,
+      "minRainfall": 130,
+      "maxRainfall": 400,
+      "maxForest": "edge"
+    },
+    {
+      "id": "musk_ox",
+      "placement": "on_ground",
+      "minTemperatureC": -25,
+      "maxTemperatureC": 0,
+      "minRainfall": 100
+    },
+    {
+      "id": "ocelot",
+      "placement": "on_ground",
+      "minTemperatureC": 15,
+      "maxTemperatureC": 30,
+      "minRainfall": 300,
+      "maxRainfall": 500,
+      "minForest": "edge"
+    },
+    {
+      "id": "octopoteuthis",
+      "placement": "in_water",
+      "maxBrightness": 0,
+      "distanceBelowSeaLevel": 33
+    },
+    {
+      "id": "orca",
+      "placement": "in_water",
+      "maxTemperatureC": 19,
+      "minRainfall": 100,
+      "chance": 10,
+      "distanceBelowSeaLevel": 6
+    },
+    {
+      "id": "panda",
+      "placement": "on_ground",
+      "minTemperatureC": 18,
+      "maxTemperatureC": 28,
+      "minRainfall": 300,
+      "maxRainfall": 500,
+      "minForest": "normal",
+      "fuzzy": true
+    },
+    {
+      "id": "panther",
+      "placement": "on_ground",
+      "minTemperatureC": -10,
+      "maxTemperatureC": 21,
+      "minRainfall": 150
+    },
+    {
+      "id": "peafowl",
+      "placement": "on_ground",
+      "minTemperatureC": 14,
+      "minRainfall": 190,
+      "maxRainfall": 500,
+      "minForest": "normal"
+    },
+    {
+      "id": "penguin",
+      "placement": "on_ground",
+      "maxTemperatureC": -14,
+      "minRainfall": 75
+    },
+    {
+      "id": "pheasant",
+      "placement": "on_ground",
+      "minTemperatureC": -5,
+      "maxTemperatureC": 17,
+      "minRainfall": 100,
+      "maxRainfall": 300,
+      "minForest": "edge"
+    },
+    {
+      "id": "pig",
+      "placement": "on_ground",
+      "minTemperatureC": -10,
+      "maxTemperatureC": 35,
+      "minRainfall": 200,
+      "minForest": "edge"
+    },
+    {
+      "id": "polar_bear",
+      "placement": "on_ground",
+      "maxTemperatureC": -10,
+      "minRainfall": 100
+    },
+    {
+      "id": "pufferfish",
+      "placement": "in_water",
+      "minTemperatureC": 10,
+      "distanceBelowSeaLevel": 3
+    },
+    {
+      "id": "quail",
+      "placement": "on_ground",
+      "minTemperatureC": -15,
+      "maxTemperatureC": 10,
+      "minRainfall": 200
+    },
+    {
+      "id": "rabbit",
+      "placement": "on_ground",
+      "minRainfall": 15
+    },
+    {
+      "id": "rainbow_trout",
+      "placement": "in_water",
+      "maxTemperatureC": 10,
+      "minRainfall": 150
+    },
+    {
+      "id": "sabertooth",
+      "placement": "on_ground",
+      "maxTemperatureC": 0,
+      "minRainfall": 250
+    },
+    {
+      "id": "salmon",
+      "placement": "in_water",
+      "minTemperatureC": -5
+    },
+    {
+      "id": "sheep",
+      "placement": "on_ground",
+      "minTemperatureC": 0,
+      "maxTemperatureC": 35,
+      "minRainfall": 70,
+      "maxRainfall": 300
+    },
+    {
+      "id": "smallmouth_bass",
+      "placement": "in_water",
+      "minTemperatureC": -14,
+      "maxTemperatureC": 20,
+      "minRainfall": 100,
+      "maxRainfall": 400
+    },
+    {
+      "id": "squid",
+      "placement": "in_water",
+      "distanceBelowSeaLevel": 15
+    },
+    {
+      "id": "tiger",
+      "placement": "on_ground",
+      "minTemperatureC": 13,
+      "minRainfall": 100,
+      "minForest": "edge"
+    },
+    {
+      "id": "tropical_fish",
+      "placement": "in_water",
+      "minTemperatureC": 18,
+      "distanceBelowSeaLevel": 3
+    },
+    {
+      "id": "turkey",
+      "placement": "on_ground",
+      "minTemperatureC": 0,
+      "maxTemperatureC": 17,
+      "minRainfall": 250,
+      "maxRainfall": 450,
+      "maxForest": "normal"
+    },
+    {
+      "id": "turtle",
+      "placement": "on_ground",
+      "minTemperatureC": 21,
+      "minRainfall": 250
+    },
+    {
+      "id": "wildebeest",
+      "placement": "on_ground",
+      "minTemperatureC": 13,
+      "minRainfall": 90,
+      "maxRainfall": 380,
+      "maxForest": "edge"
+    },
+    {
+      "id": "wolf",
+      "placement": "on_ground",
+      "minTemperatureC": -12,
+      "maxTemperatureC": 17,
+      "minRainfall": 150,
+      "maxRainfall": 420,
+      "maxForest": "normal"
+    },
+    {
+      "id": "yak",
+      "placement": "on_ground",
+      "maxTemperatureC": -11,
+      "minRainfall": 100
+    }
+  ]
+}
