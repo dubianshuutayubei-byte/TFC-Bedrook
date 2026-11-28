@@ -185,3 +185,47 @@ export function getCalendarInfo(worldDay, daysPerYear = DEFAULTS.yearLengthDays)
     ...seasonInfo,
   };
 }
+
+/**
+ * Validate the imported crop/plant climate threshold database.
+ * Values are source thresholds; this does not calibrate Bedrock soil hydration.
+ */
+export function validateClimateProfiles(data) {
+  const errors = [];
+  if (!data || data.schemaVersion !== 1) return ["schemaVersion must be 1"];
+  for (const category of ["crops", "plants"]) {
+    if (!Array.isArray(data[category])) {
+      errors.push(`${category} must be an array`);
+      continue;
+    }
+    const ids = new Set();
+    for (const profile of data[category]) {
+      if (!profile || typeof profile.id !== "string" || !profile.id) {
+        errors.push(`${category} contains a profile without an id`);
+        continue;
+      }
+      if (ids.has(profile.id)) errors.push(`duplicate ${category} id: ${profile.id}`);
+      ids.add(profile.id);
+      for (const key of ["minTemperatureC", "maxTemperatureC", "temperatureWiggleC", "minHydration", "maxHydration", "hydrationWiggle"]) {
+        if (typeof profile[key] !== "number" || !Number.isFinite(profile[key])) {
+          errors.push(`${category}/${profile.id}: ${key} must be finite`);
+        }
+      }
+      if (profile.minTemperatureC > profile.maxTemperatureC) errors.push(`${category}/${profile.id}: temperature minimum exceeds maximum`);
+      if (profile.minHydration > profile.maxHydration) errors.push(`${category}/${profile.id}: hydration minimum exceeds maximum`);
+      if (profile.minHydration < 0 || profile.maxHydration > 100) errors.push(`${category}/${profile.id}: hydration must be within 0..100`);
+      if (profile.temperatureWiggleC < 0 || profile.hydrationWiggle < 0) errors.push(`${category}/${profile.id}: wiggle ranges must be >= 0`);
+    }
+  }
+  return errors;
+}
+
+/** Find one source profile without merging crop and wild-plant namespaces. */
+export function getClimateProfile(data, category, id) {
+  if (category !== "crops" && category !== "plants") {
+    throw new RangeError("category must be crops or plants");
+  }
+  const profile = data?.[category]?.find(entry => entry.id === id);
+  if (!profile) throw new RangeError(`unknown ${category} climate profile: ${id}`);
+  return profile;
+}
