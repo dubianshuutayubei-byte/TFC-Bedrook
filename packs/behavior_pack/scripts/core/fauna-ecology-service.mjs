@@ -1,5 +1,6 @@
 /** Lightweight species-level predator/prey relationships for TFC fauna. */
 export const FAUNA_ECOLOGY = Object.freeze({
+  leopard_seal: { prey: ["cod", "pufferfish", "tropical_fish", "salmon", "rainbow_trout", "lake_trout", "bluegill", "largemouth_bass", "smallmouth_bass", "crappie", "arctic_char", "burbot", "peacock_bass", "pacu", "red_piranha", "northern_pike", "muksun", "tilapia", "spotted_gudgeon"] },
   cougar: { prey: ["deer", "rabbit", "boar", "sheep", "goat"] },
   black_bear: { prey: ["salmon", "cod", "rabbit", "deer"] },
   grizzly_bear: { prey: ["salmon", "cod", "rabbit", "deer", "boar"] },
