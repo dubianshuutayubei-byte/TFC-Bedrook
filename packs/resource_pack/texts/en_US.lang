@@ -47,3 +47,9 @@ item.tfc:heated_bronze_ingot.name=Heated Bronze Ingot
 item.tfc:bronze_ingot.name=Bronze Ingot
 item.tfc:bronze_sheet.name=Bronze Sheet
 
+
+item.tfc:drying_rack.name=Drying Rack
+item.tfc:dried_meat.name=Dried Meat
+item.tfc:dried_fruit.name=Dried Fruit
+item.tfc:dried_vegetables.name=Dried Vegetables
+tile.tfc:drying_rack.name=Drying Rack
