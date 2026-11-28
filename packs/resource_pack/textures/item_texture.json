@@ -139,6 +139,42 @@
     },
     "tfc_water_vessel": {
       "textures": "textures/items/tfc_pottery"
+    },
+    "tfc_garlic_seed": {
+      "textures": "textures/items/tfc_seed"
+    },
+    "tfc_garlic": {
+      "textures": "textures/items/tfc_grain"
+    },
+    "tfc_onion_seed": {
+      "textures": "textures/items/tfc_seed"
+    },
+    "tfc_onion": {
+      "textures": "textures/items/tfc_grain"
+    },
+    "tfc_squash_seed": {
+      "textures": "textures/items/tfc_seed"
+    },
+    "tfc_squash": {
+      "textures": "textures/items/tfc_grain"
+    },
+    "tfc_lentils_seed": {
+      "textures": "textures/items/tfc_seed"
+    },
+    "tfc_lentils": {
+      "textures": "textures/items/tfc_grain"
+    },
+    "tfc_soybean_seed": {
+      "textures": "textures/items/tfc_seed"
+    },
+    "tfc_soybean": {
+      "textures": "textures/items/tfc_grain"
+    },
+    "tfc_peanuts_seed": {
+      "textures": "textures/items/tfc_seed"
+    },
+    "tfc_peanuts": {
+      "textures": "textures/items/tfc_grain"
     }
   }
 }
