@@ -64,3 +64,16 @@ tile.tfc:composter.name=コンポスター
 item.tfc:wood_ash.name=木灰
 
 item.tfc:wood_ash.name=木灰
+
+item.tfc:barley_seed.name=大麦の種
+item.tfc:barley.name=大麦
+item.tfc:oat_seed.name=オーツ麦の種
+item.tfc:oat.name=オーツ麦
+item.tfc:rye_seed.name=ライ麦の種
+item.tfc:rye.name=ライ麦
+item.tfc:beet_seed.name=ビーツの種
+item.tfc:beet.name=ビーツ
+item.tfc:cabbage_seed.name=キャベツの種
+item.tfc:cabbage.name=キャベツ
+item.tfc:carrot_seed.name=ニンジンの種
+item.tfc:carrot.name=ニンジン
