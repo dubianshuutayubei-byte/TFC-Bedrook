@@ -1,4 +1,4 @@
-import test from"node:test";import assert from"node:assert/strict";import{createAnimalState,syncAnimalHealth,advanceAnimalNeeds,feedAnimal,waterAnimal,canBreed,beginPregnancy,advancePregnancy,evaluateHabitat,canProduce,recordProduct}from"../packs/behavior_pack/scripts/core/fauna-service.mjs";
+import test from"node:test";import assert from"node:assert/strict";import{createAnimalState,syncAnimalHealth,advanceAnimalNeeds,feedAnimal,waterAnimal,canBreed,beginPregnancy,advancePregnancy,evaluateHabitat,evaluateFaunaSpawn,canProduce,recordProduct}from"../packs/behavior_pack/scripts/core/fauna-service.mjs";
 test("needs and age advance",()=>{const a=advanceAnimalNeeds(createAnimalState({species:"deer"}),2);assert.equal(a.ageDays,2);assert.equal(a.hunger,16);assert.equal(a.thirst,24);});
 test("feeding and watering reduce needs",()=>{const a=feedAnimal({hunger:80,thirst:50},10);assert.equal(a.hunger,45);assert.equal(waterAnimal(a,20).thirst,25);});
 test("breeding requires healthy, fed, adult, familiar pair",()=>{const p={adultAgeDays:10,requiredFamiliarity:20,breedingCooldownDays:2};const a={species:"deer",sex:"male",ageDays:20,familiarity:30,hunger:10,thirst:10};const b={...a,sex:"female"};assert.equal(canBreed(a,b,p),true);assert.equal(canBreed({...a,hunger:90},b,p),false);assert.equal(beginPregnancy(b,a,p).started,true);});
@@ -91,4 +91,30 @@ test("forest density ordering matches the official TFC ForestType enum",()=>{
  assert.equal(evaluateHabitat(profile,{forestType:"edge"}).suitable,true);
  assert.equal(evaluateHabitat(profile,{forestType:"normal"}).suitable,true);
  assert.equal(evaluateHabitat(profile,{forestType:"old_growth"}).suitable,false);
+});
+
+test("official fauna spawn evaluator applies chance, placement, depth, climate and brightness",()=>{
+ const profile={chance:10,placement:"in_water",distanceBelowSeaLevel:5,minTemperatureC:0,maxTemperatureC:20,minRainfall:100,maxRainfall:400,minForest:"edge",maxForest:"normal",maxBrightness:4};
+ const environment={inWater:true,y:50,seaLevel:63,temperatureC:10,rainfall:200,forestType:"normal",brightness:3};
+ const good=evaluateFaunaSpawn(profile,environment,()=>0.01);
+ assert.equal(good.suitable,true);
+ assert.deepEqual(good.failures,[]);
+ const bad=evaluateFaunaSpawn(profile,{...environment,y:60,brightness:8},()=>0.5);
+ assert.equal(bad.suitable,false);
+ assert.ok(bad.failures.includes("chance"));
+ assert.ok(bad.failures.includes("too_high_above_depth_limit"));
+ assert.ok(bad.failures.includes("brightness_high"));
+});
+test("official fauna spawn evaluator never accepts missing required environment measurements",()=>{
+ const result=evaluateFaunaSpawn({distanceBelowSeaLevel:10,minTemperatureC:0,solidGround:true},{});
+ assert.equal(result.suitable,false);
+ assert.ok(result.missing.includes("y"));
+ assert.ok(result.missing.includes("seaLevel"));
+ assert.ok(result.missing.includes("temperatureC"));
+ assert.ok(result.missing.includes("validSpawnGround"));
+});
+test("official fauna spawn evaluator validates placement and aquatic fluid requirements",()=>{
+ assert.ok(evaluateFaunaSpawn({placement:"in_water"},{inWater:false},()=>0).failures.includes("not_in_water"));
+ assert.ok(evaluateFaunaSpawn({placement:"on_ground"},{onGround:false},()=>0).failures.includes("not_on_ground"));
+ assert.equal(evaluateFaunaSpawn({placement:"no_restrictions"},{},()=>0).suitable,true);
 });
