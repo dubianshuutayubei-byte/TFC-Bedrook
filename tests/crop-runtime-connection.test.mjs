@@ -11,4 +11,5 @@ test("in-world wheat growth uses crop climate and soil suitability checks",()=>{
   assert.match(runtime,/evaluateCropGrowth\(profile,\{temperatureC:currentTemperatureC\(block\.location\.y-63\)\},soil\)/);
   assert.match(runtime,/applyNutrientUptake\(soil,profile\.preferredNutrient,1\.5\)/);
   assert.match(runtime,/if\(!evaluation\.suitable\)return/);
+  assert.match(runtime,/advanceCropGrowthProgress\(Number\(readWorldState\(progressKey,0\)\),evaluation\.growthMultiplier\)/);
 });
