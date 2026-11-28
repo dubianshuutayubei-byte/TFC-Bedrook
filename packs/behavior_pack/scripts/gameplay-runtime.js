@@ -680,7 +680,7 @@ function consumeDroppedAnimalFood(entity,profile,state){
     try{entity.dimension.spawnItem(new ItemStack(stack.typeId,stack.amount-1),dropped.location);}catch(error){console.warn("[TFC-Bedrook] animal feed remainder restore failed:",error);continue;}
    }
    dropped.kill();
-   return grazeAnimal(state,{hungerReduction:35,thirstReduction:3,currentDay:world.getDay()});
+   return grazeAnimal(state,{hungerReduction:35,thirstReduction:3,currentTime:currentAnimalDay()});
   }
  }catch(error){console.warn("[TFC-Bedrook] animal food pickup failed:",error);}
  return state;
