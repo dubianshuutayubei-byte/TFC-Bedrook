@@ -137,3 +137,17 @@
 - [Static Pack Validation](https://github.com/dubianshuutayubei-byte/TFC-Bedrook/actions/runs/46167111388)：成功。
 - JSON/manifest検証、JavaScript構文検査、Node.jsユニットテストすべて成功。
 - Node.jsテスト：438件成功、失敗0件。
+
+
+## 追加修正：出生・孵化時のなつき度時計
+
+- TFC Javaの `setBabyTraits` に合わせ、子個体のなつき度継承（親が90%未満なら半分、90%以上なら90%）を維持。
+- 出生・孵化した時点のゲーム内日付を `lastFamiliarityDecay` に保存するよう修正。
+- これにより、親から引き継いだなつき度が30%未満でも、出生直後から減衰が始まる問題を防止。
+- 巣箱から孵化した個体と、妊娠・出産した個体の両方に適用。
+- currentDay未指定時は未初期化値を維持し、最初のランタイム更新で時計を開始する。
+- テストで未指定値、出生時刻の保存、2日猶予、猶予後の減衰を検査。
+
+### CI
+- [Static Pack Validation](https://github.com/dubianshuutayubei-byte/TFC-Bedrook/actions/runs/46167253313)：成功。
+- Node.jsユニットテスト：439件成功、失敗0件。
