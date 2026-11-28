@@ -18,7 +18,7 @@ anvil:["金床","銅インゴットを板材へ成形します。","銅板を成
 }[id];
 if(!r)return;
 const f=new ActionFormData().title(r[0]).body(r[1]+"\n処理時間: "+r[6]+" tick").button(r[2]).button("閉じる");
-const a=await f.show(p);if(a.canceled||a.selection!==0)return;
+let a;try{a=await f.show(p);}catch(error){p.sendMessage("§c設備UIを開けませんでした。");console.warn("[TFC-Bedrook] Station UI:",error);return;}if(a.canceled||a.selection!==0)return;
 if(!take(p,r[3],r[4])){p.sendMessage("§c材料が足りません。必要数: "+r[4]);return;}
 p.sendMessage("§e加工を開始しました。完了までお待ちください。");
 system.runTimeout(()=>{
@@ -31,7 +31,7 @@ let selected=[];try{selected=JSON.parse(String(p.getDynamicProperty(PROGRESS_KEY
 if(!Array.isArray(selected))selected=[];
 const f=new ActionFormData().title("石器成形").body("3×3の打撃位置を選択してください。\n石片の形: 左上・中央・右下の3点\n選択済み: "+selected.length+"/3");
 for(let i=0;i<9;i++)f.button((selected.includes(i)?"§a[選択] ":"§7[ ] ")+"位置 "+(i+1));
-const a=await f.show(p);if(a.canceled||a.selection===undefined)return;
+let a;try{a=await f.show(p);}catch(error){p.sendMessage("§c石器成形UIを開けませんでした。");console.warn("[TFC-Bedrook] Knapping UI:",error);return;}if(a.canceled||a.selection===undefined)return;
 const index=a.selection;
 if(selected.includes(index))selected=selected.filter(v=>v!==index);else if(selected.length<3)selected.push(index);
 if(selected.length<3){p.setDynamicProperty(PROGRESS_KEY,JSON.stringify(selected));p.sendMessage("§e打撃位置を記録しました。");return;}
