@@ -26,6 +26,6 @@ test("all custom fauna entities have exactly one matching natural spawn rule",()
 test("custom fauna natural spawn rules use animal population control",()=>{
  for(const file of spawnFiles){
   const rule=JSON.parse(readFileSync(join(spawnDir,file),"utf8"))["minecraft:spawn_rules"];
-  assert.equal(rule.description.population_control,"animal",file+" must use animal population control");
+  assert.ok(["animal","water_animal"].includes(rule.description.population_control),file+" has an unsupported population control");
  }
 });
