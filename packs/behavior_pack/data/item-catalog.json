@@ -19,7 +19,8 @@
       "clay_vessel",
       "unfired_ingot_mold",
       "fired_vessel",
-      "fired_ingot_mold"
+      "fired_ingot_mold",
+      "water_vessel"
     ],
     "metals": [
       "copper_ingot",
@@ -150,6 +151,7 @@
     "tfc:cabbage_seed",
     "tfc:cabbage",
     "tfc:carrot_seed",
-    "tfc:carrot"
+    "tfc:carrot",
+    "tfc:water_vessel"
   ]
 }
