@@ -35,3 +35,12 @@ test("registered edible items use the food service and match canonical nutrition
     assert.equal(params.hydration,profile.hydration,id+" hydration mismatch");
   }
 });
+
+test("smokehouse output is registered as smoked-preserved food, not merely cooked food",()=>{
+  const smoked=profiles.foods.find(food=>food.id==="smoked_meat");
+  assert.ok(smoked);
+  assert.equal(smoked.preservation,"smoked");
+  assert.equal(smoked.cooked,true);
+  assert.match(runtime,/"tfc:smoked_meat":0\.03/);
+  assert.match(runtime,/id:"tfc:smoked_meat",station:"smokehouse"/);
+});
