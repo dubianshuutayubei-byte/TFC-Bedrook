@@ -1,14 +1,14 @@
 {
   "source": {
     "profileSource": "TerraFirmaCraft v3.2.26 fauna JSON",
-    "placementSource": "TerraFirmaCraft v3.2.26 Faunas.java",
-    "note": "Combined spawn condition profiles; placement and climate data remain source-derived. Bedrock world sampling is not yet connected."
+    "placementSource": "TerraFirmaCraft Java 1.21.x Faunas.java + aquatic/Fish.java",
+    "note": "Climate constraints are available only for the 63 species in the v3.2.26 fauna JSON baseline. All 78 species have source-derived spawn placement from the 1.21.x registry. The 15 placement-only entries intentionally have no invented climate limits. Bedrock world sampling is not yet connected."
   },
-  "total": 63,
+  "total": 78,
   "placementCounts": {
-    "in_water": 20,
+    "in_water": 29,
     "no_restrictions": 1,
-    "on_ground": 42
+    "on_ground": 48
   },
   "species": [
     {
@@ -17,6 +17,22 @@
       "minTemperatureC": -8,
       "maxTemperatureC": 20,
       "minRainfall": 250
+    },
+    {
+      "id": "arctic_char",
+      "placement": "in_water"
+    },
+    {
+      "id": "armadillo",
+      "placement": "on_ground"
+    },
+    {
+      "id": "bactrian_camel",
+      "placement": "on_ground"
+    },
+    {
+      "id": "bison",
+      "placement": "on_ground"
     },
     {
       "id": "black_bear",
@@ -48,6 +64,10 @@
       "minRainfall": 230,
       "maxRainfall": 500,
       "minForest": "edge"
+    },
+    {
+      "id": "burbot",
+      "placement": "in_water"
     },
     {
       "id": "caribou",
@@ -134,6 +154,10 @@
       "minRainfall": 130,
       "maxRainfall": 400,
       "maxForest": "edge"
+    },
+    {
+      "id": "dromedary_camel",
+      "placement": "on_ground"
     },
     {
       "id": "duck",
@@ -239,6 +263,10 @@
       "maxRainfall": 400
     },
     {
+      "id": "leopard_seal",
+      "placement": "on_ground"
+    },
+    {
       "id": "lion",
       "placement": "on_ground",
       "minTemperatureC": 16,
@@ -270,6 +298,10 @@
       "minForest": "edge"
     },
     {
+      "id": "muksun",
+      "placement": "in_water"
+    },
+    {
       "id": "mule",
       "placement": "on_ground",
       "minTemperatureC": -15,
@@ -283,6 +315,10 @@
       "minTemperatureC": -25,
       "maxTemperatureC": 0,
       "minRainfall": 100
+    },
+    {
+      "id": "northern_pike",
+      "placement": "in_water"
     },
     {
       "id": "ocelot",
@@ -308,6 +344,10 @@
       "distanceBelowSeaLevel": 6
     },
     {
+      "id": "pacu",
+      "placement": "in_water"
+    },
+    {
       "id": "panda",
       "placement": "on_ground",
       "minTemperatureC": 18,
@@ -323,6 +363,10 @@
       "minTemperatureC": -10,
       "maxTemperatureC": 21,
       "minRainfall": 150
+    },
+    {
+      "id": "peacock_bass",
+      "placement": "in_water"
     },
     {
       "id": "peafowl",
@@ -362,6 +406,10 @@
       "minRainfall": 100
     },
     {
+      "id": "pond_turtle",
+      "placement": "on_ground"
+    },
+    {
       "id": "pufferfish",
       "placement": "in_water",
       "minTemperatureC": 10,
@@ -384,6 +432,10 @@
       "placement": "in_water",
       "maxTemperatureC": 10,
       "minRainfall": 150
+    },
+    {
+      "id": "red_piranha",
+      "placement": "in_water"
     },
     {
       "id": "sabertooth",
@@ -413,6 +465,10 @@
       "maxRainfall": 400
     },
     {
+      "id": "spotted_gudgeon",
+      "placement": "in_water"
+    },
+    {
       "id": "squid",
       "placement": "in_water",
       "distanceBelowSeaLevel": 15
@@ -423,6 +479,10 @@
       "minTemperatureC": 13,
       "minRainfall": 100,
       "minForest": "edge"
+    },
+    {
+      "id": "tilapia",
+      "placement": "in_water"
     },
     {
       "id": "tropical_fish",
