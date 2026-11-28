@@ -1,0 +1,28 @@
+{
+  "format_version": "1.20.10",
+  "minecraft:recipe_shaped": {
+    "description": {
+      "identifier": "tfc:crucible"
+    },
+    "tags": [
+      "crafting_table"
+    ],
+    "pattern": [
+      "SSS",
+      "SCS",
+      "SSS"
+    ],
+    "key": {
+      "S": {
+        "item": "minecraft:stone_bricks"
+      },
+      "C": {
+        "item": "tfc:fired_crucible"
+      }
+    },
+    "result": {
+      "item": "tfc:crucible",
+      "count": 1
+    }
+  }
+}
