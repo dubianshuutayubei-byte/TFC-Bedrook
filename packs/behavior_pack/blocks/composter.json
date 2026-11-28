@@ -1,0 +1,29 @@
+{
+  "format_version": "1.26.60",
+  "minecraft:block": {
+    "description": {
+      "identifier": "tfc:composter",
+      "menu_category": {
+        "category": "construction"
+      }
+    },
+    "components": {
+      "minecraft:geometry": "minecraft:geometry.full_block",
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "tfc_composter",
+          "render_method": "opaque"
+        }
+      },
+      "minecraft:destructible_by_mining": {
+        "seconds_to_destroy": 1
+      },
+      "minecraft:collision_box": true,
+      "minecraft:selection_box": true,
+      "tfc:station_ui": {
+        "station": "composter"
+      },
+      "minecraft:display_name": "tile.tfc:composter.name"
+    }
+  }
+}
