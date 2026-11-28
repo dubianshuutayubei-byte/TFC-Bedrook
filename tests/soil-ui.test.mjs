@@ -7,7 +7,7 @@ const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
 test("soil status UI displays soil type and ambient temperature",()=>{
  assert.match(runtime,/title\("土壌状態"\)/);
- assert.match(runtime,/soilNames=\{loam:"壌土",silt:"シルト",clay:"粘土質"\}/);
+ assert.match(runtime,/soilNames=\{loam:"壌土",silt:"シルト",clay:"粘土質"\}/);\n assert.match(runtime,/fertilityNames=\{entisol:"エンティソル"/);
  assert.match(runtime,/currentTemperatureC\(block\.location\.y-63\)\.toFixed\(1\)/);
- assert.match(runtime,/骨粉を持って操作すると肥料として使えます/);
+ assert.match(runtime,/骨粉を持って操作すると肥料として使えます/);\n assert.match(runtime,/applyFertilizer\(soil,\{phosphorus:10\}\)/);
 });
