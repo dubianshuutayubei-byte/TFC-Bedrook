@@ -189,3 +189,11 @@ test("official oviparous livestock production uses TFC hatch times, laying inter
  assert.match(runtime,/"tfc:quail":\{[^}]*adultAgeDays":22[^}]*eggLayCooldownDays":1\.1666666667[^}]*maxUses":48[^}]*productFamiliarityMin":15[^}]*hatchDays":8/);
  assert.match(runtime,/state\.familiarity<30\|\|state\.lastFedDay<world\.getDay\(\)/);
 });
+
+
+test("custom TFC livestock alpaca, musk ox and yak use official reproduction and product profiles",()=>{
+ assert.match(runtime,/"tfc:alpaca":\{[^}]*adultAgeDays":98[^}]*gestationDays":36[^}]*childCount":2[^}]*maxUses":128[^}]*productCooldownDays":5[^}]*customBreeding":true[^}]*wooly":true/);
+ assert.match(runtime,/"tfc:musk_ox":\{[^}]*adultAgeDays":168[^}]*gestationDays":64[^}]*childCount":1[^}]*maxUses":160[^}]*productCooldownDays":4[^}]*customBreeding":true[^}]*wooly":true/);
+ assert.match(runtime,/"tfc:yak":\{[^}]*adultAgeDays":180[^}]*gestationDays":64[^}]*childCount":1[^}]*maxUses":230[^}]*productCooldownDays":1[^}]*customBreeding":true[^}]*dairy":true/);
+ assert.match(runtime,/profile\.customBreeding&&entity\.typeId\.startsWith\("tfc:"\)\)baby\.triggerEvent\("tfc:spawn_baby"\)/);
+});
