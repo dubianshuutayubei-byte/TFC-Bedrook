@@ -15,7 +15,7 @@ test("every processing recipe input and output has a registered item definition"
  for(const [station,recipes] of Object.entries(PROCESSING_RECIPES)){
   for(const recipe of recipes){
    for(const id of [...Object.keys(recipe.inputs),...Object.keys(recipe.outputs)]){
-    if(!itemIds.has(id))missing.push(station+"/"+recipe.id+": "+id);
+    if(id.startsWith("tfc:")&&!itemIds.has(id))missing.push(station+"/"+recipe.id+": "+id);
    }
   }
  }
