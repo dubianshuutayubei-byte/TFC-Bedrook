@@ -15,5 +15,5 @@ test("fauna coverage roster contains all 63 official TFC 3.2.26 profiles",()=>{
 });
 test("current Bedrock animal profiles are explicitly distinguished from planned fauna",()=>{
  for(const id of Object.keys(implemented)) assert.ok(roster.species.some(x=>x.id===id),id+" missing from full roster");
- assert.equal(roster.species.find(x=>x.id==="deer").status,"not_implemented");
+ for(const id of ["deer","cow","sheep","chicken"]) assert.equal(roster.species.find(x=>x.id===id).status,"partial_state_tracking");
 });
