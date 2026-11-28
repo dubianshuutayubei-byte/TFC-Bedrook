@@ -791,3 +791,11 @@
 - 監査結果を `official-fauna-profiles.json` の `audit` メタデータに記録。
 - 動物の落下餌を拾う関数が定義だけで、定期AI処理から呼び出されていなかった問題を修正。動物Tickから実際に呼び出すよう接続し、テストを追加。
 - この照合は公式気候データの転記精度を確認したもの。Bedrock側の気候サンプリング・森林分類・自然スポーン・全63種のAI/モデルが完成したという意味ではない。
+
+
+### 公式TFC森林分類の修正と動物データ再監査
+
+- 公式 `ForestType` の列挙順が `none → sparse → edge → normal → old_growth` であることを v3.2.26 ソースで確認。これまでの判定表に欠けていた `sparse` を追加し、以降の順位を修正。
+- TFCの `ClimatePlacement` が `min_forest` / `max_forest` をこのenumのordinalで比較していることも確認。Bedrock側の比較順を公式定義と一致させた。
+- 先ほどの63種データ照合を再実施し、ルート直下の `distance_below_sea_level` / `max_brightness` / `chance` と、`climate` 内の温度・降雨・森林・fuzzyを両方比較。**全63種で登録値の差異なし**。
+- 森林分類の順序テストを追加。これで公式データの転記とenum順の検証はできたが、Bedrockワールド側にTFCと同等の森林密度・チャンク気候データが存在するわけではないため、自然スポーン接続は未完了。
