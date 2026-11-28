@@ -15,7 +15,7 @@ test("cow milk requires an adult female meeting health and needs thresholds",()=
 
 test("sheep wool uses TFC product logic and oviparous animals use nest boxes",()=>{
  assert.match(runtime,/profile\.wooly\?"\\n産出: 羊毛（TFC式のハサミ操作、"/);
- assert.match(runtime,/productCooldownDays:4,productFamiliarityMin:15,familiarityCap:35/);
+ assert.match(runtime,/productCooldownDays:OFFICIAL_LIVESTOCK_LIFECYCLE\.sheep\.productCooldownDays,productFamiliarityMin:15,familiarityCap:35/);
  assert.match(runtime,/function shearAnimal\(player,entity\)/);
  assert.match(runtime,/give\(player,"tfc:wool",amount\)/);
  assert.match(runtime,/産出: 卵（巣箱へ自動産卵）/);
@@ -30,8 +30,8 @@ test("livestock status displays age, needs, health and product instructions",()=
 });
 
 test("milk collection uses the exact official TFC minimum familiarity of 0.15",()=>{
- assert.ok(runtime.includes('"minecraft:cow":{adultAgeDays:192,speciesId:"cow",displayName:"ウシ",gestationDays:58,childCount:2,maxUses:128,productCooldownDays:1,productFamiliarityMin:15'));
- assert.ok(runtime.includes('"minecraft:goat":{speciesId:"goat",displayName:"ヤギ",adultAgeDays:96,gestationDays:32,childCount:2,maxUses:60,productCooldownDays:3,productFamiliarityMin:15'));
+ assert.ok(runtime.includes('"minecraft:cow":{adultAgeDays:OFFICIAL_LIVESTOCK_LIFECYCLE.cow.adultAgeDays,speciesId:"cow",displayName:"ウシ",gestationDays:OFFICIAL_LIVESTOCK_LIFECYCLE.cow.gestationDays,childCount:OFFICIAL_LIVESTOCK_LIFECYCLE.cow.childCount,maxUses:OFFICIAL_LIVESTOCK_LIFECYCLE.cow.maxUses,productCooldownDays:OFFICIAL_LIVESTOCK_LIFECYCLE.cow.productCooldownDays,productFamiliarityMin:15'));
+ assert.ok(runtime.includes('"minecraft:goat":{speciesId:"goat",displayName:"ヤギ",adultAgeDays:OFFICIAL_LIVESTOCK_LIFECYCLE.goat.adultAgeDays,gestationDays:OFFICIAL_LIVESTOCK_LIFECYCLE.goat.gestationDays,childCount:OFFICIAL_LIVESTOCK_LIFECYCLE.goat.childCount,maxUses:OFFICIAL_LIVESTOCK_LIFECYCLE.goat.maxUses,productCooldownDays:OFFICIAL_LIVESTOCK_LIFECYCLE.goat.productCooldownDays,productFamiliarityMin:15'));
 });
 
 
