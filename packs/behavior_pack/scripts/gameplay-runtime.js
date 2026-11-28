@@ -81,4 +81,6 @@ event.blockComponentRegistry.registerCustomComponent("tfc:station_ui",{onPlayerI
 event.blockComponentRegistry.registerCustomComponent("tfc:farmland_interaction",{onPlayerInteract:a=>void farmlandInteract(a.player,a.block),onTick:a=>soilTick(a.block)});
 event.blockComponentRegistry.registerCustomComponent("tfc:crop_growth",{onTick:a=>cropTick(a.block),onPlayerInteract:a=>{const p=a.player,b=a.block;if(!p||!b)return;if(b.permutation.getState("tfc:age")!==3){p.sendMessage("§eまだ成長中です。");return;}give(p,"tfc:grain",2);give(p,"tfc:crop_seed",1);b.setPermutation(b.permutation.withState("tfc:age",0));p.sendMessage("§a収穫しました。");}});
 system.runInterval(()=>{for(const dimensionId of ["overworld","nether","the_end"]){try{const dimension=world.getDimension(dimensionId);for(const entity of dimension.getEntities({type:"tfc:deer"}))animalTick(entity);}catch(error){}}},1200);
-});}
+});
+world.afterEvents.playerInteractWithEntity.subscribe(event=>{if(event.target?.typeId==="tfc:deer")animalInteract(event.player,event.target);});
+}
