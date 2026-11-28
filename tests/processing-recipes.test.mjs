@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { PROCESSING_RECIPES, getStationRecipes, validateProcessingRecipes } from "../packs/behavior_pack/scripts/core/processing-recipes.mjs";
 
 test("canonical station recipes are valid and unique",()=>{
-  assert.deepEqual(validateProcessingRecipes(),{count:13});
+  assert.deepEqual(validateProcessingRecipes(),{count:19});
 });
 test("pit kiln exposes both vessel and ingot-mold firing",()=>{
   const ids=getStationRecipes("pit_kiln").map(r=>r.id);
