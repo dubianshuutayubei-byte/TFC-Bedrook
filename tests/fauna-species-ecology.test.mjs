@@ -78,6 +78,14 @@ test("aquatic fauna distinguish swimming fish from seafloor shellfish",()=>{
  assert.equal(manatee.breathes_water,true);
 });
 
+test("predators follow TFC day/night schedules and only threaten players after a recent hunt",()=>{
+ assert.match(runtime,/profile\.diurnal!==undefined/);
+ assert.match(runtime,/state\.lastHuntAt>=0&&currentDay-state\.lastHuntAt<=0\.25/);
+ assert.match(runtime,/player\.applyDamage\(profile\.playerAttackDamage\?\?3\)/);
+ for(const id of ["black_bear","grizzly_bear"])assert.equal(CUSTOM_FAUNA_PROFILES["tfc:"+id].diurnal,true);
+ for(const id of ["cougar","panther","lion","sabertooth","tiger","hyena","direwolf","crocodile"])assert.equal(CUSTOM_FAUNA_PROFILES["tfc:"+id].diurnal,false);
+});
+
 test("custom prey avoid predator family while predator archetypes can target prey",()=>{
  for(const id of ["bongo","caribou","gazelle","grouse","pheasant","turkey","peafowl"]){
   const e=read("packs/behavior_pack/entities/"+id+".json")["minecraft:entity"].components;
