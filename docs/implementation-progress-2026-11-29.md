@@ -70,3 +70,24 @@
 - 1.21.xの生息条件には地下水・平均降水量・森林密度などが必要だが、現在のBedrock環境サンプラーでは取得できない値が残る。未取得値を推測で埋めず、現状は自然スポーン判定を保留する。これは「生息条件の完全再現」ではない。
 - 78種すべての専用モデル/テクスチャ/移動・採食・捕食/逃走AI、自然スポーン、繁殖可否は個別の実装・実機検証が必要。
 - Node単体テストとGitHub Actionsの成功はまだ確認していない。Bedrock 26.60実機検証も未実施。
+
+
+## 追加修正：Java版1.21.xの繁殖・老齢化仕様へ再同期
+
+公式ソース `TFCAnimalProperties.java` と `ServerConfig.java` を再確認し、前回の繁殖回数実装にあった差を修正。
+
+- 交配成立時、妊娠するメスは受精状態になる。繁殖使用回数を5加算するのは相手のオスのみ（公式 `onFertilized` の `male.addUses(5)` に一致）。
+- 老齢化予定日は使用回数が設定値と同じになった時点ではなく、設定値を超えた後に設定する（公式 `getUses() > getUsesToElderly()` に一致）。
+- 乳・羊毛・卵の産出についても同じ「しきい値を超えた後」の老齢化判定に統一。
+- しきい値と同じ使用回数では、老齢化予定日前の産出を許可する。
+- 日本語説明書の誤った「両親両方に加算」という説明を訂正。
+- テストを更新し、オスのみ5回加算、しきい値到達時、しきい値超過時、産出・産卵の境界を検査。
+
+### 公式ソース
+- [TFCAnimalProperties.java（1.21.x）](https://github.com/TerraFirmaCraft/TerraFirmaCraft/blob/1.21.x/src/main/java/net/dries007/tfc/common/entities/livestock/TFCAnimalProperties.java)
+- [ServerConfig.java（1.21.x）](https://github.com/TerraFirmaCraft/TerraFirmaCraft/blob/1.21.x/src/main/java/net/dries007/tfc/config/ServerConfig.java)
+
+### 検証状態
+- GitHub上の現行ソースとテストを再取得し、老齢化条件・雌雄の使用回数・産出条件の静的照合：成功。
+- Node.jsテスト実行とGitHub Actions：結果未取得。成功扱いにしない。
+- Bedrock 26.60実機検証：未実施。
