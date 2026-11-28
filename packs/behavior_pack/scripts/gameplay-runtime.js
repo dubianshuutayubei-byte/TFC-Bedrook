@@ -289,24 +289,35 @@ async function crucibleStation(player,block,state){
  const key=posKey(block,"crucible_charge"),charge=readWorldState(key,{copper:0,tin:0});
  const copper=Math.max(0,Math.floor(Number(charge.copper)||0)),tin=Math.max(0,Math.floor(Number(charge.tin)||0));
  const valid=findMatchingAlloys({copper,tin},{recipes:[{id:"bronze",components:{copper:[0.88,0.92],tin:[0.08,0.12]}}]}).includes("bronze");
- const body="§7るつぼ温度: "+Math.floor(state.temperatureC)+"°C\n§7燃料残り: "+Math.ceil(state.burnTicks/20)+"秒\n\n投入済み金属\n銅: "+copper+" / 錫: "+tin+"\n配合: "+(copper+tin?Math.round(copper/(copper+tin)*100)+"% 銅 / "+Math.round(tin/(copper+tin)*100)+"% 錫":"未投入")+"\n判定: "+(valid?"§a青銅の範囲内":"§e配合未成立");
+ const body="§7るつぼ温度: "+Math.floor(state.temperatureC)+"°C\\n§7燃料残り: "+Math.ceil(state.burnTicks/20)+"秒\\n\\n投入済み合金材料\\n銅インゴット: "+copper+" / 錫インゴット: "+tin+"\\n配合: "+(copper+tin?Math.round(copper/(copper+tin)*100)+"% 銅 / "+Math.round(tin/(copper+tin)*100)+"% 錫":"未投入")+"\\n青銅判定: "+(valid?"§a配合範囲内":"§e未成立")+"\\n\\n鋳型を使う鉱石鋳造もここから実行できます。";
  const form=new ActionFormData().title("Crucible｜投入・配合・鋳造").body(body)
- .button("銅インゴットを1個投入")
- .button("錫インゴットを1個投入")
+ .button("銅鉱石×2を溶融・鋳造")
+ .button("錫鉱石×2を溶融・鋳造")
+ .button("銅インゴットを1個投入（青銅用）")
+ .button("錫インゴットを1個投入（青銅用）")
  .button("配合を確認して青銅を鋳造")
  .button("投入金属を取り出す")
  .button("閉じる");
  let response;try{response=await form.show(player);}catch{player.sendMessage("§cるつぼUIを開けませんでした。");return;}
- if(response.canceled||response.selection===4)return;
+ if(response.canceled||response.selection===6)return;
  if(response.selection===0||response.selection===1){
-  const id=response.selection===0?"tfc:copper_ingot":"tfc:tin_ingot",name=response.selection===0?"copper":"tin";
+  const copperOre=response.selection===0,oreId=copperOre?"tfc:copper_ore":"tfc:tin_ore",outputId=copperOre?"tfc:heated_copper_ingot":"tfc:heated_tin_ingot",requiredTemp=copperOre?1085:232,name=copperOre?"銅":"錫";
+  if(!canProcessAtTemperature(state,requiredTemp)){player.sendMessage("§c"+name+"の鋳造には"+requiredTemp+"°C以上が必要です。");return;}
+  if(count(player,oreId)<2||count(player,"tfc:fired_ingot_mold")<1){player.sendMessage("§c"+name+"鉱石×2と焼成済み鋳型×1が必要です。");return;}
+  if(!take(player,oreId,2)){player.sendMessage("§c鉱石を取り出せませんでした。");return;}
+  if(!take(player,"tfc:fired_ingot_mold",1)){give(player,oreId,2);player.sendMessage("§c鋳型を取り出せませんでした。鉱石を返却しました。");return;}
+  give(player,outputId,1);give(player,"tfc:fired_ingot_mold",1);
+  player.sendMessage("§a"+name+"を溶融・鋳造しました。加熱インゴットと鋳型を回収してください。");return;
+ }
+ if(response.selection===2||response.selection===3){
+  const id=response.selection===2?"tfc:copper_ingot":"tfc:tin_ingot",name=response.selection===2?"copper":"tin";
   if(!take(player,id,1)){player.sendMessage("§c"+(name==="copper"?"銅":"錫")+"インゴットがありません。");return;}
   const next={copper,tin};next[name]++;if(!writeWorldState(key,next)){give(player,id,1);player.sendMessage("§c投入状態を保存できませんでした。材料を返却しました。");return;}
   player.sendMessage("§a"+(name==="copper"?"銅":"錫")+"をるつぼへ投入しました。");return;
  }
- if(response.selection===3){
+ if(response.selection===5){
   if(copper+tin===0){player.sendMessage("§eるつぼは空です。");return;}
-  if(!give(player,"tfc:copper_ingot",copper)||!give(player,"tfc:tin_ingot",tin)){player.sendMessage("§c金属を返却できませんでした。");return;}
+  give(player,"tfc:copper_ingot",copper);give(player,"tfc:tin_ingot",tin);
   writeWorldState(key,{copper:0,tin:0});player.sendMessage("§a投入金属をインベントリへ戻しました。");return;
  }
  if(!valid){player.sendMessage("§c青銅の配合範囲外です。銅88〜92%、錫8〜12%に調整してください。");return;}
@@ -317,7 +328,6 @@ async function crucibleStation(player,block,state){
  give(player,"tfc:heated_bronze_ingot",1);give(player,"tfc:fired_ingot_mold",1);
  player.sendMessage("§a青銅を鋳造しました。加熱済みインゴットと鋳型を回収してください。");
 }
-
 async function station(player,id,block){
  const recipes=getStationRecipes(id);if(!recipes.length)return;
  const key=stationJobKey(block),existing=readWorldState(key,null);
