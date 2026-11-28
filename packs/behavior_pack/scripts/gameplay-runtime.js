@@ -573,7 +573,7 @@ function nearbyBreedingPair(block,entityType){
   const nearby=block.dimension.getEntities({type:entityType,location:block.location,maxDistance:6}),profile=ANIMAL_PROFILES[entityType];
   for(const entity of nearby){
    let state=animalState(entity);
-   if(state.sex==="unknown"){state.sex=Math.random()<0.5?"male":"female";saveAnimal(entity,state);}
+   if(state.sex==="unknown"){state.sex=profile.fixedSex??(Math.random()<0.5?"male":"female");saveAnimal(entity,state);}
    if(state.lifeStage!=="adult"||state.ageDays<(profile?.adultAgeDays??0)||state.familiarity<30||state.lastFedDay<world.getDay())continue;
    if(state.sex==="male")male=true;
    if(state.sex==="female")female=true;
@@ -758,7 +758,7 @@ async function animalInteract(player,entity){
  if(!player||!entity)return;
  const profile=ANIMAL_PROFILES[entity.typeId];if(!profile)return;
  let state=animalState(entity);
- if(state.sex==="unknown"){state.sex=Math.random()<0.5?"male":"female";saveAnimal(entity,state);}
+ if(state.sex==="unknown"){state.sex=profile.fixedSex??(Math.random()<0.5?"male":"female");saveAnimal(entity,state);}
  const held=inv(player)?.getItem(player.selectedSlotIndex);
  if(!held){
   const names=Object.fromEntries(Object.entries(ANIMAL_PROFILES).map(([id,p])=>[id,p.displayName]));
