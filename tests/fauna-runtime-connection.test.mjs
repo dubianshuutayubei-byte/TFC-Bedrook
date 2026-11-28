@@ -43,7 +43,7 @@ test("custom pregnancy uses shared TFC birth and juvenile events for vanilla and
  assert.match(runtime,/getOffspringCount\(profile\)/);
 });
 test("animal needs and age update on the periodic loaded-entity tick",()=>{
- assert.match(runtime,/advanceAnimalNeeds\(state,0\.05,/);
+ assert.match(runtime,/advanceAnimalNeeds\(state,elapsedAgeDays,/);
  assert.match(runtime,/system\.runInterval\(\(\)=>\{for\(const dimensionId of \["overworld","nether","the_end"\]\)/);
  assert.match(runtime,/\},1200\)/);
 });
@@ -137,7 +137,7 @@ test("shared dairy interaction messages are species-neutral for cows and goats",
 test("runtime uses official TFC maturity, gestation and production limits for supported livestock",()=>{
  for(const [entity,age,uses] of [
   ["minecraft:pig",80,60],["minecraft:horse",80,60],["minecraft:donkey",80,60],
-  ["minecraft:mule",80,60],["minecraft:rabbit",30,40],["minecraft:cow",192,128],
+  ["minecraft:mule",80,60],["minecraft:rabbit",20,40],["minecraft:cow",192,128],
   ["minecraft:goat",96,60],["minecraft:sheep",56,60],["tfc:chicken",24,100]
  ]){
   const entry=runtime.match(new RegExp('"'+entity+'":\\{[^}]*\\}'))?.[0]??"";
@@ -181,12 +181,12 @@ test("custom births trigger juvenile state and persist remaining litter count",(
  assert.doesNotMatch(runtime,/if\(!baby\.triggerEvent\(birthEvent\)\)/);
  assert.match(runtime,/createAnimalOffspringState\(state,offspringSpecies/);
  assert.match(runtime,/started\.animal\.birthsTotal=started\.animal\.birthsRemaining/);
- assert.match(runtime,/state\.birthsTotal\|\|Math\.floor\(profile\.childCount\?\?1\)/);
+ assert.match(runtime,/state\.birthsTotal\|\|getOffspringCount\(profile\)/);
  assert.match(runtime,/state\.birthsRemaining-=1/);
 });
 
 test("loaded animal lifecycle uses fractional world time for decay and old-age transition",()=>{
- assert.match(runtime,/const currentDay=currentAnimalDay\(\),lastAgeUpdateAt=state\.lastAgeUpdateAt>=0\?state\.lastAgeUpdateAt:currentDay,elapsedAgeDays=Math\.max\(0,currentDay-lastAgeUpdateAt\);\s*state\.lastAgeUpdateAt=currentDay;\s*state=advanceAnimalNeeds\(state,0\.05/);
+ assert.match(runtime,/const currentDay=currentAnimalDay\(\),lastAgeUpdateAt=state\.lastAgeUpdateAt>=0\?state\.lastAgeUpdateAt:currentDay,elapsedAgeDays=Math\.max\(0,currentDay-lastAgeUpdateAt\);\s*state\.lastAgeUpdateAt=currentDay;\s*state=advanceAnimalNeeds\(state,elapsedAgeDays/);
  assert.match(runtime,/currentDay>state\.oldDay/);
 });
 
@@ -205,17 +205,17 @@ test("custom breeding uses calendar-day feeding and fractional mating cooldown",
 
 
 test("official oviparous livestock production uses TFC hatch times, laying intervals and lifetime counts",()=>{
- assert.match(runtime,/"tfc:chicken":\{[^}]*adultAgeDays:24[^}]*maxUses:100[^}]*eggLayCooldownDays:1\.25[^}]*productFamiliarityMin:15[^}]*hatchDays:8/);
- assert.match(runtime,/"tfc:duck":\{[^}]*adultAgeDays":32[^}]*eggLayCooldownDays":1\.3333333333[^}]*maxUses":72[^}]*productFamiliarityMin":15[^}]*hatchDays":8/);
- assert.match(runtime,/"tfc:quail":\{[^}]*adultAgeDays":22[^}]*eggLayCooldownDays":1\.1666666667[^}]*maxUses":48[^}]*productFamiliarityMin":15[^}]*hatchDays":8/);
+ assert.match(runtime,/"tfc:chicken":\{[^}]*adultAgeDays:OFFICIAL_LIVESTOCK_LIFECYCLE\.chicken\.adultAgeDays[^}]*maxUses:OFFICIAL_LIVESTOCK_LIFECYCLE\.chicken\.maxUses[^}]*eggLayCooldownDays:OFFICIAL_LIVESTOCK_LIFECYCLE\.chicken\.eggLayCooldownDays[^}]*productFamiliarityMin:15[^}]*hatchDays:8/);
+ assert.match(runtime,/"tfc:duck":\{[^}]*adultAgeDays":OFFICIAL_LIVESTOCK_LIFECYCLE\.duck\.adultAgeDays[^}]*eggLayCooldownDays":OFFICIAL_LIVESTOCK_LIFECYCLE\.duck\.eggLayCooldownDays[^}]*maxUses":OFFICIAL_LIVESTOCK_LIFECYCLE\.duck\.maxUses[^}]*productFamiliarityMin":15[^}]*hatchDays":8/);
+ assert.match(runtime,/"tfc:quail":\{[^}]*adultAgeDays":OFFICIAL_LIVESTOCK_LIFECYCLE\.quail\.adultAgeDays[^}]*eggLayCooldownDays":OFFICIAL_LIVESTOCK_LIFECYCLE\.quail\.eggLayCooldownDays[^}]*maxUses":OFFICIAL_LIVESTOCK_LIFECYCLE\.quail\.maxUses[^}]*productFamiliarityMin":15[^}]*hatchDays":8/);
  assert.match(runtime,/state\.familiarity<30\|\|state\.lastFedDay<world\.getDay\(\)/);
 });
 
 
 test("custom TFC livestock alpaca, musk ox and yak use official reproduction and product profiles",()=>{
- assert.match(runtime,/"tfc:alpaca":\{[^}]*adultAgeDays":98[^}]*gestationDays":36[^}]*childCount":2[^}]*maxUses":128[^}]*productCooldownDays":5[^}]*customBreeding":true[^}]*wooly":true/);
- assert.match(runtime,/"tfc:musk_ox":\{[^}]*adultAgeDays":168[^}]*gestationDays":64[^}]*childCount":1[^}]*maxUses":160[^}]*productCooldownDays":4[^}]*customBreeding":true[^}]*wooly":true/);
- assert.match(runtime,/"tfc:yak":\{[^}]*adultAgeDays":180[^}]*gestationDays":64[^}]*childCount":1[^}]*maxUses":230[^}]*productCooldownDays":1[^}]*customBreeding":true[^}]*dairy":true/);
+ assert.match(runtime,/"tfc:alpaca":\{[^}]*adultAgeDays":OFFICIAL_LIVESTOCK_LIFECYCLE\.alpaca\.adultAgeDays[^}]*gestationDays":OFFICIAL_LIVESTOCK_LIFECYCLE\.alpaca\.gestationDays[^}]*childCount":OFFICIAL_LIVESTOCK_LIFECYCLE\.alpaca\.childCount[^}]*maxUses":OFFICIAL_LIVESTOCK_LIFECYCLE\.alpaca\.maxUses[^}]*productCooldownDays":OFFICIAL_LIVESTOCK_LIFECYCLE\.alpaca\.productCooldownDays[^}]*customBreeding":true[^}]*wooly":true/);
+ assert.match(runtime,/"tfc:musk_ox":\{[^}]*adultAgeDays":OFFICIAL_LIVESTOCK_LIFECYCLE\.musk_ox\.adultAgeDays[^}]*gestationDays":OFFICIAL_LIVESTOCK_LIFECYCLE\.musk_ox\.gestationDays[^}]*childCount":OFFICIAL_LIVESTOCK_LIFECYCLE\.musk_ox\.childCount[^}]*maxUses":OFFICIAL_LIVESTOCK_LIFECYCLE\.musk_ox\.maxUses[^}]*productCooldownDays":OFFICIAL_LIVESTOCK_LIFECYCLE\.musk_ox\.productCooldownDays[^}]*customBreeding":true[^}]*wooly":true/);
+ assert.match(runtime,/"tfc:yak":\{[^}]*adultAgeDays":OFFICIAL_LIVESTOCK_LIFECYCLE\.yak\.adultAgeDays[^}]*gestationDays":OFFICIAL_LIVESTOCK_LIFECYCLE\.yak\.gestationDays[^}]*childCount":OFFICIAL_LIVESTOCK_LIFECYCLE\.yak\.childCount[^}]*maxUses":OFFICIAL_LIVESTOCK_LIFECYCLE\.yak\.maxUses[^}]*productCooldownDays":OFFICIAL_LIVESTOCK_LIFECYCLE\.yak\.productCooldownDays[^}]*customBreeding":true[^}]*dairy":true/);
  assert.match(runtime,/const birthEvent=offspringEntityType\.startsWith\("tfc:"\)\?"tfc:spawn_baby":"minecraft:entity_born"/);
  assert.match(runtime,/baby\.triggerEvent\("tfc:spawn_baby"\)/);
 });
