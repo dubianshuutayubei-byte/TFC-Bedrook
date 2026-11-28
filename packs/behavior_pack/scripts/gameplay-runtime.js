@@ -8,6 +8,7 @@ import { createAnimalState, advanceAnimalNeeds, feedAnimal, waterAnimal, canBree
 import { getStationRecipes } from "./core/processing-recipes.mjs";
 import { isStationJobDue, getPendingStationOutputs, markStationOutputDelivered, markStationJobRecoverable } from "./core/station-job-service.mjs";
 import { normalizeDimensionId, normalizeWeather, getRainfallMm } from "./core/environment-service.mjs";
+import { calculateAmbientTemperatureC } from "./core/climate-service.mjs";
 
 const STATE_KEY="tfc:player_state",PROGRESS_KEY="tfc:knapping_progress",FOOD_FRESHNESS_KEY="tfc:food_freshness";
 const FOOD_DECAY_PROFILES={"tfc:raw_meat":0.16,"tfc:cooked_meat":0.12,"tfc:grain":0.025,"tfc:maize":0.025,"tfc:potato":0.1,"tfc:milk_bottle":0.18};
@@ -150,7 +151,8 @@ if(seedProfile){const top=block.above();if(!top?.isAir){player.sendMessage("§c�
 if(held?.typeId==="minecraft:bone_meal"){if(take(player,"minecraft:bone_meal",1)){writeWorldState(soilKey(block),applySoilCompost(soil));player.sendMessage("§a堆肥を混ぜました。土壌養分が回復しました。");}return;}
 const form=new ActionFormData().title("土壌状態").body("水分: "+Math.floor(soil.hydration)+"%\n窒素: "+Math.floor(soil.nitrogen)+"\nリン: "+Math.floor(soil.phosphorus)+"\nカリウム: "+Math.floor(soil.potassium)+"\n\n骨粉を持って操作すると堆肥として使えます。").button("閉じる");try{await form.show(player);}catch{}
 }
-function cropTick(block){const age=block.permutation.getState("tfc:age");if(typeof age!=="number"||age>=3)return;const cropType=block.permutation.getState("tfc:crop_type")??"wheat";const profile=CROP_PROFILES[cropType]??CROP_PROFILES.wheat;let soil;try{soil=readSoil(block.below());}catch{return;}const evaluation=evaluateCropGrowth(profile,{temperatureC:15},soil);if(!evaluation.suitable)return;soil.hydration=Math.max(0,soil.hydration-2);soil=applyNutrientUptake(soil,profile.preferredNutrient,1.5);writeWorldState(soilKey(block.below()),soil);block.setPermutation(block.permutation.withState("tfc:age",age+1));}
+function currentTemperatureC(){return calculateAmbientTemperatureC({meanAnnualTempC:12,seasonalAmplitudeC:14,dayOfYear:((world.getDay()%96)+96)%96,timeOfDay:world.getTimeOfDay(),elevationM:0,diurnalAmplitudeC:3});}
+function cropTick(block){const age=block.permutation.getState("tfc:age");if(typeof age!=="number"||age>=3)return;const cropType=block.permutation.getState("tfc:crop_type")??"wheat";const profile=CROP_PROFILES[cropType]??CROP_PROFILES.wheat;let soil;try{soil=readSoil(block.below());}catch{return;}const evaluation=evaluateCropGrowth(profile,{temperatureC:currentTemperatureC()},soil);if(!evaluation.suitable)return;soil.hydration=Math.max(0,soil.hydration-2);soil=applyNutrientUptake(soil,profile.preferredNutrient,1.5);writeWorldState(soilKey(block.below()),soil);block.setPermutation(block.permutation.withState("tfc:age",age+1));}
 function fireTick(block){const key=posKey(block,"fire");const state=advanceFire(readWorldState(key,{}),20);writeWorldState(key,state);}
 function animalState(entity){try{const raw=entity.getDynamicProperty("tfc:animal_state");const base=typeof raw==="string"?JSON.parse(raw):{};return createAnimalState({...base,species:entity.typeId.replace(":","_")});}catch{return createAnimalState({species:entity.typeId.replace(":","_")});}}
 function saveAnimal(entity,state){try{entity.setDynamicProperty("tfc:animal_state",JSON.stringify(state));}catch(error){console.warn("[TFC-Bedrook] animal state save:",error);}}
