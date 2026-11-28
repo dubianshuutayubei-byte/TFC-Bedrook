@@ -44,7 +44,7 @@ if(response.canceled||response.selection!==0)return;
 if(id!=="anvil"&&!canProcessAtTemperature(state,recipe.minTemp)){player.sendMessage("§c温度不足です。燃料を追加して加熱してください。");return;}
 if(!take(player,recipe.input,recipe.amount)){player.sendMessage("§c材料が足りません。");return;}
 player.sendMessage("§e加工中…");
-system.runTimeout(()=>{try{give(player,recipe.output);player.sendMessage("§a加工完了: "+recipe.output);}catch(e){try{block.dimension.spawnItem(new ItemStack(recipe.output,1),block.location);}catch{}}},recipe.duration);
+system.runTimeout(()=>{try{if(!give(player,recipe.output))block.dimension.spawnItem(new ItemStack(recipe.output,1),block.location);player.sendMessage("§a加工完了: "+recipe.output);}catch(e){try{block.dimension.spawnItem(new ItemStack(recipe.output,1),block.location);}catch{}}},recipe.duration);
 }
 async function knap(player){
 let selected=[];try{selected=JSON.parse(String(player.getDynamicProperty(PROGRESS_KEY)??"[]"));}catch{selected=[];}if(!Array.isArray(selected))selected=[];
