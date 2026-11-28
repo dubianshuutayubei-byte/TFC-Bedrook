@@ -76,6 +76,18 @@
     },
     "tfc_bronze_sheet": {
       "textures": "textures/items/tfc_ingot"
+    },
+    "tfc_drying_rack": {
+      "textures": "textures/items/tfc_firepit"
+    },
+    "tfc_dried_meat": {
+      "textures": "textures/items/tfc_meat_cooked"
+    },
+    "tfc_dried_fruit": {
+      "textures": "textures/items/tfc_grain"
+    },
+    "tfc_dried_vegetables": {
+      "textures": "textures/items/tfc_grain"
     }
   }
 }
