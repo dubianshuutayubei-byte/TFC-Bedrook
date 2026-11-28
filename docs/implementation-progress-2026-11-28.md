@@ -416,3 +416,15 @@
 - 調査結果の分類は geology-service の純粋関数へ分離し、鉱石数の降順で表示。
 - これは既存ワールド内のバニラ鉱石を調べる初期機能。TFC固有の鉱脈生成・母岩適合・地表サンプル採取・鉱石分布は地形/鉱石生成工程で実装する。
 - Script API の ItemComponentUseOnEvent の block/source と ItemCustomComponent.onUseOn を利用。26.60実機動作は未検証。
+
+
+### 追加修正（TFC 1.21.1農業仕様との整合）
+
+- 公式Field Guideの作物ページに合わせ、小麦・トウモロコシ・ジャガイモの適温/水分範囲を更新。
+- TFCでは栄養不足が作物成長を完全停止させる条件ではなく、NPKの消費/補給が成長速度や収量へ影響するため、栄養不足による成長停止を廃止。現在は栄養状態が悪いほど成長倍率を下げる方式。
+- 作物ごとのNPK効果を追加。小麦/トウモロコシは窒素を消費しリン/カリウムを補給、ジャガイモはNPK全てを消費する簡易モデル。
+- 土壌の粒度/基質（loam/silt/clay）と、TFCの肥沃度クラス（Entisol/Andisol/Fluvisol/Alfisol/Mollisol/Podzol/Aridisol/Oxisol）を別管理にした。
+- 肥沃度クラスは作物成長速度を変えず、肥料と作物からの養分補給効果だけを倍率補正。8クラスの倍率はField Guideの±10/20%説明を反映。
+- 骨粉はField Guideに合わせてリン+10として接続。堆肥はN+20/K+20のプロファイルに修正（ゲーム内堆肥アイテム/コンポスターは今後の工程）。
+- 養分効果量の時間当たりスケールはBedrook側の仮値。公式ガイドの方向性・範囲に合わせたもので、内部数値を完全再現したものではない。
+- 参照: https://terrafirmacraft.github.io/Field-Guide/ja_jp/food/crops.html / farmland.html / fertilizers.html
