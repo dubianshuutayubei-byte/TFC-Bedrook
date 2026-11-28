@@ -146,3 +146,11 @@
 - Node単体テストは燃焼・冷却、土壌水分/栄養、餌やり/繁殖判定を対象に追加。
 - Bedrock Script APIのイベント接続はコード上実装した段階で、Minecraft 26.60実機の起動・動作は未確認。
 - 地形生成と他アドオン統合は今回も対象外。
+
+
+## 2026-11-28 追加修正（設備tickの分離）
+
+- `tfc:station_ui` から `onTick` を分離し、温度更新専用の `tfc:heated_station_tick` を追加。
+- 焚き火・Pit Kiln・るつぼだけに温度tickコンポーネントを付与。金床はクリックUIのみで、温度tickを持たない。
+- これにより、`minecraft:tick` を持たない金床に `onTick` コールバックを登録していた構造を解消。
+- JSON/Script構造の修正であり、Bedrock 26.60実機のContent Log確認は未実施。
