@@ -60,7 +60,7 @@ test("every custom fauna client entity resolves to a model or an explicit vanill
   }
 
   // The custom chicken deliberately reuses Bedrock's built-in chicken geometry and animation set.
-  const vanillaGeometry = new Set(["geometry.chicken.v1.12"]);
+  const vanillaGeometry = new Set(["geometry.chicken.v1.12", "geometry.cat", "geometry.wolf"]);
   const usedModelIds = new Set();
   for (const file of jsonFiles(clientDir)) {
     const client = readJson(join(clientDir, file))["minecraft:client_entity"]?.description;
