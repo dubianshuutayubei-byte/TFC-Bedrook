@@ -35,7 +35,7 @@ test("milk collection uses the exact official TFC minimum familiarity of 0.15",(
 test("milk and wool cooldowns use fractional world days, not animal age",()=>{
  assert.match(runtime,/function currentAnimalDay\(\)\{return world\.getDay\(\)\+world\.getTimeOfDay\(\)\/24000;\}/);
  assert.match(runtime,/const currentDay=currentAnimalDay\(\);/);
- assert.match(runtime,/cooldownDays:profile\.productCooldownDays\?\?7,currentDay:currentAnimalDay\(\)/);
+ assert.match(runtime,/const state=animalState\(entity\),currentDay=currentAnimalDay\(\);/);
 });
 
 test("sheep shearing uses TFC wool production familiarity, cooldown and per-animal uses",()=>{
@@ -50,5 +50,5 @@ test("sheep shearing uses TFC wool production familiarity, cooldown and per-anim
 test("product timing uses fractional world calendar days rather than animal age",()=>{
  assert.match(runtime,/function currentAnimalDay\(\)\{return world\.getDay\(\)\+world\.getTimeOfDay\(\)\/24000;\}/);
  assert.match(runtime,/const currentDay=currentAnimalDay\(\);/);
- assert.match(runtime,/recordProduct\(state,currentAnimalDay\(\),\{maxUses:profile\.maxUses\?\?Infinity\}\)/);
+ assert.match(runtime,/recordProduct\(state,currentDay,\{maxUses:profile\.maxUses\?\?Infinity,oldDayDelay:1\+Math\.floor\(Math\.random\(\)\*5\)\}\)/);
 });
