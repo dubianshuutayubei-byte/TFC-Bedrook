@@ -6,7 +6,8 @@ import { readStackFreshness, advanceStackFreshness } from "./core/food-stack-ser
 import { createFireState, addFuel, advanceFire, canProcessAtTemperature } from "./core/firepit-service.mjs";
 import { createSoilState, advanceSoilHydration, evaluateCropGrowth, calculateCropYield, applyFertilizer, applyCropNutrientEffects, inferSoilTypeFromBlockId, inferSoilFertilityClassFromBiomeId, advanceCropGrowthProgress } from "./core/agriculture-service.mjs";
 import { CROP_PROFILES } from "./core/crop-profiles.mjs";
-import { createAnimalState, createAnimalOffspringState, initializeAnimalLifeStage, syncAnimalHealth, advanceAnimalNeeds, advanceAnimalFamiliarityDecay, canFeedAnimal, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct } from "./core/fauna-service.mjs";
+import { createAnimalState, createAnimalOffspringState, initializeAnimalLifeStage, syncAnimalHealth, advanceAnimalNeeds, advanceAnimalFamiliarityDecay, canFeedAnimal, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct, evaluateHabitat } from "./core/fauna-service.mjs";
+import { OFFICIAL_FAUNA_PROFILES } from "./core/fauna-profiles.mjs";
 import { getStationRecipes } from "./core/processing-recipes.mjs";
 import { isStationJobDue, getPendingStationOutputs, markStationOutputDelivered, markStationJobRecoverable } from "./core/station-job-service.mjs";
 import { normalizeDimensionId, normalizeWeather, getRainfallMm, inferBiomeRainfallMultiplierFromBiomeId } from "./core/environment-service.mjs";
@@ -736,6 +737,55 @@ world.afterEvents.itemUse.subscribe(event=>{
  const player=event.source,stack=event.itemStack;
  if(player?.typeId==="minecraft:player"&&player.isSneaking&&stack?.typeId==="minecraft:clay_ball")void shapePottery(player);
 });
+function rainfallForBiome(biomeId){
+ const id=String(biomeId??"").toLowerCase();
+ if(/desert|badlands/.test(id))return 50;
+ if(/savanna/.test(id))return 180;
+ if(/jungle|mangrove/.test(id))return 600;
+ if(/swamp/.test(id))return 550;
+ if(/snowy|ice_spikes|frozen/.test(id))return 220;
+ if(/taiga|old_growth_pine|old_growth_spruce/.test(id))return 280;
+ if(/forest|birch|cherry_grove/.test(id))return 420;
+ if(/ocean|river|beach/.test(id))return 300;
+ return 320;
+}
+function forestTypeAt(dimension,location){
+ let leaves=0,logs=0;
+ for(let dx=-4;dx<=4;dx+=2)for(let dz=-4;dz<=4;dz+=2)for(let dy=0;dy<=5;dy+=2){
+  try{const block=dimension.getBlock({x:Math.floor(location.x)+dx,y:Math.floor(location.y)+dy,z:Math.floor(location.z)+dz});const id=block?.typeId??"";
+   if(id.includes("leaves")||id.includes("leaf"))leaves++;
+   if(id.includes("_log")||id.includes("_wood"))logs++;
+  }catch{}
+ }
+ const score=leaves+logs*2;
+ return score>=24?"old_growth":score>=10?"normal":score>=2?"edge":"none";
+}
+function sampleAnimalEnvironment(entity){
+ const location=entity.location,dimension=entity.dimension;
+ const blockLocation={x:Math.floor(location.x),y:Math.floor(location.y),z:Math.floor(location.z)};
+ let biomeId="minecraft:plains",brightness=null;
+ try{biomeId=dimension.getBiome(blockLocation).id;}catch{}
+ try{brightness=dimension.getBlock(blockLocation)?.getLightLevel()??null;}catch{}
+ const terrain=/mountain|windswept|peaks|highlands/.test(biomeId)?"highlands":/plains|savanna/.test(biomeId)?"plains":/forest|taiga|jungle/.test(biomeId)?"forest":"other";
+ const waterType=/ocean|beach/.test(biomeId)?"saltwater":"freshwater";
+ return {temperatureC:currentTemperatureC(location.y-63,biomeId),rainfall:rainfallForBiome(biomeId),belowSeaLevel:Math.max(0,63-blockLocation.y),brightness,forestType:forestTypeAt(dimension,location),terrain,waterType,biomeId};
+}
+function validateNaturalFaunaSpawn(event){
+ if(event?.cause!=="Spawned")return;
+ const entity=event.entity,profile=ANIMAL_PROFILES[entity?.typeId];
+ if(!profile)return;
+ const official=OFFICIAL_FAUNA_PROFILES[profile.speciesId];
+ if(!official)return;
+ system.run(()=>{
+  try{
+   if(!entity.isValid())return;
+   const environment=sampleAnimalEnvironment(entity),result=evaluateHabitat(official,environment);
+   if(result.missing.length){console.warn("[TFC-Bedrook] fauna spawn climate check skipped; missing:",profile.speciesId,result.missing);return;}
+   if(!result.suitable){entity.remove();}
+  }catch(error){console.warn("[TFC-Bedrook] fauna spawn climate validation skipped:",profile.speciesId,error);}
+ });
+}
+world.afterEvents.entitySpawn.subscribe(validateNaturalFaunaSpawn);
 world.beforeEvents.playerInteractWithEntity.subscribe(event=>{
  const target=event.target;
  if(target?.typeId!=="minecraft:sheep"||event.itemStack?.typeId!=="minecraft:shears")return;
