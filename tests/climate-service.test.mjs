@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import {
   calculateTemperatureC,
   calculateAmbientTemperatureC,
+  getSeasonName,
   evaluateCropClimate,
   evaluateFaunaHabitat,
   normalizeHydration,
@@ -71,4 +72,12 @@ test("ambient temperature follows both season and day-night cycle", () => {
   assert.throws(() => calculateAmbientTemperatureC({
     meanAnnualTempC: 12, dayOfYear: 0, timeOfDay: 25000,
   }), RangeError);
+});
+
+test("season labels align with day zero winter solstice", () => {
+  assert.equal(getSeasonName(0), "冬");
+  assert.equal(getSeasonName(24), "春");
+  assert.equal(getSeasonName(48), "夏");
+  assert.equal(getSeasonName(72), "秋");
+  assert.equal(getSeasonName(96), "冬");
 });
