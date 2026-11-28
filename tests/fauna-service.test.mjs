@@ -133,3 +133,20 @@ test("species without verified maturity ages do not receive fabricated ages",()=
  const adult=initializeAnimalLifeStage({species:"wolf"},{isBaby:false,adultAgeDays:null});
  assert.equal(adult.ageDays,0);assert.equal(adult.lifeStage,"adult");
 });
+
+test("animal product uses are persisted and reaching the configured limit makes the animal old",()=>{
+ const a=recordProduct({species:"cow",lifeStage:"adult",uses:1},10,{maxUses:2});
+ assert.equal(a.uses,2);
+ assert.equal(a.lifeStage,"old");
+ assert.equal(canProduce(a,{currentDay:20,maxUses:2}),false);
+});
+test("animal initialization restores old age from exhausted product uses",()=>{
+ const a=initializeAnimalLifeStage({species:"sheep",ageDays:60,lifeStage:"adult",uses:60},{isBaby:false,adultAgeDays:56,maxUses:60});
+ assert.equal(a.lifeStage,"old");
+});
+test("pregnancy state records fertilization",()=>{
+ const p={adultAgeDays:10,requiredFamiliarity:0,breedingCooldownDays:0};
+ const result=beginPregnancy({species:"deer",sex:"female",ageDays:20},{species:"deer",sex:"male",ageDays:20},p);
+ assert.equal(result.started,true);
+ assert.equal(result.animal.fertilized,true);
+});
