@@ -23,4 +23,6 @@ test("spawn environment sampler provides temperature, rainfall, depth, light and
 });
 
 
-test("natural fauna spawn sampler supplies TFC calendar month",()=>{\n assert.match(runtime,/month:tfcMonthFromDay\\(world\\.getDay\\(\\)\\)/);\n});\n
+test("natural fauna spawn sampler supplies TFC calendar month",()=>{
+ assert.match(runtime,/month:tfcMonthFromDay\\(world\\.getDay\\(\\)\\)/);
+});
