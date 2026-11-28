@@ -59,7 +59,7 @@ test("product timing uses fractional world calendar days rather than animal age"
 
 test("sheep status shows remaining wool regrowth time and specific failure reasons",()=>{
  assert.match(runtime,/再生待ち: "\+\(state\.uses>0\?Math\.max\(0,profile\.productCooldownDays-\(currentAnimalDay\(\)-state\.lastProductAt\)\)/);
- assert.match(runtime,/このヒツジはまだ成熟していません/);
+ assert.match(runtime,/この動物はまだ成熟していません/);
  assert.match(runtime,/なつき度を.*以上にしてください/);
  assert.match(runtime,/羊毛が再生するまであと/);
 });
