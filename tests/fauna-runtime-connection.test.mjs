@@ -181,3 +181,11 @@ test("custom breeding uses calendar-day feeding and fractional mating cooldown",
  assert.match(runtime,/beginPregnancy\(state,other,breedingProfile\)/);
  assert.match(runtime,/other\.lastBreedAt=breedingTime;other\.lastFedDay=breedingDay-1/);
 });
+
+
+test("official oviparous livestock production uses TFC hatch times, laying intervals and lifetime counts",()=>{
+ assert.match(runtime,/"minecraft:chicken":\{[^}]*adultAgeDays:24[^}]*maxUses:100[^}]*eggLayCooldownDays:1\.25[^}]*productFamiliarityMin:15[^}]*hatchDays:8/);
+ assert.match(runtime,/"tfc:duck":\{[^}]*adultAgeDays":32[^}]*eggLayCooldownDays":1\.3333333333[^}]*maxUses":72[^}]*productFamiliarityMin":15[^}]*hatchDays":8/);
+ assert.match(runtime,/"tfc:quail":\{[^}]*adultAgeDays":22[^}]*eggLayCooldownDays":1\.1666666667[^}]*maxUses":48[^}]*productFamiliarityMin":15[^}]*hatchDays":8/);
+ assert.match(runtime,/state\.familiarity<30\|\|state\.lastFedDay<world\.getDay\(\)/);
+});
