@@ -71,7 +71,7 @@ async function station(player,id,block){
  const key=stationJobKey(block),existing=readWorldState(key,null);
  if(existing&&["running","ready_to_claim","delivering"].includes(existing.status)){
   const remaining=Math.max(0,existing.endsAt-Date.now());
-  if(remaining<=0){completeStationJob(key,block.dimension,block.location);player.sendMessage("§a保存されていた加工を完了しました。");return;}
+  if(remaining<=0){const completed=completeStationJob(key,block.dimension,block.location);player.sendMessage(completed?"§a保存されていた加工が完了しました。完成品は設備の場所に出ました。":"§e加工時間は終了していますが、完成品をまだ搬出できません。後で再試行します。");return;}
   scheduleStationJob(key,block.dimension,block.location,remaining/50);
   const progress=Math.floor(100*(1-remaining/Math.max(1,existing.endsAt-existing.startedAt)));
   const form=new ActionFormData().title("設備状態").body("§e加工中: "+existing.recipeId+"\n進捗: "+progress+"%\n残り: "+Math.ceil(remaining/1000)+"秒\n\n開始後に退出しても処理結果は保存されます。").button("閉じる");
