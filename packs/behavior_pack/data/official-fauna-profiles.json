@@ -405,5 +405,26 @@
       "maxTemperatureC": -11,
       "minRainfall": 100
     }
-  ]
+  ],
+  "audit": {
+    "sourceTag": "v3.2.26",
+    "sourceDirectory": "https://github.com/TerraFirmaCraft/TerraFirmaCraft/tree/v3.2.26/src/main/resources/data/tfc/tfc/fauna",
+    "speciesChecked": 63,
+    "speciesWithExactClimateFieldComparison": 63,
+    "checkedFields": [
+      "min_temperature",
+      "max_temperature",
+      "min_rainfall",
+      "max_rainfall",
+      "min_forest",
+      "max_forest",
+      "below_sea_level",
+      "max_brightness",
+      "water",
+      "chance",
+      "fuzzy"
+    ],
+    "result": "All climate keys and values in this Bedrock profile file were compared with the corresponding official JSON files. No differences were found.",
+    "caveat": "This validates only climate profile transcription, not Bedrock environment sampling, forest classification, spawn frequency, AI, or species implementation."
+  }
 }
