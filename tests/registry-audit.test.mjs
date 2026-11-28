@@ -42,3 +42,11 @@ test("item block placers resolve to registered block definitions and catalog cou
  assert.equal(catalog.audit.registeredItemCount,items.length);
  assert.equal(catalog.audit.registeredBlockCount,blocks.length);
 });
+
+test("TFC wool item is registered and has an item texture mapping",()=>{
+ const wool=JSON.parse(readFileSync(join(root,"packs/behavior_pack/items/wool.json"),"utf8"));
+ const textures=JSON.parse(readFileSync(join(root,"packs/resource_pack/textures/item_texture.json"),"utf8"));
+ assert.equal(wool["minecraft:item"].description.identifier,"tfc:wool");
+ assert.equal(wool["minecraft:item"].components["minecraft:icon"],"tfc_wool");
+ assert.ok(textures.texture_data.tfc_wool);
+});
