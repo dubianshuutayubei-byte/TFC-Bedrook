@@ -9,6 +9,7 @@ const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runti
 test("livestock maturity data matches runtime adult thresholds",()=>{
  for(const [species,age] of [["cow",192],["sheep",56],["chicken",24]]){
   assert.equal(fauna[species].adultAgeDays,age);
-  assert.ok(runtime.includes('"minecraft:'+species+'":{adultAgeDays:'+age));
+  const entityId=species==="chicken"?"tfc:chicken":"minecraft:"+species;
+  assert.ok(runtime.includes('"'+entityId+'":{adultAgeDays:'+age));
  }
 });
