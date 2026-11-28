@@ -1,0 +1,18 @@
+{
+  "format_version": "1.26.60",
+  "minecraft:item": {
+    "description": {
+      "identifier": "tfc:radish_seed",
+      "menu_category": {
+        "category": "items"
+      }
+    },
+    "components": {
+      "minecraft:icon": "tfc_radish_seed",
+      "minecraft:display_name": {
+        "value": "ラディッシュの種"
+      },
+      "minecraft:max_stack_size": 64
+    }
+  }
+}
