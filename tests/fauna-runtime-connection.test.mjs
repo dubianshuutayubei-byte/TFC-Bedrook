@@ -240,7 +240,7 @@ test("all 13 fauna entity scaffolds missing from the prior runtime now receive s
   assert.match(entry,id==="leopard_seal"?/hungerPerDay:8/:/hungerPerDay:0/);
   assert.match(entry,/thirstPerDay:0/);
   if(id==="leopard_seal") assert.match(entry,/feedItems:\["minecraft:cod","minecraft:salmon"\]/);
-  else assert.match(entry,/feedItems:\[\]/);
+  else if(id==="pond_turtle") assert.match(entry,/feedItems:\["tfc:food\/dried_kelp","tfc:food\/dried_seaweed"\]/); else assert.match(entry,/feedItems:\[\]/);
  }
 });
 
