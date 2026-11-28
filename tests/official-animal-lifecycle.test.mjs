@@ -13,7 +13,11 @@ test("official TFC animal lifecycle config preserves exact adulthood, gestation 
  assert.equal(byId.goat.adulthoodDays,96);
  assert.equal(byId.goat.product.cooldownDays,3);
  assert.equal(byId.sheep.adulthoodDays,56);
- assert.equal(byId.sheep.product.cooldownDays,7);
+ assert.equal(byId.sheep.product.cooldownDays,4);
+ assert.equal(byId.rabbit.adulthoodDays,30);
+ assert.equal(byId.pig.childCountMin,1);
+ assert.equal(byId.pig.childCountMax,10);
+ assert.match(data.source,/TFC 1\.21\.x/);
  assert.equal(byId.chicken.adulthoodDays,24);
  assert.equal(byId.chicken.product.hatchDays,8);
  assert.equal(byId.horse.gestationDays,19);
