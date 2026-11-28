@@ -10,7 +10,7 @@ import { isStationJobDue, getPendingStationOutputs, markStationOutputDelivered, 
 import { normalizeDimensionId, normalizeWeather, getRainfallMm } from "./core/environment-service.mjs";
 import { calculateAmbientTemperatureC } from "./core/climate-service.mjs";
 import { findMatchingAlloys } from "./core/metal-service.mjs";
-import { classifyTemperature } from "./core/heat-service.mjs";
+import { classifyTemperature, coolItemTemperature } from "./core/heat-service.mjs";
 import { summarizeOreSamples } from "./core/geology-service.mjs";
 
 const STATE_KEY="tfc:player_state",PROGRESS_KEY="tfc:knapping_progress",FOOD_FRESHNESS_KEY="tfc:food_freshness";
@@ -20,6 +20,29 @@ const CROP_PROFILES={
  maize:{minTemperatureC:-7,maxTemperatureC:27,minHydration:50,maxHydration:100,nutrientDemand:{nitrogen:90},nutrientEffects:{nitrogen:-0.9,phosphorus:0.25,potassium:0.25},seed:"tfc:maize_seed",harvest:"tfc:maize"},
  potato:{minTemperatureC:-7,maxTemperatureC:22,minHydration:35,maxHydration:90,nutrientDemand:{nitrogen:40,phosphorus:20,potassium:60},nutrientEffects:{nitrogen:-0.4,phosphorus:-0.2,potassium:-0.6},seed:"tfc:potato_seed",harvest:"tfc:potato"}
 };
+const ITEM_TEMPERATURE_KEY="tfc:temperature_c",ITEM_HEAT_TICK_KEY="tfc:heat_updated_tick";
+const HEATED_METAL_PROFILES=Object.freeze({
+ "tfc:heated_copper_ingot":{initialTemperatureC:1080,heatCapacity:2.857,forgingTemperatureC:648},
+ "tfc:heated_tin_ingot":{initialTemperatureC:230,heatCapacity:7.143,forgingTemperatureC:138},
+ "tfc:heated_bronze_ingot":{initialTemperatureC:950,heatCapacity:2.857,forgingTemperatureC:570}
+});
+function createOutputStack(id,amount=1){
+ const stack=new ItemStack(id,amount),profile=HEATED_METAL_PROFILES[id];
+ if(profile)stack.setDynamicProperties({[ITEM_TEMPERATURE_KEY]:profile.initialTemperatureC,[ITEM_HEAT_TICK_KEY]:system.currentTick});
+ return stack;
+}
+function tickMetalHeat(player,nowTick){
+ const container=inv(player);if(!container)return;
+ for(let i=0;i<container.size;i++){
+  const stack=container.getItem(i),profile=HEATED_METAL_PROFILES[stack?.typeId];if(!stack||!profile)continue;
+  const rawTemperature=stack.getDynamicProperty(ITEM_TEMPERATURE_KEY),rawTick=stack.getDynamicProperty(ITEM_HEAT_TICK_KEY);
+  const current=Number.isFinite(Number(rawTemperature))?Number(rawTemperature):20;
+  const last=Number.isFinite(Number(rawTick))?Number(rawTick):nowTick;
+  const elapsed=nowTick>=last?nowTick-last:0;
+  const next=coolItemTemperature(current,profile,elapsed);
+  if(next!==current||last!==nowTick||rawTemperature===undefined){stack.setDynamicProperties({[ITEM_TEMPERATURE_KEY]:next,[ITEM_HEAT_TICK_KEY]:nowTick});container.setItem(i,stack);}
+ }
+}
 const ITEM_LABELS={"tfc:raw_meat":"生肉","tfc:cooked_meat":"焼いた肉","tfc:clay_vessel":"未焼成土器","tfc:fired_vessel":"焼成土器","tfc:unfired_ingot_mold":"未焼成鋳型","tfc:fired_ingot_mold":"焼成鋳型","tfc:copper_ore":"銅鉱石","tfc:heated_copper_ingot":"加熱銅インゴット","tfc:copper_ingot":"銅インゴット","tfc:tin_ore":"錫鉱石","tfc:heated_tin_ingot":"加熱錫インゴット","tfc:tin_ingot":"錫インゴット","tfc:heated_bronze_ingot":"加熱青銅インゴット","tfc:bronze_ingot":"青銅インゴット","tfc:fruit":"果物","tfc:vegetable":"野菜","tfc:dried_meat":"干し肉","tfc:dried_fruit":"干し果物","tfc:dried_vegetables":"干し野菜","tfc:compost":"堆肥","minecraft:oak_leaves":"落ち葉"};
 const WEATHER_BY_DIMENSION=new Map([["overworld","clear"]]);
 const ANIMAL_PROFILES={
@@ -31,7 +54,7 @@ const ANIMAL_PROFILES={
 const inv=p=>p.getComponent("minecraft:inventory")?.container;
 function count(p,id){const c=inv(p);if(!c)return 0;let n=0;for(let i=0;i<c.size;i++){const s=c.getItem(i);if(s?.typeId===id)n+=s.amount;}return n;}
 function take(p,id,n){const c=inv(p);if(!c||count(p,id)<n)return false;for(let i=0;i<c.size&&n>0;i++){const s=c.getItem(i);if(!s||s.typeId!==id)continue;const k=Math.min(n,s.amount);if(k===s.amount)c.setItem(i,undefined);else{s.amount-=k;c.setItem(i,s);}n-=k;}return n===0;}
-function give(p,id,n=1){const c=inv(p);if(!c)return false;const rest=c.addItem(new ItemStack(id,n));if(rest)p.dimension.spawnItem(rest,p.location);return true;}
+function give(p,id,n=1){const c=inv(p);if(!c)return false;const rest=c.addItem(createOutputStack(id,n));if(rest)p.dimension.spawnItem(rest,p.location);return true;}
 function readFoodFreshness(player){try{const raw=player.getDynamicProperty(FOOD_FRESHNESS_KEY);return raw?JSON.parse(String(raw)):{};}catch{return {};}}
 function writeFoodFreshness(player,state){try{player.setDynamicProperty(FOOD_FRESHNESS_KEY,JSON.stringify(state));}catch(error){console.warn("[TFC-Bedrook] food freshness save:",error);}}
 function food(p,params){if(!p||p.typeId!=="minecraft:player")return;const s=deserializePlayerState(String(p.getDynamicProperty(STATE_KEY)??""));const freshnessState=readFoodFreshness(p);const itemId=String(params.itemId??"");const freshness=Number(freshnessState[itemId]?.freshness??100);const nutrition=params.category?{[params.category]:Number(params.nutrition??0)}:{};const result=consumeFood(s,{freshness,hydration:Number(params.hydration??0),nutrition});if(!result.consumed){p.sendMessage("§cこの食品は腐敗していて食べられません。");return;}p.setDynamicProperty(STATE_KEY,serializePlayerState(result.playerState));p.sendMessage("§a水分・栄養状態を更新しました。");}
@@ -101,7 +124,7 @@ function completeStationJob(key,dimension,location){
  let job=readWorldState(key,null);if(!isStationJobDue(job))return false;
  try{
   for(const [id,n] of getPendingStationOutputs(job)){
-   dimension.spawnItem(new ItemStack(id,n),location);
+   dimension.spawnItem(createOutputStack(id,n),location);
    job=markStationOutputDelivered(job,id);
    writeWorldState(key,job);
   }
@@ -143,7 +166,7 @@ async function station(player,id,block){
  if(fuel){if(!take(player,held.typeId,1)){player.sendMessage("§c燃料を取り出せません。");return;}writeWorldState(posKey(block,"fire"),addFuel(state,fuel));player.sendMessage("§a燃料投入: "+Math.round(fuel.duration/20)+"秒分");return;}
  const tempLabels={unheated:"未加熱",warming:"暖まり中",hot:"熱い",very_hot:"非常に熱い",faint_red:"かすかな赤熱",dark_red:"暗赤色",bright_red:"明るい赤熱",orange:"橙熱",yellow:"黄色熱",yellow_white:"黄白色",white:"白熱",brilliant_white:"強白熱"};
  const body=recipes.map((r,i)=>{const inputs=Object.entries(r.inputs).map(([itemId,amount])=>(count(player,itemId)>=amount?"§a":"§c")+(ITEM_LABELS[itemId]??itemId)+" ×"+amount+"§r").join("、");const outputs=Object.entries(r.outputs).map(([itemId,amount])=>(ITEM_LABELS[itemId]??itemId)+" ×"+amount).join("、");return(i+1)+". "+r.title+"\n   "+(id==="drying_rack"||id==="composter"?"所要時間 "+Math.ceil(r.durationTicks/20)+"秒":"必要温度 "+r.minimumTemperatureC+"°C / "+Math.ceil(r.durationTicks/20)+"秒")+"\n   材料: "+inputs+"\n   完成品: "+outputs;}).join("\n\n");
- const status=id==="drying_rack"?"\n\n常温・時間式乾燥です。燃料は必要ありません。":id==="composter"?"\n\n常温で約10日間発酵させます。緑の素材と茶色の素材が必要です。":"\n\n現在温度: "+Math.floor(state.temperatureC)+"°C（"+tempLabels[classifyTemperature(state.temperatureC)]+"）\n燃料残り: "+Math.ceil(state.burnTicks/20)+"秒";
+ const heldTemperature=Number(held?.getDynamicProperty(ITEM_TEMPERATURE_KEY)??0);const status=id==="drying_rack"?"\n\n常温・時間式乾燥です。燃料は必要ありません。":id==="composter"?"\n\n常温で約10日間発酵させます。緑の素材と茶色の素材が必要です。":id==="anvil"?"\n\n手持ち金属温度: "+Math.floor(heldTemperature)+"°C（"+tempLabels[classifyTemperature(heldTemperature)]+"）\n鍛造温度に達した加熱インゴットが必要です。":"\n\n現在温度: "+Math.floor(state.temperatureC)+"°C（"+tempLabels[classifyTemperature(state.temperatureC)]+"）\n燃料残り: "+Math.ceil(state.burnTicks/20)+"秒";
  const form=new ActionFormData().title(id==="anvil"?"金床":id==="drying_rack"?"乾燥棚":id==="composter"?"コンポスター":"加工設備").body(body+status);
  for(const recipe of recipes)form.button(recipe.title);
  if(id==="anvil")form.button("水で冷却");
@@ -159,6 +182,7 @@ async function station(player,id,block){
  }
  if(response.selection>=recipes.length)return;
  const recipe=recipes[response.selection];
+ if(id==="anvil"){const requiredId=Object.keys(recipe.inputs)[0],heldNow=inv(player)?.getItem(player.selectedSlotIndex),profile=HEATED_METAL_PROFILES[requiredId],temperature=Number(heldNow?.getDynamicProperty(ITEM_TEMPERATURE_KEY)??0);if(!profile||heldNow?.typeId!==requiredId||temperature<profile.forgingTemperatureC){player.sendMessage("§c手持ちの加熱インゴットが鍛造温度に達していません。必要温度: "+(profile?.forgingTemperatureC??0)+"°C");return;}}
  if(recipe.alloyId){const matches=findMatchingAlloys(recipe.metalInputs,{recipes:[{id:recipe.alloyId,components:recipe.alloyComponents}]});if(!matches.includes(recipe.alloyId)){player.sendMessage("§c合金の配合比が範囲外です。");return;}}
  if(!["anvil","drying_rack","composter"].includes(id)&&!canProcessAtTemperature(state,recipe.minimumTemperatureC)){player.sendMessage("§c温度不足です。");return;}
  for(const [itemId,amount] of Object.entries(recipe.inputs)){if(count(player,itemId)<amount){player.sendMessage("§c材料不足: "+itemId+" ×"+amount);return;}}
@@ -253,6 +277,7 @@ event.blockComponentRegistry.registerCustomComponent("tfc:farmland_interaction",
 event.blockComponentRegistry.registerCustomComponent("tfc:crop_growth",{onTick:a=>cropTick(a.block),onPlayerInteract:a=>{const p=a.player,b=a.block;if(!p||!b)return;if(b.permutation.getState("tfc:age")!==3){p.sendMessage("§e成長中: "+Math.floor(Number(readWorldState(posKey(b,"crop_progress"),0)))+"%");return;}const cropType=b.permutation.getState("tfc:crop_type")??"wheat";const profile=CROP_PROFILES[cropType]??CROP_PROFILES.wheat;give(p,profile.harvest,cropType==="potato"?2:3);give(p,profile.seed,1);b.setPermutation(b.permutation.withState("tfc:age",0));writeWorldState(posKey(b,"crop_progress"),0);p.sendMessage("§a収穫しました。");}});
 system.runInterval(()=>{for(const dimensionId of ["overworld","nether","the_end"]){try{const dimension=world.getDimension(dimensionId);for(const type of Object.keys(ANIMAL_PROFILES))for(const entity of dimension.getEntities({type}))animalTick(entity);}catch(error){}}},1200);
 system.runInterval(()=>{for(const player of world.getAllPlayers()){try{tickFoodFreshness(player,system.currentTick);}catch(error){console.warn("[TFC-Bedrook] food freshness tick failed:",error);}}},1200);
+system.runInterval(()=>{for(const player of world.getAllPlayers()){try{tickMetalHeat(player,system.currentTick);}catch(error){console.warn("[TFC-Bedrook] metal heat tick failed:",error);}}},20);
 });
 world.afterEvents.playerInteractWithEntity.subscribe(event=>{if(ANIMAL_PROFILES[event.target?.typeId])animalInteract(event.player,event.target);});
 world.afterEvents.playerInteractWithBlock.subscribe(event=>{
