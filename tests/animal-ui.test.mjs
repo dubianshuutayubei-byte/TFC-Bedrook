@@ -7,8 +7,8 @@ import { fileURLToPath } from "node:url";
 const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
 
-test("knapping UI presents a 3x3 selection grid without exposing the answer",()=>{
-  assert.match(runtime,/const grid=Array\.from\(\{length:3\}/);
+test("knapping UI presents a 5x5 selection grid without exposing the answer",()=>{
+  assert.match(runtime,/const grid=Array\.from\(\{length:5\}/);\n  assert.match(runtime,/for\(let i=0;i<25;i\+\+\)form\.button/);\n  assert.match(runtime,/v<25/);
   assert.match(runtime,/同じ位置を再選択すると解除できます/);
   assert.doesNotMatch(runtime,/正解パターン: 左上・中央・右下/);
 });
