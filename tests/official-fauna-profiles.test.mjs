@@ -38,3 +38,19 @@ test("all official fauna profiles include their exact official spawn placement",
  }
  assert.deepEqual(profiles.spawnPlacementAudit.placementCounts,spawn.placementCounts);
 });
+
+import { evaluateFaunaSpawn } from "../packs/behavior_pack/scripts/core/fauna-service.mjs";
+test("official aquatic placement is enforced by the shared fauna spawn evaluator",()=>{
+ const cod=db.species.find(x=>x.id==="cod");
+ const valid=evaluateFaunaSpawn(cod,{inWater:true,onGround:false,temperatureC:10,belowSeaLevel:8},()=>0);
+ assert.equal(valid.suitable,true);
+ const invalid=evaluateFaunaSpawn(cod,{inWater:false,onGround:true,temperatureC:10,belowSeaLevel:8},()=>0);
+ assert.equal(invalid.suitable,false);
+ assert.ok(invalid.failures.includes("not_in_water"));
+});
+test("official terrestrial placement does not silently accept a water spawn point",()=>{
+ const deer=db.species.find(x=>x.id==="deer");
+ const result=evaluateFaunaSpawn(deer,{inWater:true,onGround:false,temperatureC:5,rainfall:250,forestType:"edge"},()=>0);
+ assert.equal(result.suitable,false);
+ assert.ok(result.failures.includes("not_on_ground"));
+});
