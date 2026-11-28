@@ -26,6 +26,5 @@ test("anvil sheet forming requires each metal's forging temperature",()=>{
 test("tin sheet forging recipe and item are registered",()=>{
  const item=JSON.parse(readFileSync(join(root,"packs/behavior_pack/items/tin_sheet.json"),"utf8"))["minecraft:item"];
  assert.equal(item.description.identifier,"tfc:tin_sheet");
- assert.match(recipes,/tfc:tin_sheet[^
-]+minimumTemperatureC:138/);
+ assert.ok(recipes.includes('id:"tfc:tin_sheet",station:"anvil",title:"錫板を成形"'));
 });
