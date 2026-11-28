@@ -17,3 +17,12 @@ test("terrain classification separates ocean, coast, hills and mountains", () =>
   assert.equal(classifyTerrain(30, 0.4), "hills");
   assert.equal(classifyTerrain(200, 0.6), "mountain");
 });
+
+import { summarizeOreSamples } from "../packs/behavior_pack/scripts/core/geology-service.mjs";
+test("prospecting summary classifies ore samples by count",()=>{
+ const summary=summarizeOreSamples({copper:2,iron:5,coal:0});
+ assert.deepEqual(summary.map(x=>x.ore),["iron","copper"]);
+ assert.equal(summary[0].abundance,"small");
+ assert.equal(summary[1].abundance,"small");
+ assert.throws(()=>summarizeOreSamples([]),TypeError);
+});
