@@ -23,3 +23,8 @@ test("sheep wool and chicken eggs use native Bedrock collection systems",()=>{
 test("livestock status displays age, needs, health and product instructions",()=>{
  for(const label of ["性別: ","年齢: ","空腹: ","渇き: ","健康: ","なつき度: ","産出: 牛乳","産出: 羊毛","産出: 卵"])assert.ok(runtime.includes(label),label);
 });
+
+test("milk collection uses the exact official TFC minimum familiarity of 0.15",()=>{
+ assert.match(runtime,/productFamiliarityMin:15/);
+ assert.doesNotMatch(runtime,/productFamiliarityMin:16/);
+});
