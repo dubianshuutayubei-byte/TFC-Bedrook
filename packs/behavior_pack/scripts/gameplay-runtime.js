@@ -700,7 +700,7 @@ function findNearbyNestBox(entity,radius=4){
  return nearest;
 }
 function layAnimalEgg(entity,state,profile,currentDay){
- if(!profile.eggSpecies||!canLayEgg(state,{currentDay,cooldownDays:profile.eggLayCooldownDays??1,minimumAgeDays:profile.adultAgeDays??0,minimumFamiliarity:profile.productFamiliarityMin??15,minimumHealth:30,maximumHunger:70,maximumThirst:70,maxUses:profile.maxUses??Infinity}))return state;
+ if(!profile.eggSpecies||!canLayEgg(state,{currentDay,cooldownDays:profile.eggLayCooldownDays??1,minimumAgeDays:profile.adultAgeDays??0,minimumFamiliarity:profile.productFamiliarityMin??15,maxUses:profile.maxUses??Infinity}))return state;
  const eggUseOptions={maxUses:profile.maxUses??Infinity,oldDayDelay:1+Math.floor(Math.random()*5)};
  const nest=findNearbyNestBox(entity,4);
  if(!nest)return state;
@@ -872,8 +872,7 @@ async function animalInteract(player,entity){
   if(state.familiarity<=minimumFamiliarity){player.sendMessage("§e乳を採取するには、なつき度を"+(minimumFamiliarity+1)+"以上にしてください。");return;}
   const remaining=cooldown-(currentDay-state.lastProductAt);
   if(state.uses>0&&remaining>0){player.sendMessage("§e次回の乳採取まであと"+remaining.toFixed(1)+"日です。");return;}
-  if(state.health<40||state.hunger>60||state.thirst>60){player.sendMessage("§e乳畜の健康・空腹・渇きを回復させてください。");return;}
-  if(!canProduce(state,{requiredFamiliarity:minimumFamiliarity,cooldownDays:cooldown,currentDay,requiredSex:"female",minimumAgeDays:profile.adultAgeDays,minimumHealth:40,maximumHunger:60,maximumThirst:60,maxUses:profile.maxUses??Infinity})){player.sendMessage("§e今は乳を採取できません。");return;}
+  if(!canProduce(state,{requiredFamiliarity:minimumFamiliarity,cooldownDays:cooldown,currentDay,requiredSex:"female",minimumAgeDays:profile.adultAgeDays,maxUses:profile.maxUses??Infinity})){player.sendMessage("§e今は乳を採取できません。");return;}
   if(!take(player,"minecraft:glass_bottle",1)){player.sendMessage("§c空き瓶を取り出せません。");return;}
   give(player,"tfc:milk_bottle",1);
   saveAnimal(entity,recordProduct(state,currentDay,{maxUses:profile.maxUses??Infinity,oldDayDelay:1+Math.floor(Math.random()*5)}));
