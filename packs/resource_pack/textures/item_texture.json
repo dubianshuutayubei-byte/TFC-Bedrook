@@ -301,6 +301,9 @@
     },
     "tfc_smokehouse": {
       "textures": "textures/items/tfc_pottery"
+    },
+    "tfc_wool": {
+      "textures": "textures/blocks/wool_colored_white"
     }
   }
 }
