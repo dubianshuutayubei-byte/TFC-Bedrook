@@ -480,10 +480,15 @@ test("TFC 1.21.x camel cat and dog defaults match ServerConfig",()=>{
  assert.ok(lifecycle.includes("bactrian_camel: Object.freeze({ adultAgeDays: 80, maxUses: 80, gestationDays: 24, childCount: 1, productCooldownDays: 7 })"));
  assert.ok(lifecycle.includes("cat: Object.freeze({ adultAgeDays: 50, maxUses: 60, gestationDays: 19, childCount: 6 })"));
  assert.ok(lifecycle.includes("dog: Object.freeze({ adultAgeDays: 50, maxUses: 60, gestationDays: 19, childCount: 2 })"));
- const dog=runtime.slice(runtime.indexOf('"tfc:dog":'),runtime.indexOf("\\n",runtime.indexOf('"tfc:dog":')));
+ const dogStart=runtime.indexOf('"tfc:dog":');
+ const dogEnd=runtime.indexOf("\\n",dogStart);
+ const dog=runtime.slice(dogStart,dogEnd<0?runtime.length:dogEnd);
  assert.match(dog,/"tfc:spoiled_food"/);
  assert.match(runtime,/if\(state\.lifeStage==="juvenile"&&profile\.adultAgeDays!=null&&state\.ageDays>=profile\.adultAgeDays\)/,"juvenile growth must use each species maturity profile");
  assert.doesNotMatch(runtime,/if\(\["tfc:deer"/,"growth must not depend on a manually maintained entity allowlist");
+ const profileStart=runtime.indexOf("const ANIMAL_PROFILES=");
+ const profileEnd=runtime.indexOf("\\n};",profileStart);
+ const profiles=runtime.slice(profileStart,profileEnd);
  for(const id of ["dromedary_camel","bactrian_camel","cat","dog"])assert.ok(profiles.includes("OFFICIAL_LIVESTOCK_LIFECYCLE."+id+".adultAgeDays"),id+" maturity must be connected");
 });
 
