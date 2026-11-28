@@ -393,6 +393,6 @@ test("egg laying applies the same lifetime-use and old-age grace period as milk 
  const used=recordEggLaid(female,10,{maxUses:2,oldDayDelay:3});
  assert.equal(used.uses,2);
  assert.equal(used.oldDay,13);
- assert.equal(canLayEgg(used,{currentDay:12,cooldownDays:1,minimumAgeDays:24,maxUses:2}),true);
- assert.equal(canLayEgg(used,{currentDay:14,cooldownDays:1,minimumAgeDays:24,maxUses:2}),false);
+ assert.equal(canLayEgg({...used,lastFedDay:12},{currentDay:12,cooldownDays:1,minimumAgeDays:24,maxUses:2}),true);
+ assert.equal(canLayEgg({...used,lastFedDay:14},{currentDay:14,cooldownDays:1,minimumAgeDays:24,maxUses:2}),false);
 });
