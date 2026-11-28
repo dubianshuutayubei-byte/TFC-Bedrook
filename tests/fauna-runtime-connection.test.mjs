@@ -14,7 +14,7 @@ test("vanilla livestock relies on vanilla breeding and avoids duplicate feed con
 });
 test("custom deer retains its own pregnancy and birth cycle",()=>{
  assert.match(runtime,/"tfc:deer":\{[^}]*customBreeding:true/);
- assert.match(runtime,/advancePregnancy\(state,0\.05,profile\.gestationDays\)/);
+ assert.match(runtime,/advancePregnancy\(state,elapsedAgeDays,profile\.gestationDays\)/);
 });
 
 test("custom pregnancy is confined to deer; vanilla livestock uses native breeding",()=>{
@@ -111,7 +111,7 @@ test("animals do not consume dropped feed when they are not hungry",()=>{
 
 test("shared dairy interaction messages are species-neutral for cows and goats",()=>{
  assert.match(runtime,/メスの乳畜だけです/);
- assert.match(runtime,/この動物は健康・空腹・渇き、または補充時間の条件を満たしていません/);
+ assert.match(runtime,/乳畜の健康・空腹・渇きを回復させてください/);
  assert.match(runtime,/§a乳を採取しました/);
 });
 
@@ -127,7 +127,8 @@ test("runtime uses official TFC maturity, gestation and production limits for su
  }
 });
 test("dairy production applies TFC familiarity, cooldown and use limits",()=>{
- assert.match(runtime,/requiredFamiliarity:profile\.productFamiliarityMin\?\?0/);
+ assert.match(runtime,/minimumFamiliarity=profile\.productFamiliarityMin\?\?0,cooldown=profile\.productCooldownDays\?\?1/);
+ assert.match(runtime,/requiredFamiliarity:minimumFamiliarity,cooldownDays:cooldown/);
  assert.match(runtime,/cooldownDays:profile\.productCooldownDays\?\?1/);
  assert.match(runtime,/maxUses:profile\.maxUses\?\?Infinity/);
  assert.match(runtime,/recordProduct\(state,currentDay,\{maxUses:profile\.maxUses\?\?Infinity,oldDayDelay:1\+Math\.floor\(Math\.random\(\)\*5\)\}\)/);
@@ -163,7 +164,7 @@ test("custom births trigger juvenile state and persist remaining litter count",(
 });
 
 test("loaded animal lifecycle uses fractional world time for decay and old-age transition",()=>{
- assert.match(runtime,/const currentDay=currentAnimalDay\(\);\s*state=advanceAnimalFamiliarityDecay\(state,currentDay/);
+ assert.match(runtime,/const currentDay=currentAnimalDay\(\),lastAgeUpdateAt=state\.lastAgeUpdateAt>=0\?state\.lastAgeUpdateAt:currentDay,elapsedAgeDays=Math\.max\(0,currentDay-lastAgeUpdateAt\);\s*state\.lastAgeUpdateAt=currentDay;\s*state=advanceAnimalNeeds\(state,0\.05/);
  assert.match(runtime,/currentDay>state\.oldDay/);
 });
 
