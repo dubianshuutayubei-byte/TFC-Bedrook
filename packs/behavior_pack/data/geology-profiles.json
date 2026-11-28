@@ -1,0 +1,12 @@
+{
+  "default": {
+    "defaultRock": "minecraft:stone",
+    "layers": [
+      { "minDepth": -64, "maxDepth": -1, "rock": "minecraft:deepslate" },
+      { "minDepth": 0, "maxDepth": 24, "rock": "minecraft:stone" },
+      { "minDepth": 25, "maxDepth": 64, "rock": "minecraft:andesite" },
+      { "minDepth": 65, "maxDepth": 128, "rock": "minecraft:granite" }
+    ]
+  },
+  "note": "Prototype profile only. Replace with TFC source-derived regional rock strata after terrain reference material is supplied."
+}
