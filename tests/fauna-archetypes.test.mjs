@@ -6,10 +6,10 @@ import { fileURLToPath } from "node:url";
 const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const roster=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/fauna-roster.json"),"utf8"));
 const archetypes=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/fauna-archetypes.json"),"utf8"));
-test("official TFC Java entity archetypes cover all 63 fauna",()=>{
- assert.equal(archetypes.total,63);
- assert.equal(archetypes.species.length,63);
- assert.equal(new Set(archetypes.species.map(x=>x.id)).size,63);
+test("official TFC Java entity archetypes cover all 78 fauna",()=>{
+ assert.equal(archetypes.total,78);
+ assert.equal(archetypes.species.length,78);
+ assert.equal(new Set(archetypes.species.map(x=>x.id)).size,78);
  assert.deepEqual(new Set(archetypes.species.map(x=>x.id)),new Set(roster.species.map(x=>x.id)));
 });
 test("official predator, prey, livestock, fish and aquatic classes are preserved",()=>{
@@ -22,16 +22,16 @@ test("official predator, prey, livestock, fish and aquatic classes are preserved
 
 const coverage=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/fauna-runtime-coverage.json"),"utf8"));
 const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
-test("all 63 fauna are runtime-tracked while 40 still need species-specific TFC behavior",()=>{
- assert.equal(coverage.total,63);
+test("63 legacy fauna are runtime-tracked while 55 official species need implementation work",()=>{
+ assert.equal(coverage.total,78);
  assert.equal(coverage.runtimeTrackedCount,63);
  assert.equal(coverage.runtimeTrackedSpecies.length,63);
- assert.equal(coverage.remainingCount,40);
+ assert.equal(coverage.remainingCount,55);
  const tracked=new Set(coverage.runtimeTrackedSpecies);
  const remaining=new Set(coverage.requiresSpeciesImplementation);
  assert.equal(tracked.size,63);
- assert.equal(remaining.size,40);
+ assert.equal(remaining.size,55);
  for(const id of tracked){assert.ok(roster.species.some(x=>x.id===id),id);assert.ok(runtime.includes('"speciesId":"'+id+'"')||runtime.includes('speciesId:"'+id+'"'),id);}
  for(const id of remaining){assert.ok(roster.species.some(x=>x.id===id),id);assert.ok(tracked.has(id),id);}
- for(const x of roster.species)assert.ok(tracked.has(x.id),x.id);
+ for(const id of coverage.missingOfficialSpecies){assert.ok(!tracked.has(id),id+" must not be claimed as runtime tracked");assert.equal(roster.species.find(x=>x.id===id).status,"not_implemented");}
 });
