@@ -277,6 +277,30 @@
     },
     "tfc_clay_seal": {
       "textures": "textures/items/tfc_pottery"
+    },
+    "tfc_brine_vessel": {
+      "textures": "textures/items/tfc_pottery"
+    },
+    "tfc_salt": {
+      "textures": "textures/items/tfc_grain"
+    },
+    "tfc_salted_meat": {
+      "textures": "textures/items/tfc_meat_cooked"
+    },
+    "tfc_smoked_meat": {
+      "textures": "textures/items/tfc_meat_cooked"
+    },
+    "tfc_unfired_crucible": {
+      "textures": "textures/items/tfc_pottery"
+    },
+    "tfc_fired_crucible": {
+      "textures": "textures/items/tfc_pottery"
+    },
+    "tfc_tin_sheet": {
+      "textures": "textures/items/tfc_ingot"
+    },
+    "tfc_smokehouse": {
+      "textures": "textures/items/tfc_pottery"
     }
   }
 }
