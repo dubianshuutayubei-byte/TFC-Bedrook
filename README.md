@@ -40,7 +40,7 @@ Minecraft Bedrock Edition 向けに TerraFirmaCraft（TFC）Java 1.20.1-3.2.26 �
 
 ## 検証環境
 
-GitHub ActionsでJSON・manifestの静的検査、JavaScript構文検査、Node.js単体テストを実行する。気候計算、金属・合金判定、熱・燃料の基礎計算に関する純粋関数プロトタイプを追加済み。Behavior Packのmanifest・Script API起動点・初期UIは追加済み。Resource Pack、専用ガイドアイテム、ゲーム内各機能との接続は未完成。
+GitHub ActionsでJSON・manifestの静的検査、JavaScript構文検査、Node.js単体テストを実行する。気候計算、金属・合金判定、熱・燃料の基礎計算に関する純粋関数プロトタイプを追加済み。Behavior Packのmanifest・Script API起動点・初期UIは追加済み。Resource Packの初期版、専用アイテム・設備ブロック、石片成形UI、食品摂取、作物、シカEntityの初期接続を追加済み。
 
 - [静的検査ツール](tools/validate-pack.mjs)
 - [プレイヤー状態サービス](packs/behavior_pack/scripts/core/player-state-service.mjs)
@@ -71,7 +71,7 @@ GitHub ActionsでJSON・manifestの静的検査、JavaScript構文検査、Node.
 
 静的検査はゲーム内検証の代わりにはならない。地形生成・設備動作・セーブデータ・端末負荷はMinecraft実機で確認する。
 
-## 公式参照元
+- [初期ゲーム内アイテム・設備実装](packs/behavior_pack/scripts/gameplay-runtime.js)\n- [Resource Pack](packs/resource_pack/manifest.json)\n\n## 公式参照元
 
 - [TFC Field Guide 1.20.1](https://terrafirmacraft.github.io/Field-Guide/20/en_us/)
 - [TFC Documentation 1.20.x](https://terrafirmacraft.github.io/Documentation/1.20.x/)
