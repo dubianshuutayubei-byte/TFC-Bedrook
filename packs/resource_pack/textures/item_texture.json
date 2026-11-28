@@ -175,6 +175,18 @@
     },
     "tfc_peanuts": {
       "textures": "textures/items/tfc_grain"
+    },
+    "tfc_handstone": {
+      "textures": "textures/items/tfc_stone"
+    },
+    "tfc_flour": {
+      "textures": "textures/items/tfc_grain"
+    },
+    "tfc_dough": {
+      "textures": "textures/items/tfc_grain"
+    },
+    "tfc_bread": {
+      "textures": "textures/items/tfc_grain"
     }
   }
 }
