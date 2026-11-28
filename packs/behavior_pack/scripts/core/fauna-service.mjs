@@ -107,7 +107,7 @@ export function canLayEgg(i,{currentDay=0,cooldownDays=1,minimumAgeDays=0,minimu
 export function recordEggLaid(i,currentDay,{maxUses=Infinity,oldDayDelay=null}={}){const a=createAnimalState(i),day=Number(currentDay);if(!Number.isFinite(day))return a;a.lastEggAt=day;a.uses+=1;if(Number.isFinite(maxUses)&&maxUses>0&&a.uses>maxUses&&a.oldDay<0&&oldDayDelay!==null)a.oldDay=day+Math.max(1,finiteOr(oldDayDelay,1));return a;}
 export function canProduce(i,{requiredFamiliarity=0,cooldownDays=0,currentDay=0,minimumAgeDays=0,requiredSex,minimumHealth=0,maximumHunger=100,maximumThirst=100,maxUses=Infinity}={}){const a=createAnimalState(i);const withinUseWindow=a.uses<=maxUses||(a.oldDay>=0&&currentDay<=a.oldDay);return a.isAlive&&a.lifeStage!=="old"&&withinUseWindow&&!(a.oldDay>=0&&currentDay>a.oldDay)&&a.health>=minimumHealth&&a.ageDays>=minimumAgeDays&&a.familiarity>requiredFamiliarity&&(requiredSex===undefined||a.sex===requiredSex)&&a.hunger<=maximumHunger&&a.thirst<=maximumThirst&&currentDay>=a.lastProductAt&&currentDay-a.lastProductAt>=cooldownDays;}
 export function recordBreedingUse(input,currentDay,{maxUses=Infinity,useCost=5,oldDayDelay=1}={}){const a=createAnimalState(input),day=Number(currentDay),cost=Math.max(0,Math.floor(finiteOr(useCost,5)));if(!Number.isFinite(day))return a;a.uses+=cost;if(Number.isFinite(maxUses)&&maxUses>0&&a.uses>maxUses&&a.oldDay<0)a.oldDay=day+Math.max(1,finiteOr(oldDayDelay,1));return a;}
-export function recordProduct(i,d,{maxUses=Infinity,oldDayDelay=null}={}){const a=createAnimalState(i);a.lastProductAt=Math.max(a.lastProductAt,finiteOr(d,a.lastProductAt));a.uses+=1;if(Number.isFinite(maxUses)&&maxUses>0&&a.uses>=maxUses&&a.oldDay<0&&oldDayDelay!==null)a.oldDay=finiteOr(d,0)+Math.max(1,finiteOr(oldDayDelay,1));return a;}
+export function recordProduct(i,d,{maxUses=Infinity,oldDayDelay=null}={}){const a=createAnimalState(i);a.lastProductAt=Math.max(a.lastProductAt,finiteOr(d,a.lastProductAt));a.uses+=1;if(Number.isFinite(maxUses)&&maxUses>0&&a.uses>maxUses&&a.oldDay<0&&oldDayDelay!==null)a.oldDay=finiteOr(d,0)+Math.max(1,finiteOr(oldDayDelay,1));return a;}
 
 export function grazeAnimal(input,{hungerReduction=2,thirstReduction=0,currentDay=null}={}){const a=createAnimalState(input);a.hunger=clamp(a.hunger-Math.max(0,finiteOr(hungerReduction,0)),0,100);a.thirst=clamp(a.thirst-Math.max(0,finiteOr(thirstReduction,0)),0,100);if(currentDay!==null&&currentDay!==undefined&&Number.isFinite(Number(currentDay))){a.lastFedDay=Number(currentDay);a.lastFamiliarityDecay=Number(currentDay);}return a;}
 
@@ -204,9 +204,11 @@ export function advanceAnimalFamiliarityDecay(input,currentDay,{decayLimit=30,de
  const a=createAnimalState(input),day=Number(currentDay);
  if(!Number.isFinite(day))throw new TypeError("currentDay must be finite");
  if(a.lastFamiliarityDecay<0){a.lastFamiliarityDecay=day;return a;}
- if(a.familiarity>0&&a.familiarity<decayLimit&&a.lastFamiliarityDecay+1<day){
-  a.familiarity=clamp(a.familiarity-Math.max(0,decayPerDay)*(day-a.lastFamiliarityDecay),0,100);
-  a.lastFamiliarityDecay=day;
+ const elapsedSinceFed=day-a.lastFamiliarityDecay;
+ if(a.familiarity>0&&a.familiarity<decayLimit&&elapsedSinceFed>2){
+  const decayDays=Math.floor(elapsedSinceFed-1);
+  a.familiarity=clamp(a.familiarity-Math.max(0,decayPerDay)*decayDays,0,100);
+  a.lastFamiliarityDecay+=decayDays;
  }
  return a;
 }
