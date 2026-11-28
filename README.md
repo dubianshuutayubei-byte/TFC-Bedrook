@@ -66,7 +66,7 @@ GitHub ActionsでJSON・manifestの静的検査、JavaScript構文検査、Node.
 - [燃料データ](packs/behavior_pack/data/fuels.json)
 - [アイテム熱プロファイル](packs/behavior_pack/data/item-heat-profiles.json)
 - [熱・燃料計算モジュール](packs/behavior_pack/scripts/core/heat-service.mjs)
-- [熱・燃料テスト](tests/heat-service.test.mjs)
+- [熱・燃料テスト](tests/heat-service.test.mjs)\n- [焚き火・燃焼ランタイムモデル](packs/behavior_pack/scripts/core/firepit-service.mjs)\n- [焚き火・燃焼テスト](tests/firepit-service.test.mjs)
 - [GitHub Actions workflow](.github/workflows/static-validation.yml)
 
 静的検査はゲーム内検証の代わりにはならない。地形生成・設備動作・セーブデータ・端末負荷はMinecraft実機で確認する。
@@ -83,4 +83,4 @@ GitHub ActionsでJSON・manifestの静的検査、JavaScript構文検査、Node.
 
 ## 現在の状態
 
-調査・仕様整理に加え、気候、金属・合金、熱・燃料、プレイヤー状態、加工工程（抽象インベントリの原子的処理を含む）、農業・土壌（水分収支・成長ポイント）、食品腐敗（鮮度区分・保存・栄養プロファイル）、動物・畜産（妊娠・産出クールダウン）、地質・地形プロファイルの基礎モジュールとNode単体テストを追加。Behavior Packのmanifest、プレイヤー参加時の状態初期化、`/scriptevent tfc:menu` で開く日本語UIを追加した。内部アイテムIDカタログと地形生成プロトタイプも追加済み。ただし、登録は初期セットに限られ、全TFCアイテム・レシピ・生態系を網羅していない。設備の燃料/温度、土壌・気候依存、動物の繁殖、地形生成は未完成。完成アドオンやMinecraft実機検証済みビルドはまだ存在しない。
+調査・仕様整理に加え、気候、金属・合金、熱・燃料、プレイヤー状態、加工工程（抽象インベントリの原子的処理を含む）、農業・土壌（水分収支・成長ポイント）、食品腐敗（鮮度区分・保存・栄養プロファイル）、動物・畜産（妊娠・産出クールダウン）、地質・地形プロファイルの基礎モジュールとNode単体テストを追加。Behavior Packのmanifest、プレイヤー参加時の状態初期化、`/scriptevent tfc:menu` で開く日本語UIを追加した。内部アイテムIDカタログと地形生成プロトタイプも追加済み。ただし、登録は初期セットに限られ、全TFCアイテム・レシピ・生態系を網羅していない。設備の燃料/温度、土壌水分・養分、シカの餌やり・繁殖・健康の初期ランタイムを追加済み。ただし雨/季節連動、複数種、完全なTFC熱処理、地形生成は未完成。完成アドオンやMinecraft実機検証済みビルドはまだ存在しない。
