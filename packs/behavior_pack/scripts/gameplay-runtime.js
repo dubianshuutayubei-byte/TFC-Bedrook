@@ -52,9 +52,9 @@ const FERTILIZER_PROFILES=Object.freeze({
 const WEATHER_BY_DIMENSION=new Map([["overworld","clear"]]);
 const ANIMAL_PROFILES={
  "tfc:deer":{adultAgeDays:30,requiredFamiliarity:35,breedingCooldownDays:20,gestationDays:210,customBreeding:true,feedItems:["minecraft:wheat","minecraft:wheat_seeds"],grazeBlocks:["minecraft:grass_block","minecraft:tallgrass"]},
- "minecraft:cow":{adultAgeDays:30,requiredFamiliarity:30,customBreeding:false,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"]},
- "minecraft:sheep":{adultAgeDays:24,requiredFamiliarity:25,customBreeding:false,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"]},
- "minecraft:chicken":{adultAgeDays:12,requiredFamiliarity:20,customBreeding:false,feedItems:["minecraft:wheat_seeds","minecraft:beetroot_seeds","minecraft:melon_seeds","minecraft:pumpkin_seeds"],grazeBlocks:["minecraft:grass_block"]}
+ "minecraft:cow":{adultAgeDays:192,requiredFamiliarity:30,customBreeding:false,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"]},
+ "minecraft:sheep":{adultAgeDays:56,requiredFamiliarity:25,customBreeding:false,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"]},
+ "minecraft:chicken":{adultAgeDays:24,requiredFamiliarity:20,customBreeding:false,feedItems:["minecraft:wheat_seeds","minecraft:beetroot_seeds","minecraft:melon_seeds","minecraft:pumpkin_seeds"],grazeBlocks:["minecraft:grass_block"]}
 };
 const inv=p=>p.getComponent("minecraft:inventory")?.container;
 function count(p,id){const c=inv(p);if(!c)return 0;let n=0;for(let i=0;i<c.size;i++){const s=c.getItem(i);if(s?.typeId===id)n+=s.amount;}return n;}
@@ -243,7 +243,7 @@ function animalTick(entity){
  }catch{}
  try{const hp=entity.getComponent("minecraft:health");if(hp)hp.setCurrentValue(Math.max(0,hp.effectiveMax*state.health/100));}catch{}
  if(profile.customBreeding&&state.pregnancyDays>0){const result=advancePregnancy(state,0.05,profile.gestationDays);state=result.animal;if(result.birthReady){let born=false;try{entity.dimension.spawnEntity(entity.typeId,{x:entity.location.x+1,y:entity.location.y,z:entity.location.z});born=true;}catch(error){console.warn("[TFC-Bedrook] animal birth deferred:",error);}if(born)state.pregnancyDays=0;}}
- if(profile.customBreeding&&state.sex==="unknown")state.sex=Math.random()<0.5?"male":"female";
+ if(state.sex==="unknown")state.sex=Math.random()<0.5?"male":"female";
  if(profile.customBreeding&&state.sex==="female"&&state.ageDays>=profile.adultAgeDays&&state.familiarity>=profile.requiredFamiliarity&&state.hunger<60&&state.thirst<60&&state.pregnancyDays===0){
   try{const nearby=entity.dimension.getEntities({type:entity.typeId,location:entity.location,maxDistance:6});for(const partner of nearby){if(partner.id===entity.id)continue;const other=animalState(partner);if(canBreed(state,other,profile)){const started=beginPregnancy(state,other,profile);if(started.started){state=started.animal;other.lastBreedAt=other.ageDays;saveAnimal(partner,other);break;}}}}catch{}
  }
@@ -252,26 +252,33 @@ function animalTick(entity){
 function animalInteract(player,entity){
  if(!player||!entity)return;
  const profile=ANIMAL_PROFILES[entity.typeId];if(!profile)return;
+ let state=animalState(entity);
+ if(state.sex==="unknown"){state.sex=Math.random()<0.5?"male":"female";saveAnimal(entity,state);}
  const held=inv(player)?.getItem(player.selectedSlotIndex);
- if(!held){const state=animalState(entity);const names={"tfc:deer":"シカ","minecraft:cow":"ウシ","minecraft:sheep":"ヒツジ","minecraft:chicken":"ニワトリ"};player.sendMessage("§e"+(names[entity.typeId]??entity.typeId)+"\n年齢: "+state.ageDays.toFixed(1)+"日\n空腹: "+Math.floor(state.hunger)+" / 100\n渇き: "+Math.floor(state.thirst)+" / 100\n健康: "+Math.floor(state.health)+" / 100\nなつき度: "+Math.floor(state.familiarity)+" / 100"+(state.pregnancyDays>0?"\n妊娠: "+Math.floor(state.pregnancyDays)+"日":""));return;}
- if(entity.typeId==="minecraft:cow"&&held?.typeId==="minecraft:glass_bottle"){
-  const state=animalState(entity);
+ if(!held){
+  const names={"tfc:deer":"シカ","minecraft:cow":"ウシ","minecraft:sheep":"ヒツジ","minecraft:chicken":"ニワトリ"};
+  player.sendMessage("§e"+(names[entity.typeId]??entity.typeId)+"\n性別: "+(state.sex==="female"?"メス":"オス")+"\n年齢: "+state.ageDays.toFixed(1)+"日\n空腹: "+Math.floor(state.hunger)+" / 100\n渇き: "+Math.floor(state.thirst)+" / 100\n健康: "+Math.floor(state.health)+" / 100\nなつき度: "+Math.floor(state.familiarity)+" / 100"+(state.pregnancyDays>0?"\n妊娠: "+Math.floor(state.pregnancyDays)+"日":""));
+  return;
+ }
+ if(entity.typeId==="minecraft:cow"&&held.typeId==="minecraft:glass_bottle"){
+  if(state.sex!=="female"){player.sendMessage("§e乳を生産できるのはメスの牛だけです。");return;}
   if(state.ageDays<profile.adultAgeDays){player.sendMessage("§eこの牛はまだ成長中です。");return;}
   const currentDay=state.ageDays;
-  if(!canProduce(state,{requiredFamiliarity:0,cooldownDays:0.5,currentDay})){player.sendMessage("§eこの牛はまだミルクを補充中です。");return;}
+  if(!canProduce(state,{requiredFamiliarity:0,cooldownDays:1,currentDay})){player.sendMessage("§eこの牛はまだミルクを補充中です。");return;}
   if(!take(player,"minecraft:glass_bottle",1)){player.sendMessage("§c空き瓶を取り出せません。");return;}
   give(player,"tfc:milk_bottle",1);
   saveAnimal(entity,recordProduct(state,currentDay));
   player.sendMessage("§a牛乳を採取しました。");
   return;
  }
- if(!held||!profile.feedItems.includes(held.typeId))return;
+ if(!profile.feedItems.includes(held.typeId))return;
  // Vanilla livestock already consumes its breeding feed during the interaction event.
  // Only the custom deer entity needs a manual inventory deduction.
  if(entity.typeId==="tfc:deer"&&!take(player,held.typeId,1))return;
- const state=feedAnimal(animalState(entity),15,0);saveAnimal(entity,state);
+ state=feedAnimal(state,15,0);saveAnimal(entity,state);
  player.sendMessage("§a餌を与えました。なつき度: "+Math.floor(state.familiarity));
 }
+
 export function initializeGameplay(){world.afterEvents.weatherChange.subscribe(event=>{const key=normalizeDimensionId(event.dimension?.id);if(key)WEATHER_BY_DIMENSION.set(key,normalizeWeather(event.newWeather));});system.beforeEvents.startup.subscribe(event=>{
 event.itemComponentRegistry.registerCustomComponent("tfc:open_knapping",{onUse:a=>{if(a.source?.typeId==="minecraft:player")void knap(a.source);}});
 event.itemComponentRegistry.registerCustomComponent("tfc:prospect",{onUseOn:a=>{if(a.source?.typeId==="minecraft:player")prospect(a.source,a.block);}});
