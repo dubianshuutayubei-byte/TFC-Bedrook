@@ -58,15 +58,24 @@ test("duck and quail use automatic nest-box laying with eight-day incubation",()
  assert.match(runtime,/巣箱で産卵します/);
 });
 
-test("aquatic custom fauna use swim navigation and species-appropriate breathing",()=>{
+test("aquatic fauna distinguish swimming fish from seafloor shellfish",()=>{
  const aquatic=Object.entries(CUSTOM_FAUNA_PROFILES).filter(([,p])=>p.kind==="aquatic");
  assert.ok(aquatic.length>=10);
+ const shellfish=new Set(["lobster","crayfish","isopod","horseshoe_crab"]);
  for(const [entityId] of aquatic){
   const id=entityId.split(":")[1],e=read("packs/behavior_pack/entities/"+id+".json")["minecraft:entity"].components;
-  assert.ok(e["minecraft:navigation.swim"],id+" missing swim navigation");
-  assert.ok(e["minecraft:movement.swim"],id+" missing swim movement");
   assert.ok(e["minecraft:breathable"],id+" missing breathing component");
+  if(shellfish.has(id)){
+   assert.ok(e["minecraft:navigation.walk"],id+" must move along the water floor");
+   assert.ok(e["minecraft:behavior.avoid_mob_type"],id+" must avoid predators");
+   assert.equal(e["minecraft:behavior.swim_wander"],undefined,id+" should not swim freely");
+  }else{
+   assert.ok(e["minecraft:navigation.swim"],id+" missing swim navigation");
+   assert.ok(e["minecraft:movement.swim"],id+" missing swim movement");
+  }
  }
+ const manatee=read("packs/behavior_pack/entities/manatee.json")["minecraft:entity"].components["minecraft:breathable"];
+ assert.equal(manatee.breathes_water,true);
 });
 
 test("custom prey avoid predator family while predator archetypes can target prey",()=>{
