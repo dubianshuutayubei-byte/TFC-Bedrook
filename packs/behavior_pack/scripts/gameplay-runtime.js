@@ -703,7 +703,7 @@ function runFaunaPredatorPreyInteraction(entity,profile,state,currentDay){
    try{
     const dx=entity.location.x-threat.location.x,dz=entity.location.z-threat.location.z;
     const length=Math.hypot(dx,dz)||1;
-    entity.applyKnockback(dx/length,dz/length,0.55,0.12);
+    entity.applyKnockback({x:(dx/length)*0.55,z:(dz/length)*0.55},0.12);
     entity.setDynamicProperty("tfc:ecology_action_at",now);
    }catch(error){console.warn("[TFC-Bedrook] fauna flee response unavailable:",species,predator,error);}
    break;
