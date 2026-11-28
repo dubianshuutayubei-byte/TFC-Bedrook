@@ -1,18 +1,57 @@
 {
   "schemaVersion": 1,
   "categories": {
-    "raw_materials": ["stone", "stick", "clay", "flint", "copper_ore", "native_copper"],
-    "stone_tools": ["stone_shard", "stone_knife_head", "stone_axe_head", "stone_hammer_head"],
-    "pottery": ["unfired_vessel", "unfired_ingot_mold", "fired_vessel", "fired_ingot_mold"],
-    "metals": ["copper_ingot", "copper_sheet", "copper_tool_head"],
-    "food": ["raw_meat", "cooked_meat", "grain", "vegetable", "fruit", "salt"],
-    "farming": ["crop_seed", "fertilizer", "farmland"],
-    "equipment": ["firepit", "pit_kiln", "charcoal_forge", "crucible", "anvil"]
+    "raw_materials": [
+      "stone",
+      "stick",
+      "clay",
+      "flint",
+      "copper_ore",
+      "native_copper"
+    ],
+    "stone_tools": [
+      "stone_shard",
+      "stone_knife_head",
+      "stone_axe_head",
+      "stone_hammer_head"
+    ],
+    "pottery": [
+      "unfired_vessel",
+      "unfired_ingot_mold",
+      "fired_vessel",
+      "fired_ingot_mold"
+    ],
+    "metals": [
+      "copper_ingot",
+      "copper_sheet",
+      "copper_tool_head"
+    ],
+    "food": [
+      "raw_meat",
+      "cooked_meat",
+      "grain",
+      "vegetable",
+      "fruit",
+      "salt"
+    ],
+    "farming": [
+      "crop_seed",
+      "fertilizer",
+      "farmland"
+    ],
+    "equipment": [
+      "firepit",
+      "pit_kiln",
+      "charcoal_forge",
+      "crucible",
+      "anvil"
+    ]
   },
-  "implementationStatus": "logical_catalog_only",
+  "implementationStatus": "partially_registered",
   "notes": [
-    "This catalog is an internal ID registry, not yet a set of registered Bedrock item or block definitions.",
-    "Custom item identifiers and RP textures will be added together after the first asset batch is finalized.",
-    "Do not expose missing custom IDs as obtainable items in recipes before their definitions exist."
+    "専用アイテム・ブロック定義の初期セットをBehavior Packへ登録済み。",
+    "石片成形UI、食品摂取時の栄養反映、設備加工UI、作物植え付け・成長・収穫を接続。",
+    "全TFCアイテム・全レシピを登録した状態ではない。現在の登録対象は初期プレイ用の一部。",
+    "地形生成と高度な動物生態は未接続。"
   ]
 }
