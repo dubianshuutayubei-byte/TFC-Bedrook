@@ -383,7 +383,6 @@ async function station(player,id,block){
  if(response.selection>=recipes.length)return;
  const recipe=recipes[response.selection];
  if(id==="smokehouse"&&!hasActiveSmokeSource(block)){player.sendMessage("§c燻製設備の隣に、燃焼中で80°C以上の焚き火が必要です。");return;}
- if(id==="smokehouse"&&!hasActiveSmokeSource(block)){player.sendMessage("§c燻製設備の隣に、燃焼中で80°C以上の焚き火が必要です。");return;}
  if(id==="quern"){await processQuernManually(player,block,recipe);return;}
  if(id==="anvil"){const requiredId=Object.keys(recipe.inputs)[0],heldNow=inv(player)?.getItem(player.selectedSlotIndex),profile=HEATED_METAL_PROFILES[requiredId],temperature=Number(heldNow?.getDynamicProperty(ITEM_TEMPERATURE_KEY)??0);if(!profile||heldNow?.typeId!==requiredId||temperature<profile.forgingTemperatureC){player.sendMessage("§c手持ちの加熱インゴットが鍛造温度に達していません。必要温度: "+(profile?.forgingTemperatureC??0)+"°C");return;}}
  if(recipe.alloyId){const matches=findMatchingAlloys(recipe.metalInputs,{recipes:[{id:recipe.alloyId,components:recipe.alloyComponents}]});if(!matches.includes(recipe.alloyId)){player.sendMessage("§c合金の配合比が範囲外です。");return;}}
