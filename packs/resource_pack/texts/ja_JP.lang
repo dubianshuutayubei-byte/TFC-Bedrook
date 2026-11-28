@@ -36,3 +36,6 @@ item.tfc:maize.name=トウモロコシ
 item.tfc:potato.name=ジャガイモ
 
 item.tfc:spoiled_food.name=腐敗した食品
+
+item.tfc:vegetable.name=野菜
+item.tfc:fruit.name=果物
