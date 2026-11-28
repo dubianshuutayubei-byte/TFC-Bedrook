@@ -6,7 +6,7 @@ import { readStackFreshness, advanceStackFreshness } from "./core/food-stack-ser
 import { createFireState, addFuel, advanceFire, canProcessAtTemperature } from "./core/firepit-service.mjs";
 import { createSoilState, advanceSoilHydration, evaluateCropGrowth, calculateCropYield, applyFertilizer, applyCropNutrientEffects, inferSoilTypeFromBlockId, inferSoilFertilityClassFromBiomeId, advanceCropGrowthProgress } from "./core/agriculture-service.mjs";
 import { CROP_PROFILES } from "./core/crop-profiles.mjs";
-import { createAnimalState, syncAnimalHealth, advanceAnimalNeeds, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct } from "./core/fauna-service.mjs";
+import { createAnimalState, initializeAnimalLifeStage, syncAnimalHealth, advanceAnimalNeeds, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct } from "./core/fauna-service.mjs";
 import { getStationRecipes } from "./core/processing-recipes.mjs";
 import { isStationJobDue, getPendingStationOutputs, markStationOutputDelivered, markStationJobRecoverable } from "./core/station-job-service.mjs";
 import { normalizeDimensionId, normalizeWeather, getRainfallMm, inferBiomeRainfallMultiplierFromBiomeId } from "./core/environment-service.mjs";
@@ -524,7 +524,7 @@ function cropTick(block){
  }
 }
 function fireTick(block){const key=posKey(block,"fire");const state=advanceFire(readWorldState(key,{}),20);writeWorldState(key,state);}
-function animalState(entity){const profile=ANIMAL_PROFILES[entity.typeId];try{const raw=entity.getDynamicProperty("tfc:animal_state");const base=typeof raw==="string"?JSON.parse(raw):{};return createAnimalState({...base,species:profile?.speciesId??base.species??entity.typeId.replace(":","_")});}catch{return createAnimalState({species:profile?.speciesId??entity.typeId.replace(":","_")});}}
+function animalState(entity){const profile=ANIMAL_PROFILES[entity.typeId];try{const raw=entity.getDynamicProperty("tfc:animal_state");const base=typeof raw==="string"?JSON.parse(raw):{};const isBaby=entity.hasComponent("minecraft:is_baby");return initializeAnimalLifeStage({...base,species:profile?.speciesId??base.species??entity.typeId.replace(":","_")},{isBaby,adultAgeDays:profile?.adultAgeDays??null});}catch{return initializeAnimalLifeStage({species:profile?.speciesId??entity.typeId.replace(":","_")},{isBaby:false,adultAgeDays:profile?.adultAgeDays??null});}}
 function saveAnimal(entity,state){try{entity.setDynamicProperty("tfc:animal_state",JSON.stringify(state));}catch(error){console.warn("[TFC-Bedrook] animal state save:",error);}}
 function consumeDroppedAnimalFood(entity,profile,state){
  if(!profile.feedItems?.length)return state;
