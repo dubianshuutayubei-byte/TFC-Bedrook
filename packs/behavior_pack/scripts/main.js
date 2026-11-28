@@ -1,8 +1,10 @@
 import { system, world } from "@minecraft/server";
 import { getCalendarInfo } from "./core/climate-service.mjs";
+import { formatSurvivalHud } from "./ui/hud-service.mjs";
 
 const DAYS_PER_YEAR = 96;
-const CALENDAR_POLL_TICKS = 200;
+const HUD_REFRESH_TICKS = 40;
+const SEASON_CHECK_TICKS = 200;
 
 const SEASON_JA = Object.freeze({
   winter: "冬",
@@ -11,10 +13,6 @@ const SEASON_JA = Object.freeze({
   autumn: "秋",
 });
 
-function formatCalendar(calendar) {
-  return `第${calendar.year}年・${SEASON_JA[calendar.season]} ${calendar.dayOfYearNumber}日目`;
-}
-
 function announceSeasonChange(previousSeason, nextSeason) {
   if (previousSeason === nextSeason) return;
   world.sendMessage(
@@ -22,33 +20,50 @@ function announceSeasonChange(previousSeason, nextSeason) {
   );
 }
 
+function updatePlayerHud(player, calendar) {
+  try {
+    player.onScreenDisplay.setActionBar(formatSurvivalHud(calendar));
+  } catch (error) {
+    console.warn(`[TFC-Bedrook] HUD update failed for ${player.name}: ${error}`);
+  }
+}
+
 world.afterEvents.playerSpawn.subscribe((event) => {
   if (!event.initialSpawn) return;
   system.run(() => {
     try {
       const calendar = getCalendarInfo(world.getDay(), DAYS_PER_YEAR);
-      event.player.sendMessage(
-        `§6[TFC-Bedrook]§r 暦：${formatCalendar(calendar)}`
-      );
+      updatePlayerHud(event.player, calendar);
     } catch (error) {
-      console.warn(`[TFC-Bedrook] Calendar display failed: ${error}`);
+      console.warn(`[TFC-Bedrook] Initial HUD display failed: ${error}`);
     }
   });
 });
 
+let lastSeason;
+let seasonCheckCounter = 0;
+
 system.runTimeout(() => {
   try {
-    let lastSeason = getCalendarInfo(world.getDay(), DAYS_PER_YEAR).season;
+    lastSeason = getCalendarInfo(world.getDay(), DAYS_PER_YEAR).season;
     system.runInterval(() => {
       try {
-        const currentSeason = getCalendarInfo(world.getDay(), DAYS_PER_YEAR).season;
-        announceSeasonChange(lastSeason, currentSeason);
-        lastSeason = currentSeason;
+        const calendar = getCalendarInfo(world.getDay(), DAYS_PER_YEAR);
+        for (const player of world.getPlayers()) {
+          updatePlayerHud(player, calendar);
+        }
+
+        seasonCheckCounter += HUD_REFRESH_TICKS;
+        if (seasonCheckCounter >= SEASON_CHECK_TICKS) {
+          seasonCheckCounter = 0;
+          announceSeasonChange(lastSeason, calendar.season);
+          lastSeason = calendar.season;
+        }
       } catch (error) {
-        console.warn(`[TFC-Bedrook] Calendar update failed: ${error}`);
+        console.warn(`[TFC-Bedrook] HUD/calendar update failed: ${error}`);
       }
-    }, CALENDAR_POLL_TICKS);
+    }, HUD_REFRESH_TICKS);
   } catch (error) {
-    console.warn(`[TFC-Bedrook] Calendar startup failed: ${error}`);
+    console.warn(`[TFC-Bedrook] HUD startup failed: ${error}`);
   }
 }, 1);
