@@ -9,7 +9,7 @@ const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runti
 const item=JSON.parse(readFileSync(join(root,"packs/behavior_pack/items/milk_bottle.json"),"utf8"));
 const profiles=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/food-profiles.json"),"utf8"));
 
-test("adult cows produce milk bottles with a per-animal cooldown",()=>{
+test("adult female cows produce milk bottles with a per-animal cooldown",()=>{
   assert.match(runtime,/entity\.typeId==="minecraft:cow"&&held\.typeId==="minecraft:glass_bottle"/);
   assert.match(runtime,/canProduce\(state,\{requiredFamiliarity:0,cooldownDays:1,currentDay\}\)/);
   assert.match(runtime,/state\.sex!=="female"/);
