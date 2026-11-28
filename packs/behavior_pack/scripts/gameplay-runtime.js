@@ -7,7 +7,7 @@ import { createSoilState, advanceSoilHydration, evaluateCropGrowth, applyFertili
 import { createAnimalState, syncAnimalHealth, advanceAnimalNeeds, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct } from "./core/fauna-service.mjs";
 import { getStationRecipes } from "./core/processing-recipes.mjs";
 import { isStationJobDue, getPendingStationOutputs, markStationOutputDelivered, markStationJobRecoverable } from "./core/station-job-service.mjs";
-import { normalizeDimensionId, normalizeWeather, getRainfallMm } from "./core/environment-service.mjs";
+import { normalizeDimensionId, normalizeWeather, getRainfallMm, inferBiomeRainfallMultiplierFromBiomeId } from "./core/environment-service.mjs";
 import { calculateAmbientTemperatureC, getBiomeClimateProfile } from "./core/climate-service.mjs";
 import { findMatchingAlloys } from "./core/metal-service.mjs";
 import { classifyTemperature, coolItemTemperature } from "./core/heat-service.mjs";
@@ -211,7 +211,7 @@ if(take(player,"tfc:flint",1)){give(player,"tfc:stone_shard",2);player.sendMessa
 }
 function soilKey(block){return posKey(block,"soil");}
 function readSoil(block){const saved=readWorldState(soilKey(block),{});let substrate;try{substrate=block.below()?.typeId;}catch{}return createSoilState({...saved,soilType:saved.soilType??inferSoilTypeFromBlockId(substrate)});}
-function soilTick(block){const soil=readSoil(block);let nearbyWater=false;for(let x=-2;x<=2&&!nearbyWater;x++)for(let z=-2;z<=2;z++){try{const b=block.dimension.getBlock({x:block.location.x+x,y:block.location.y,z:block.location.z+z});if(b&&b.typeId==="minecraft:water"){nearbyWater=true;break;}}catch{}}const weather=WEATHER_BY_DIMENSION.get(normalizeDimensionId(block.dimension.id))??"clear";const rainfallMm=getRainfallMm(weather);const next=advanceSoilHydration(soil,1/60,{rainfallMm,evaporationPerHour:nearbyWater?0.02:0.15,shadeFactor:0.7});if(nearbyWater)next.hydration=Math.min(100,next.hydration+0.5);writeWorldState(soilKey(block),next);}
+function soilTick(block){const soil=readSoil(block);let nearbyWater=false;for(let x=-2;x<=2&&!nearbyWater;x++)for(let z=-2;z<=2;z++){try{const b=block.dimension.getBlock({x:block.location.x+x,y:block.location.y,z:block.location.z+z});if(b&&b.typeId==="minecraft:water"){nearbyWater=true;break;}}catch{}}const weather=WEATHER_BY_DIMENSION.get(normalizeDimensionId(block.dimension.id))??"clear";const rainfallMm=getRainfallMm(weather,0.8,soil.rainfallMultiplier);const next=advanceSoilHydration(soil,1/60,{rainfallMm,evaporationPerHour:nearbyWater?0.02:0.15,shadeFactor:0.7});if(nearbyWater)next.hydration=Math.min(100,next.hydration+0.5);writeWorldState(soilKey(block),next);}
 async function farmlandInteract(player,block){if(!player||!block)return;const held=inv(player)?.getItem(player.selectedSlotIndex);const soil=readSoil(block);
 const seedProfile=Object.values(CROP_PROFILES).find(profile=>profile.seed===held?.typeId);
 if(seedProfile){const top=block.above();if(!top?.isAir){player.sendMessage("§c耕作土の上に空間が必要です。");return;}if(take(player,seedProfile.seed,1)){writeWorldState(soilKey(block),soil);top.setType("tfc:crop");top.setPermutation(top.permutation.withState("tfc:crop_type",Object.keys(CROP_PROFILES).find(key=>CROP_PROFILES[key]===seedProfile)));writeWorldState(posKey(top,"crop_progress"),0);player.sendMessage("§a"+(seedProfile.harvest==="tfc:grain"?"小麦":seedProfile.harvest==="tfc:maize"?"トウモロコシ":"ジャガイモ")+"を植えました。");}return;}
@@ -300,6 +300,6 @@ world.afterEvents.playerInteractWithBlock.subscribe(event=>{
  if(!held?.typeId?.endsWith("_hoe"))return;
  const block=event.block;
  if(!["minecraft:dirt","minecraft:grass_block","minecraft:coarse_dirt","minecraft:rooted_dirt","minecraft:farmland"].includes(block.typeId))return;
- try{const originalSoilType=inferSoilTypeFromBlockId(block.typeId);const biomeId=block.dimension.getBiome(block.location).id;const fertilityClass=inferSoilFertilityClassFromBiomeId(biomeId);block.setType("tfc:farmland");const soil=createSoilState({...readSoil(block),soilType:originalSoilType,fertilityClass});writeWorldState(soilKey(block),soil);event.player.sendMessage("§a耕作土を作りました。土質: "+({loam:"壌土",silt:"シルト",clay:"粘土質"}[soil.soilType]??soil.soilType)+"。種を持って操作すると植えられます。");}catch(error){console.warn("[TFC-Bedrook] farmland conversion failed:",error);}
+ try{const originalSoilType=inferSoilTypeFromBlockId(block.typeId);const biomeId=block.dimension.getBiome(block.location).id;const fertilityClass=inferSoilFertilityClassFromBiomeId(biomeId);const rainfallMultiplier=inferBiomeRainfallMultiplierFromBiomeId(biomeId);block.setType("tfc:farmland");const soil=createSoilState({...readSoil(block),soilType:originalSoilType,fertilityClass,rainfallMultiplier});writeWorldState(soilKey(block),soil);event.player.sendMessage("§a耕作土を作りました。土質: "+({loam:"壌土",silt:"シルト",clay:"粘土質"}[soil.soilType]??soil.soilType)+"。種を持って操作すると植えられます。");}catch(error){console.warn("[TFC-Bedrook] farmland conversion failed:",error);}
 });world.afterEvents.playerSpawn.subscribe(event=>{if(event.player)recoverPlayerStationJobs(event.player);});
 }
