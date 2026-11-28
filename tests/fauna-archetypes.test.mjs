@@ -22,14 +22,14 @@ test("official predator, prey, livestock, fish and aquatic classes are preserved
 
 const coverage=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/fauna-runtime-coverage.json"),"utf8"));
 const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
-test("63 legacy fauna are runtime-tracked while 55 official species need implementation work",()=>{
+test("76 fauna have runtime state profiles while 55 still need species-specific work",()=>{
  assert.equal(coverage.total,78);
- assert.equal(coverage.runtimeTrackedCount,63);
- assert.equal(coverage.runtimeTrackedSpecies.length,63);
+ assert.equal(coverage.runtimeTrackedCount,76);
+ assert.equal(coverage.runtimeTrackedSpecies.length,76);
  assert.equal(coverage.remainingCount,55);
  const tracked=new Set(coverage.runtimeTrackedSpecies);
  const remaining=new Set(coverage.requiresSpeciesImplementation);
- assert.equal(tracked.size,63);
+ assert.equal(tracked.size,76);
  assert.equal(remaining.size,55);
  for(const id of tracked){assert.ok(roster.species.some(x=>x.id===id),id);assert.ok(runtime.includes('"speciesId":"'+id+'"')||runtime.includes('speciesId:"'+id+'"'),id);}
  for(const id of remaining){assert.ok(roster.species.some(x=>x.id===id),id);assert.ok(!tracked.has(id)||coverage.customEntitySpecies.includes(id),id+" must be either legacy runtime-tracked or have a custom entity scaffold");}
