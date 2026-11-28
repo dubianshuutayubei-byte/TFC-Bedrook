@@ -108,3 +108,9 @@ test("animals do not consume dropped feed when they are not hungry",()=>{
  const pickup=runtime.slice(start,end);
  assert.match(pickup,/if\(!profile\.feedItems\?\.length\|\|state\.hunger<25\)return state/);
 });
+
+test("shared dairy interaction messages are species-neutral for cows and goats",()=>{
+ assert.match(runtime,/メスの乳畜だけです/);
+ assert.match(runtime,/この動物は健康・空腹・渇き、または補充時間の条件を満たしていません/);
+ assert.match(runtime,/§a乳を採取しました/);
+});
