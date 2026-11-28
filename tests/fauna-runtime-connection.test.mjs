@@ -6,11 +6,14 @@ import { fileURLToPath } from "node:url";
 const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
 test("TFC mammal livestock uses shared breeding while hybrid mules remain non-breeding",()=>{
- assert.match(runtime,/"minecraft:cow":\{[^}]*customBreeding:true/);
- assert.match(runtime,/"minecraft:sheep":\{[^}]*customBreeding:true/);
- for(const id of ["minecraft:pig","minecraft:goat","minecraft:horse","minecraft:donkey","minecraft:rabbit"])assert.match(runtime,new RegExp("\\""+id+"\\":\\\\{[^}]*customBreeding:true"));
- assert.match(runtime,/"minecraft:mule":\{[^}]*customBreeding:false/);
- assert.match(runtime,/"tfc:chicken":\{[^}]*customBreeding:false/);
+ for(const id of ["minecraft:cow","minecraft:sheep","minecraft:pig","minecraft:goat","minecraft:horse","minecraft:donkey","minecraft:rabbit"]){
+  const entry=runtime.split("\n").find(line=>line.includes('"'+id+'":{'))??"";
+  assert.match(entry,/customBreeding:true/);
+ }
+ const mule=runtime.split("\n").find(line=>line.includes('"minecraft:mule":{'))??"";
+ assert.match(mule,/customBreeding:false/);
+ const chicken=runtime.split("\n").find(line=>line.includes('"tfc:chicken":{'))??"";
+ assert.match(chicken,/customBreeding:false/);
  assert.ok(runtime.includes('if(!entity.typeId.startsWith("minecraft:")&&!take(player,held.typeId,1))return;'));
  assert.match(runtime,/if\(profile\.customBreeding&&state\.sex==="female"/);
 });
@@ -21,11 +24,11 @@ test("custom deer retains its own pregnancy and birth cycle",()=>{
 
 test("TFC livestock rotten-food compatibility matches official species configuration",()=>{
  for(const id of ["minecraft:cow","minecraft:goat","minecraft:pig","minecraft:rabbit","tfc:chicken","tfc:quail"]){
-  const entry=runtime.split("\\n").find(line=>line.includes("\\""+id+"\\":{"))??"";
+  const entry=runtime.split("\n").find(line=>line.includes('"'+id+'":{'))??"";
   assert.match(entry,/tfc:spoiled_food/);
  }
  for(const id of ["minecraft:sheep","minecraft:horse","minecraft:donkey","minecraft:mule","tfc:duck","tfc:alpaca","tfc:musk_ox","tfc:yak"]){
-  const entry=runtime.split("\\n").find(line=>line.includes("\\""+id+"\\":{"))??"";
+  const entry=runtime.split("\n").find(line=>line.includes('"'+id+'":{'))??"";
   assert.doesNotMatch(entry,/tfc:spoiled_food/);
  }
 });
