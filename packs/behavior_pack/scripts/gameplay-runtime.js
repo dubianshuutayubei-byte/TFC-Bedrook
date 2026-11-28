@@ -584,7 +584,8 @@ async function animalInteract(player,entity){
   const names=Object.fromEntries(Object.entries(ANIMAL_PROFILES).map(([id,p])=>[id,p.displayName]));
   const products=entity.typeId==="minecraft:cow"?"\n産出: 牛乳（メスの成体・健康/空腹/渇き条件を満たすと空き瓶で採取、1日間隔）":entity.typeId==="minecraft:sheep"?"\n産出: 羊毛（バニラのハサミ操作で採取）":entity.typeId==="minecraft:chicken"?"\n産出: 卵（バニラの産卵AI）":"";
   const status="性別: "+(state.sex==="female"?"メス":"オス")+"\n年齢: "+state.ageDays.toFixed(1)+"日 / 成熟目安: "+(profile.adultAgeDays==null?"未設定":profile.adultAgeDays+"日")+"\n空腹: "+Math.floor(state.hunger)+" / 100\n渇き: "+Math.floor(state.thirst)+" / 100\n健康: "+Math.floor(state.health)+" / 100\nなつき度: "+Math.floor(state.familiarity)+" / 100"+(state.pregnancyDays>0?"\n妊娠: "+Math.floor(state.pregnancyDays)+"日":"")+products;
-  const form=new ActionFormData().title((names[entity.typeId]??entity.typeId)+"の状態").body(status+"\n\n餌を手に持ってもう一度操作すると給餌できます。").button("閉じる");
+  const feedHint=profile.feedItems.length?"給餌可能: "+profile.feedItems.map(id=>ITEM_LABELS[id]??id).join(" / ")+"\n餌を手に持ってもう一度操作してください。":"この種への手動給餌は未対応です。";
+  const form=new ActionFormData().title((names[entity.typeId]??entity.typeId)+"の状態").body(status+"\n\n"+feedHint).button("閉じる");
   try{await form.show(player);}catch(error){player.sendMessage("§e状態を表示できませんでした。");}
   return;
  }
