@@ -521,3 +521,22 @@ export const OFFICIAL_FAUNA_PROFILES = Object.freeze({
     "heightmap": "motion_blocking_no_leaves"
   }
 });
+
+
+/** Verified TFC 1.21.x livestock lifecycle values from ServerConfig.java. Values absent from this table remain intentionally unknown. */
+export const OFFICIAL_LIVESTOCK_LIFECYCLE = Object.freeze({
+  pig: Object.freeze({ adultAgeDays: 80, maxUses: 60, gestationDays: 19 }),
+  donkey: Object.freeze({ adultAgeDays: 80, maxUses: 60, gestationDays: 19 }),
+  mule: Object.freeze({ adultAgeDays: 80, maxUses: 60, gestationDays: 19, sterile: true }),
+  horse: Object.freeze({ adultAgeDays: 80, maxUses: 60, gestationDays: 19 }),
+  rabbit: Object.freeze({ adultAgeDays: 30, maxUses: 40, gestationDays: 19, childCount: 6 }),
+  cow: Object.freeze({ adultAgeDays: 192, maxUses: 128, gestationDays: 58, childCount: 2, productCooldownDays: 1 }),
+  goat: Object.freeze({ adultAgeDays: 96, maxUses: 60, gestationDays: 32, childCount: 2, productCooldownDays: 3 }),
+  yak: Object.freeze({ adultAgeDays: 180, maxUses: 230, gestationDays: 64, childCount: 1, productCooldownDays: 1 }),
+  alpaca: Object.freeze({ adultAgeDays: 98, maxUses: 128, gestationDays: 36, childCount: 2, productCooldownDays: 5 }),
+  sheep: Object.freeze({ adultAgeDays: 56, maxUses: 60, gestationDays: 32, childCount: 2, productCooldownDays: 4 }),
+  musk_ox: Object.freeze({ adultAgeDays: 168, maxUses: 160, gestationDays: 64, childCount: 1, productCooldownDays: 4 }),
+  chicken: Object.freeze({ adultAgeDays: 24, maxUses: 100, eggLayCooldownDays: 30 / 24, hatchDays: 8 }),
+  duck: Object.freeze({ adultAgeDays: 32, maxUses: 72, eggLayCooldownDays: 32 / 24, hatchDays: 8 }),
+  quail: Object.freeze({ adultAgeDays: 22, maxUses: 48, eggLayCooldownDays: 28 / 24, hatchDays: 8 })
+});
