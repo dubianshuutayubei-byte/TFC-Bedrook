@@ -1,0 +1,28 @@
+{
+  "format_version": "1.10.0",
+  "minecraft:client_entity": {
+    "description": {
+      "identifier": "tfc:cat",
+      "materials": { "default": "entity_alphatest" },
+      "textures": { "default": "textures/entity/cat/tabby" },
+      "geometry": { "default": "geometry.cat" },
+      "animations": {
+        "sneak": "animation.cat.sneak",
+        "walk": "animation.cat.walk",
+        "sprint": "animation.cat.sprint",
+        "sit": "animation.cat.sit",
+        "look_at_target": "animation.common.look_at_target"
+      },
+      "scripts": {
+        "animate": [
+          "look_at_target",
+          { "sneak": "query.is_sneaking" },
+          { "walk": "query.modified_move_speed" },
+          { "sprint": "query.is_sprinting" },
+          { "sit": "query.is_sitting" }
+        ]
+      },
+      "render_controllers": ["controller.render.tfc_fauna"]
+    }
+  }
+}
