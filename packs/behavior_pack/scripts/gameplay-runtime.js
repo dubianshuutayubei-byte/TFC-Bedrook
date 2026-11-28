@@ -6,7 +6,7 @@ import { readStackFreshness, advanceStackFreshness } from "./core/food-stack-ser
 import { createFireState, addFuel, advanceFire, canProcessAtTemperature } from "./core/firepit-service.mjs";
 import { createSoilState, advanceSoilHydration, evaluateCropGrowth, calculateCropYield, applyFertilizer, applyCropNutrientEffects, inferSoilTypeFromBlockId, inferSoilFertilityClassFromBiomeId, advanceCropGrowthProgress } from "./core/agriculture-service.mjs";
 import { CROP_PROFILES } from "./core/crop-profiles.mjs";
-import { createAnimalState, createAnimalOffspringState, initializeAnimalLifeStage, syncAnimalHealth, advanceAnimalNeeds, advanceAnimalFamiliarityDecay, canFeedAnimal, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct } from "./core/fauna-service.mjs";
+import { createAnimalState, createAnimalOffspringState, initializeAnimalLifeStage, syncAnimalHealth, advanceAnimalNeeds, advanceAnimalFamiliarityDecay, canFeedAnimal, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct, advanceAnimalLifecycle } from "./core/fauna-service.mjs";
 import { getStationRecipes } from "./core/processing-recipes.mjs";
 import { isStationJobDue, getPendingStationOutputs, markStationOutputDelivered, markStationJobRecoverable } from "./core/station-job-service.mjs";
 import { normalizeDimensionId, normalizeWeather, getRainfallMm, inferBiomeRainfallMultiplierFromBiomeId } from "./core/environment-service.mjs";
@@ -547,8 +547,10 @@ function animalTick(entity){
  const profile=ANIMAL_PROFILES[entity.typeId];if(!profile)return;
  let state=animalState(entity);
   try{const health=entity.getComponent("minecraft:health");if(health)state=syncAnimalHealth(state,health.currentValue,health.effectiveMax);}catch{}
-  state=advanceAnimalNeeds(state,0.05,{hungerPerDay:profile.hungerPerDay??8,thirstPerDay:profile.thirstPerDay??(profile.kind==="aquatic"?0:12),healthLossPerDay:2});
- const currentDay=currentAnimalDay();
+  const currentDay=currentAnimalDay(),lastAgeUpdateAt=state.lastAgeUpdateAt>=0?state.lastAgeUpdateAt:currentDay,elapsedAgeDays=Math.max(0,currentDay-lastAgeUpdateAt);
+ state.lastAgeUpdateAt=currentDay;
+ state=advanceAnimalNeeds(state,0.05,{hungerPerDay:profile.hungerPerDay??8,thirstPerDay:profile.thirstPerDay??(profile.kind==="aquatic"?0:12),healthLossPerDay:2,ageElapsedDays:elapsedAgeDays});
+ state=advanceAnimalLifecycle(state,0,{adultDays:profile.adultAgeDays??0}).animal;
  state=advanceAnimalFamiliarityDecay(state,currentDay,{decayLimit:30,decayPerDay:2});
  if(profile.maxUses>0&&state.uses>profile.maxUses&&state.oldDay<0)state.oldDay=currentDay+1+Math.floor(Math.random()*5);
  if(state.oldDay>=0&&currentDay>state.oldDay)state.lifeStage="old";
@@ -575,7 +577,7 @@ function animalTick(entity){
   }
  }catch{}
  try{const hp=entity.getComponent("minecraft:health");if(hp)hp.setCurrentValue(Math.max(0,hp.effectiveMax*state.health/100));}catch{}
- if(profile.customBreeding&&state.pregnancyDays>0){const result=advancePregnancy(state,0.05,profile.gestationDays);state=result.animal;if(result.birthReady){if(state.birthsRemaining===0){state.birthsRemaining=Math.max(1,Math.floor(profile.childCount??1));saveAnimal(entity,state);}while(state.birthsRemaining>0){try{const offset=Math.max(0,Math.floor(profile.childCount??1))-state.birthsRemaining;const baby=entity.dimension.spawnEntity(entity.typeId+"<tfc:spawn_baby>",{x:entity.location.x+1+(offset%2)*0.8,y:entity.location.y,z:entity.location.z+Math.floor(offset/2)*0.8});state.birthsRemaining-=1;saveAnimal(entity,state);saveAnimal(baby,createAnimalOffspringState(state,profile.speciesId,Math.random()<0.5?"male":"female"));}catch(error){console.warn("[TFC-Bedrook] animal birth deferred:",error);break;}}if(state.birthsRemaining===0){state.pregnancyDays=0;state.fertilized=false;}}}\n if(entity.typeId==="tfc:deer"&&state.lifeStage==="juvenile"&&state.ageDays>=profile.adultAgeDays){try{entity.triggerEvent("tfc:grow_up");state.lifeStage="adult";}catch(error){console.warn("[TFC-Bedrook] deer growth event failed:",error);}}
+ if(profile.customBreeding&&state.pregnancyDays>0){const result=advancePregnancy(state,elapsedAgeDays,profile.gestationDays);state=result.animal;if(result.birthReady){if(state.birthsRemaining===0){state.birthsRemaining=Math.max(1,Math.floor(profile.childCount??1));saveAnimal(entity,state);}while(state.birthsRemaining>0){try{const offset=Math.max(0,Math.floor(profile.childCount??1))-state.birthsRemaining;const baby=entity.dimension.spawnEntity(entity.typeId+"<tfc:spawn_baby>",{x:entity.location.x+1+(offset%2)*0.8,y:entity.location.y,z:entity.location.z+Math.floor(offset/2)*0.8});state.birthsRemaining-=1;saveAnimal(entity,state);saveAnimal(baby,createAnimalOffspringState(state,profile.speciesId,Math.random()<0.5?"male":"female"));}catch(error){console.warn("[TFC-Bedrook] animal birth deferred:",error);break;}}if(state.birthsRemaining===0){state.pregnancyDays=0;state.fertilized=false;}}}\n if(entity.typeId==="tfc:deer"&&state.lifeStage==="juvenile"&&state.ageDays>=profile.adultAgeDays){try{entity.triggerEvent("tfc:grow_up");state.lifeStage="adult";}catch(error){console.warn("[TFC-Bedrook] deer growth event failed:",error);}}
  if(state.sex==="unknown")state.sex=Math.random()<0.5?"male":"female";
  if(profile.customBreeding&&state.sex==="female"&&state.ageDays>=profile.adultAgeDays&&state.familiarity>=profile.requiredFamiliarity&&state.hunger<60&&state.thirst<60&&state.pregnancyDays===0){
   try{const nearby=entity.dimension.getEntities({type:entity.typeId,location:entity.location,maxDistance:6});for(const partner of nearby){if(partner.id===entity.id)continue;const other=animalState(partner);if(canBreed(state,other,profile)){const started=beginPregnancy(state,other,profile);if(started.started){state=started.animal;other.lastBreedAt=other.ageDays;other.uses=(other.uses??0)+5;if(profile.maxUses>0&&other.uses>profile.maxUses&&other.oldDay<0)other.oldDay=world.getDay()+1+Math.floor(Math.random()*5);saveAnimal(partner,other);break;}}}}catch{}
