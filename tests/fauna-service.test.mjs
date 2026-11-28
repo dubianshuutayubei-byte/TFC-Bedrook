@@ -300,3 +300,19 @@ test("offspring count supports fixed litters and bounded randomized litters",()=
  assert.equal(getOffspringCount({childCountMin:1,childCountMax:10,childCount:6},()=>0.999),10);
  assert.throws(()=>getOffspringCount({childCountMin:1,childCountMax:10},()=>1),RangeError);
 });
+
+test("horse and donkey can produce a persisted mule offspring while other cross-species pairs remain incompatible",()=>{
+ const mare={species:"horse",sex:"female",lifeStage:"adult",ageDays:80,familiarity:40,health:100,hunger:10,thirst:10,lastFedDay:5,lastBreedAt:0};
+ const jack={species:"donkey",sex:"male",lifeStage:"adult",ageDays:80,familiarity:40,health:100,hunger:10,thirst:10,lastFedDay:5,lastBreedAt:0};
+ const profile={adultAgeDays:80,requiredFamiliarity:30,currentDay:5,currentTime:5,compatibleSpeciesPairs:[["horse","donkey"]],offspringSpecies:"mule",offspringEntityType:"minecraft:mule"};
+ assert.equal(canBreed(mare,jack),false);
+ assert.equal(canBreed(mare,jack,profile),true);
+ const pregnancy=beginPregnancy(mare,jack,profile);
+ assert.equal(pregnancy.started,true);
+ assert.equal(pregnancy.animal.pregnancyOffspringSpecies,"mule");
+ assert.equal(pregnancy.animal.pregnancyOffspringEntityType,"minecraft:mule");
+ const advanced=advancePregnancy(pregnancy.animal,19,19);
+ assert.equal(advanced.birthReady,true);
+ assert.equal(advanced.animal.pregnancyOffspringSpecies,"mule");
+ assert.equal(advanced.animal.pregnancyOffspringEntityType,"minecraft:mule");
+});
