@@ -23,3 +23,8 @@ tile.tfc:crucible.name=Crucible
 tile.tfc:anvil.name=Anvil
 tile.tfc:farmland.name=TFC Farmland
 tile.tfc:crop.name=TFC Crop
+
+item.tfc:heated_copper_ingot.name=Heated Copper Ingot
+item.tfc:farmland.name=Farmland
+item.tfc:unfired_ingot_mold.name=Unfired Ingot Mold
+item.tfc:fired_ingot_mold.name=Fired Ingot Mold
