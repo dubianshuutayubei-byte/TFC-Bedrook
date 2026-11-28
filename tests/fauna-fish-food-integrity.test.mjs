@@ -46,8 +46,9 @@ test("runtime food decay rates exactly match every registered food profile", () 
 test("every official 1.21.x livestock lifecycle entry has a runtime species profile", () => {
   const lifecycle = readJson("packs/behavior_pack/data/official-animal-lifecycle.json");
   for (const species of lifecycle.species) {
-    const pattern = new RegExp('speciesId\\s*:\\s*["\\']' + species.id + '["\\']');
-    assert.match(runtime, pattern, species.id + " lifecycle data must be connected to an entity runtime profile");
+    const hasProfile = runtime.includes('speciesId:"' + species.id + '"') ||
+      runtime.includes('"speciesId":"' + species.id + '"');
+    assert.equal(hasProfile, true, species.id + " lifecycle data must be connected to an entity runtime profile");
   }
 });
 
