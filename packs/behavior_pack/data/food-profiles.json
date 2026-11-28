@@ -342,7 +342,7 @@
         "protein": 20
       },
       "hydration": 0,
-      "baseDecayPerHour": 0.05,
+      "baseDecayPerHour": 0.03,
       "cooked": true,
       "preservation": "cooked"
     }
