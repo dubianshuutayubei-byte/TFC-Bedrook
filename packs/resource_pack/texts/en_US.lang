@@ -132,3 +132,5 @@ tile.tfc:trellis.name=Crop Trellis
 
 tile.tfc:pumpkin_fruit.name=Pumpkin Fruit
 tile.tfc:melon_fruit.name=Melon Fruit
+
+item.tfc:clay_seal.name=Clay Seal
