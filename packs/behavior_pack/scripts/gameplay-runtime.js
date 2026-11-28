@@ -595,6 +595,17 @@ function consumeDroppedAnimalFood(entity,profile,state){
  }catch(error){console.warn("[TFC-Bedrook] animal food pickup failed:",error);}
  return state;
 }
+function tickFishForage(entity,profile,state){
+ if(!profile.fishForageItems?.length||state.hunger<25)return state;
+ try{
+  for(const fish of entity.dimension.getEntities({location:entity.location,maxDistance:2.5})){
+   if(!profile.fishForageItems.includes(fish.typeId))continue;
+   const hp=fish.getComponent("minecraft:health");if(!hp)continue;
+   hp.setCurrentValue(0);state=grazeAnimal(state,{hungerReduction:35,thirstReduction:2,currentDay:world.getDay()});break;
+  }
+ }catch(error){console.warn("[TFC-Bedrook] aquatic fauna forage failed:",error);}
+ return state;
+}
 function tickPredation(entity,profile,state,currentDay){
  if(!profile.predatorDiet?.length||state.dead)return state;
  // A successful hunt pacifies TFC predators for half a day.
@@ -661,6 +672,7 @@ function animalTick(entity){
  state=advanceAnimalLifecycle(state,currentDay,{adultAgeDays:profile.adultAgeDays??null,elapsedDays:elapsedAgeDays,oldAgeHealthLossPerDay:profile.oldAgeHealthLossPerDay??0.15});
  if(state.dead){saveAnimal(entity,state);try{const hp=entity.getComponent("minecraft:health");if(hp)hp.setCurrentValue(0);}catch{}return;}
  state=consumeDroppedAnimalFood(entity,profile,state);
+ state=tickFishForage(entity,profile,state);
  state=tickPredation(entity,profile,state,currentDay);
  if(profile.eggProduct&&state.sex==="female"&&currentDay>state.eggFertilizedUntil){try{const mates=entity.dimension.getEntities({type:entity.typeId,location:entity.location,maxDistance:6});if(mates.some(m=>m.id!==entity.id&&animalState(m).sex==="male")){state.eggFertilized=true;state.eggFertilizedUntil=currentDay+4;}}catch{}}
  try{
@@ -679,7 +691,7 @@ function animalTick(entity){
    const forage=forageCandidates[Math.floor(Math.random()*forageCandidates.length)];
    try{
     if(forage.typeId==="minecraft:grass_block")forage.setType("minecraft:dirt");
-    else if(forage.typeId==="minecraft:tallgrass"||forage.typeId==="minecraft:short_grass"||forage.typeId==="minecraft:tall_grass")forage.setType("minecraft:air");
+    else if(["minecraft:tallgrass","minecraft:short_grass","minecraft:tall_grass","minecraft:fern","minecraft:large_fern","minecraft:seagrass","minecraft:tall_seagrass"].includes(forage.typeId))forage.setType("minecraft:air");
     state=grazeAnimal(state,{hungerReduction:15,currentDay:world.getDay()});
    }catch(error){console.warn("[TFC-Bedrook] animal grazing failed:",error);}
   }
