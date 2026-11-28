@@ -275,6 +275,62 @@ async function processQuernManually(player,block,recipe){
  for(const [itemId,amount] of Object.entries(recipe.outputs))give(player,itemId,amount);
  player.sendMessage("§a粉挽き完了: "+recipe.title);
 }
+
+function openFoodDetail(player,stack){
+ if(!player||!stack)return;
+ const id=stack.typeId,baseDecay=FOOD_DECAY_PROFILES[id];
+ if(baseDecay===undefined&&id!=="tfc:spoiled_food")return;
+ let lore=[];try{lore=stack.getLore();}catch{}
+ const freshness=id==="tfc:spoiled_food"?0:readStackFreshness(lore).freshness;
+ const stage=id==="tfc:spoiled_food"||freshness<=0?"腐敗":freshness>=75?"新鮮":freshness>=40?"劣化中":"腐敗間近";
+ const color=stage==="新鮮"?"§a":stage==="劣化中"?"§e":"§c";
+ const body="食品: "+(ITEM_LABELS[id]??id)+"\n個数: "+stack.amount+"\n鮮度: "+Math.round(freshness)+"%（"+stage+"）\n腐敗速度: "+(baseDecay===undefined?"腐敗済み":(baseDecay*100).toFixed(1)+"% / 実時間1時間")+
+ "\n\n"+(id==="tfc:spoiled_food"?"この食品は食べられません。":freshness<=0?"腐敗しています。":"鮮度は食品スタック単位で保存され、移動しても引き継がれます。");
+ const form=new ActionFormData().title("食品の状態").body(color+body).button("閉じる");
+ void form.show(player).catch(()=>player.sendMessage(body));
+}
+async function shapePottery(player){
+ const form=new ActionFormData().title("粘土成形").body("粘土玉を使って未焼成品を成形します。\n\n土器: 粘土玉 4個\nインゴット鋳型: 粘土玉 8個\n\n成形後はPit Kilnで焼成してください。").button("土器を成形（粘土玉×4）").button("インゴット鋳型を成形（粘土玉×8）").button("閉じる");
+ let response;try{response=await form.show(player);}catch{return;}
+ if(response.canceled||response.selection===2)return;
+ const amount=response.selection===0?4:8,output=response.selection===0?"tfc:clay_vessel":"tfc:unfired_ingot_mold";
+ if(count(player,"minecraft:clay_ball")<amount){player.sendMessage("§c粘土玉が不足しています。必要数: "+amount);return;}
+ if(!take(player,"minecraft:clay_ball",amount)){player.sendMessage("§c粘土玉を取り出せませんでした。");return;}
+ give(player,output,1);player.sendMessage("§a"+(output==="tfc:clay_vessel"?"土器":"インゴット鋳型")+"を成形しました。Pit Kilnで焼成できます。");
+}
+async function crucibleStation(player,block,state){
+ const key=posKey(block,"crucible_charge"),charge=readWorldState(key,{copper:0,tin:0});
+ const copper=Math.max(0,Math.floor(Number(charge.copper)||0)),tin=Math.max(0,Math.floor(Number(charge.tin)||0));
+ const valid=findMatchingAlloys({copper,tin},{recipes:[{id:"bronze",components:{copper:[0.88,0.92],tin:[0.08,0.12]}}]}).includes("bronze");
+ const body="§7るつぼ温度: "+Math.floor(state.temperatureC)+"°C\n§7燃料残り: "+Math.ceil(state.burnTicks/20)+"秒\n\n投入済み金属\n銅: "+copper+" / 錫: "+tin+"\n配合: "+(copper+tin?Math.round(copper/(copper+tin)*100)+"% 銅 / "+Math.round(tin/(copper+tin)*100)+"% 錫":"未投入")+"\n判定: "+(valid?"§a青銅の範囲内":"§e配合未成立");
+ const form=new ActionFormData().title("Crucible｜投入・配合・鋳造").body(body)
+ .button("銅インゴットを1個投入")
+ .button("錫インゴットを1個投入")
+ .button("配合を確認して青銅を鋳造")
+ .button("投入金属を取り出す")
+ .button("閉じる");
+ let response;try{response=await form.show(player);}catch{player.sendMessage("§cるつぼUIを開けませんでした。");return;}
+ if(response.canceled||response.selection===4)return;
+ if(response.selection===0||response.selection===1){
+  const id=response.selection===0?"tfc:copper_ingot":"tfc:tin_ingot",name=response.selection===0?"copper":"tin";
+  if(!take(player,id,1)){player.sendMessage("§c"+(name==="copper"?"銅":"錫")+"インゴットがありません。");return;}
+  const next={copper,tin};next[name]++;if(!writeWorldState(key,next)){give(player,id,1);player.sendMessage("§c投入状態を保存できませんでした。材料を返却しました。");return;}
+  player.sendMessage("§a"+(name==="copper"?"銅":"錫")+"をるつぼへ投入しました。");return;
+ }
+ if(response.selection===3){
+  if(copper+tin===0){player.sendMessage("§eるつぼは空です。");return;}
+  if(!give(player,"tfc:copper_ingot",copper)||!give(player,"tfc:tin_ingot",tin)){player.sendMessage("§c金属を返却できませんでした。");return;}
+  writeWorldState(key,{copper:0,tin:0});player.sendMessage("§a投入金属をインベントリへ戻しました。");return;
+ }
+ if(!valid){player.sendMessage("§c青銅の配合範囲外です。銅88〜92%、錫8〜12%に調整してください。");return;}
+ if(!canProcessAtTemperature(state,950)){player.sendMessage("§c青銅の溶融には950°C以上が必要です。");return;}
+ if(!count(player,"tfc:fired_ingot_mold")){player.sendMessage("§c焼成済みインゴット鋳型が必要です。");return;}
+ if(!take(player,"tfc:fired_ingot_mold",1)){player.sendMessage("§c鋳型を取り出せませんでした。");return;}
+ if(!writeWorldState(key,{copper:0,tin:0})){give(player,"tfc:fired_ingot_mold",1);player.sendMessage("§c配合状態を更新できませんでした。鋳型を返却しました。");return;}
+ give(player,"tfc:heated_bronze_ingot",1);give(player,"tfc:fired_ingot_mold",1);
+ player.sendMessage("§a青銅を鋳造しました。加熱済みインゴットと鋳型を回収してください。");
+}
+
 async function station(player,id,block){
  const recipes=getStationRecipes(id);if(!recipes.length)return;
  const key=stationJobKey(block),existing=readWorldState(key,null);
@@ -289,6 +345,7 @@ async function station(player,id,block){
  const state=createFireState(readWorldState(posKey(block,"fire"),{}));
  const held=inv(player)?.getItem(player.selectedSlotIndex),fuel=(id==="anvil"||id==="drying_rack"||id==="composter"||id==="quern")?null:(held?FUELS[held.typeId]:null);
  if(fuel){if(!take(player,held.typeId,1)){player.sendMessage("§c燃料を取り出せません。");return;}writeWorldState(posKey(block,"fire"),addFuel(state,fuel));player.sendMessage("§a燃料投入: "+Math.round(fuel.duration/20)+"秒分");return;}
+ if(id==="crucible"){await crucibleStation(player,block,state);return;}
  const tempLabels={unheated:"未加熱",warming:"暖まり中",hot:"熱い",very_hot:"非常に熱い",faint_red:"かすかな赤熱",dark_red:"暗赤色",bright_red:"明るい赤熱",orange:"橙熱",yellow:"黄色熱",yellow_white:"黄白色",white:"白熱",brilliant_white:"強白熱"};
  const body=recipes.map((r,i)=>{const inputs=Object.entries(r.inputs).map(([itemId,amount])=>(count(player,itemId)>=amount?"§a":"§c")+(ITEM_LABELS[itemId]??itemId)+" ×"+amount+"§r").join("、");const outputs=Object.entries(r.outputs).map(([itemId,amount])=>(ITEM_LABELS[itemId]??itemId)+" ×"+amount).join("、");return(i+1)+". "+r.title+"\n   "+(id==="quern"?"手動回転 3回":id==="drying_rack"||id==="composter"?"所要時間 "+Math.ceil(r.durationTicks/20)+"秒":"必要温度 "+r.minimumTemperatureC+"°C / "+Math.ceil(r.durationTicks/20)+"秒")+"\n   材料: "+inputs+"\n   完成品: "+outputs;}).join("\n\n");
  const heldTemperature=Number(held?.getDynamicProperty(ITEM_TEMPERATURE_KEY)??0);const status=id==="quern"?"\n\n上臼石を材料と一緒に投入し、手動回転で穀物を挽きます。燃料・熱源は不要です。":id==="drying_rack"?"\n\n常温・時間式乾燥です。燃料は必要ありません。":id==="composter"?"\n\n常温で約10日間発酵させます。緑の素材と茶色の素材が必要です。":id==="anvil"?"\n\n手持ち金属温度: "+Math.floor(heldTemperature)+"°C（"+tempLabels[classifyTemperature(heldTemperature)]+"）\n鍛造温度に達した加熱インゴットが必要です。":"\n\n現在温度: "+Math.floor(state.temperatureC)+"°C（"+tempLabels[classifyTemperature(state.temperatureC)]+"）\n燃料残り: "+Math.ceil(state.burnTicks/20)+"秒";
@@ -511,6 +568,16 @@ system.runInterval(()=>{try{tickTrackedFoodContainers(system.currentTick);}catch
 system.runInterval(()=>{for(const player of world.getAllPlayers()){try{tickMetalHeat(player,system.currentTick);}catch(error){console.warn("[TFC-Bedrook] metal heat tick failed:",error);}}},20);
 });
 world.afterEvents.playerInteractWithEntity.subscribe(event=>{if(ANIMAL_PROFILES[event.target?.typeId])animalInteract(event.player,event.target);});
+world.afterEvents.itemUse.subscribe(event=>{
+ const player=event.source,stack=event.itemStack;if(!player||player.typeId!=="minecraft:player"||!stack)return;
+ if(player.isSneaking&&stack.typeId==="minecraft:clay_ball"){void shapePottery(player);return;}
+ if(player.isSneaking&&(FOOD_DECAY_PROFILES[stack.typeId]!==undefined||stack.typeId==="tfc:spoiled_food")){
+  const container=inv(player),slot=player.selectedSlotIndex;
+  if(container){const current=container.getItem(slot);if(current&&current.typeId===stack.typeId){const lore=current.getLore?.()??[],advanced=advanceStackFreshness(lore,system.currentTick,{temperatureC:temperatureAt(player.dimension,player.location),baseDecayPerHour:FOOD_DECAY_PROFILES[stack.typeId]??0});try{current.setLore(advanced.lore);container.setItem(slot,current);}catch{}openFoodDetail(player,current);return;}}
+  openFoodDetail(player,stack);
+ }
+});
+
 
 world.afterEvents.playerInteractWithBlock.subscribe(event=>{
  if(!event.isFirstEvent)return;
