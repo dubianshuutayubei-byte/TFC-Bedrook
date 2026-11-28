@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "foods": [
+    {
+      "id": "raw_meat",
+      "displayName": "生肉",
+      "nutrition": {
+        "protein": 12
+      },
+      "hydration": 0,
+      "baseDecayPerHour": 0.16,
+      "cooked": false
+    },
+    {
+      "id": "cooked_meat",
+      "displayName": "焼いた肉",
+      "nutrition": {
+        "protein": 18
+      },
+      "hydration": 0,
+      "baseDecayPerHour": 0.12,
+      "cooked": true
+    },
+    {
+      "id": "grain",
+      "displayName": "穀物",
+      "nutrition": {
+        "grain": 14
+      },
+      "hydration": 0,
+      "baseDecayPerHour": 0.025,
+      "cooked": false
+    },
+    {
+      "id": "vegetable",
+      "displayName": "野菜",
+      "nutrition": {
+        "vegetables": 12
+      },
+      "hydration": 5,
+      "baseDecayPerHour": 0.1,
+      "cooked": false
+    },
+    {
+      "id": "fruit",
+      "displayName": "果物",
+      "nutrition": {
+        "fruit": 12
+      },
+      "hydration": 12,
+      "baseDecayPerHour": 0.11,
+      "cooked": false
+    },
+    {
+      "id": "milk",
+      "displayName": "ミルク",
+      "nutrition": {
+        "dairy": 14
+      },
+      "hydration": 18,
+      "baseDecayPerHour": 0.18,
+      "cooked": false
+    }
+  ],
+  "notes": [
+    "栄養値・腐敗速度はBedrook用の仮バランス値で、TFC公式値ではありません。",
+    "このデータはロジック用プロファイルであり、Minecraftの食料アイテム登録・摂取イベントには未接続です。"
+  ]
+}
