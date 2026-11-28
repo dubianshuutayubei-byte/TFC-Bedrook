@@ -1192,3 +1192,10 @@
 - バニラ家畜の給餌操作を `beforeEvents` で捕捉・キャンセルし、TFC側の1日1回給餌・なつき度更新へ一本化。これによりバニラの即時ラブモード繁殖が同時発火する経路を抑止し、TFC妊娠/出産管理へ寄せた。給餌時のアイテム消費はTFC処理側で行う。
 - ラバはTFC仕様に合わせて常時オスとして初期化し、繁殖対象から除外。
 - 注意: バニラEntityを使う種では、既存のバニラAI/繁殖挙動との併存があり得る。TFC独自条件への完全置換や交雑（ウマ×ロバ→ラバ）は未実装。Minecraft 26.60実機での重複出産・AI挙動は未検証。
+
+
+### 追加検証（共通哺乳類繁殖・2026-11-28）
+- GitHub Actions Static Pack Validation: 成功。
+- JSON/manifest検査: 成功。JavaScript構文検査: 成功。Node.jsユニットテスト: 324件成功 / 324件、失敗0件。
+- 検証実行: https://github.com/dubianshuutayubei-byte/TFC-Bedrook/actions/runs/46141638718
+- これはリポジトリ上の静的検証とNodeテストの結果であり、Bedrock 26.60実機でのEntityイベント・繁殖AI・幼体成長・セーブ復旧の動作保証ではない。
