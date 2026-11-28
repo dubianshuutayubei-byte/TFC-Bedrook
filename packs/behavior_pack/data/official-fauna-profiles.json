@@ -410,7 +410,7 @@
     "sourceTag": "v3.2.26",
     "sourceDirectory": "https://github.com/TerraFirmaCraft/TerraFirmaCraft/tree/v3.2.26/src/main/resources/data/tfc/tfc/fauna",
     "speciesChecked": 63,
-    "speciesWithExactClimateFieldComparison": 63,
+    "speciesWithExactFieldComparison": 63,
     "checkedFields": [
       "min_temperature",
       "max_temperature",
@@ -418,13 +418,20 @@
       "max_rainfall",
       "min_forest",
       "max_forest",
-      "below_sea_level",
+      "distance_below_sea_level",
       "max_brightness",
-      "water",
       "chance",
       "fuzzy"
     ],
-    "result": "All climate keys and values in this Bedrock profile file were compared with the corresponding official JSON files. No differences were found.",
-    "caveat": "This validates only climate profile transcription, not Bedrock environment sampling, forest classification, spawn frequency, AI, or species implementation."
+    "result": "For all 63 species, root-level and climate-nested source fields were merged and compared against the Bedrock profile. All represented values match the official JSON files.",
+    "forestEnumSource": "https://github.com/TerraFirmaCraft/TerraFirmaCraft/blob/v3.2.26/src/main/java/net/dries007/tfc/world/chunkdata/ForestType.java",
+    "forestEnumOrder": [
+      "none",
+      "sparse",
+      "edge",
+      "normal",
+      "old_growth"
+    ],
+    "caveat": "This verifies source data transcription and enum ordering only; it does not mean Bedrock can currently sample TFC chunk climate/forest data or spawn all species."
   }
 }
