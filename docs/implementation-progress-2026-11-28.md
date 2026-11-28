@@ -560,3 +560,14 @@
 - UIは所持中食品のスタックごとの最低鮮度を表示。
 - ItemStackのgetLore/setLoreとItemComponentConsumeEvent.itemStackはStable APIに存在する。Bedrock 26.60実機でLoreの保存/移動/スタック統合/消費イベントの挙動は未検証。
 - 参照: https://learn.microsoft.com/ja-jp/minecraft/creator/scriptapi/minecraft/server/itemstack?view=minecraft-bedrock-stable / https://learn.microsoft.com/en-us/minecraft/creator/scriptapi/minecraft/server/itemcomponentconsumeevent?view=minecraft-bedrock-stable
+
+
+### 追加実装（TFC 1.21.1作物バリエーション第3弾）
+
+- 米、キャッサバ、インゲン、パンプキン、メロン、トマト、赤/黄パプリカ、アルファルファ、カノーラ、ラディッシュ、サトウキビ、ジュート、パピルスの13種を追加。既存15種と合わせて29種のcrop_typeを登録。
+- 作物別の適温/水分/NPK方向性、種/収穫物アイテム、食品プロファイル、腐敗速度、カタログ、Resource Pack名称/アイコンを接続。
+- 米は周囲の淡水、インゲン/トマトは隣接トレリスを要求。トウモロコシ/インゲン/トマト/サトウキビ/ジュート/パピルスは2ブロック成長。赤/黄パプリカは株を残して繰り返し収穫。
+- アルファルファ/カノーラ/ラディッシュはNPKを補う被覆作物として登録。野生種は草地/シダ/水辺草の破壊から低確率で取得する簡易方式。
+- 公式ガイドではカボチャ/メロンは周囲へ果実ブロックを広げる作物、米は水没条件、インゲン/トマトは支柱が必要。現在のカボチャ/メロンは作物株から直接収穫する簡易方式で、果実ブロックの拡散は未実装。トレリスは支柱要件のBedrook表現。
+- 参照: https://terrafirmacraft.github.io/Field-Guide/ja_jp/food/crops.html
+- 実際の水判定・複数ブロック成長・収穫/破壊はBedrock 26.60実機確認待ち。
