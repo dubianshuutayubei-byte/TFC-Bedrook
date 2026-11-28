@@ -9,7 +9,13 @@ const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runti
 
 test("in-world wheat growth uses crop climate and soil suitability checks",()=>{
   assert.match(runtime,/evaluateCropGrowth\(profile,\{temperatureC:currentTemperatureC\(block\.location\.y-63\)\},soil\)/);
-  assert.match(runtime,/applyNutrientUptake\(soil,profile\.preferredNutrient,1\.5\*evaluation\.growthMultiplier\)/);
+  assert.match(runtime,/applyCropNutrientEffects\(soil,profile\.nutrientEffects,evaluation\.growthMultiplier\)/);
   assert.match(runtime,/if\(!evaluation\.suitable\)return/);
   assert.match(runtime,/advanceCropGrowthProgress\(Number\(readWorldState\(progressKey,0\)\),evaluation\.growthMultiplier\)/);
+});
+
+test("crop profiles use TFC Field Guide temperature and hydration ranges",()=>{
+ assert.match(runtime,/wheat:\{minTemperatureC:-7,maxTemperatureC:22,minHydration:15,maxHydration:85/);
+ assert.match(runtime,/maize:\{minTemperatureC:-7,maxTemperatureC:27,minHydration:50,maxHydration:100/);
+ assert.match(runtime,/potato:\{minTemperatureC:-7,maxTemperatureC:22,minHydration:35,maxHydration:90/);
 });
