@@ -797,9 +797,8 @@ async function animalInteract(player,entity){
  }
  if(!profile.feedItems.includes(held.typeId))return;
  const currentDay=world.getDay(),firstFeedToday=canFeedAnimal(state,currentDay);
- // Native Bedrock livestock consumes feed before the after-event callback; custom deer is handled entirely here.
- if(!entity.typeId.startsWith("minecraft:")&&!firstFeedToday){player.sendMessage("§eこの動物には今日はもう餌を与えています。");return;}
- if(!entity.typeId.startsWith("minecraft:")&&!take(player,held.typeId,1))return;
+ if(!firstFeedToday){player.sendMessage("§eこの動物には今日はもう餌を与えています。");return;}
+ if(!take(player,held.typeId,1))return;
  let healPercent=0;try{const hp=entity.getComponent("minecraft:health");if(hp&&hp.effectiveMax>0)healPercent=100/hp.effectiveMax;}catch{}
  state=feedAnimal(state,firstFeedToday?6:0,healPercent,{currentDay,adultFamiliarityCap:profile.familiarityCap??100});saveAnimal(entity,state);
  player.sendMessage("§a餌を与えました。なつき度: "+Math.floor(state.familiarity));
@@ -896,11 +895,16 @@ function validateNaturalFaunaSpawn(event){
 }
 world.afterEvents.entitySpawn.subscribe(validateNaturalFaunaSpawn);
 world.beforeEvents.playerInteractWithEntity.subscribe(event=>{
- const target=event.target;
- if(!ANIMAL_PROFILES[target?.typeId]?.wooly||event.itemStack?.typeId!=="minecraft:shears")return;
- event.cancel=true;
- const player=event.player,slot=player.selectedSlotIndex;
- system.run(()=>{if(player.selectedSlotIndex===slot)shearAnimal(player,target);});
+ const target=event.target,profile=ANIMAL_PROFILES[target?.typeId],player=event.player,held=event.itemStack;
+ if(!profile)return;
+ if(profile.wooly&&held?.typeId==="minecraft:shears"){
+  event.cancel=true;const slot=player.selectedSlotIndex;
+  system.run(()=>{if(player.selectedSlotIndex===slot)shearAnimal(player,target);});return;
+ }
+ if(profile.feedItems.includes(held?.typeId)){
+  event.cancel=true;const slot=player.selectedSlotIndex;
+  system.run(()=>{if(player.selectedSlotIndex===slot)void animalInteract(player,target);});
+ }
 });
 world.afterEvents.playerInteractWithEntity.subscribe(event=>{if(ANIMAL_PROFILES[event.target?.typeId])animalInteract(event.player,event.target);});
 
