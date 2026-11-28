@@ -9,6 +9,7 @@ import { CROP_PROFILES } from "./core/crop-profiles.mjs";
 import { getFaunaPrey, getFaunaPredators } from "./core/fauna-ecology-service.mjs";
 import { createAnimalState, createAnimalOffspringState, initializeAnimalLifeStage, syncAnimalHealth, advanceAnimalNeeds, advanceAnimalFamiliarityDecay, canFeedAnimal, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct, canLayEgg, recordEggLaid, getOffspringCount, evaluateOfficialFaunaHabitat, tfcMonthFromDay } from "./core/fauna-service.mjs";
 import { OFFICIAL_FAUNA_HABITATS_1_21 } from "./core/official-fauna-habitat-profiles.mjs";
+import { OFFICIAL_LIVESTOCK_LIFECYCLE } from "./core/official-livestock-lifecycle.mjs";
 import { addNestBoxEgg, advanceNestBoxIncubation, takeNestBoxEgg } from "./core/nest-box-service.mjs";
 import { getStationRecipes } from "./core/processing-recipes.mjs";
 import { initializeArmadilloScuteClock, isArmadilloScuteDue } from "./core/armadillo-service.mjs";
