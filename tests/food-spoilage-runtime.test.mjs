@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { resolve, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { ticksToHours } from "../packs/behavior_pack/scripts/core/food-service.mjs";
+import { ticksToHours, validateFoodDatabase } from "../packs/behavior_pack/scripts/core/food-service.mjs";
 import { readStackFreshness } from "../packs/behavior_pack/scripts/core/food-stack-service.mjs";
 const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
@@ -61,4 +61,15 @@ test("every edible item has a label in the food freshness UI",()=>{
   if(item.components?.["tfc:consume_food"]&&!ui.includes(JSON.stringify(item.description.identifier)))missing.push(item.description.identifier);
  }
  assert.deepEqual(missing,[]);
+});
+
+test("the complete food profile database validates and preserves intended methods",()=>{
+ const database=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/food-profiles.json"),"utf8"));
+ assert.equal(validateFoodDatabase(database).foodCount,database.foods.length);
+ const methods=new Map(database.foods.map(food=>[food.id,food.preservation??"none"]));
+ assert.equal(methods.get("dried_meat"),"dried");
+ assert.equal(methods.get("dried_fruit"),"dried");
+ assert.equal(methods.get("dried_vegetables"),"dried");
+ assert.equal(methods.get("salted_meat"),"salted");
+ assert.equal(methods.get("smoked_meat"),"cooked");
 });
