@@ -23,7 +23,14 @@
       "tfc:station_ui": {
         "station": "anvil"
       },
-      "minecraft:display_name": "tile.tfc:anvil.name"
+      "minecraft:display_name": "tile.tfc:anvil.name",
+      "minecraft:tick": {
+        "interval_range": [
+          20,
+          20
+        ],
+        "looping": true
+      }
     }
   }
 }
