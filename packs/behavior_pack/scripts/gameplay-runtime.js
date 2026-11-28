@@ -40,7 +40,7 @@ function tickFoodFreshness(player,nowTick){
   if(amount===0){delete freshnessState[itemId];continue;}
   const previous=freshnessState[itemId]??{freshness:100,lastTick:nowTick};
   const elapsedTicks=Math.max(0,nowTick-Number(previous.lastTick??nowTick));
-  const decayed=advanceFoodDecay({id:itemId,freshness:previous.freshness},elapsedTicks/1000,{temperatureC:currentTemperatureC(player.location.y-63),baseDecayPerHour});
+  const decayed=advanceFoodDecay({id:itemId,freshness:previous.freshness},elapsedTicks/72000,{temperatureC:currentTemperatureC(player.location.y-63),baseDecayPerHour});
   if(decayed.spoiled){
    for(const entry of slots)container.setItem(entry.slot,new ItemStack("tfc:spoiled_food",entry.amount));
    delete freshnessState[itemId];
