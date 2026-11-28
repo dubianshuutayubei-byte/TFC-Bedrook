@@ -24,6 +24,44 @@ function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));
 }
 
+function positive(value, name) {
+  const number = finite(value, name);
+  if (number <= 0) throw new RangeError(`${name} must be > 0`);
+  return number;
+}
+
+/**
+ * Normalize an arbitrary day index into [0, yearLengthDays).
+ * Negative and overflow values wrap across year boundaries.
+ */
+export function normalizeDayOfYear(dayOfYear, yearLengthDays = DEFAULTS.yearLengthDays) {
+  const day = finite(dayOfYear, "dayOfYear");
+  const yearLength = positive(yearLengthDays, "yearLengthDays");
+  return ((day % yearLength) + yearLength) % yearLength;
+}
+
+/**
+ * Four equal seasons. Day zero is the winter-solstice start of winter.
+ * This is the addon calendar convention, not a claim that Java TFC uses
+ * identical season lengths.
+ */
+export function getSeasonInfo(dayOfYear, yearLengthDays = DEFAULTS.yearLengthDays) {
+  const yearLength = positive(yearLengthDays, "yearLengthDays");
+  const day = normalizeDayOfYear(dayOfYear, yearLength);
+  const seasonLength = yearLength / 4;
+  const seasonIndex = Math.min(3, Math.floor(day / seasonLength));
+  const seasonDay = day - seasonIndex * seasonLength;
+  const seasons = ["winter", "spring", "summer", "autumn"];
+
+  return {
+    season: seasons[seasonIndex],
+    dayOfYear: day,
+    dayInSeason: Math.floor(seasonDay),
+    seasonProgress: seasonDay / seasonLength,
+    seasonIndex,
+  };
+}
+
 /**
  * Calculate local temperature from annual mean, seasonal amplitude and height.
  * Day zero is the winter solstice; the seasonal curve peaks halfway through
@@ -49,7 +87,8 @@ export function calculateTemperatureC({
   if (amplitude < 0) throw new RangeError("seasonalAmplitudeC must be >= 0");
   if (lapseRate < 0) throw new RangeError("lapseRateCPerKm must be >= 0");
 
-  const phase = (day / yearLength - DEFAULTS.summerPeakDayFraction) * 2 * Math.PI;
+  const normalizedDay = normalizeDayOfYear(day, yearLength);
+  const phase = (normalizedDay / yearLength - DEFAULTS.summerPeakDayFraction) * 2 * Math.PI;
   const seasonalOffset = amplitude * Math.cos(phase);
   const altitudeOffset = -(elevation / 1000) * lapseRate;
   return mean + seasonalOffset + altitudeOffset;
@@ -64,8 +103,11 @@ export function evaluateCropClimate(profile, climate) {
 
   const temperature = finite(climate.temperatureC, "climate.temperatureC");
   const hydration = finite(climate.hydration, "climate.hydration");
-  const tempWiggle = profile.temperatureWiggleC ?? 0;
-  const hydrationWiggle = profile.hydrationWiggle ?? 0;
+  const tempWiggle = finite(profile.temperatureWiggleC ?? 0, "profile.temperatureWiggleC");
+  const hydrationWiggle = finite(profile.hydrationWiggle ?? 0, "profile.hydrationWiggle");
+  if (tempWiggle < 0 || hydrationWiggle < 0) {
+    throw new RangeError("climate wiggle ranges must be >= 0");
+  }
 
   const values = [
     ["minTemperatureC", "maxTemperatureC", temperature, tempWiggle],
