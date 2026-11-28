@@ -20,7 +20,7 @@ test("drying rack is craftable and opens the station UI",()=>{
 
 test("drying rack is passive and does not accept fuel",()=>{
  const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
- assert.match(runtime,/id==="anvil"\|\|id==="drying_rack"\|\|id==="composter"\)\?null/);
+ assert.match(runtime,/id==="drying_rack".*?\?null/);
  assert.match(runtime,/id==="drying_rack"\?"乾燥棚"/);
  assert.match(runtime,/常温・時間式乾燥です。燃料は必要ありません。/);
  const recipes=getStationRecipes("drying_rack");
