@@ -39,7 +39,10 @@
       "grain",
       "vegetable",
       "fruit",
-      "salt"
+      "salt",
+      "dried_meat",
+      "dried_fruit",
+      "dried_vegetables"
     ],
     "farming": [
       "crop_seed",
@@ -51,7 +54,8 @@
       "pit_kiln",
       "charcoal_forge",
       "crucible",
-      "anvil"
+      "anvil",
+      "drying_rack"
     ]
   },
   "implementationStatus": "partially_registered",
@@ -102,6 +106,10 @@
     "tfc:tin_ingot",
     "tfc:heated_bronze_ingot",
     "tfc:bronze_ingot",
-    "tfc:bronze_sheet"
+    "tfc:bronze_sheet",
+    "tfc:dried_meat",
+    "tfc:dried_fruit",
+    "tfc:dried_vegetables",
+    "tfc:drying_rack"
   ]
 }
