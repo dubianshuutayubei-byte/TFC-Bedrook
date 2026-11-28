@@ -9,8 +9,8 @@ const crop=JSON.parse(readFileSync(join(root,"packs/behavior_pack/blocks/crop.js
 const catalog=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/item-catalog.json"),"utf8"));
 test("crop block distinguishes wheat maize and potato",()=>{
  assert.deepEqual(crop["minecraft:block"].description.states["tfc:crop_type"],["wheat","maize","potato"]);
- assert.match(runtime,/maize:\{minTemperatureC:12,maxTemperatureC:35/);
- assert.match(runtime,/potato:\{minTemperatureC:4,maxTemperatureC:25/);
+ assert.match(runtime,/maize:\{minTemperatureC:-7,maxTemperatureC:27/);
+ assert.match(runtime,/potato:\{minTemperatureC:-7,maxTemperatureC:22/);
  assert.match(runtime,/const cropType=block\.permutation\.getState\("tfc:crop_type"\)/);
 });
 test("planting and harvesting route through matching seed and produce ids",()=>{
