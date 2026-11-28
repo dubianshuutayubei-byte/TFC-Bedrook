@@ -1,6 +1,6 @@
 import { ActionFormData } from "@minecraft/server-ui";
 import { world } from "@minecraft/server";
-import { calculateAmbientTemperatureC } from "../core/climate-service.mjs";
+import { calculateAmbientTemperatureC, getSeasonName } from "../core/climate-service.mjs";
 import { deserializePlayerState } from "../core/player-state-service.mjs";
 
 const UI_TITLE = "TerraFirmaCraft: Bedrook";
@@ -55,7 +55,7 @@ async function showPlayerStatus(player) {
   const raw = player.getDynamicProperty(PLAYER_STATE_KEY);
   const state = deserializePlayerState(typeof raw === "string" ? raw : "");
   const dayOfYear = ((world.getDay() % 96) + 96) % 96;
-  const season = ["春","夏","秋","冬"][Math.floor(dayOfYear / 24)];
+  const season = getSeasonName(dayOfYear);
   const temperatureC = calculateAmbientTemperatureC({ meanAnnualTempC: 12, seasonalAmplitudeC: 14, dayOfYear, timeOfDay: world.getTimeOfDay(), elevationM: Math.max(0, player.location.y - 63), diurnalAmplitudeC: 3 });
   const nutrition = Object.entries(state.nutrition)
     .map(([key, value]) => `${NUTRITION_LABELS[key] ?? key}: ${Math.round(value)} / 100`)
