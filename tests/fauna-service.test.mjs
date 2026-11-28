@@ -405,3 +405,20 @@ test("egg laying applies the same lifetime-use and old-age grace period as milk 
  assert.equal(canLayEgg({...used,lastFedDay:12},{currentDay:12,cooldownDays:1,minimumAgeDays:24,maxUses:2}),true);
  assert.equal(canLayEgg({...used,lastFedDay:14},{currentDay:14,cooldownDays:1,minimumAgeDays:24,maxUses:2}),false);
 });
+
+import { readFileSync } from "node:fs";
+import { resolve, dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+test("predator-prey runtime uses per-animal throttling and bounded local searches",()=>{
+ const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
+ const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
+ const start=runtime.indexOf("function runFaunaPredatorPreyInteraction(");
+ const end=runtime.indexOf("function animalTick(",start);
+ assert.ok(start>=0&&end>start,"predator-prey interaction function must exist");
+ const section=runtime.slice(start,end);
+ assert.match(section,/now-lastAction<100/,"each animal must be throttled");
+ assert.match(section,/maxDistance:1\.8/,"predation search must stay close-range");
+ assert.match(section,/maxDistance:5/,"flee search must stay local");
+ assert.match(section,/getFaunaPrey\(species\)/);
+ assert.match(section,/getFaunaPredators\(species\)/);
+});
