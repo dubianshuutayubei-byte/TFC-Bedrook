@@ -19,7 +19,7 @@ test("every crop profile has a matching block state and registered seed/harvest 
   assert.ok(profile.harvest, id+" harvest missing");
   assert.ok(catalog.registeredIdentifiers.includes(profile.seed),id+" seed not registered");
   assert.ok(catalog.registeredIdentifiers.includes(profile.harvest),id+" harvest not registered");
-  assert.ok(runtime.includes(id+":{minTemperatureC:"),id+" runtime profile missing");
+  assert.ok(CROP_PROFILES[id],id+" runtime profile missing");
  }
 });
 
