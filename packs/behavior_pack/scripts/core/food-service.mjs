@@ -1,5 +1,11 @@
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 const finiteOr = (value, fallback) => Number.isFinite(Number(value)) ? Number(value) : fallback;
+
+// Bedrock simulation runs at 20 ticks per second: 72,000 ticks = one hour.
+export function ticksToHours(ticks) {
+  const value = Number(ticks);
+  return Number.isFinite(value) && value > 0 ? value / 72000 : 0;
+}
 const NUTRITION_CATEGORIES = Object.freeze(["grain", "fruit", "vegetables", "protein", "dairy"]);
 const PRESERVATION_MULTIPLIERS = Object.freeze({ none: 1, cooked: 0.8, salted: 0.35, pickled: 0.25, sealed: 0.5 });
 
