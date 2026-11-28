@@ -16,3 +16,10 @@ item.tfc:crucible.name=るつぼ設備
 item.tfc:anvil.name=金床
 item.tfc:deer_spawn_egg.name=シカの召喚アイテム
 entity.tfc:deer.name=シカ
+
+tile.tfc:firepit.name=焚き火設備
+tile.tfc:pit_kiln.name=Pit Kiln
+tile.tfc:crucible.name=るつぼ設備
+tile.tfc:anvil.name=金床
+tile.tfc:farmland.name=TFC耕作土
+tile.tfc:crop.name=TFC作物
