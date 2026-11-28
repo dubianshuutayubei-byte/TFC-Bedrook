@@ -22,3 +22,10 @@ test("anvil sheet forming requires each metal's forging temperature",()=>{
  assert.match(recipes,/tfc:copper_sheet[^\n]+minimumTemperatureC:648/);
  assert.match(recipes,/tfc:bronze_sheet[^\n]+minimumTemperatureC:570/);
 });
+
+test("tin sheet forging recipe and item are registered",()=>{
+ const item=JSON.parse(readFileSync(join(root,"packs/behavior_pack/items/tin_sheet.json"),"utf8"))["minecraft:item"];
+ assert.equal(item.description.identifier,"tfc:tin_sheet");
+ assert.match(recipes,/tfc:tin_sheet[^
+]+minimumTemperatureC:138/);
+});
