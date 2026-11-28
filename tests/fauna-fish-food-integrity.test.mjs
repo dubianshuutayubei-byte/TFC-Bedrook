@@ -91,12 +91,12 @@ test("the 78-species fauna coverage stays explicitly separate from terrain compl
 
 
 test("all 80 runtime fauna profiles define feed and grazing arrays with registered custom feed items", () => {
-  const profileBlock = runtime.match(/const ANIMAL_PROFILES\\s*=\\s*\\{([\\s\\S]*?)\\n\\};/);
+  const profileBlock = runtime.match(/const ANIMAL_PROFILES\s*=\s*\{([\s\S]*?)\n\};/);
   assert.ok(profileBlock, "ANIMAL_PROFILES runtime table must exist");
   const body = profileBlock[1];
-  const profileCount = [...body.matchAll(/^\\s*"[^"]+"\\s*:\\s*\\{/gm)].length;
-  const feedArrays = [...body.matchAll(/["']?feedItems["']?\\s*:\\s*\\[([^\\]]*)\\]/g)];
-  const grazeArrays = [...body.matchAll(/["']?grazeBlocks["']?\\s*:\\s*\\[([^\\]]*)\\]/g)];
+  const profileCount = [...body.matchAll(/^\s*"[^"]+"\s*:\s*\{/gm)].length;
+  const feedArrays = [...body.matchAll(/["']?feedItems["']?\s*:\s*\[([^\]]*)\]/g)];
+  const grazeArrays = [...body.matchAll(/["']?grazeBlocks["']?\s*:\s*\[([^\]]*)\]/g)];
   assert.equal(profileCount, 80, "fauna profile count changed; update this coverage assertion");
   assert.equal(feedArrays.length, profileCount, "every profile must provide feedItems because interaction handlers read it directly");
   assert.equal(grazeArrays.length, profileCount, "every profile must provide grazeBlocks because grazing runtime reads it directly");
