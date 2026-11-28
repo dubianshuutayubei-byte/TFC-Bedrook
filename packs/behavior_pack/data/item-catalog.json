@@ -16,7 +16,7 @@
       "stone_hammer_head"
     ],
     "pottery": [
-      "unfired_vessel",
+      "clay_vessel",
       "unfired_ingot_mold",
       "fired_vessel",
       "fired_ingot_mold"
@@ -65,6 +65,7 @@
     "tfc:clay_vessel",
     "tfc:fired_vessel",
     "tfc:copper_ore",
+    "tfc:clay_vessel",
     "tfc:copper_ingot",
     "tfc:heated_copper_ingot",
     "tfc:copper_sheet",
