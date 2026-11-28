@@ -410,7 +410,7 @@ function cropTick(block){
  if(typeof age!=="number")return;
  const cropType=block.permutation.getState("tfc:crop_type")??"wheat";
  const profile=CROP_PROFILES[cropType]??CROP_PROFILES.wheat;
- if(age>=3){if(profile.spreading)trySpreadCrop(block,cropType);return;}
+ if(age>=3){if(profile.spreading)trySpreadFruit(block,profile);return;}
  if(profile.requiresWater&&!hasFreshWaterAdjacent(block.below()))return;
  if(profile.supportRequired&&!hasCropSupport(block.below()))return;
  if(profile.twoBlock&&age===1&&!block.above()?.isAir)return;
@@ -433,7 +433,7 @@ function cropTick(block){
    const upper=block.above();
    if(upper?.isAir){upper.setType("tfc:crop");upper.setPermutation(upper.permutation.withState("tfc:crop_type",cropType).withState("tfc:part","upper").withState("tfc:age",2));}
   }
-  if(profile.spreading&&nextAge===3)trySpreadCrop(block,cropType);
+  if(profile.spreading&&nextAge===3)trySpreadFruit(block,profile);
  }
 }
 function fireTick(block){const key=posKey(block,"fire");const state=advanceFire(readWorldState(key,{}),20);writeWorldState(key,state);}
