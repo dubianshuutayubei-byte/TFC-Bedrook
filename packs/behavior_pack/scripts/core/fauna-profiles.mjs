@@ -525,11 +525,11 @@ export const OFFICIAL_FAUNA_PROFILES = Object.freeze({
 
 /** Verified TFC 1.21.x livestock lifecycle values from ServerConfig.java. Values absent from this table remain intentionally unknown. */
 export const OFFICIAL_LIVESTOCK_LIFECYCLE = Object.freeze({
-  pig: Object.freeze({ adultAgeDays: 80, maxUses: 60, gestationDays: 19 }),
+  pig: Object.freeze({ adultAgeDays: 80, maxUses: 60, gestationDays: 19, childCountMin: 1, childCountMax: 10 }),
   donkey: Object.freeze({ adultAgeDays: 80, maxUses: 60, gestationDays: 19 }),
-  mule: Object.freeze({ adultAgeDays: 80, maxUses: 60, gestationDays: 19, sterile: true }),
+  mule: Object.freeze({ adultAgeDays: 80, maxUses: 60, gestationDays: 19 }),
   horse: Object.freeze({ adultAgeDays: 80, maxUses: 60, gestationDays: 19 }),
-  rabbit: Object.freeze({ adultAgeDays: 30, maxUses: 40, gestationDays: 19, childCount: 6 }),
+  rabbit: Object.freeze({ adultAgeDays: 20, serverConfigAdultAgeDays: 30, ageSourceConflict: true, maxUses: 40, gestationDays: 19, childCount: 6 }),
   cow: Object.freeze({ adultAgeDays: 192, maxUses: 128, gestationDays: 58, childCount: 2, productCooldownDays: 1 }),
   goat: Object.freeze({ adultAgeDays: 96, maxUses: 60, gestationDays: 32, childCount: 2, productCooldownDays: 3 }),
   yak: Object.freeze({ adultAgeDays: 180, maxUses: 230, gestationDays: 64, childCount: 1, productCooldownDays: 1 }),
