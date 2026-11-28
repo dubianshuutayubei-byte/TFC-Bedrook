@@ -134,3 +134,13 @@ tile.tfc:pumpkin_fruit.name=Pumpkin Fruit
 tile.tfc:melon_fruit.name=Melon Fruit
 
 item.tfc:clay_seal.name=Clay Seal
+
+item.tfc:brine_vessel.name=Brine Vessel
+item.tfc:salt.name=Salt
+item.tfc:salted_meat.name=Salted Meat
+item.tfc:smoked_meat.name=Smoked Meat
+item.tfc:unfired_crucible.name=Unfired Crucible
+item.tfc:fired_crucible.name=Fired Crucible
+item.tfc:tin_sheet.name=Tin Sheet
+item.tfc:smokehouse.name=Smokehouse
+tile.tfc:smokehouse.name=Smokehouse
