@@ -38,8 +38,8 @@
       "tfc:crop_growth": {},
       "minecraft:tick": {
         "interval_range": [
-          1200,
-          2400
+          12000,
+          24000
         ],
         "looping": true
       },
