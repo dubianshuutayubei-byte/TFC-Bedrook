@@ -179,7 +179,7 @@ test("custom births trigger juvenile state and persist remaining litter count",(
  assert.match(runtime,/spawnEntity\(offspringEntityType,\{x:entity\.location\.x\+1/);
  assert.match(runtime,/baby\.triggerEvent\(birthEvent\)/);
  assert.doesNotMatch(runtime,/if\(!baby\.triggerEvent\(birthEvent\)\)/);
- assert.match(runtime,/createAnimalOffspringState\(state,profile\.speciesId/);
+ assert.match(runtime,/createAnimalOffspringState\(state,offspringSpecies/);
  assert.match(runtime,/started\.animal\.birthsTotal=started\.animal\.birthsRemaining/);
  assert.match(runtime,/state\.birthsTotal\|\|Math\.floor\(profile\.childCount\?\?1\)/);
  assert.match(runtime,/state\.birthsRemaining-=1/);
