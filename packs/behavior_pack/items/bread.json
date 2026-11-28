@@ -1,0 +1,15 @@
+{
+  "format_version":"1.26.60",
+  "minecraft:item":{
+    "description":{"identifier":"tfc:bread","menu_category":{"category":"items"}},
+    "components":{
+      "minecraft:icon":"tfc_bread",
+      "minecraft:display_name":{"value":"パン"},
+      "minecraft:max_stack_size":16,
+      "minecraft:food":{"nutrition":5,"saturation_modifier":0.6},
+      "minecraft:use_animation":"eat",
+      "minecraft:use_modifiers":{"use_duration":1.6,"movement_modifier":0.35},
+      "tfc:consume_food":{"itemId":"tfc:bread","hydration":0,"category":"grain","nutrition":20}
+    }
+  }
+}
