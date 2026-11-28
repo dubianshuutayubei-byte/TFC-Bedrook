@@ -71,6 +71,23 @@
             "sprint_speed_multiplier": 1.6
           }
         ]
+      },
+      "minecraft:behavior.hurt_by_target": {
+        "priority": 2
+      },
+      "minecraft:behavior.ram_attack": {
+        "priority": 3,
+        "run_speed": 0.8,
+        "ram_speed": 1.6,
+        "min_ram_distance": 4,
+        "ram_distance": 9,
+        "knockback_force": 2.5,
+        "knockback_height": 0.08,
+        "baby_knockback_modifier": 0.4,
+        "cooldown_range": {
+          "min": 30,
+          "max": 80
+        }
       }
     }
   }
