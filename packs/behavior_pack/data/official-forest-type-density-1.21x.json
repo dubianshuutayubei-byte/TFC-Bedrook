@@ -3,7 +3,11 @@
     "project": "TerraFirmaCraft",
     "branch": "1.21.x",
     "path": "src/main/java/net/dries007/tfc/world/chunkdata/ForestType.java",
-    "meaning": "ForestType.getDensity() values used by ClimatePlacement min_forest/max_forest checks."
+    "meaning": "ForestType.getDensity() values used by ClimatePlacement min_forest/max_forest checks.",
+    "version": "TerraFirmaCraft 1.21.1-4.2.16",
+    "tag": "v4.2.16",
+    "commit": "tag v4.2.16; source blobs pinned below",
+    "blob": "c8e1e6544b6660f66f44c741f5c560ca31fda84e"
   },
   "count": 29,
   "densityRange": {
