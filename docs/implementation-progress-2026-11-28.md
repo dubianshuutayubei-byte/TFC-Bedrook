@@ -549,3 +549,14 @@
 - 石臼の加工は手動式の時間工程として実装。TFCの回転軸/動力網による自動化、各種粉末/染料/鉱石処理、パンの発酵/酵母工程は未実装。
 - 公式Field Guideでは石臼は下臼・上臼から構成され、穀物を粉にできる。パンは穀物を粉砕して小麦粉にし、水と混ぜた生地を加熱して作る。本実装はBedrockの水入り土器で水バケツ工程を簡略化。
 - 参照: https://terrafirmacraft.github.io/Field-Guide/ja_jp/crafting/quern.html / https://terrafirmacraft.github.io/Field-Guide/en_us/food/bread.html
+
+
+### 追加改善（食品鮮度をスタック単位で保存）
+
+- 旧方式の「プレイヤー×食品ID」管理を廃止し、食品ItemStackのLoreへ鮮度と最終更新tickを保存。
+- インベントリ内の食品スタックごとに温度依存の腐敗計算を行い、鮮度0で腐敗食品へ変換。
+- 食品を別スロット/別プレイヤーへ移動してもLoreがItemStackと一緒に移るため、鮮度が引き継がれる。同じスタックに入った食品は同一鮮度を共有する。
+- 摂取イベントのItemStackから鮮度を読み、腐敗食品は栄養・水分へ反映しない。
+- UIは所持中食品のスタックごとの最低鮮度を表示。
+- ItemStackのgetLore/setLoreとItemComponentConsumeEvent.itemStackはStable APIに存在する。Bedrock 26.60実機でLoreの保存/移動/スタック統合/消費イベントの挙動は未検証。
+- 参照: https://learn.microsoft.com/ja-jp/minecraft/creator/scriptapi/minecraft/server/itemstack?view=minecraft-bedrock-stable / https://learn.microsoft.com/en-us/minecraft/creator/scriptapi/minecraft/server/itemcomponentconsumeevent?view=minecraft-bedrock-stable
