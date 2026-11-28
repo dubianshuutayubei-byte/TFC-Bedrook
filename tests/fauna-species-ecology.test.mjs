@@ -114,6 +114,7 @@ test("predators follow TFC day/night schedules, territory and post-kill pacifica
  assert.match(runtime,/homeDx\*homeDx\+homeDy\*homeDy\+homeDz\*homeDz>6400/);
  assert.match(runtime,/player\.applyDamage\(profile\.playerAttackDamage\?\?3\)/);
  assert.match(runtime,/if\(remaining<=0\)\{state\.hunger=Math\.max\(0,state\.hunger-28\);state\.lastHuntAt=currentDay;\}/);
+ assert.match(runtime,/predatorHungerThreshold:profile\.predatorHungerThreshold\?\?0/);
  for(const id of ["black_bear","grizzly_bear"]){assert.equal(CUSTOM_FAUNA_PROFILES["tfc:"+id].diurnal,true);assert.equal(CUSTOM_FAUNA_PROFILES["tfc:"+id].territorial,true);}
  assert.equal(CUSTOM_FAUNA_PROFILES["tfc:orca"].territorial,false);
  assert.equal(CUSTOM_FAUNA_PROFILES["tfc:orca"].attackPlayers,false);
