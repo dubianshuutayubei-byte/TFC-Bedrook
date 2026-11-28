@@ -11,3 +11,5 @@ export function beginPregnancy(i,p,profile){if(!canBreed(i,p,profile))return{sta
 export function advancePregnancy(i,d,g){const a=createAnimalState(i);if(a.pregnancyDays<=0)return{animal:a,birthReady:false,progress:0};const duration=finiteOr(g,0);if(duration<=0)throw new RangeError("gestationDays must be positive");a.pregnancyDays+=Math.max(0,finiteOr(d,0));return{animal:a,birthReady:a.pregnancyDays>=duration,progress:clamp(a.pregnancyDays/duration,0,1)};}
 export function canProduce(i,{requiredFamiliarity=0,cooldownDays=0,currentDay=0}={}){const a=createAnimalState(i);return a.health>0&&a.ageDays>0&&a.familiarity>=requiredFamiliarity&&currentDay-a.lastProductAt>=cooldownDays;}
 export function recordProduct(i,d){const a=createAnimalState(i);a.lastProductAt=Math.max(a.lastProductAt,finiteOr(d,a.lastProductAt));return a;}
+
+export function grazeAnimal(input,{hungerReduction=2,thirstReduction=0}={}){const a=createAnimalState(input);a.hunger=clamp(a.hunger-Math.max(0,finiteOr(hungerReduction,0)),0,100);a.thirst=clamp(a.thirst-Math.max(0,finiteOr(thirstReduction,0)),0,100);return a;}
