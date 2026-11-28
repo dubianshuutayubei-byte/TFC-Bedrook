@@ -1,3 +1,4 @@
+import { OFFICIAL_FAUNA_PROFILES } from "../packs/behavior_pack/scripts/core/fauna-profiles.mjs";
 import test from"node:test";import assert from"node:assert/strict";import{createAnimalState,createAnimalOffspringState,initializeAnimalLifeStage,canFeedAnimal,advanceAnimalFamiliarityDecay,syncAnimalHealth,advanceAnimalNeeds,feedAnimal,waterAnimal,canBreed,beginPregnancy,advancePregnancy,evaluateHabitat,evaluateFaunaSpawn,canProduce,recordProduct}from"../packs/behavior_pack/scripts/core/fauna-service.mjs";
 test("needs and age advance",()=>{const a=advanceAnimalNeeds(createAnimalState({species:"deer"}),2);assert.equal(a.ageDays,2);assert.equal(a.hunger,16);assert.equal(a.thirst,24);});
 test("feeding and watering reduce needs",()=>{const a=feedAnimal({hunger:80,thirst:50},10);assert.equal(a.hunger,45);assert.equal(waterAnimal(a,20).thirst,25);});
@@ -242,4 +243,30 @@ test("animals without a verified lifespan do not receive a fabricated death age"
  const animal=advanceAnimalNeeds({species:"wolf",ageDays:1000,health:100},10,{hungerPerDay:0,thirstPerDay:0,healthLossPerDay:0});
  assert.equal(animal.isAlive,true);
  assert.equal(animal.lifespanDays,null);
+});
+
+test("official TFC 3.2.26 fauna database contains 63 unique species with supported placement rules",()=>{
+ const entries=Object.entries(OFFICIAL_FAUNA_PROFILES);
+ assert.equal(entries.length,63);
+ assert.equal(new Set(entries.map(([id])=>id)).size,63);
+ for(const [id,profile] of entries){
+  assert.equal(profile.id,id);
+  assert.ok(["on_ground","in_water","no_restrictions"].includes(profile.placement),id+" placement");
+ }
+});
+test("all 63 official fauna profiles can be evaluated with a complete matching habitat sample",()=>{
+ const forestRank={none:0,sparse:1,edge:2,normal:3,old_growth:4};
+ for(const [id,p] of Object.entries(OFFICIAL_FAUNA_PROFILES)){
+  let forest="normal";
+  if(p.minForest&&p.maxForest){
+   const candidates=Object.keys(forestRank).filter(v=>forestRank[v]>=forestRank[p.minForest]&&forestRank[v]<=forestRank[p.maxForest]);
+   forest=candidates[0]??p.minForest;
+  }else if(p.minForest)forest=p.minForest;
+  else if(p.maxForest)forest=p.maxForest;
+  const temperature=p.minTemperatureC!=null&&p.maxTemperatureC!=null?(p.minTemperatureC+p.maxTemperatureC)/2:p.minTemperatureC??p.maxTemperatureC??10;
+  const rainfall=p.minRainfall!=null&&p.maxRainfall!=null?(p.minRainfall+p.maxRainfall)/2:p.minRainfall??p.maxRainfall??200;
+  const environment={temperatureC:temperature,rainfall,belowSeaLevel:(p.belowSeaLevel??0)+1,brightness:p.maxBrightness??0,forestType:forest,waterType:p.waterType??"freshwater",terrain:"plains",inWater:p.placement==="in_water",onGround:p.placement==="on_ground",validSpawnGround:true,y:40,seaLevel:63};
+  const result=evaluateFaunaSpawn(p,environment,()=>0);
+  assert.equal(result.suitable,true,id+": "+JSON.stringify(result));
+ }
 });
