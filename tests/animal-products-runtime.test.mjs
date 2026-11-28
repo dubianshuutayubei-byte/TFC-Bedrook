@@ -73,11 +73,14 @@ test("dairy collection reports familiarity, regrowth, and animal-condition block
 
 test("all four official TFC wool-producing mammals are connected, including Bactrian camel",()=>{
  for(const id of ["minecraft:sheep","tfc:alpaca","tfc:musk_ox","tfc:bactrian_camel"]){
-  const escaped=id.replace(/[.*+?^${}()|[\]\\]/g,"\\$&");
-  assert.match(runtime,new RegExp('"'+escaped+'":\\{[^\\n]*wooly:true'),id+" must use the wool product path");
+  const line=runtime.split("\n").find(value=>value.includes('"'+id+'":'));
+  assert.ok(line,id+" runtime profile must exist");
+  assert.match(line,/"wooly":true/,id+" must use the wool product path");
  }
- assert.match(runtime,/"tfc:bactrian_camel":\\{[^\\n]*adultAgeDays:OFFICIAL_LIVESTOCK_LIFECYCLE\.bactrian_camel\.adultAgeDays/);
- assert.match(runtime,/"tfc:bactrian_camel":\\{[^\\n]*productCooldownDays:OFFICIAL_LIVESTOCK_LIFECYCLE\.bactrian_camel\.productCooldownDays/);
- assert.match(runtime,/"tfc:bactrian_camel":\\{[^\\n]*maxUses:OFFICIAL_LIVESTOCK_LIFECYCLE\.bactrian_camel\.maxUses/);
+ const camel=runtime.split("\n").find(value=>value.includes('"tfc:bactrian_camel":'));
+ assert.ok(camel,"Bactrian camel runtime profile must exist");
+ assert.match(camel,/adultAgeDays:OFFICIAL_LIVESTOCK_LIFECYCLE\.bactrian_camel\.adultAgeDays/);
+ assert.match(camel,/productCooldownDays:OFFICIAL_LIVESTOCK_LIFECYCLE\.bactrian_camel\.productCooldownDays/);
+ assert.match(camel,/maxUses:OFFICIAL_LIVESTOCK_LIFECYCLE\.bactrian_camel\.maxUses/);
  assert.match(runtime,/give\(player,"tfc:wool",amount\)/);
 });
