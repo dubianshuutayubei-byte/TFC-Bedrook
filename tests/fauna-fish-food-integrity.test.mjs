@@ -104,10 +104,10 @@ test("all 80 runtime fauna profiles define feed and grazing arrays with register
   const itemDirectory = join(root, "packs/behavior_pack/items");
   const registeredItems = new Set(
     readdirSync(itemDirectory).filter((name) => name.endsWith(".json"))
-      .map((name) => "tfc:" + name.slice(0, -5))
+      .map((name) => readJson("packs/behavior_pack/items/" + name)["minecraft:item"].description.identifier)
   );
   const customFeedIds = new Set(feedArrays.flatMap((match) =>
-    [...match[1].matchAll(/["'](tfc:[a-z0-9_]+)["']/g)].map((item) => item[1])
+    [...match[1].matchAll(/["'](tfc:[a-z0-9_\/]+)["']/g)].map((item) => item[1])
   ));
   assert.ok(customFeedIds.size > 0, "expected custom TFC feed items to be exercised");
   for (const id of customFeedIds) {
@@ -131,7 +131,8 @@ test("domestic and tameable fauna diets follow official Java 1.21.1 food-tag cat
     turtle: "minecraft:turtle", pond_turtle: "tfc:pond_turtle"
   };
   const registered = new Set(readdirSync(join(root, "packs/behavior_pack/items"))
-    .filter(name => name.endsWith(".json")).map(name => "tfc:" + name.slice(0, -5)));
+    .filter(name => name.endsWith(".json"))
+    .map(name => readJson("packs/behavior_pack/items/" + name)["minecraft:item"].description.identifier));
   for (const diet of audit.diets) {
     for (const species of diet.species) {
       const entityId = entityIds[species];
@@ -152,6 +153,13 @@ test("domestic and tameable fauna diets follow official Java 1.21.1 food-tag cat
     }
   }
   const turtleDiet = audit.diets.find(diet => diet.species.includes("turtle"));
-  assert.deepEqual(turtleDiet.missingBedrockItems, ["tfc:food/dried_kelp", "tfc:food/dried_seaweed"]);
-  assert.deepEqual(turtleDiet.bedrockFeedItems, [], "do not substitute seagrass for the official dried seaweed diet");
+  assert.deepEqual(turtleDiet.bedrockFeedItems, ["tfc:food/dried_kelp", "tfc:food/dried_seaweed"]);
+  assert.ok(!("missingBedrockItems" in turtleDiet), "official turtle feed items must be registered in the Bedrock pack");
+  for (const id of turtleDiet.bedrockFeedItems) assert.ok(registered.has(id), id + " must have an item definition");
+  for (const entityId of ["minecraft:turtle", "tfc:pond_turtle"]) {
+    const line = runtime.split("\n").find(value => value.includes('"' + entityId + '":{')) ?? "";
+    const start = line.indexOf("feedItems");
+    const left = line.indexOf("[", start), right = line.indexOf("]", left);
+    assert.deepEqual(JSON.parse(line.slice(left, right + 1)), turtleDiet.bedrockFeedItems, entityId + " must accept the official turtle diet");
+  }
 });
