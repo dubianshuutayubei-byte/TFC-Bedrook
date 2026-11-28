@@ -53,3 +53,18 @@ test("all supported animal entity types are included in the periodic state updat
  assert.match(runtime,/Object\.keys\(ANIMAL_PROFILES\).*dimension\.getEntities\(\{type\}\).*animalTick/);
  assert.match(runtime,/if\(ANIMAL_PROFILES\[event\.target\?\.typeId\]\)animalInteract/);
 });
+
+test("animal runtime applies species-specific needs and natural dropped-food pickup",()=>{
+ assert.match(runtime,/hungerPerDay:profile\.hungerPerDay\?\?8/);
+ assert.match(runtime,/thirstPerDay:profile\.thirstPerDay\?\?\(profile\.kind==="aquatic"\?0:12\)/);
+ assert.match(runtime,/function consumeDroppedAnimalFood\(entity,profile,state\)/);
+ assert.match(runtime,/getEntities\(\{type:"minecraft:item",location:entity\.location,maxDistance:1\.5\}\)/);
+ assert.match(runtime,/grazeAnimal\(state,\{hungerReduction:35,thirstReduction:3\}\)/);
+});
+test("aquatic species do not lose health from terrestrial hunger and thirst simulation",()=>{
+ for(const id of ["cod","salmon","tropicalfish","pufferfish","squid"]){
+  const entry=runtime.match(new RegExp('"minecraft:'+id+'":\\{[^}]*\\}'))?.[0]??"";
+  assert.match(entry,/hungerPerDay:0/);
+  assert.match(entry,/thirstPerDay:0/);
+ }
+});
