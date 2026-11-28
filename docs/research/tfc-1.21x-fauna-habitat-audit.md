@@ -4,7 +4,7 @@ Updated: 2026-11-28
 
 ## Scope and source boundary
 
-This audit extracts the fauna habitat builder expressions from the official TerraFirmaCraft Java source branch `1.21.x`. It is a branch-based reference snapshot, not yet a byte-for-byte verification against the pinned NeoForge 1.21.1 / TFC 4.2.16 release artifact. Keep the version distinction visible until the 4.2.16 source/JAR is rechecked.
+This audit is pinned to the official TerraFirmaCraft Java release tag `v4.2.16` (TerraFirmaCraft 1.21.1-4.2.16). The four relevant source blobs were fetched from both `v4.2.16` and `1.21.x`; their Git blob SHAs match exactly, confirming the branch snapshot used for extraction is byte-identical to the release-tag files.
 
 Primary source files:
 - `src/data/java/net/dries007/tfc/data/providers/BuiltinFauna.java` — species habitat builder expressions
@@ -12,7 +12,9 @@ Primary source files:
 - `src/main/java/net/dries007/tfc/world/placement/ClimatePlacement.java` — climate evaluation semantics
 - `src/main/java/net/dries007/tfc/world/chunkdata/ForestType.java` — exact forest density values
 
-The extracted data is stored in `packs/behavior_pack/data/official-fauna-habitat-1.21x.json`. It contains 78 unique species, each retaining the exact source builder chain in `sourceExpression`. The source expression is the audit anchor; derived numeric fields must not be edited independently without rechecking it.
+Release tag: [TerraFirmaCraft v4.2.16](https://github.com/TerraFirmaCraft/TerraFirmaCraft/releases/tag/v4.2.16). The habitat dataset records source blob SHAs for BuiltinFauna, Faunas, and ClimatePlacement; the forest-density dataset records the ForestType blob SHA.
+
+The extracted data is stored in `packs/behavior_pack/data/official-fauna-habitat-1.21x.json`. It contains 78 unique species, each retaining the exact source builder chain in `sourceExpression`, plus the release tag and source blob SHAs. The source expression is the audit anchor; derived numeric fields must not be edited independently without rechecking it.
 
 ## Java semantics captured
 
