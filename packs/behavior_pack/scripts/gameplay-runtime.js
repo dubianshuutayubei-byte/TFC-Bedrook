@@ -186,6 +186,7 @@ function animalInteract(player,entity){
  if(!player||!entity)return;
  const profile=ANIMAL_PROFILES[entity.typeId];if(!profile)return;
  const held=inv(player)?.getItem(player.selectedSlotIndex);
+ if(!held){const state=animalState(entity);const names={"tfc:deer":"シカ","minecraft:cow":"ウシ","minecraft:sheep":"ヒツジ","minecraft:chicken":"ニワトリ"};player.sendMessage("§e"+(names[entity.typeId]??entity.typeId)+"\n年齢: "+state.ageDays.toFixed(1)+"日\n空腹: "+Math.floor(state.hunger)+" / 100\n渇き: "+Math.floor(state.thirst)+" / 100\n健康: "+Math.floor(state.health)+" / 100\nなつき度: "+Math.floor(state.familiarity)+" / 100"+(state.pregnancyDays>0?"\n妊娠: "+Math.floor(state.pregnancyDays)+"日":""));return;}
  if(entity.typeId==="minecraft:cow"&&held?.typeId==="minecraft:glass_bottle"){
   const state=animalState(entity);
   if(state.ageDays<profile.adultAgeDays){player.sendMessage("§eこの牛はまだ成長中です。");return;}
