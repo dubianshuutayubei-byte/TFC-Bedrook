@@ -35,3 +35,12 @@ test("maize requires two blocks of space, grows an upper segment and harvests fr
  assert.match(runtime,/withState\("tfc:part","upper"\)/);
  assert.match(runtime,/clicked\.permutation\.getState\("tfc:part"\)==="upper"\?clicked\.below\(\):clicked/);
 });
+
+test("rice, climbing crops and peppers enforce their special growth rules",()=>{
+ assert.match(runtime,/function hasFreshWaterAdjacent\(block\)/);
+ assert.match(runtime,/function hasCropSupport\(block\)/);
+ assert.match(runtime,/if\(profile\.requiresWater&&!hasFreshWaterAdjacent\(block\.below\(\)\)\)return/);
+ assert.match(runtime,/if\(profile\.supportRequired&&!hasCropSupport\(block\.below\(\)\)\)return/);
+ assert.match(runtime,/if\(profile\.pickable\)/);
+ assert.match(runtime,/setPermutation\(b\.permutation\.withState\("tfc:age",1\)\)/);
+});
