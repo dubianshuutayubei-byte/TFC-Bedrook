@@ -101,6 +101,14 @@ test("predators follow TFC day/night schedules, territory and post-kill pacifica
  for(const id of ["cougar","panther","lion","sabertooth","tiger","hyena","direwolf","crocodile"])assert.equal(CUSTOM_FAUNA_PROFILES["tfc:"+id].diurnal,false);
 });
 
+test("checked-in ecology snapshot records the official TFC 3.2.26 tag expansion",()=>{
+ const tags=read("packs/behavior_pack/data/official-fauna-ecology-tags.json");
+ assert.equal(tags.source,"TerraFirmaCraft v3.2.26");
+ assert.deepEqual(tags.expanded.land_prey,[...tags.tags.land_prey,...tags.tags.livestock]);
+ assert.deepEqual(tags.tags.ocean_predators,["dolphin","orca"]);
+ assert.deepEqual(tags.tags.hunted_by_land_predators,["#tfc:land_prey"]);
+});
+
 test("predator diets follow official TFC land-prey and ocean-prey entity tags",()=>{
  const land=["rabbit","fox","turtle","penguin","frog","deer","bongo","panda","grouse","pheasant","turkey","ocelot","caribou","gazelle","peafowl","pig","cow","goat","yak","alpaca","sheep","musk_ox","chicken","duck","quail","horse","mule","donkey"];
  const ocean=["isopod","lobster","crayfish","cod","tropical_fish","horseshoe_crab","bluegill","crappie","lake_trout","largemouth_bass","rainbow_trout","salmon","smallmouth_bass"];
