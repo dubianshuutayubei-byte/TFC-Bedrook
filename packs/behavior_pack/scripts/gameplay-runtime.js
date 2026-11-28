@@ -602,7 +602,7 @@ async function animalInteract(player,entity){
  if(profile.dairy&&held.typeId==="minecraft:glass_bottle"){
   if(state.sex!=="female"){player.sendMessage("§e乳を生産できるのはメスの乳畜だけです。");return;}
   if(entity.hasComponent("minecraft:is_baby")||(profile.adultAgeDays!=null&&state.ageDays<profile.adultAgeDays)){player.sendMessage("§eこの動物はまだ成長中です。");return;}
-  const currentDay=state.ageDays;
+  const currentDay=world.getDay();
   if(!canProduce(state,{requiredFamiliarity:profile.productFamiliarityMin??0,cooldownDays:profile.productCooldownDays??1,currentDay,requiredSex:"female",minimumAgeDays:profile.adultAgeDays,minimumHealth:40,maximumHunger:60,maximumThirst:60,maxUses:profile.maxUses??Infinity})){player.sendMessage("§eこの動物は健康・空腹・渇き、または補充時間の条件を満たしていません。");return;}
   if(!take(player,"minecraft:glass_bottle",1)){player.sendMessage("§c空き瓶を取り出せません。");return;}
   give(player,"tfc:milk_bottle",1);
