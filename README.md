@@ -71,7 +71,11 @@ GitHub ActionsでJSON・manifestの静的検査、JavaScript構文検査、Node.
 
 静的検査はゲーム内検証の代わりにはならない。地形生成・設備動作・セーブデータ・端末負荷はMinecraft実機で確認する。
 
-- [初期ゲーム内アイテム・設備実装](packs/behavior_pack/scripts/gameplay-runtime.js)\n- [Resource Pack](packs/resource_pack/manifest.json)\n\n- [初期ゲーム内アイテム・設備実装](packs/behavior_pack/scripts/gameplay-runtime.js)\n- [Resource Pack](packs/resource_pack/manifest.json)\n\n## 公式参照元
+- [初期ゲーム内アイテム・設備実装](packs/behavior_pack/scripts/gameplay-runtime.js)
+- [Resource Pack](packs/resource_pack/manifest.json)
+
+
+## 公式参照元
 
 - [TFC Field Guide 1.20.1](https://terrafirmacraft.github.io/Field-Guide/20/en_us/)
 - [TFC Documentation 1.20.x](https://terrafirmacraft.github.io/Documentation/1.20.x/)
