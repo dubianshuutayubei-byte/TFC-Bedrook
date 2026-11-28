@@ -31,6 +31,58 @@ export function evaluateHabitat(p,e){
  if(p.terrain&&!p.terrain.includes(e.terrain))failures.push("terrain");
  return{suitable:failures.length===0&&missing.length===0,failures,missing};
 }
+/**
+ * Evaluates the 1.21.x BuiltinFauna/ClimatePlacement profile schema.
+ * Environmental measurements must come from the TFC world sampler; unavailable
+ * measurements are returned as missing rather than approximated.
+ */
+export function evaluateOfficialFaunaHabitat(profile,environment){
+ const p=profile??{},e=environment??{},failures=[],missing=[];
+ const number=(key)=>e[key]!==undefined&&e[key]!==null&&Number.isFinite(Number(e[key]))?Number(e[key]):null;
+ const checkRange=(valueKey,min,max,lowFail,highFail)=>{
+  if(min===undefined&&max===undefined)return;
+  const value=number(valueKey);
+  if(value===null){missing.push(valueKey);return;}
+  if(min!==undefined&&value<min)failures.push(lowFail);
+  if(max!==undefined&&value>max)failures.push(highFail);
+ };
+ checkRange("temperatureC",p.minTemperatureC,p.maxTemperatureC,"temperature_low","temperature_high");
+ const waterKey=p.ignoreRivers===true?"averageRainfall":"averageGroundwater";
+ checkRange(waterKey,p.minGroundwater,p.maxGroundwater,"groundwater_low","groundwater_high");
+ checkRange("forestDensity",p.minForestDensity,p.maxForestDensity,"forest_below_minimum","forest_above_maximum");
+ checkRange("y",p.minElevation,p.maxElevation,"elevation_low","elevation_high");
+ if(p.distanceBelowSeaLevel!==undefined&&p.distanceBelowSeaLevel!==-1){
+  const y=number("y"),sea=number("seaLevel");
+  if(y===null||sea===null)missing.push("seaLevel");
+  else if(y>sea-p.distanceBelowSeaLevel)failures.push("water_too_shallow");
+ }
+ if(p.maxBrightness!==undefined&&p.maxBrightness!==-1){
+  const brightness=number("brightness");
+  if(brightness===null)missing.push("brightness");
+  else if(brightness>p.maxBrightness)failures.push("brightness_high");
+ }
+ if(p.solidGround===true&&e.solidGround!==true)failures.push("solid_ground_required");
+ if(Array.isArray(p.months)&&p.months.length){
+  if(e.month===undefined||e.month===null)missing.push("month");
+  else if(!p.months.includes(String(e.month).toUpperCase()))failures.push("out_of_season");
+ }
+ if(p.fuzzy===true&&failures.length===0&&missing.length===0){
+  const temperature=number("temperatureC"),water=number(waterKey),rainVariance=number("rainVariance");
+  if(temperature===null)missing.push("temperatureC");
+  if(water===null)missing.push(waterKey);
+  if(rainVariance===null)missing.push("rainVariance");
+  const rolls=Array.isArray(e.randomFloats)?e.randomFloats.slice(0,2).map(Number):[];
+  if(rolls.length!==2||rolls.some(v=>!Number.isFinite(v)||v<0||v>=1))missing.push("randomFloats");
+  if(missing.length===0){
+   const minTemp=p.minTemperatureC??Number.NEGATIVE_INFINITY,maxTemp=p.maxTemperatureC??Number.POSITIVE_INFINITY;
+   const minWater=p.minGroundwater??Number.NEGATIVE_INFINITY,maxWater=p.maxGroundwater??Number.POSITIVE_INFINITY;
+   const norm=(v,min,max)=>Number.isFinite(min)&&Number.isFinite(max)&&max>min?Math.abs(v-(min+max)/2)/(max-min):0;
+   const maxDelta=Math.max(norm(temperature,minTemp,maxTemp),norm(water,minWater,maxWater),Math.abs(rainVariance)/2);
+   if(!(rolls[0]*rolls[1]>maxDelta))failures.push("fuzzy_climate_roll");
+  }
+ }
+ return{suitable:failures.length===0&&missing.length===0,failures:[...new Set(failures)],missing:[...new Set(missing)],waterMetric:waterKey};
+}
 export function canFeedAnimal(i,currentDay){const a=createAnimalState(i),day=Number(currentDay);return Number.isFinite(day)&&a.lastFedDay<day;}
 export function feedAnimal(i,g=6,h=0,{currentDay=null,adultFamiliarityCap=100}={}){const a=createAnimalState(i);const cap=a.lifeStage==="juvenile"?100:clamp(finiteOr(adultFamiliarityCap,100),0,100);if(a.lifeStage==="juvenile"||a.familiarity<cap)a.familiarity=clamp(a.familiarity+Math.max(0,finiteOr(g,0)),0,cap);a.health=clamp(a.health+Math.max(0,finiteOr(h,0)),0,100);a.hunger=clamp(a.hunger-35,0,100);a.thirst=clamp(a.thirst-5,0,100);if(currentDay!==null&&currentDay!==undefined&&Number.isFinite(Number(currentDay))){a.lastFedDay=Number(currentDay);a.lastFamiliarityDecay=Number(currentDay);}return a;}
 export function waterAnimal(i,n=30){const a=createAnimalState(i);a.thirst=clamp(a.thirst-Math.max(0,finiteOr(n,0)),0,100);return a;}
