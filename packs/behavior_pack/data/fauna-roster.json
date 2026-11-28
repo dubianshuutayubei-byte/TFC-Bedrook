@@ -41,13 +41,14 @@
     {
       "id": "chicken",
       "group": "bird",
-      "status": "partial_state_tracking",
-      "note": "Bedrock runtime state integration exists; full TFC behavior, ecology, assets and habitat spawning are incomplete."
+      "status": "native_entity_state_adapter",
+      "note": "Runtime tracks sex, age, needs, health and familiarity. Vanilla entity AI/breeding remains in use where applicable; TFC-specific ecology, natural spawn, full life cycle and species assets are not yet complete."
     },
     {
       "id": "cod",
       "group": "aquatic",
-      "status": "not_implemented"
+      "status": "native_entity_state_adapter",
+      "note": "Runtime tracks sex, age, needs, health and familiarity. Vanilla entity AI/breeding remains in use where applicable; TFC-specific ecology, natural spawn, full life cycle and species assets are not yet complete."
     },
     {
       "id": "cougar",
@@ -57,8 +58,8 @@
     {
       "id": "cow",
       "group": "mammal",
-      "status": "partial_state_tracking",
-      "note": "Bedrock runtime state integration exists; full TFC behavior, ecology, assets and habitat spawning are incomplete."
+      "status": "native_entity_state_adapter",
+      "note": "Runtime tracks sex, age, needs, health and familiarity. Vanilla entity AI/breeding remains in use where applicable; TFC-specific ecology, natural spawn, full life cycle and species assets are not yet complete."
     },
     {
       "id": "crappie",
@@ -78,8 +79,8 @@
     {
       "id": "deer",
       "group": "mammal",
-      "status": "partial_state_tracking",
-      "note": "Bedrock runtime state integration exists; full TFC behavior, ecology, assets and habitat spawning are incomplete."
+      "status": "custom_entity_state_adapter",
+      "note": "Runtime tracks sex, age, needs, health and familiarity. Vanilla entity AI/breeding remains in use where applicable; TFC-specific ecology, natural spawn, full life cycle and species assets are not yet complete."
     },
     {
       "id": "direwolf",
@@ -89,12 +90,14 @@
     {
       "id": "dolphin",
       "group": "aquatic",
-      "status": "not_implemented"
+      "status": "native_entity_state_adapter",
+      "note": "Runtime tracks sex, age, needs, health and familiarity. Vanilla entity AI/breeding remains in use where applicable; TFC-specific ecology, natural spawn, full life cycle and species assets are not yet complete."
     },
     {
       "id": "donkey",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "native_entity_state_adapter",
+      "note": "Runtime tracks sex, age, needs, health and familiarity. Vanilla entity AI/breeding remains in use where applicable; TFC-specific ecology, natural spawn, full life cycle and species assets are not yet complete."
     },
     {
       "id": "duck",
@@ -104,12 +107,14 @@
     {
       "id": "fox",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "native_entity_state_adapter",
+      "note": "Runtime tracks sex, age, needs, health and familiarity. Vanilla entity AI/breeding remains in use where applicable; TFC-specific ecology, natural spawn, full life cycle and species assets are not yet complete."
     },
     {
       "id": "frog",
       "group": "amphibian",
-      "status": "not_implemented"
+      "status": "native_entity_state_adapter",
+      "note": "Runtime tracks sex, age, needs, health and familiarity. Vanilla entity AI/breeding remains in use where applicable; TFC-specific ecology, natural spawn, full life cycle and species assets are not yet complete."
     },
     {
       "id": "gazelle",
@@ -119,7 +124,8 @@
     {
       "id": "goat",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "native_entity_state_adapter",
+      "note": "Runtime tracks sex, age, needs, health and familiarity. Vanilla entity AI/breeding remains in use where applicable; TFC-specific ecology, natural spawn, full life cycle and species assets are not yet complete."
     },
     {
       "id": "grizzly_bear",
@@ -134,7 +140,8 @@
     {
       "id": "horse",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "native_entity_state_adapter",
+      "note": "Runtime tracks sex, age, needs, health and familiarity. Vanilla entity AI/breeding remains in use where applicable; TFC-specific ecology, natural spawn, full life cycle and species assets are not yet complete."
     },
     {
       "id": "horseshoe_crab",
@@ -189,7 +196,8 @@
     {
       "id": "mule",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "native_entity_state_adapter",
+      "note": "Runtime tracks sex, age, needs, health and familiarity. Vanilla entity AI/breeding remains in use where applicable; TFC-specific ecology, natural spawn, full life cycle and species assets are not yet complete."
     },
     {
       "id": "musk_ox",
@@ -199,7 +207,8 @@
     {
       "id": "ocelot",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "native_entity_state_adapter",
+      "note": "Runtime tracks sex, age, needs, health and familiarity. Vanilla entity AI/breeding remains in use where applicable; TFC-specific ecology, natural spawn, full life cycle and species assets are not yet complete."
     },
     {
       "id": "octopoteuthis",
@@ -214,7 +223,8 @@
     {
       "id": "panda",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "native_entity_state_adapter",
+      "note": "Runtime tracks sex, age, needs, health and familiarity. Vanilla entity AI/breeding remains in use where applicable; TFC-specific ecology, natural spawn, full life cycle and species assets are not yet complete."
     },
     {
       "id": "panther",
@@ -239,17 +249,20 @@
     {
       "id": "pig",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "native_entity_state_adapter",
+      "note": "Runtime tracks sex, age, needs, health and familiarity. Vanilla entity AI/breeding remains in use where applicable; TFC-specific ecology, natural spawn, full life cycle and species assets are not yet complete."
     },
     {
       "id": "polar_bear",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "native_entity_state_adapter",
+      "note": "Runtime tracks sex, age, needs, health and familiarity. Vanilla entity AI/breeding remains in use where applicable; TFC-specific ecology, natural spawn, full life cycle and species assets are not yet complete."
     },
     {
       "id": "pufferfish",
       "group": "aquatic",
-      "status": "not_implemented"
+      "status": "native_entity_state_adapter",
+      "note": "Runtime tracks sex, age, needs, health and familiarity. Vanilla entity AI/breeding remains in use where applicable; TFC-specific ecology, natural spawn, full life cycle and species assets are not yet complete."
     },
     {
       "id": "quail",
@@ -259,7 +272,8 @@
     {
       "id": "rabbit",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "native_entity_state_adapter",
+      "note": "Runtime tracks sex, age, needs, health and familiarity. Vanilla entity AI/breeding remains in use where applicable; TFC-specific ecology, natural spawn, full life cycle and species assets are not yet complete."
     },
     {
       "id": "rainbow_trout",
@@ -274,13 +288,14 @@
     {
       "id": "salmon",
       "group": "aquatic",
-      "status": "not_implemented"
+      "status": "native_entity_state_adapter",
+      "note": "Runtime tracks sex, age, needs, health and familiarity. Vanilla entity AI/breeding remains in use where applicable; TFC-specific ecology, natural spawn, full life cycle and species assets are not yet complete."
     },
     {
       "id": "sheep",
       "group": "mammal",
-      "status": "partial_state_tracking",
-      "note": "Bedrock runtime state integration exists; full TFC behavior, ecology, assets and habitat spawning are incomplete."
+      "status": "native_entity_state_adapter",
+      "note": "Runtime tracks sex, age, needs, health and familiarity. Vanilla entity AI/breeding remains in use where applicable; TFC-specific ecology, natural spawn, full life cycle and species assets are not yet complete."
     },
     {
       "id": "smallmouth_bass",
@@ -290,7 +305,8 @@
     {
       "id": "squid",
       "group": "aquatic",
-      "status": "not_implemented"
+      "status": "native_entity_state_adapter",
+      "note": "Runtime tracks sex, age, needs, health and familiarity. Vanilla entity AI/breeding remains in use where applicable; TFC-specific ecology, natural spawn, full life cycle and species assets are not yet complete."
     },
     {
       "id": "tiger",
@@ -300,7 +316,8 @@
     {
       "id": "tropical_fish",
       "group": "aquatic",
-      "status": "not_implemented"
+      "status": "native_entity_state_adapter",
+      "note": "Runtime tracks sex, age, needs, health and familiarity. Vanilla entity AI/breeding remains in use where applicable; TFC-specific ecology, natural spawn, full life cycle and species assets are not yet complete."
     },
     {
       "id": "turkey",
@@ -310,7 +327,8 @@
     {
       "id": "turtle",
       "group": "reptile",
-      "status": "not_implemented"
+      "status": "native_entity_state_adapter",
+      "note": "Runtime tracks sex, age, needs, health and familiarity. Vanilla entity AI/breeding remains in use where applicable; TFC-specific ecology, natural spawn, full life cycle and species assets are not yet complete."
     },
     {
       "id": "wildebeest",
@@ -320,7 +338,8 @@
     {
       "id": "wolf",
       "group": "mammal",
-      "status": "not_implemented"
+      "status": "native_entity_state_adapter",
+      "note": "Runtime tracks sex, age, needs, health and familiarity. Vanilla entity AI/breeding remains in use where applicable; TFC-specific ecology, natural spawn, full life cycle and species assets are not yet complete."
     },
     {
       "id": "yak",
