@@ -18,8 +18,8 @@ export const PROCESSING_RECIPES = Object.freeze({
   Object.freeze({id:"tfc:fired_crucible",station:"pit_kiln",title:"るつぼを焼く",description:"成形した粘土製るつぼを焼成します。",inputs:Object.freeze({"tfc:unfired_crucible":1}),outputs:Object.freeze({"tfc:fired_crucible":1}),minimumTemperatureC:600,durationTicks:900})
  ]),
  crucible:Object.freeze([
-  Object.freeze({id:"tfc:heated_copper_ingot",station:"crucible",title:"銅を溶かして鋳造",description:"銅鉱石を溶かし、焼成済み鋳型に流し込みます。鋳型は返却されます。",inputs:Object.freeze({"tfc:copper_ore":2,"tfc:fired_ingot_mold":1}),outputs:Object.freeze({"tfc:heated_copper_ingot":1,"tfc:fired_ingot_mold":1}),minimumTemperatureC:1085,durationTicks:200}),
-  Object.freeze({id:"tfc:heated_tin_ingot",station:"crucible",title:"錫を溶かして鋳造",description:"錫鉱石を溶かして錫インゴットを鋳造します。",inputs:Object.freeze({"tfc:tin_ore":2,"tfc:fired_ingot_mold":1}),outputs:Object.freeze({"tfc:heated_tin_ingot":1,"tfc:fired_ingot_mold":1}),minimumTemperatureC:232,durationTicks:200}),
+  Object.freeze({id:"tfc:heated_copper_ingot",station:"crucible",title:"銅を溶かして鋳造",description:"銅鉱石を溶かし、焼成済み鋳型に流し込みます。鋳型は返却されます。",inputs:Object.freeze({"tfc:copper_ore":2,"tfc:fired_ingot_mold":1}),outputs:Object.freeze({"tfc:heated_copper_ingot":1,"tfc:fired_ingot_mold":1}),minimumTemperatureC:1080,durationTicks:200}),
+  Object.freeze({id:"tfc:heated_tin_ingot",station:"crucible",title:"錫を溶かして鋳造",description:"錫鉱石を溶かして錫インゴットを鋳造します。",inputs:Object.freeze({"tfc:tin_ore":2,"tfc:fired_ingot_mold":1}),outputs:Object.freeze({"tfc:heated_tin_ingot":1,"tfc:fired_ingot_mold":1}),minimumTemperatureC:230,durationTicks:200}),
   Object.freeze({id:"tfc:heated_bronze_ingot",station:"crucible",title:"青銅を合金鋳造",description:"銅9・錫1の割合で青銅を作ります。",inputs:Object.freeze({"tfc:copper_ingot":9,"tfc:tin_ingot":1,"tfc:fired_ingot_mold":1}),outputs:Object.freeze({"tfc:heated_bronze_ingot":1,"tfc:fired_ingot_mold":1}),minimumTemperatureC:950,durationTicks:300,alloyId:"bronze",metalInputs:Object.freeze({copper:9,tin:1}),alloyComponents:Object.freeze({copper:Object.freeze([0.88,0.92]),tin:Object.freeze([0.08,0.12])})})
  ]),
  drying_rack:Object.freeze([
