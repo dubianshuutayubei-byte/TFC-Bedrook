@@ -125,3 +125,31 @@ export function evaluateFaunaHabitat(profile, environment) {
 export function normalizeHydration(value) {
   return clamp(finite(value, "hydration"), 0, 100);
 }
+
+/**
+ * Estimate ambient temperature from the 96-day seasonal cycle and time of day.
+ * Bedrock time is a global clock; regional climate and altitude are added later.
+ */
+export function calculateAmbientTemperatureC({
+  meanAnnualTempC,
+  seasonalAmplitudeC = 0,
+  dayOfYear,
+  timeOfDay = 12000,
+  elevationM = 0,
+  diurnalAmplitudeC = 3,
+  yearLengthDays = DEFAULTS.yearLengthDays,
+}) {
+  const time = finite(timeOfDay, "timeOfDay");
+  const dailyAmplitude = finite(diurnalAmplitudeC, "diurnalAmplitudeC");
+  if (time < 0 || time > 24000) throw new RangeError("timeOfDay must be between 0 and 24000");
+  if (dailyAmplitude < 0) throw new RangeError("diurnalAmplitudeC must be >= 0");
+  const seasonal = calculateTemperatureC({
+    meanAnnualTempC,
+    seasonalAmplitudeC,
+    dayOfYear,
+    elevationM,
+    yearLengthDays,
+  });
+  const dailyPhase = (time / 24000 - 0.5) * 2 * Math.PI;
+  return seasonal + Math.cos(dailyPhase) * dailyAmplitude;
+}
