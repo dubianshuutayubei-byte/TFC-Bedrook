@@ -56,3 +56,7 @@ tile.tfc:drying_rack.name=乾燥棚
 
 
 item.tfc:prospecting_tool.name=地質調査具
+
+item.tfc:compost.name=堆肥
+item.tfc:composter.name=コンポスター
+tile.tfc:composter.name=コンポスター
