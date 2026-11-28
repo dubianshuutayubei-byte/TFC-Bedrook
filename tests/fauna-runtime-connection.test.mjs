@@ -240,7 +240,7 @@ test("all 13 fauna entity scaffolds missing from the prior runtime now receive s
   assert.match(entry,new RegExp('speciesId:"'+id+'"'));
   assert.match(entry,new RegExp('kind:"'+kind+'"'));
   assert.match(entry,/customBreeding:false/);
-  assert.match(entry,/hungerPerDay:0/);
+  assert.match(entry,id==="leopard_seal"?/hungerPerDay:8/:/hungerPerDay:0/);
   assert.match(entry,/thirstPerDay:0/);
   assert.match(entry,/feedItems:\[\]/);
  }
