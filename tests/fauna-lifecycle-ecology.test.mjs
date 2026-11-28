@@ -54,3 +54,11 @@ test("predator diet, hunger and herd defense gate hunting", () => {
   const notHungry = evaluatePredation({ hunger: 10 }, prey, { predatorDiet: ["deer"], preySpecies: "deer" });
   assert.equal(notHungry.eligible, false);
 });
+
+
+test("tracked fauna runtime invokes the shared lifecycle service", () => {
+  const root = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+  const runtime = readFileSync(join(root, "packs/behavior_pack/scripts/gameplay-runtime.js"), "utf8");
+  assert.match(runtime, /advanceAnimalLifecycle/);
+  assert.match(runtime, /state=advanceAnimalLifecycle\(state,0,\{adultDays:profile\.adultAgeDays\?\?0\}\)\.animal/);
+});
