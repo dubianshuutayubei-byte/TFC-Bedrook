@@ -1,0 +1,18 @@
+{
+  "format_version": "1.26.60",
+  "minecraft:item": {
+    "description": {
+      "identifier": "tfc:heated_bronze_ingot",
+      "menu_category": {
+        "category": "items"
+      }
+    },
+    "components": {
+      "minecraft:icon": "tfc_heated_bronze_ingot",
+      "minecraft:display_name": {
+        "value": "加熱済み青銅インゴット"
+      },
+      "minecraft:max_stack_size": 64
+    }
+  }
+}
