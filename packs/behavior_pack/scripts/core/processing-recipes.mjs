@@ -17,6 +17,11 @@ export const PROCESSING_RECIPES = Object.freeze({
   Object.freeze({id:"tfc:dried_fruit",station:"drying_rack",title:"果物を乾燥",description:"果物の水分を減らして保存性を高めます。",inputs:Object.freeze({"tfc:fruit":1}),outputs:Object.freeze({"tfc:dried_fruit":1}),minimumTemperatureC:0,durationTicks:18000}),
   Object.freeze({id:"tfc:dried_vegetables",station:"drying_rack",title:"野菜を乾燥",description:"野菜の水分を減らして保存性を高めます。",inputs:Object.freeze({"tfc:vegetable":1}),outputs:Object.freeze({"tfc:dried_vegetables":1}),minimumTemperatureC:0,durationTicks:18000})
  ]),
+
+ composter:Object.freeze([
+  Object.freeze({id:"tfc:compost_from_vegetables",station:"composter",title:"野菜から堆肥を作る",description:"緑の素材と茶色の素材を長時間発酵させます。",inputs:Object.freeze({"tfc:vegetable":4,"minecraft:oak_leaves":16}),outputs:Object.freeze({"tfc:compost":1}),minimumTemperatureC:0,durationTicks:240000}),
+  Object.freeze({id:"tfc:compost_from_fruit",station:"composter",title:"果物から堆肥を作る",description:"果物と落ち葉を長時間発酵させます。",inputs:Object.freeze({"tfc:fruit":4,"minecraft:oak_leaves":16}),outputs:Object.freeze({"tfc:compost":1}),minimumTemperatureC:0,durationTicks:240000})
+ ]),
  anvil:Object.freeze([
   Object.freeze({id:"tfc:copper_sheet",station:"anvil",title:"銅板を成形",description:"加熱済み銅インゴットを成形します。",inputs:Object.freeze({"tfc:heated_copper_ingot":1}),outputs:Object.freeze({"tfc:copper_sheet":1}),minimumTemperatureC:0,durationTicks:60}),
   Object.freeze({id:"tfc:bronze_sheet",station:"anvil",title:"青銅板を成形",description:"加熱済み青銅インゴットを成形します。",inputs:Object.freeze({"tfc:heated_bronze_ingot":1}),outputs:Object.freeze({"tfc:bronze_sheet":1}),minimumTemperatureC:0,durationTicks:60})
