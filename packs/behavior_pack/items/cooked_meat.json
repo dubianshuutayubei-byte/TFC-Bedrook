@@ -23,9 +23,9 @@
         "movement_modifier": 0.35
       },
       "tfc:consume_food": {
-        "hydration": 1,
+        "hydration": 0,
         "category": "protein",
-        "nutrition": 12
+        "nutrition": 18
       }
     }
   }
