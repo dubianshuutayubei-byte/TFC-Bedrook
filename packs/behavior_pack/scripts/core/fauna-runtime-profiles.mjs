@@ -115,7 +115,8 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "squid",
       "tropical_fish"
     ],
-    "predationDamage": 6
+    "predationDamage": 6,
+    "diurnal": true
   },
   "tfc:bluegill": {
     "speciesId": "bluegill",
@@ -293,7 +294,8 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "wildebeest",
       "yak"
     ],
-    "predationDamage": 6
+    "predationDamage": 6,
+    "diurnal": false
   },
   "tfc:crappie": {
     "speciesId": "crappie",
@@ -397,7 +399,8 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "duck",
       "penguin"
     ],
-    "predationDamage": 6
+    "predationDamage": 6,
+    "diurnal": false
   },
   "tfc:direwolf": {
     "speciesId": "direwolf",
@@ -461,7 +464,8 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "wildebeest",
       "yak"
     ],
-    "predationDamage": 6
+    "predationDamage": 6,
+    "diurnal": false
   },
   "tfc:duck": {
     "speciesId": "duck",
@@ -615,7 +619,8 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "squid",
       "tropical_fish"
     ],
-    "predationDamage": 6
+    "predationDamage": 6,
+    "diurnal": true
   },
   "tfc:grouse": {
     "speciesId": "grouse",
@@ -733,7 +738,8 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "wildebeest",
       "yak"
     ],
-    "predationDamage": 6
+    "predationDamage": 6,
+    "diurnal": false
   },
   "tfc:isopod": {
     "speciesId": "isopod",
@@ -893,7 +899,8 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "wildebeest",
       "yak"
     ],
-    "predationDamage": 6
+    "predationDamage": 6,
+    "diurnal": false
   },
   "tfc:lobster": {
     "speciesId": "lobster",
@@ -1126,7 +1133,8 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "wildebeest",
       "yak"
     ],
-    "predationDamage": 6
+    "predationDamage": 6,
+    "diurnal": false
   },
   "tfc:peafowl": {
     "speciesId": "peafowl",
@@ -1343,7 +1351,8 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "wildebeest",
       "yak"
     ],
-    "predationDamage": 6
+    "predationDamage": 6,
+    "diurnal": false
   },
   "tfc:smallmouth_bass": {
     "speciesId": "smallmouth_bass",
@@ -1431,7 +1440,8 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
       "wildebeest",
       "yak"
     ],
-    "predationDamage": 6
+    "predationDamage": 6,
+    "diurnal": false
   },
   "tfc:turkey": {
     "speciesId": "turkey",
