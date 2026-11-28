@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createSoilState, evaluateCropGrowth, applyNutrientUptake, applyFertilizer, advanceCropStage, advanceSoilHydration, calculateCropGrowthPoints, advanceSoilDay, applySoilCompost, inferSoilTypeFromBlockId } from "../packs/behavior_pack/scripts/core/agriculture-service.mjs";
+import { createSoilState, evaluateCropGrowth, applyNutrientUptake, applyFertilizer, advanceCropStage, advanceSoilHydration, calculateCropGrowthPoints, advanceSoilDay, applySoilCompost, inferSoilTypeFromBlockId, advanceCropGrowthProgress } from "../packs/behavior_pack/scripts/core/agriculture-service.mjs";
 
 const wheat = { minTemperatureC: 5, maxTemperatureC: 30, minHydration: 25, maxHydration: 100, preferredNutrient: "nitrogen", minPreferredNutrient: 10, optimalNutrient: 60 };
 test("soil state is normalized", () => assert.equal(createSoilState({ hydration: 200 }).hydration, 100));
@@ -33,4 +33,14 @@ test("soil type inference maps common substrate blocks to TFC soil classes", () 
   assert.equal(inferSoilTypeFromBlockId("minecraft:mud"), "silt");
   assert.equal(inferSoilTypeFromBlockId("minecraft:grass_block"), "loam");
   assert.equal(inferSoilTypeFromBlockId("minecraft:unknown"), "loam");
+});
+
+test("crop growth progress accumulates proportionally before advancing a stage", () => {
+  const first = advanceCropGrowthProgress(0, 1);
+  assert.deepEqual(first, { progress: 25, stageAdvanced: false });
+  const second = advanceCropGrowthProgress(first.progress, 0.5);
+  assert.deepEqual(second, { progress: 37.5, stageAdvanced: false });
+  const final = advanceCropGrowthProgress(80, 1);
+  assert.deepEqual(final, { progress: 5, stageAdvanced: true });
+  assert.deepEqual(advanceCropGrowthProgress(20, 0), { progress: 20, stageAdvanced: false });
 });
