@@ -1,5 +1,7 @@
 const clamp=(v,min,max)=>Math.min(max,Math.max(min,v));
 const finiteOr=(v,f)=>Number.isFinite(Number(v))?Number(v):f;
+const TFC_MONTHS=Object.freeze(["january","february","march","april","may","june","july","august","september","october","november","december"]);
+export function tfcMonthFromDay(day,daysPerMonth=8){const days=Math.max(0,Math.floor(finiteOr(day,0))),monthLength=Math.max(1,Math.floor(finiteOr(daysPerMonth,8)));return TFC_MONTHS[Math.floor((days%(monthLength*TFC_MONTHS.length))/monthLength)];}
 export function createAnimalState(i={}){return{species:i.species??"unknown",sex:i.sex??"unknown",ageDays:Math.max(0,finiteOr(i.ageDays,0)),familiarity:clamp(finiteOr(i.familiarity,0),0,100),pregnancyDays:Math.max(0,finiteOr(i.pregnancyDays,0)),pregnancyOffspringSpecies:i.pregnancyOffspringSpecies??null,pregnancyOffspringEntityType:i.pregnancyOffspringEntityType??null,health:clamp(finiteOr(i.health,100),0,100),hunger:clamp(finiteOr(i.hunger,0),0,100),thirst:clamp(finiteOr(i.thirst,0),0,100),lastProductAt:Math.max(0,finiteOr(i.lastProductAt,0)),lastEggAt:finiteOr(i.lastEggAt,-1),lastBreedAt:finiteOr(i.lastBreedAt,-1),lifeStage:i.lifeStage??"unknown",uses:Math.max(0,Math.floor(finiteOr(i.uses,0))),fertilized:Boolean(i.fertilized),lastFedDay:finiteOr(i.lastFedDay,-1),lastFamiliarityDecay:finiteOr(i.lastFamiliarityDecay,-1),oldDay:finiteOr(i.oldDay,-1),birthsRemaining:Math.max(0,Math.floor(finiteOr(i.birthsRemaining,0))),birthsTotal:Math.max(0,Math.floor(finiteOr(i.birthsTotal,0))),lastAgeUpdateAt:finiteOr(i.lastAgeUpdateAt,-1),lifespanDays:Number.isFinite(Number(i.lifespanDays))&&Number(i.lifespanDays)>0?Number(i.lifespanDays):null,isAlive:i.isAlive!==false,deathReason:i.deathReason??null};}
 export function initializeAnimalLifeStage(input={}, {isBaby=false,adultAgeDays=null,maxUses=Infinity,currentDay=null}={}){const hasSavedAge=input.ageDays!==undefined&&input.ageDays!==null&&Number.isFinite(Number(input.ageDays));const state=createAnimalState(input);const maturity=Number(adultAgeDays);const hasMaturity=Number.isFinite(maturity)&&maturity>=0;if(!hasSavedAge){state.ageDays=isBaby?0:(hasMaturity?maturity:0);state.lifeStage=isBaby?"juvenile":"adult";}else if(input.lifeStage==="juvenile"){if(hasMaturity){if(state.ageDays>=maturity)state.lifeStage="adult";}else if(!isBaby)state.lifeStage="adult";}else if(input.lifeStage==="unknown"||input.lifeStage==null){state.lifeStage=isBaby?"juvenile":"adult";if(!isBaby&&state.ageDays===0&&hasMaturity)state.ageDays=maturity;}if(currentDay!==null&&currentDay!==undefined&&Number.isFinite(Number(currentDay))){if(state.lastAgeUpdateAt<0)state.lastAgeUpdateAt=Number(currentDay);if(state.lastBreedAt<0)state.lastBreedAt=Number(currentDay);}if(state.oldDay>=0&&currentDay!==null&&currentDay!==undefined&&Number(currentDay)>state.oldDay)state.lifeStage="old";return state;}
 const FOREST_RANK={none:0,sparse:1,edge:2,normal:3,old_growth:4};
@@ -84,6 +86,14 @@ export function evaluateFaunaSpawn(profile, environment, random = Math.random) {
   if (profile.distanceBelowSeaLevel != null && profile.distanceBelowSeaLevel >= 0) {
     if (environment.y == null || environment.seaLevel == null) missing.push("y", "seaLevel");
     else if (environment.y > environment.seaLevel - profile.distanceBelowSeaLevel) failures.push("too_high_above_depth_limit");
+  }
+
+  if (profile.months != null) {
+    if (!Array.isArray(profile.months) || profile.months.some(month => typeof month !== "string" || !TFC_MONTHS.includes(month.toLowerCase()))) throw new RangeError("profile.months must contain valid TFC month names");
+    if (profile.months.length > 0) {
+      if (environment.month == null) missing.push("month");
+      else if (!profile.months.includes(String(environment.month).toLowerCase())) failures.push("wrong_month");
+    }
   }
 
   const climate = evaluateHabitat(profile, environment);
