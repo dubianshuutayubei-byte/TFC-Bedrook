@@ -1,7 +1,31 @@
 const clamp=(v,min,max)=>Math.min(max,Math.max(min,v));
 const finiteOr=(v,f)=>Number.isFinite(Number(v))?Number(v):f;
 export function createAnimalState(i={}){return{species:i.species??"unknown",sex:i.sex??"unknown",ageDays:Math.max(0,finiteOr(i.ageDays,0)),familiarity:clamp(finiteOr(i.familiarity,0),0,100),pregnancyDays:Math.max(0,finiteOr(i.pregnancyDays,0)),health:clamp(finiteOr(i.health,100),0,100),hunger:clamp(finiteOr(i.hunger,0),0,100),thirst:clamp(finiteOr(i.thirst,0),0,100),lastProductAt:Math.max(0,finiteOr(i.lastProductAt,0)),lastBreedAt:Math.max(0,finiteOr(i.lastBreedAt,0))};}
-export function evaluateHabitat(p,e){const failures=[];if(p.minTemperatureC!=null&&e.temperatureC<p.minTemperatureC)failures.push("temperature_low");if(p.maxTemperatureC!=null&&e.temperatureC>p.maxTemperatureC)failures.push("temperature_high");if(p.minRainfall!=null&&e.rainfall<p.minRainfall)failures.push("rainfall_low");if(p.maxRainfall!=null&&e.rainfall>p.maxRainfall)failures.push("rainfall_high");if(p.waterType&&p.waterType!==e.waterType)failures.push("waterType");if(p.terrain&&!p.terrain.includes(e.terrain))failures.push("terrain");return{suitable:failures.length===0,failures};}
+const FOREST_RANK={none:0,edge:1,normal:2,old_growth:3};
+export function evaluateHabitat(p,e){
+ const failures=[],missing=[];
+ const check=(key,condition,fail)=>{if(p[key]===undefined||p[key]===null)return;if(e[key]===undefined||e[key]===null){missing.push(key);return;}if(condition(e[key]))failures.push(fail);};
+ check("minTemperatureC",v=>v<p.minTemperatureC,"temperature_low");
+ check("maxTemperatureC",v=>v>p.maxTemperatureC,"temperature_high");
+ check("minRainfall",v=>v<p.minRainfall,"rainfall_low");
+ check("maxRainfall",v=>v>p.maxRainfall,"rainfall_high");
+ check("belowSeaLevel",v=>v<p.belowSeaLevel,"water_too_shallow");
+ check("maxBrightness",v=>v>p.maxBrightness,"brightness_high");
+ if(p.minForest!=null||p.maxForest!=null){
+  if(e.forestType==null)missing.push("forestType");
+  else{
+   const rank=FOREST_RANK[e.forestType];
+   if(rank===undefined)missing.push("forestType");
+   else{
+    if(p.minForest!=null&&rank<FOREST_RANK[p.minForest])failures.push("forest_below_minimum");
+    if(p.maxForest!=null&&rank>FOREST_RANK[p.maxForest])failures.push("forest_above_maximum");
+   }
+  }
+ }
+ if(p.waterType&&p.waterType!==e.waterType)failures.push("waterType");
+ if(p.terrain&&!p.terrain.includes(e.terrain))failures.push("terrain");
+ return{suitable:failures.length===0&&missing.length===0,failures,missing};
+}
 export function feedAnimal(i,g=5,h=0){const a=createAnimalState(i);a.familiarity=clamp(a.familiarity+Math.max(0,finiteOr(g,0)),0,100);a.health=clamp(a.health+Math.max(0,finiteOr(h,0)),0,100);a.hunger=clamp(a.hunger-35,0,100);a.thirst=clamp(a.thirst-5,0,100);return a;}
 export function waterAnimal(i,n=30){const a=createAnimalState(i);a.thirst=clamp(a.thirst-Math.max(0,finiteOr(n,0)),0,100);return a;}
 export function advanceAnimalAge(i,d){const a=createAnimalState(i);a.ageDays+=Math.max(0,finiteOr(d,0));return a;}
