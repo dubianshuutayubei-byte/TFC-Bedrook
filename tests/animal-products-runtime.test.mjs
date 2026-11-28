@@ -51,3 +51,9 @@ test("sheep shearing uses TFC wool production familiarity, cooldown and per-anim
  assert.match(runtime,/give\(player,"tfc:wool",amount\)/);
  assert.match(runtime,/durability\.damage\+=1/);
 });
+
+test("product timing uses fractional world calendar days rather than animal age",()=>{
+ assert.match(runtime,/function currentAnimalDay\(\)\{return world\.getDay\(\)\+world\.getTimeOfDay\(\)\/24000;\}/);
+ assert.match(runtime,/const currentDay=currentAnimalDay\(\);/);
+ assert.match(runtime,/recordProduct\(state,currentAnimalDay\(\),\{maxUses:profile\.maxUses\?\?Infinity\}\)/);
+});
