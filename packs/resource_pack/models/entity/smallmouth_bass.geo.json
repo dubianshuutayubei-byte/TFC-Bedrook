@@ -3,7 +3,7 @@
   "minecraft:geometry": [
     {
       "description": {
-        "identifier": "geometry.tfc.smallmouth_bass",
+        "identifier": "geometry.tfc.fauna.smallmouth_bass",
         "texture_width": 256,
         "texture_height": 256,
         "visible_bounds_width": 2.5,

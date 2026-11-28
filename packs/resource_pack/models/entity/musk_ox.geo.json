@@ -3,7 +3,7 @@
   "minecraft:geometry": [
     {
       "description": {
-        "identifier": "geometry.tfc.musk_ox",
+        "identifier": "geometry.tfc.fauna.musk_ox",
         "texture_width": 256,
         "texture_height": 256,
         "visible_bounds_width": 2.5,
@@ -195,33 +195,6 @@
                 2,
                 2,
                 5
-              ],
-              "uv": [
-                32,
-                96
-              ]
-            }
-          ]
-        },
-        {
-          "name": "wool",
-          "parent": "body",
-          "pivot": [
-            0,
-            10,
-            0
-          ],
-          "cubes": [
-            {
-              "origin": [
-                -5,
-                8,
-                -7
-              ],
-              "size": [
-                10,
-                4,
-                14
               ],
               "uv": [
                 32,

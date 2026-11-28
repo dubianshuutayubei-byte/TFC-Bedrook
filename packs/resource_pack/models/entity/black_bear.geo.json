@@ -3,7 +3,7 @@
   "minecraft:geometry": [
     {
       "description": {
-        "identifier": "geometry.tfc.black_bear",
+        "identifier": "geometry.tfc.fauna.black_bear",
         "texture_width": 256,
         "texture_height": 256,
         "visible_bounds_width": 2.5,

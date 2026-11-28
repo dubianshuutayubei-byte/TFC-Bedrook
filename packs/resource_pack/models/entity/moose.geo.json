@@ -3,7 +3,7 @@
   "minecraft:geometry": [
     {
       "description": {
-        "identifier": "geometry.tfc.moose",
+        "identifier": "geometry.tfc.fauna.moose",
         "texture_width": 256,
         "texture_height": 256,
         "visible_bounds_width": 2.5,
@@ -30,9 +30,9 @@
                 -6
               ],
               "size": [
-                9,
-                7,
-                13
+                8,
+                6,
+                12
               ],
               "uv": [
                 0,

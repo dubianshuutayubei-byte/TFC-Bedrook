@@ -3,7 +3,7 @@
   "minecraft:geometry": [
     {
       "description": {
-        "identifier": "geometry.tfc.crocodile",
+        "identifier": "geometry.tfc.fauna.crocodile",
         "texture_width": 256,
         "texture_height": 256,
         "visible_bounds_width": 2.5,

@@ -3,7 +3,7 @@
   "minecraft:geometry": [
     {
       "description": {
-        "identifier": "geometry.tfc.horseshoe_crab",
+        "identifier": "geometry.tfc.fauna.horseshoe_crab",
         "texture_width": 256,
         "texture_height": 256,
         "visible_bounds_width": 2.5,
