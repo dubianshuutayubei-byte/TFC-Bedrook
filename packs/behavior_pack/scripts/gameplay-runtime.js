@@ -15,6 +15,8 @@ import { classifyTemperature, coolItemTemperature } from "./core/heat-service.mj
 import { summarizeOreSamples } from "./core/geology-service.mjs";
 
 const STATE_KEY="tfc:player_state",PROGRESS_KEY="tfc:knapping_progress";
+const TRACKED_FOOD_CONTAINERS_KEY="tfc:tracked_food_containers";
+const trackedFoodContainers=new Map();
 const FOOD_DECAY_PROFILES={"tfc:raw_meat":0.16,"tfc:cooked_meat":0.12,"tfc:grain":0.025,"tfc:maize":0.025,"tfc:potato":0.1,"tfc:vegetable":0.1,"tfc:fruit":0.11,"tfc:milk_bottle":0.18,"tfc:dried_meat":0.04,"tfc:dried_fruit":0.03,"tfc:dried_vegetables":0.03,"tfc:bread":0.05,"tfc:barley":0.025,"tfc:oat":0.025,"tfc:rye":0.025,"tfc:beet":0.1,"tfc:cabbage":0.1,"tfc:carrot":0.1,"tfc:garlic":0.1,"tfc:onion":0.1,"tfc:squash":0.1,"tfc:lentils":0.08,"tfc:soybean":0.08,"tfc:peanuts":0.08};
 const CROP_PROFILES={
  wheat:{minTemperatureC:-7,maxTemperatureC:22,minHydration:15,maxHydration:85,nutrientDemand:{nitrogen:100},nutrientEffects:{nitrogen:-1,phosphorus:0.3,potassium:0.3},seed:"tfc:crop_seed",harvest:"tfc:grain"},
@@ -123,9 +125,9 @@ function mixDough(player){
  player.sendMessage("§a小麦粉と水を混ぜて生地を作りました。空の土器が戻りました。");
 }
 function food(event,params){const p=event?.source;if(!p||p.typeId!=="minecraft:player")return;const s=deserializePlayerState(String(p.getDynamicProperty(STATE_KEY)??""));const itemId=String(params.itemId??"");const freshness=readStackFreshness(event.itemStack?.getLore?.()??[])?.freshness??100;const nutrition=params.category?{[params.category]:Number(params.nutrition??0)}:{};const result=consumeFood(s,{freshness,hydration:Number(params.hydration??0),nutrition});if(!result.consumed){p.sendMessage("§cこの食品は腐敗していて食べられません。");return;}p.setDynamicProperty(STATE_KEY,serializePlayerState(result.playerState));p.sendMessage("§a"+(itemId||"食品")+"の栄養・水分を反映しました。");}
-function tickFoodFreshness(player,nowTick){
- const container=inv(player);if(!container)return;
- const temperatureC=temperatureAt(player.dimension,player.location);
+function tickFoodContainerFreshness(container,dimension,location,nowTick){
+ if(!container)return;
+ const temperatureC=temperatureAt(dimension,location);
  for(let slot=0;slot<container.size;slot++){
   const stack=container.getItem(slot);if(!stack)continue;
   const baseDecayPerHour=FOOD_DECAY_PROFILES[stack.typeId];if(baseDecayPerHour===undefined)continue;
@@ -134,6 +136,51 @@ function tickFoodFreshness(player,nowTick){
   if(result.food.spoiled){container.setItem(slot,new ItemStack("tfc:spoiled_food",stack.amount));continue;}
   try{stack.setLore(result.lore);container.setItem(slot,stack);}catch(error){console.warn("[TFC-Bedrook] food stack freshness update:",error);}
  }
+}
+function saveTrackedFoodContainers(){
+ const entries=[...trackedFoodContainers.entries()].map(([key,value])=>({key,dimensionId:value.dimensionId,location:value.location}));
+ try{world.setDynamicProperty(TRACKED_FOOD_CONTAINERS_KEY,JSON.stringify(entries));}catch(error){console.warn("[TFC-Bedrook] tracked food container save failed:",error);}
+}
+function loadTrackedFoodContainers(){
+ try{
+  const raw=world.getDynamicProperty(TRACKED_FOOD_CONTAINERS_KEY);
+  if(typeof raw!=="string")return;
+  const entries=JSON.parse(raw);
+  if(!Array.isArray(entries))return;
+  for(const entry of entries.slice(-128)){
+   if(!entry?.key||!entry?.dimensionId||!entry?.location)continue;
+   trackedFoodContainers.set(entry.key,{dimensionId:entry.dimensionId,location:entry.location});
+  }
+ }catch(error){console.warn("[TFC-Bedrook] tracked food container load failed:",error);}
+}
+function trackFoodContainer(block){
+ try{
+  const component=block.getComponent("minecraft:inventory")??block.getComponent("inventory");
+  if(!component?.container)return;
+  const location={x:Math.floor(block.location.x),y:Math.floor(block.location.y),z:Math.floor(block.location.z)};
+  const dimensionId=normalizeDimensionId(block.dimension.id),key=dimensionId+":"+location.x+","+location.y+","+location.z;
+  if(trackedFoodContainers.has(key))return;
+  trackedFoodContainers.set(key,{dimensionId,location});
+  while(trackedFoodContainers.size>128)trackedFoodContainers.delete(trackedFoodContainers.keys().next().value);
+  saveTrackedFoodContainers();
+ }catch{}
+}
+function tickTrackedFoodContainers(nowTick){
+ let changed=false;
+ for(const [key,entry] of trackedFoodContainers){
+  try{
+   const dimension=world.getDimension(entry.dimensionId),block=dimension.getBlock(entry.location);
+   if(!block){continue;}
+   const component=block.getComponent("minecraft:inventory")??block.getComponent("inventory");
+   if(!component?.container){trackedFoodContainers.delete(key);changed=true;continue;}
+   tickFoodContainerFreshness(component.container,dimension,entry.location,nowTick);
+  }catch{}
+ }
+ if(changed)saveTrackedFoodContainers();
+}
+function tickFoodFreshness(player,nowTick){
+ const container=inv(player);if(!container)return;
+ tickFoodContainerFreshness(container,player.dimension,player.location,nowTick);
 }
 function posKey(block,kind){const l=block.location;return "tfc:"+kind+":"+block.dimension.id+":"+Math.floor(l.x)+","+Math.floor(l.y)+","+Math.floor(l.z);}
 function readWorldState(key,fallback){try{const raw=world.getDynamicProperty(key);return typeof raw==="string"?JSON.parse(raw):fallback;}catch{return fallback;}}
@@ -376,7 +423,8 @@ function animalInteract(player,entity){
  player.sendMessage("§a餌を与えました。なつき度: "+Math.floor(state.familiarity));
 }
 
-export function initializeGameplay(){world.afterEvents.weatherChange.subscribe(event=>{const key=normalizeDimensionId(event.dimension?.id);if(key)WEATHER_BY_DIMENSION.set(key,normalizeWeather(event.newWeather));});
+export function initializeGameplay(){
+ loadTrackedFoodContainers();world.afterEvents.weatherChange.subscribe(event=>{const key=normalizeDimensionId(event.dimension?.id);if(key)WEATHER_BY_DIMENSION.set(key,normalizeWeather(event.newWeather));});
 world.afterEvents.playerBreakBlock.subscribe(event=>{
  const brokenId=event.brokenBlockPermutation?.type?.id,player=event.player;if(!player)return;
  try{
@@ -400,12 +448,14 @@ event.blockComponentRegistry.registerCustomComponent("tfc:farmland_interaction",
 event.blockComponentRegistry.registerCustomComponent("tfc:crop_growth",{onTick:a=>cropTick(a.block),onPlayerInteract:a=>{const p=a.player,clicked=a.block;if(!p||!clicked)return;const b=clicked.permutation.getState("tfc:part")==="upper"?clicked.below():clicked;if(!b||b.typeId!=="tfc:crop")return;if(b.permutation.getState("tfc:part")==="upper")return;const cropType=b.permutation.getState("tfc:crop_type")??"wheat";const profile=CROP_PROFILES[cropType]??CROP_PROFILES.wheat;const age=b.permutation.getState("tfc:age");const quality=Number(readWorldState(posKey(b,"crop_quality"),1));if(profile.pickable){if(typeof age!=="number"||age<2){p.sendMessage("§e収穫できる状態まで成長していません。");return;}const yieldCount=calculateCropYield(1,quality);give(p,profile.harvest,yieldCount);b.setPermutation(b.permutation.withState("tfc:age",1));writeWorldState(posKey(b,"crop_progress"),0);writeWorldState(posKey(b,"crop_quality"),1);p.sendMessage("§a実を収穫しました。株は残り、再び成長します。");return;}if(age!==3){p.sendMessage("§e成長中: "+Math.floor(Number(readWorldState(posKey(b,"crop_progress"),0)))+"%");return;}const yieldCount=calculateCropYield(cropType==="potato"?2:3,quality);give(p,profile.harvest,yieldCount);give(p,profile.seed,1);if(profile.twoBlock){const upper=b.above();if(upper?.typeId==="tfc:crop"&&upper.permutation.getState("tfc:part")==="upper")upper.setType("minecraft:air");}b.setPermutation(b.permutation.withState("tfc:age",0));writeWorldState(posKey(b,"crop_progress"),0);writeWorldState(posKey(b,"crop_quality"),1);p.sendMessage("§a収穫しました。収穫量補正: "+Math.floor(quality*100)+"% / "+yieldCount+"個");}});
 system.runInterval(()=>{for(const dimensionId of ["overworld","nether","the_end"]){try{const dimension=world.getDimension(dimensionId);for(const type of Object.keys(ANIMAL_PROFILES))for(const entity of dimension.getEntities({type}))animalTick(entity);}catch(error){}}},1200);
 system.runInterval(()=>{for(const player of world.getAllPlayers()){try{tickFoodFreshness(player,system.currentTick);}catch(error){console.warn("[TFC-Bedrook] food freshness tick failed:",error);}}},1200);
+system.runInterval(()=>{try{tickTrackedFoodContainers(system.currentTick);}catch(error){console.warn("[TFC-Bedrook] tracked food container tick failed:",error);}},1200);
 system.runInterval(()=>{for(const player of world.getAllPlayers()){try{tickMetalHeat(player,system.currentTick);}catch(error){console.warn("[TFC-Bedrook] metal heat tick failed:",error);}}},20);
 });
 world.afterEvents.playerInteractWithEntity.subscribe(event=>{if(ANIMAL_PROFILES[event.target?.typeId])animalInteract(event.player,event.target);});
 
 world.afterEvents.playerInteractWithBlock.subscribe(event=>{
  if(!event.isFirstEvent)return;
+ trackFoodContainer(event.block);
  const held=event.beforeItemStack??event.itemStack;
  if(!held?.typeId?.endsWith("_hoe"))return;
  const block=event.block;
