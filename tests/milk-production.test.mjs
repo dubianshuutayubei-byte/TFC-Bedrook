@@ -29,6 +29,7 @@ test("milk production imports its runtime cooldown functions",()=>{
 });
 
 test("goats are included in the dairy animal profile",()=>{
+ assert.match(runtime,/"minecraft:cow":\{[^}]*dairy:true/);
  assert.match(runtime,/"minecraft:goat":\{[^}]*dairy:true/);
  assert.match(runtime,/entity\.typeId==="minecraft:goat"\?"\\n産出: 山羊乳/);
 });
