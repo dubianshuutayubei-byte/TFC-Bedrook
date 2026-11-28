@@ -25,6 +25,11 @@ test("all 40 custom species have an official-source-mapped death loot profile",(
  assert.match(runtime,/entity\.getDynamicProperty\("tfc:predated"\)===true/);
 });
 
+test("shared breeding flow keeps the partner state mutable for both use counters",()=>{
+ assert.match(runtime,/let other=animalState\(partner\);const breedingProfile/);
+ assert.match(runtime,/other=recordBreedingUse\(other,breedingTime/);
+});
+
 test("TFC livestock litter sizes are rolled within documented ranges",()=>{
  assert.equal(determineOffspringCount({childCountMin:1,childCountMax:10},()=>0),1);
  assert.equal(determineOffspringCount({childCountMin:1,childCountMax:10},()=>0.999999),10);
