@@ -342,3 +342,10 @@ test("verified TFC 1.21 livestock lifecycle values stay centralized and exact",(
  assert.equal(OFFICIAL_LIVESTOCK_LIFECYCLE.rabbit.ageSourceConflict,true);
  assert.deepEqual([OFFICIAL_LIVESTOCK_LIFECYCLE.pig.childCountMin,OFFICIAL_LIVESTOCK_LIFECYCLE.pig.childCountMax],[1,10]);
 });
+
+test("all ecology prey references resolve to one of the 63 supported fauna species",()=>{
+ const supported=new Set(Object.keys(OFFICIAL_FAUNA_PROFILES));
+ for(const [predator,profile] of Object.entries(FAUNA_ECOLOGY)){
+  for(const prey of profile.prey)assert.ok(supported.has(prey),predator+" references missing prey "+prey);
+ }
+});
