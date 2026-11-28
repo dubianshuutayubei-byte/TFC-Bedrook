@@ -14,6 +14,6 @@ test("bone meal, compost and wood ash are connected as fertilizers",()=>{
 });
 test("breaking a firepit produces wood ash",()=>{
  assert.match(runtime,/playerBreakBlock\.subscribe/);
- assert.match(runtime,/brokenBlockPermutation\?\.type\?\.id!=="tfc:firepit"/);
- assert.match(runtime,/spawnItem\(new ItemStack\("tfc:wood_ash",1\)/);
+ assert.match(runtime,/brokenId==="tfc:firepit"/);
+ assert.match(runtime,/player\.dimension\.spawnItem\(new ItemStack\("tfc:wood_ash",1\)/);
 });
