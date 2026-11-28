@@ -113,6 +113,66 @@
       "baseDecayPerHour": 0.03,
       "cooked": false,
       "preservation": "dried"
+    },
+    {
+      "id": "barley",
+      "displayName": "大麦",
+      "nutrition": {
+        "grain": 14
+      },
+      "hydration": 0,
+      "baseDecayPerHour": 0.025,
+      "cooked": false
+    },
+    {
+      "id": "oat",
+      "displayName": "オーツ麦",
+      "nutrition": {
+        "grain": 14
+      },
+      "hydration": 0,
+      "baseDecayPerHour": 0.025,
+      "cooked": false
+    },
+    {
+      "id": "rye",
+      "displayName": "ライ麦",
+      "nutrition": {
+        "grain": 14
+      },
+      "hydration": 0,
+      "baseDecayPerHour": 0.025,
+      "cooked": false
+    },
+    {
+      "id": "beet",
+      "displayName": "ビーツ",
+      "nutrition": {
+        "vegetables": 12
+      },
+      "hydration": 2,
+      "baseDecayPerHour": 0.1,
+      "cooked": false
+    },
+    {
+      "id": "cabbage",
+      "displayName": "キャベツ",
+      "nutrition": {
+        "vegetables": 12
+      },
+      "hydration": 5,
+      "baseDecayPerHour": 0.1,
+      "cooked": false
+    },
+    {
+      "id": "carrot",
+      "displayName": "ニンジン",
+      "nutrition": {
+        "vegetables": 12
+      },
+      "hydration": 2,
+      "baseDecayPerHour": 0.1,
+      "cooked": false
     }
   ],
   "notes": [
@@ -121,7 +181,7 @@
     "所持品内の食品はプレイヤー単位・アイテムID単位で鮮度を保存し、腐敗時に腐敗食品へ変換します。",
     "鮮度は同じアイテムIDの全スタックで共有する簡易モデルで、スタックごとの個別鮮度や保存容器は未実装です。",
     "腐敗速度はゲーム時間ではなく実時間換算で、72000 Bedrock ticksを1時間として計算します。",
-    "小麦・トウモロコシ・ジャガイモは作物別プロファイルと食品アイテムを登録済みです。",
-    "乾燥棚で作る干し肉・干し果物・干し野菜を追加。保存性の高い仮プロファイルで、実際の保存期間は調整対象。"
+    "乾燥棚で作る干し肉・干し果物・干し野菜を追加。保存性の高い仮プロファイルで、実際の保存期間は調整対象。",
+    "小麦・トウモロコシ・ジャガイモ・大麦・オーツ麦・ライ麦・ビーツ・キャベツ・ニンジンを作物別プロファイルと食品アイテムとして登録。"
   ]
 }
