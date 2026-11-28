@@ -1,6 +1,6 @@
 const clamp=(v,min,max)=>Math.min(max,Math.max(min,v));
 const finiteOr=(v,f)=>Number.isFinite(Number(v))?Number(v):f;
-export function createAnimalState(i={}){return{species:i.species??"unknown",sex:i.sex??"unknown",ageDays:Math.max(0,finiteOr(i.ageDays,0)),familiarity:clamp(finiteOr(i.familiarity,0),0,100),pregnancyDays:Math.max(0,finiteOr(i.pregnancyDays,0)),health:clamp(finiteOr(i.health,100),0,100),hunger:clamp(finiteOr(i.hunger,0),0,100),thirst:clamp(finiteOr(i.thirst,0),0,100),lastProductAt:Math.max(0,finiteOr(i.lastProductAt,0)),lastBreedAt:Math.max(0,finiteOr(i.lastBreedAt,0)),lifeStage:i.lifeStage??"unknown",uses:Math.max(0,Math.floor(finiteOr(i.uses,0))),fertilized:Boolean(i.fertilized),lastFedDay:Math.max(0,finiteOr(i.lastFedDay,0))};}
+export function createAnimalState(i={}){return{species:i.species??"unknown",sex:i.sex??"unknown",ageDays:Math.max(0,finiteOr(i.ageDays,0)),familiarity:clamp(finiteOr(i.familiarity,0),0,100),pregnancyDays:Math.max(0,finiteOr(i.pregnancyDays,0)),health:clamp(finiteOr(i.health,100),0,100),hunger:clamp(finiteOr(i.hunger,0),0,100),thirst:clamp(finiteOr(i.thirst,0),0,100),lastProductAt:Math.max(0,finiteOr(i.lastProductAt,0)),lastBreedAt:Math.max(0,finiteOr(i.lastBreedAt,0)),lifeStage:i.lifeStage??"unknown",uses:Math.max(0,Math.floor(finiteOr(i.uses,0))),fertilized:Boolean(i.fertilized),lastFedDay:finiteOr(i.lastFedDay,-1),lastFamiliarityDecay:finiteOr(i.lastFamiliarityDecay,-1)};}
 export function initializeAnimalLifeStage(input={}, {isBaby=false,adultAgeDays=null,maxUses=Infinity}={}){const hasSavedAge=input.ageDays!==undefined&&input.ageDays!==null&&Number.isFinite(Number(input.ageDays));const state=createAnimalState(input);const maturity=Number(adultAgeDays);const hasMaturity=Number.isFinite(maturity)&&maturity>=0;if(!hasSavedAge){state.ageDays=isBaby?0:(hasMaturity?maturity:0);state.lifeStage=isBaby?"juvenile":"adult";}else if(input.lifeStage==="juvenile"&&!isBaby){if(hasMaturity)state.ageDays=Math.max(state.ageDays,maturity);state.lifeStage="adult";}else if(input.lifeStage==="unknown"||input.lifeStage==null){state.lifeStage=isBaby?"juvenile":"adult";if(!isBaby&&state.ageDays===0&&hasMaturity)state.ageDays=maturity;}if(Number.isFinite(maxUses)&&maxUses>=0&&state.uses>=maxUses)state.lifeStage="old";return state;}
 const FOREST_RANK={none:0,sparse:1,edge:2,normal:3,old_growth:4};
 export function evaluateHabitat(p,e){
@@ -27,7 +27,7 @@ export function evaluateHabitat(p,e){
  if(p.terrain&&!p.terrain.includes(e.terrain))failures.push("terrain");
  return{suitable:failures.length===0&&missing.length===0,failures,missing};
 }
-export function feedAnimal(i,g=5,h=0){const a=createAnimalState(i);a.familiarity=clamp(a.familiarity+Math.max(0,finiteOr(g,0)),0,100);a.health=clamp(a.health+Math.max(0,finiteOr(h,0)),0,100);a.hunger=clamp(a.hunger-35,0,100);a.thirst=clamp(a.thirst-5,0,100);return a;}
+export function canFeedAnimal(i,currentDay){const a=createAnimalState(i),day=Number(currentDay);return Number.isFinite(day)&&a.lastFedDay<day;}\nexport function feedAnimal(i,g=6,h=0,{currentDay=null,adultFamiliarityCap=100}={}){const a=createAnimalState(i);const cap=a.lifeStage==="juvenile"?100:clamp(finiteOr(adultFamiliarityCap,100),0,100);if(a.lifeStage==="juvenile"||a.familiarity<cap)a.familiarity=clamp(a.familiarity+Math.max(0,finiteOr(g,0)),0,cap);a.health=clamp(a.health+Math.max(0,finiteOr(h,0)),0,100);a.hunger=clamp(a.hunger-35,0,100);a.thirst=clamp(a.thirst-5,0,100);if(Number.isFinite(Number(currentDay))){a.lastFedDay=Number(currentDay);a.lastFamiliarityDecay=Number(currentDay);}return a;}
 export function waterAnimal(i,n=30){const a=createAnimalState(i);a.thirst=clamp(a.thirst-Math.max(0,finiteOr(n,0)),0,100);return a;}
 export function advanceAnimalAge(i,d){const a=createAnimalState(i);a.ageDays+=Math.max(0,finiteOr(d,0));return a;}
 export function advanceAnimalNeeds(i,d,{hungerPerDay=8,thirstPerDay=12,healthLossPerDay=2}={}){const a=createAnimalState(i),days=Math.max(0,finiteOr(d,0));a.ageDays+=days;a.hunger=clamp(a.hunger+days*hungerPerDay,0,100);a.thirst=clamp(a.thirst+days*thirstPerDay,0,100);const stress=Math.max(0,a.hunger-75)+Math.max(0,a.thirst-75);a.health=clamp(a.health-days*healthLossPerDay*(stress/50),0,100);return a;}
@@ -37,7 +37,7 @@ export function advancePregnancy(i,d,g){const a=createAnimalState(i);if(a.pregna
 export function canProduce(i,{requiredFamiliarity=0,cooldownDays=0,currentDay=0,minimumAgeDays=0,requiredSex,minimumHealth=0,maximumHunger=100,maximumThirst=100,maxUses=Infinity}={}){const a=createAnimalState(i);return a.lifeStage!=="old"&&a.uses<maxUses&&a.health>=minimumHealth&&a.ageDays>=minimumAgeDays&&a.familiarity>=requiredFamiliarity&&(requiredSex===undefined||a.sex===requiredSex)&&a.hunger<=maximumHunger&&a.thirst<=maximumThirst&&currentDay>=a.lastProductAt&&currentDay-a.lastProductAt>=cooldownDays;}
 export function recordProduct(i,d,{maxUses=Infinity}={}){const a=createAnimalState(i);a.lastProductAt=Math.max(a.lastProductAt,finiteOr(d,a.lastProductAt));a.uses+=1;if(Number.isFinite(maxUses)&&maxUses>=0&&a.uses>=maxUses)a.lifeStage="old";return a;}
 
-export function grazeAnimal(input,{hungerReduction=2,thirstReduction=0}={}){const a=createAnimalState(input);a.hunger=clamp(a.hunger-Math.max(0,finiteOr(hungerReduction,0)),0,100);a.thirst=clamp(a.thirst-Math.max(0,finiteOr(thirstReduction,0)),0,100);return a;}
+export function grazeAnimal(input,{hungerReduction=2,thirstReduction=0,currentDay=null}={}){const a=createAnimalState(input);a.hunger=clamp(a.hunger-Math.max(0,finiteOr(hungerReduction,0)),0,100);a.thirst=clamp(a.thirst-Math.max(0,finiteOr(thirstReduction,0)),0,100);if(Number.isFinite(Number(currentDay))){a.lastFedDay=Number(currentDay);a.lastFamiliarityDecay=Number(currentDay);}return a;}
 
 export function syncAnimalHealth(input,currentHealth,effectiveMax){
   const animal=createAnimalState(input);
@@ -96,4 +96,16 @@ export function evaluateFaunaSpawn(profile, environment, random = Math.random) {
     chance,
     roll
   };
+}
+
+/** TFC default familiarity decay: 0.02 per day below the 0.30 threshold, after a one-day grace period. */
+export function advanceAnimalFamiliarityDecay(input,currentDay,{decayLimit=30,decayPerDay=2}={}){
+ const a=createAnimalState(input),day=Number(currentDay);
+ if(!Number.isFinite(day))throw new TypeError("currentDay must be finite");
+ if(a.lastFamiliarityDecay<0){a.lastFamiliarityDecay=day;return a;}
+ if(a.familiarity>0&&a.familiarity<decayLimit&&a.lastFamiliarityDecay+1<day){
+  a.familiarity=clamp(a.familiarity-Math.max(0,decayPerDay)*(day-a.lastFamiliarityDecay),0,100);
+  a.lastFamiliarityDecay=day;
+ }
+ return a;
 }
