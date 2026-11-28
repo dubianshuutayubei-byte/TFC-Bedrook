@@ -225,5 +225,253 @@
       "phosphorus": -0.5,
       "potassium": -0.5
     }
+  },
+  "rice": {
+    "minTemperatureC": 8,
+    "maxTemperatureC": 31,
+    "minHydration": 35,
+    "maxHydration": 100,
+    "nutrientDemand": {
+      "nitrogen": 40,
+      "phosphorus": 30,
+      "potassium": 30
+    },
+    "nutrientEffects": {
+      "nitrogen": -0.4,
+      "phosphorus": -0.3,
+      "potassium": -0.3
+    },
+    "seed": "tfc:rice_seed",
+    "harvest": "tfc:rice",
+    "requiresWater": true
+  },
+  "cassava": {
+    "minTemperatureC": 10,
+    "maxTemperatureC": 31,
+    "minHydration": 45,
+    "maxHydration": 100,
+    "nutrientDemand": {
+      "phosphorus": 40,
+      "potassium": 20
+    },
+    "nutrientEffects": {
+      "nitrogen": 0.5,
+      "phosphorus": -0.4,
+      "potassium": -0.2
+    },
+    "seed": "tfc:cassava_seed",
+    "harvest": "tfc:cassava"
+  },
+  "green_beans": {
+    "minTemperatureC": -2,
+    "maxTemperatureC": 25,
+    "minHydration": 25,
+    "maxHydration": 90,
+    "nutrientDemand": {
+      "phosphorus": 50,
+      "potassium": 40
+    },
+    "nutrientEffects": {
+      "nitrogen": 0.8,
+      "phosphorus": -0.5,
+      "potassium": -0.4
+    },
+    "seed": "tfc:green_beans_seed",
+    "harvest": "tfc:green_beans",
+    "twoBlock": true,
+    "supportRequired": true
+  },
+  "pumpkin": {
+    "minTemperatureC": -7,
+    "maxTemperatureC": 27,
+    "minHydration": 20,
+    "maxHydration": 85,
+    "nutrientDemand": {
+      "nitrogen": 40,
+      "phosphorus": 30,
+      "potassium": 60
+    },
+    "nutrientEffects": {
+      "nitrogen": -0.4,
+      "phosphorus": -0.3,
+      "potassium": -0.6
+    },
+    "seed": "tfc:pumpkin_seed",
+    "harvest": "tfc:pumpkin",
+    "spreading": true
+  },
+  "melon": {
+    "minTemperatureC": 5,
+    "maxTemperatureC": 31,
+    "minHydration": 35,
+    "maxHydration": 100,
+    "nutrientDemand": {
+      "nitrogen": 30,
+      "phosphorus": 40,
+      "potassium": 65
+    },
+    "nutrientEffects": {
+      "nitrogen": -0.3,
+      "phosphorus": -0.4,
+      "potassium": -0.65
+    },
+    "seed": "tfc:melon_seed",
+    "harvest": "tfc:melon",
+    "spreading": true
+  },
+  "tomato": {
+    "minTemperatureC": 2,
+    "maxTemperatureC": 31,
+    "minHydration": 20,
+    "maxHydration": 85,
+    "nutrientDemand": {
+      "nitrogen": 40,
+      "phosphorus": 50,
+      "potassium": 60
+    },
+    "nutrientEffects": {
+      "nitrogen": -0.4,
+      "phosphorus": -0.5,
+      "potassium": -0.6
+    },
+    "seed": "tfc:tomato_seed",
+    "harvest": "tfc:tomato",
+    "twoBlock": true,
+    "supportRequired": true
+  },
+  "red_bell_pepper": {
+    "minTemperatureC": 11,
+    "maxTemperatureC": 31,
+    "minHydration": 30,
+    "maxHydration": 95,
+    "nutrientDemand": {
+      "nitrogen": 30,
+      "phosphorus": 40,
+      "potassium": 50
+    },
+    "nutrientEffects": {
+      "nitrogen": -0.3,
+      "phosphorus": -0.4,
+      "potassium": -0.5
+    },
+    "seed": "tfc:red_bell_pepper_seed",
+    "harvest": "tfc:green_bell_pepper",
+    "pickable": true
+  },
+  "yellow_bell_pepper": {
+    "minTemperatureC": 11,
+    "maxTemperatureC": 31,
+    "minHydration": 30,
+    "maxHydration": 95,
+    "nutrientDemand": {
+      "nitrogen": 30,
+      "phosphorus": 40,
+      "potassium": 50
+    },
+    "nutrientEffects": {
+      "nitrogen": -0.3,
+      "phosphorus": -0.4,
+      "potassium": -0.5
+    },
+    "seed": "tfc:yellow_bell_pepper_seed",
+    "harvest": "tfc:green_bell_pepper",
+    "pickable": true
+  },
+  "alfalfa": {
+    "minTemperatureC": -32,
+    "maxTemperatureC": 8,
+    "minHydration": 40,
+    "maxHydration": 100,
+    "nutrientDemand": {},
+    "nutrientEffects": {
+      "nitrogen": 0.24,
+      "phosphorus": 0.15,
+      "potassium": 0.18
+    },
+    "seed": "tfc:alfalfa_seed",
+    "harvest": "tfc:alfalfa"
+  },
+  "canola": {
+    "minTemperatureC": -30,
+    "maxTemperatureC": 6,
+    "minHydration": 20,
+    "maxHydration": 75,
+    "nutrientDemand": {},
+    "nutrientEffects": {
+      "nitrogen": 0.09,
+      "phosphorus": 0.18,
+      "potassium": 0.3
+    },
+    "seed": "tfc:canola_seed",
+    "harvest": "tfc:canola"
+  },
+  "radish": {
+    "minTemperatureC": -28,
+    "maxTemperatureC": 10,
+    "minHydration": 30,
+    "maxHydration": 90,
+    "nutrientDemand": {},
+    "nutrientEffects": {
+      "nitrogen": 0.15,
+      "phosphorus": 0.3,
+      "potassium": 0.18
+    },
+    "seed": "tfc:radish_seed",
+    "harvest": "tfc:radish"
+  },
+  "sugarcane": {
+    "minTemperatureC": 16,
+    "maxTemperatureC": 31,
+    "minHydration": 25,
+    "maxHydration": 100,
+    "nutrientDemand": {
+      "nitrogen": 50,
+      "phosphorus": 50,
+      "potassium": 50
+    },
+    "nutrientEffects": {
+      "nitrogen": -0.5,
+      "phosphorus": -0.5,
+      "potassium": -0.5
+    },
+    "seed": "tfc:sugarcane_seed",
+    "harvest": "tfc:sugarcane",
+    "twoBlock": true
+  },
+  "jute": {
+    "minTemperatureC": 2,
+    "maxTemperatureC": 25,
+    "minHydration": 15,
+    "maxHydration": 90,
+    "nutrientDemand": {
+      "nitrogen": 60,
+      "phosphorus": 40
+    },
+    "nutrientEffects": {
+      "nitrogen": -0.6,
+      "phosphorus": -0.4,
+      "potassium": 0.4
+    },
+    "seed": "tfc:jute_seed",
+    "harvest": "tfc:jute",
+    "twoBlock": true
+  },
+  "papyrus": {
+    "minTemperatureC": 11,
+    "maxTemperatureC": 31,
+    "minHydration": 50,
+    "maxHydration": 100,
+    "nutrientDemand": {
+      "nitrogen": 60,
+      "potassium": 40
+    },
+    "nutrientEffects": {
+      "nitrogen": -0.6,
+      "phosphorus": 0.4,
+      "potassium": -0.4
+    },
+    "seed": "tfc:papyrus_seed",
+    "harvest": "tfc:papyrus",
+    "twoBlock": true
   }
 }
