@@ -25,7 +25,10 @@
       "unfired_ingot_mold",
       "fired_vessel",
       "fired_ingot_mold",
-      "water_vessel"
+      "water_vessel",
+      "brine_vessel",
+      "unfired_crucible",
+      "fired_crucible"
     ],
     "metals": [
       "copper_ingot",
@@ -37,7 +40,8 @@
       "tin_ingot",
       "heated_bronze_ingot",
       "bronze_ingot",
-      "bronze_sheet"
+      "bronze_sheet",
+      "tin_sheet"
     ],
     "food": [
       "raw_meat",
@@ -75,7 +79,9 @@
       "maize",
       "potato",
       "milk_bottle",
-      "spoiled_food"
+      "spoiled_food",
+      "salted_meat",
+      "smoked_meat"
     ],
     "farming": [
       "crop_seed",
@@ -125,7 +131,8 @@
       "composter",
       "quern",
       "handstone",
-      "clay_seal"
+      "clay_seal",
+      "smokehouse"
     ],
     "geology_tools": [
       "prospecting_tool"
@@ -163,6 +170,7 @@
     "tfc:beet",
     "tfc:beet_seed",
     "tfc:bread",
+    "tfc:brine_vessel",
     "tfc:bronze_ingot",
     "tfc:bronze_sheet",
     "tfc:cabbage",
@@ -191,6 +199,7 @@
     "tfc:dried_vegetables",
     "tfc:drying_rack",
     "tfc:farmland",
+    "tfc:fired_crucible",
     "tfc:fired_ingot_mold",
     "tfc:fired_vessel",
     "tfc:firepit",
@@ -241,6 +250,10 @@
     "tfc:rice_seed",
     "tfc:rye",
     "tfc:rye_seed",
+    "tfc:salt",
+    "tfc:salted_meat",
+    "tfc:smoked_meat",
+    "tfc:smokehouse",
     "tfc:soybean",
     "tfc:soybean_seed",
     "tfc:spoiled_food",
@@ -251,9 +264,11 @@
     "tfc:sugarcane_seed",
     "tfc:tin_ingot",
     "tfc:tin_ore",
+    "tfc:tin_sheet",
     "tfc:tomato",
     "tfc:tomato_seed",
     "tfc:trellis",
+    "tfc:unfired_crucible",
     "tfc:unfired_ingot_mold",
     "tfc:vegetable",
     "tfc:water_vessel",
@@ -262,8 +277,8 @@
   ],
   "audit": {
     "scope": "Behavior Pack内の専用アイテム/ブロック定義ファイルとの照合",
-    "registeredItemCount": 101,
-    "registeredBlockCount": 12,
+    "registeredItemCount": 109,
+    "registeredBlockCount": 13,
     "plannedButUnregistered": [
       "tfc:stone",
       "tfc:stick",
@@ -273,7 +288,6 @@
       "tfc:stone_axe_head",
       "tfc:stone_hammer_head",
       "tfc:copper_tool_head",
-      "tfc:salt",
       "tfc:fertilizer",
       "tfc:charcoal_forge"
     ],
@@ -281,7 +295,8 @@
       "stone/stick/clayは現状バニラ素材を使用するため専用アイテム定義を持たない。",
       "pumpkin_fruit/melon_fruitはアイテムではなくブロック定義。",
       "上記plannedButUnregisteredはカタログ上の構想IDであり、登録済みとは扱わない。",
-      "全TFC公式アイテム/ブロックとの完全一致監査ではなく、現在のリポジトリ内定義の整合性監査。"
+      "全TFC公式アイテム/ブロックとの完全一致監査ではなく、現在のリポジトリ内定義の整合性監査。",
+      "海洋Biomeの水源から海水入り土器を採取し、焚き火で煮詰めて塩を作る。塩漬け肉・燻製肉・燻製設備・陶器るつぼ・錫板を登録。"
     ]
   }
 }
