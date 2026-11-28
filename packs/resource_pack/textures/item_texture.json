@@ -88,6 +88,9 @@
     },
     "tfc_dried_vegetables": {
       "textures": "textures/items/tfc_grain"
+    },
+    "tfc_prospecting_tool": {
+      "textures": "textures/items/tfc_stone"
     }
   }
 }
