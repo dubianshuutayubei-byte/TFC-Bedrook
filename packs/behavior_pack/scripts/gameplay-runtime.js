@@ -550,7 +550,10 @@ function animalTick(entity){
  let state=animalState(entity);
   try{const health=entity.getComponent("minecraft:health");if(health)state=syncAnimalHealth(state,health.currentValue,health.effectiveMax);}catch{}
   state=advanceAnimalNeeds(state,0.05,{hungerPerDay:profile.hungerPerDay??8,thirstPerDay:profile.thirstPerDay??(profile.kind==="aquatic"?0:12),healthLossPerDay:2});
- const currentDay=world.getDay();\n state=advanceAnimalFamiliarityDecay(state,currentDay,{decayLimit:30,decayPerDay:2});\n if(profile.maxUses>0&&state.uses>profile.maxUses&&state.oldDay<0)state.oldDay=currentDay+1+Math.floor(Math.random()*5);\n if(state.oldDay>=0&&currentDay>state.oldDay)state.lifeStage="old";
+ const currentDay=currentAnimalDay();
+ state=advanceAnimalFamiliarityDecay(state,currentDay,{decayLimit:30,decayPerDay:2});
+ if(profile.maxUses>0&&state.uses>profile.maxUses&&state.oldDay<0)state.oldDay=currentDay+1+Math.floor(Math.random()*5);
+ if(state.oldDay>=0&&currentDay>state.oldDay)state.lifeStage="old";
  state=consumeDroppedAnimalFood(entity,profile,state);
  try{
   const base={x:Math.floor(entity.location.x),y:Math.floor(entity.location.y),z:Math.floor(entity.location.z)};
