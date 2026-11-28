@@ -102,7 +102,8 @@ function mixDough(player){
  const held=inv(player)?.getItem(player.selectedSlotIndex);
  if(held?.typeId!=="tfc:flour"){player.sendMessage("§e小麦粉を手に持って使ってください。");return;}
  if(count(player,"tfc:water_vessel")<1){player.sendMessage("§c水入り土器が必要です。");return;}
- if(!take(player,"tfc:flour",1)||!take(player,"tfc:water_vessel",1)){player.sendMessage("§c材料を取り出せませんでした。");return;}
+ if(!take(player,"tfc:flour",1)){player.sendMessage("§c小麦粉を取り出せませんでした。");return;}
+ if(!take(player,"tfc:water_vessel",1)){give(player,"tfc:flour",1);player.sendMessage("§c水入り土器を取り出せませんでした。小麦粉を返却しました。");return;}
  give(player,"tfc:dough",1);give(player,"tfc:fired_vessel",1);
  player.sendMessage("§a小麦粉と水を混ぜて生地を作りました。空の土器が戻りました。");
 }
@@ -207,7 +208,7 @@ async function processQuernManually(player,block,recipe){
  for(let turn=0;turn<3;turn++){
   const form=new ActionFormData().title("石臼").body("穀物を挽いています。\n手動回転: "+(turn+1)+" / 3\n上臼石を回してください。").button("上臼を回す").button("中止");
   let response;try{response=await form.show(player);}catch{player.sendMessage("§e石臼UIを開けませんでした。材料は消費されていません。");return;}
-  if(response.canceled||response.selection!==0){player.sendMessage("§e粉挽きを中止しました。材料は消費されていません。");return;}
+  if(!response||response.canceled||response.selection!==0){player.sendMessage("§e粉挽きを中止しました。材料は消費されていません。");return;}
   const current=inv(player)?.getItem(player.selectedSlotIndex);
   if(current?.typeId!=="tfc:handstone"||block.typeId!=="tfc:quern"){player.sendMessage("§c石臼か上臼石が手元からなくなりました。");return;}
  }
