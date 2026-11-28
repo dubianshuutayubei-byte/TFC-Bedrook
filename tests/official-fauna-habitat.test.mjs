@@ -64,6 +64,8 @@ test("derived habitat fields exactly match every retained Java builder expressio
 
 test("official ForestType density lookup covers all 29 Java forest types",()=>{
  const forest=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/official-forest-type-density-1.21x.json"),"utf8"));
+ assert.equal(forest.source.version,"TerraFirmaCraft 1.21.1-4.2.16");
+ assert.equal(forest.source.blob,"c8e1e6544b6660f66f44c741f5c560ca31fda84e");
  assert.equal(forest.count,29);
  assert.equal(forest.types.length,29);
  assert.equal(new Set(forest.types.map(x=>x.javaName)).size,29);
