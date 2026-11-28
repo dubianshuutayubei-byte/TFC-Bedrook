@@ -580,6 +580,30 @@ function animalTick(entity){
  }
  saveAnimal(entity,state);
 }
+function damageSelectedTool(player){
+ const container=inv(player),slot=player.selectedSlotIndex,stack=container?.getItem(slot);
+ if(stack?.typeId!=="minecraft:shears")return false;
+ try{
+  const durability=stack.getComponent("minecraft:durability");
+  if(!durability)return false;
+  durability.damage+=1;
+  container.setItem(slot,durability.damage>=durability.maxDurability?undefined:stack);
+  return true;
+ }catch(error){console.warn("[TFC-Bedrook] tool durability update failed:",error);return false;}
+}
+function shearAnimal(player,entity){
+ if(!player||!entity||entity.typeId!=="minecraft:sheep")return;
+ const profile=ANIMAL_PROFILES[entity.typeId];if(!profile)return;
+ const state=animalState(entity),currentDay=world.getDay();
+ if(!canProduce(state,{requiredFamiliarity:profile.productFamiliarityMin??16,cooldownDays:profile.productCooldownDays??7,currentDay,minimumAgeDays:profile.adultAgeDays??0,minimumHealth:0,maximumHunger:100,maximumThirst:100,maxUses:profile.maxUses??Infinity})){
+  player.sendMessage("§eこのヒツジは成長・なつき度・羊毛の再生条件を満たしていません。");return;
+ }
+ if(!damageSelectedTool(player)){player.sendMessage("§cハサミを使用できません。");return;}
+ const amount=state.familiarity>99?2:1;
+ give(player,"tfc:wool",amount);
+ saveAnimal(entity,recordProduct(state,currentDay,{maxUses:profile.maxUses??Infinity,oldDayDelay:1+Math.floor(Math.random()*5)}));
+ player.sendMessage("§a羊毛を"+amount+"個採取しました。");
+}
 async function animalInteract(player,entity){
  if(!player||!entity)return;
  const profile=ANIMAL_PROFILES[entity.typeId];if(!profile)return;
@@ -676,6 +700,13 @@ system.runInterval(()=>{for(const player of world.getAllPlayers()){try{tickMetal
 world.afterEvents.itemUse.subscribe(event=>{
  const player=event.source,stack=event.itemStack;
  if(player?.typeId==="minecraft:player"&&player.isSneaking&&stack?.typeId==="minecraft:clay_ball")void shapePottery(player);
+});
+world.beforeEvents.playerInteractWithEntity.subscribe(event=>{
+ const target=event.target;
+ if(target?.typeId!=="minecraft:sheep"||event.itemStack?.typeId!=="minecraft:shears")return;
+ event.cancel=true;
+ const player=event.player,slot=player.selectedSlotIndex;
+ system.run(()=>{if(player.selectedSlotIndex===slot)shearAnimal(player,target);});
 });
 world.afterEvents.playerInteractWithEntity.subscribe(event=>{if(ANIMAL_PROFILES[event.target?.typeId])animalInteract(event.player,event.target);});
 
