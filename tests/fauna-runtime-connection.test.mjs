@@ -14,7 +14,7 @@ test("TFC mammal livestock uses shared breeding while hybrid mules remain non-br
  assert.match(mule,/customBreeding:false/);
  const chicken=runtime.split("\n").find(line=>line.includes('"tfc:chicken":{'))??"";
  assert.match(chicken,/customBreeding:false/);
- assert.ok(runtime.includes('if(!entity.typeId.startsWith("minecraft:")&&!take(player,held.typeId,1))return;'));
+ assert.match(runtime,/if\(!profile\.feedItems\.includes\(held\.typeId\)\)return;/);
  assert.match(runtime,/if\(profile\.customBreeding&&state\.sex==="female"/);
 });
 test("custom deer retains its own pregnancy and birth cycle",()=>{
@@ -137,7 +137,7 @@ test("shared dairy interaction messages are species-neutral for cows and goats",
 test("runtime uses official TFC maturity, gestation and production limits for supported livestock",()=>{
  for(const [entity,age,uses] of [
   ["minecraft:pig",80,60],["minecraft:horse",80,60],["minecraft:donkey",80,60],
-  ["minecraft:mule",80,60],["minecraft:rabbit",80,40],["minecraft:cow",192,128],
+  ["minecraft:mule",80,60],["minecraft:rabbit",30,40],["minecraft:cow",192,128],
   ["minecraft:goat",96,60],["minecraft:sheep",56,60],["tfc:chicken",24,100]
  ]){
   const entry=runtime.match(new RegExp('"'+entity+'":\\{[^}]*\\}'))?.[0]??"";
