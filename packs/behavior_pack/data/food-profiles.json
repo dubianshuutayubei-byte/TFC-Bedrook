@@ -60,11 +60,32 @@
       "hydration": 18,
       "baseDecayPerHour": 0.18,
       "cooked": false
+    },
+    {
+      "id": "maize",
+      "displayName": "トウモロコシ",
+      "nutrition": {
+        "grain": 14
+      },
+      "hydration": 0,
+      "baseDecayPerHour": 0.025,
+      "cooked": false
+    },
+    {
+      "id": "potato",
+      "displayName": "ジャガイモ",
+      "nutrition": {
+        "vegetables": 12
+      },
+      "hydration": 5,
+      "baseDecayPerHour": 0.1,
+      "cooked": false
     }
   ],
   "notes": [
     "栄養値・腐敗速度はBedrook用の仮バランス値で、TFC公式値ではありません。",
     "生肉・焼いた肉・穀物の栄養/水分値はゲーム内アイテム摂取処理と接続済みです。",
-    "鮮度・腐敗速度はロジック層のみ。個別アイテムの鮮度保存と腐敗変換は未接続です。"
+    "鮮度・腐敗速度はロジック層のみ。個別アイテムの鮮度保存と腐敗変換は未接続です。",
+    "小麦・トウモロコシ・ジャガイモの作物別食品プロファイルを追加。"
   ]
 }
