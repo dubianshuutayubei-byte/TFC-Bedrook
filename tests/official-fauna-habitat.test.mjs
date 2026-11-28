@@ -58,3 +58,15 @@ test("derived habitat fields exactly match every retained Java builder expressio
   if(expression.includes(".months(FRESHWATER_FISH_MONTHS)"))assert.deepEqual(profile.months,["MAY","JUNE","JULY","AUGUST","SEPTEMBER","OCTOBER"],profile.id+" months()");
  }
 });
+
+test("official ForestType density lookup covers all 29 Java forest types",()=>{
+ const forest=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/official-forest-type-density-1.21x.json"),"utf8"));
+ assert.equal(forest.count,29);
+ assert.equal(forest.types.length,29);
+ assert.equal(new Set(forest.types.map(x=>x.javaName)).size,29);
+ for(const type of forest.types)assert.ok(type.density>=0&&type.density<=4,type.javaName);
+ for(const profile of habitat.species){
+  if(profile.minForestDensity!==undefined)assert.ok(profile.minForestDensity>=0&&profile.minForestDensity<=4,profile.id);
+  if(profile.maxForestDensity!==undefined)assert.ok(profile.maxForestDensity>=0&&profile.maxForestDensity<=4,profile.id);
+ }
+});
