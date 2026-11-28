@@ -703,17 +703,18 @@ function animalTick(entity){
    if(state.birthsRemaining===0){state.birthsRemaining=Math.max(1,Math.floor(profile.childCount??1));saveAnimal(entity,state);}
    while(state.birthsRemaining>0){
     try{
-     const offset=Math.max(0,Math.floor(profile.childCount??1))-state.birthsRemaining;
+     const offset=Math.max(0,state.birthsTotal||Math.floor(profile.childCount??1))-state.birthsRemaining;
      const offspringEntityType=state.pregnancyOffspringEntityType??entity.typeId;
      const offspringSpecies=state.pregnancyOffspringSpecies??profile.speciesId;
      const baby=entity.dimension.spawnEntity(offspringEntityType,{x:entity.location.x+1+(offset%2)*0.8,y:entity.location.y,z:entity.location.z+Math.floor(offset/2)*0.8});
      const birthEvent=offspringEntityType.startsWith("tfc:")?"tfc:spawn_baby":"minecraft:entity_born";
      try{if(!baby.triggerEvent(birthEvent))console.warn("[TFC-Bedrook] birth event was not applied:",birthEvent,offspringSpecies);}catch(error){console.warn("[TFC-Bedrook] juvenile event unavailable for",offspringSpecies,error);}
      state.birthsRemaining-=1;saveAnimal(entity,state);
-     saveAnimal(baby,createAnimalOffspringState(state,offspringSpecies,Math.random()<0.5?"male":"female"));
+     const offspringSex=ANIMAL_PROFILES[offspringEntityType]?.fixedSex??(offspringSpecies==="mule"?"male":Math.random()<0.5?"male":"female");
+      saveAnimal(baby,createAnimalOffspringState(state,offspringSpecies,offspringSex));
     }catch(error){console.warn("[TFC-Bedrook] animal birth deferred:",error);break;}
    }
-   if(state.birthsRemaining===0){state.pregnancyDays=0;state.fertilized=false;state.pregnancyOffspringSpecies=null;state.pregnancyOffspringEntityType=null;}
+   if(state.birthsRemaining===0){state.pregnancyDays=0;state.fertilized=false;state.pregnancyOffspringSpecies=null;state.pregnancyOffspringEntityType=null;state.birthsTotal=0;}
   }
  }
  if(["tfc:deer","tfc:chicken","tfc:duck","tfc:quail","tfc:alpaca","tfc:musk_ox","tfc:yak","minecraft:cow","minecraft:sheep","minecraft:pig","minecraft:goat","minecraft:horse","minecraft:donkey","minecraft:mule","minecraft:rabbit"].includes(entity.typeId)&&state.lifeStage==="juvenile"&&profile.adultAgeDays!=null&&state.ageDays>=profile.adultAgeDays){const growthEvent=entity.typeId.startsWith("tfc:")?"tfc:grow_up":"minecraft:ageable_grow_up";try{if(entity.triggerEvent(growthEvent))state.lifeStage="adult";}catch(error){console.warn("[TFC-Bedrook] fauna growth event failed:",error);}}
@@ -721,7 +722,7 @@ function animalTick(entity){
  state=layAnimalEgg(entity,state,profile,currentDay);
  const breedingDay=world.getDay(),breedingTime=currentAnimalDay();
  if(profile.customBreeding&&state.sex==="female"&&state.ageDays>=profile.adultAgeDays&&state.familiarity>=profile.requiredFamiliarity&&state.lastFedDay>=breedingDay&&state.pregnancyDays<=0&&!state.fertilized){
-  try{const nearby=[...entity.dimension.getEntities({type:entity.typeId,location:entity.location,maxDistance:6})];if(entity.typeId==="minecraft:horse")nearby.push(...entity.dimension.getEntities({type:"minecraft:donkey",location:entity.location,maxDistance:6}));else if(entity.typeId==="minecraft:donkey")nearby.push(...entity.dimension.getEntities({type:"minecraft:horse",location:entity.location,maxDistance:6}));for(const partner of nearby){if(partner.id===entity.id)continue;const other=animalState(partner),isMulePair=(state.species==="horse"&&other.species==="donkey")||(state.species==="donkey"&&other.species==="horse"),breedingProfile={...profile,currentDay:breedingDay,currentTime:breedingTime,...(isMulePair?{compatibleSpeciesPairs:[["horse","donkey"]],offspringSpecies:"mule",offspringEntityType:"minecraft:mule"}:{})};if(canBreed(state,other,breedingProfile)){const started=beginPregnancy(state,other,breedingProfile);if(started.started){started.animal.birthsRemaining=getOffspringCount(profile);state=started.animal;other.lastBreedAt=breedingTime;other.lastFedDay=breedingDay-1;other.uses=(other.uses??0)+5;if(profile.maxUses>0&&other.uses>profile.maxUses&&other.oldDay<0)other.oldDay=breedingTime+1+Math.floor(Math.random()*5);saveAnimal(partner,other);break;}}}}catch{}
+  try{const nearby=[...entity.dimension.getEntities({type:entity.typeId,location:entity.location,maxDistance:6})];if(entity.typeId==="minecraft:horse")nearby.push(...entity.dimension.getEntities({type:"minecraft:donkey",location:entity.location,maxDistance:6}));else if(entity.typeId==="minecraft:donkey")nearby.push(...entity.dimension.getEntities({type:"minecraft:horse",location:entity.location,maxDistance:6}));for(const partner of nearby){if(partner.id===entity.id)continue;const other=animalState(partner),isMulePair=(state.species==="horse"&&other.species==="donkey")||(state.species==="donkey"&&other.species==="horse"),breedingProfile={...profile,currentDay:breedingDay,currentTime:breedingTime,...(isMulePair?{compatibleSpeciesPairs:[["horse","donkey"]],offspringSpecies:"mule",offspringEntityType:"minecraft:mule"}:{})};if(canBreed(state,other,breedingProfile)){const started=beginPregnancy(state,other,breedingProfile);if(started.started){started.animal.birthsRemaining=getOffspringCount(profile);started.animal.birthsTotal=started.animal.birthsRemaining;state=started.animal;other.lastBreedAt=breedingTime;other.lastFedDay=breedingDay-1;other.uses=(other.uses??0)+5;if(profile.maxUses>0&&other.uses>profile.maxUses&&other.oldDay<0)other.oldDay=breedingTime+1+Math.floor(Math.random()*5);saveAnimal(partner,other);break;}}}}catch{}
  }
  saveAnimal(entity,state);
 }
