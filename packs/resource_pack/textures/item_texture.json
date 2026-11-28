@@ -14,6 +14,9 @@
     "tfc_ingot": {
       "textures": "textures/items/tfc_ingot"
     },
+    "tfc_heated_ingot": {
+      "textures": "textures/items/tfc_ingot"
+    },
     "tfc_grain": {
       "textures": "textures/items/tfc_grain"
     },
