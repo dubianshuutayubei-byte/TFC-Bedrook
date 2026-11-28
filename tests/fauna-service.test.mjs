@@ -211,13 +211,13 @@ test("offspring inherit the official TFC familiarity rule and begin as juveniles
 test("offspring familiarity decay clock starts at birth and preserves the TFC grace period",()=>{
  const unspecified=createAnimalOffspringState({familiarity:80},"cow","female");
  assert.equal(unspecified.lastFamiliarityDecay,-1);
- const newborn=createAnimalOffspringState({familiarity:80},"cow","female",12.5);
- assert.equal(newborn.familiarity,40);
+ const newborn=createAnimalOffspringState({familiarity:40},"cow","female",12.5);
+ assert.equal(newborn.familiarity,20);
  assert.equal(newborn.lastFamiliarityDecay,12.5);
  const atGraceEnd=advanceAnimalFamiliarityDecay(newborn,14.5);
- assert.equal(atGraceEnd.familiarity,40);
+ assert.equal(atGraceEnd.familiarity,20);
  const afterGrace=advanceAnimalFamiliarityDecay(newborn,15);
- assert.equal(afterGrace.familiarity,38);
+ assert.equal(afterGrace.familiarity,18);
 });
 test("animal state persists a partially delivered litter count",()=>{
  const state=createAnimalState({pregnancyDays:210,birthsRemaining:2});
