@@ -52,8 +52,8 @@
   "notes": [
     "専用アイテム・ブロック定義の初期セットをBehavior Packへ登録済み。",
     "石片成形UI、食品摂取時の栄養反映、設備加工UI、作物植え付け・成長・収穫を接続。",
-    "全TFCアイテム・全レシピを登録した状態ではない。現在の登録対象は初期プレイ用の一部。",
-    "地形生成と高度な動物生態は未接続。"
+    "地形生成と高度な動物生態は未接続。",
+    "銅鋳型の未焼成/焼成アイテムを追加。全TFCアイテム・全ブロック登録の完了を意味しない。"
   ],
   "registeredIdentifiers": [
     "tfc:flint",
@@ -75,6 +75,8 @@
     "tfc:anvil",
     "tfc:farmland",
     "tfc:deer_spawn_egg",
-    "tfc:crop"
+    "tfc:crop",
+    "tfc:unfired_ingot_mold",
+    "tfc:fired_ingot_mold"
   ]
 }
