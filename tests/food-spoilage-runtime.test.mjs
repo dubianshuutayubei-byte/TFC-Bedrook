@@ -71,5 +71,5 @@ test("the complete food profile database validates and preserves intended method
  assert.equal(methods.get("dried_fruit"),"dried");
  assert.equal(methods.get("dried_vegetables"),"dried");
  assert.equal(methods.get("salted_meat"),"salted");
- assert.equal(methods.get("smoked_meat"),"cooked");
+ assert.equal(methods.get("smoked_meat"),"smoked");
 });
