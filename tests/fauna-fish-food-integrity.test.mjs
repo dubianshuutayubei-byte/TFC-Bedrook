@@ -137,11 +137,13 @@ test("domestic and tameable fauna diets follow official Java 1.21.1 food-tag cat
       const entityId = entityIds[species];
       assert.ok(entityId, species + " must map to a runtime entity");
       const escaped = entityId.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-      const line = runtime.split("\\n").find(value => value.includes('"' + entityId + '":{'));
+      const line = runtime.split("\n").find(value => value.includes('"' + entityId + '":{'));
       assert.ok(line, entityId + " runtime profile missing");
-      const match = line.match(/"?feedItems"?\\s*:\\s*(\\[[^\\]]*\\])/);
-      assert.ok(match, entityId + " feedItems missing");
-      const actual = JSON.parse(match[1]);
+      const feedIndex = line.indexOf("feedItems");
+      const arrayStart = line.indexOf("[", feedIndex);
+      const arrayEnd = line.indexOf("]", arrayStart);
+      assert.ok(feedIndex >= 0 && arrayStart >= 0 && arrayEnd > arrayStart, entityId + " feedItems missing");
+      const actual = JSON.parse(line.slice(arrayStart, arrayEnd + 1));
       for (const id of diet.bedrockFeedItems) assert.ok(actual.includes(id), entityId + " missing official diet equivalent " + id);
       for (const id of actual.filter(value => value.startsWith("tfc:"))) {
         assert.ok(registered.has(id), entityId + " references unregistered item " + id);
