@@ -554,6 +554,10 @@ system.runInterval(()=>{for(const player of world.getAllPlayers()){try{tickFoodF
 system.runInterval(()=>{try{tickTrackedFoodContainers(system.currentTick);}catch(error){console.warn("[TFC-Bedrook] tracked food container tick failed:",error);}},1200);
 system.runInterval(()=>{for(const player of world.getAllPlayers()){try{tickMetalHeat(player,system.currentTick);}catch(error){console.warn("[TFC-Bedrook] metal heat tick failed:",error);}}},20);
 });
+world.afterEvents.itemUse.subscribe(event=>{
+ const player=event.source,stack=event.itemStack;
+ if(player?.typeId==="minecraft:player"&&player.isSneaking&&stack?.typeId==="minecraft:clay_ball")void shapePottery(player);
+});
 world.afterEvents.playerInteractWithEntity.subscribe(event=>{if(ANIMAL_PROFILES[event.target?.typeId])animalInteract(event.player,event.target);});
 
 
