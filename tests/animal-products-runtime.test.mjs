@@ -59,3 +59,10 @@ test("sheep status shows remaining wool regrowth time and specific failure reaso
  assert.match(runtime,/なつき度を.*以上にしてください/);
  assert.match(runtime,/羊毛が再生するまであと/);
 });
+
+test("dairy collection reports familiarity, regrowth, and animal-condition blockers separately",()=>{
+ assert.match(runtime,/なつき度を.*以上にしてください/);
+ assert.match(runtime,/次回の乳採取まであと/);
+ assert.match(runtime,/乳畜の健康・空腹・渇きを回復させてください/);
+ assert.match(runtime,/生涯の乳産出上限に達しています/);
+});
