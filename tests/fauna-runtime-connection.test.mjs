@@ -177,7 +177,7 @@ test("animal runtime applies daily familiarity decay and capped TFC feeding gain
 
 test("custom births trigger juvenile state and persist remaining litter count",()=>{
  assert.match(runtime,/spawnEntity\(entity\.typeId,\{x:entity\.location\.x\+1/);
- assert.match(runtime,/baby\.triggerEvent\("tfc:spawn_baby"\)/);
+ assert.match(runtime,/baby\.triggerEvent\(birthEvent\)/);
  assert.match(runtime,/createAnimalOffspringState\(state,profile\.speciesId/);
  assert.match(runtime,/state\.birthsRemaining=Math\.max\(1,Math\.floor\(profile\.childCount\?\?1\)\)/);
  assert.match(runtime,/state\.birthsRemaining-=1/);
@@ -214,6 +214,6 @@ test("custom TFC livestock alpaca, musk ox and yak use official reproduction and
  assert.match(runtime,/"tfc:alpaca":\{[^}]*adultAgeDays":98[^}]*gestationDays":36[^}]*childCount":2[^}]*maxUses":128[^}]*productCooldownDays":5[^}]*customBreeding":true[^}]*wooly":true/);
  assert.match(runtime,/"tfc:musk_ox":\{[^}]*adultAgeDays":168[^}]*gestationDays":64[^}]*childCount":1[^}]*maxUses":160[^}]*productCooldownDays":4[^}]*customBreeding":true[^}]*wooly":true/);
  assert.match(runtime,/"tfc:yak":\{[^}]*adultAgeDays":180[^}]*gestationDays":64[^}]*childCount":1[^}]*maxUses":230[^}]*productCooldownDays":1[^}]*customBreeding":true[^}]*dairy":true/);
- assert.match(runtime,/profile\.customBreeding&&entity\.typeId\.startsWith\("tfc:"\)/);
+ assert.match(runtime,/const birthEvent=entity\.typeId\.startsWith\("tfc:"\)\?"tfc:spawn_baby":"minecraft:entity_born"/);
  assert.match(runtime,/baby\.triggerEvent\("tfc:spawn_baby"\)/);
 });
