@@ -812,7 +812,7 @@ function animalTick(entity){
    if(state.birthsRemaining===0){state.pregnancyDays=0;state.fertilized=false;state.pregnancyOffspringSpecies=null;state.pregnancyOffspringEntityType=null;state.birthsTotal=0;}
   }
  }
- if(["tfc:deer","tfc:chicken","tfc:duck","tfc:quail","tfc:alpaca","tfc:musk_ox","tfc:yak","tfc:dromedary_camel","tfc:bactrian_camel","tfc:cat","tfc:dog","minecraft:cow","minecraft:sheep","minecraft:pig","minecraft:goat","minecraft:horse","minecraft:donkey","minecraft:mule","minecraft:rabbit"].includes(entity.typeId)&&state.lifeStage==="juvenile"&&profile.adultAgeDays!=null&&state.ageDays>=profile.adultAgeDays){const growthEvent=entity.typeId.startsWith("tfc:")?"tfc:grow_up":"minecraft:ageable_grow_up";try{entity.triggerEvent(growthEvent);state.lifeStage="adult";}catch(error){console.warn("[TFC-Bedrook] fauna growth event failed:",error);}}
+ if(state.lifeStage==="juvenile"&&profile.adultAgeDays!=null&&state.ageDays>=profile.adultAgeDays){const growthEvent=entity.typeId.startsWith("tfc:")?"tfc:grow_up":"minecraft:ageable_grow_up";try{entity.triggerEvent(growthEvent);state.lifeStage="adult";}catch(error){console.warn("[TFC-Bedrook] fauna growth event failed:",error);}}
  if(state.sex==="unknown")state.sex=profile.fixedSex??(Math.random()<0.5?"male":"female");
  state=layAnimalEgg(entity,state,profile,currentDay);
  const breedingDay=world.getDay(),breedingTime=currentAnimalDay();
