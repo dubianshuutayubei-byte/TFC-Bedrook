@@ -718,7 +718,7 @@ function animalTick(entity){
  state=advanceAnimalNeeds(state,elapsedAgeDays,{hungerPerDay:profile.hungerPerDay??8,thirstPerDay:profile.thirstPerDay??(profile.kind==="aquatic"?0:12),healthLossPerDay:profile.healthLossPerDay??2,ageElapsedDays:elapsedAgeDays});
  if(!state.isAlive){saveAnimal(entity,state);try{entity.remove();}catch{}return;}
  state=advanceAnimalFamiliarityDecay(state,currentDay,{decayLimit:30,decayPerDay:2});
- if(profile.maxUses>0&&state.uses>profile.maxUses&&state.oldDay<0)state.oldDay=currentDay+1+Math.floor(Math.random()*5);
+ if(profile.maxUses>0&&state.uses>=profile.maxUses&&state.oldDay<0)state.oldDay=currentDay+1+Math.floor(Math.random()*5);
  if(state.oldDay>=0&&currentDay>state.oldDay)state.lifeStage="old";
  state=consumeDroppedAnimalFood(entity,profile,state);
  state=runFaunaPredatorPreyInteraction(entity,profile,state,currentDay);
