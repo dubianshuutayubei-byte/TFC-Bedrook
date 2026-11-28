@@ -95,7 +95,7 @@ const ANIMAL_PROFILES={
  "tfc:crayfish":{"speciesId":"crayfish","displayName":"ザリガニ","adultAgeDays":null,"requiredFamiliarity":0,"customBreeding":false,"feedItems":["minecraft:cod"],"grazeBlocks":[],"kind":"aquatic","domestic":false,"hungerPerDay":0,"thirstPerDay":0,"healthLossPerDay":0,"archetype":"aquatic"},
  "tfc:crocodile":{"speciesId":"crocodile","displayName":"ワニ","adultAgeDays":null,"requiredFamiliarity":0,"customBreeding":false,"feedItems":["minecraft:cod","minecraft:salmon"],"grazeBlocks":[],"kind":"amphibian","domestic":false,"hungerPerDay":8,"thirstPerDay":12,"healthLossPerDay":0,"archetype":"predator"},
  "tfc:direwolf":{"speciesId":"direwolf","displayName":"ダイアウルフ","adultAgeDays":null,"requiredFamiliarity":0,"customBreeding":false,"feedItems":["minecraft:beef","minecraft:porkchop","minecraft:chicken","minecraft:mutton"],"grazeBlocks":[],"kind":"terrestrial","domestic":false,"hungerPerDay":8,"thirstPerDay":12,"healthLossPerDay":0,"archetype":"predator"},
- "tfc:duck":{"speciesId":"duck","displayName":"アヒル","adultAgeDays":32,"requiredFamiliarity":30,"customBreeding":false,"feedItems":["minecraft:wheat_seeds","minecraft:beetroot_seeds"],"grazeBlocks":[],"kind":"terrestrial","domestic":true,"hungerPerDay":8,"thirstPerDay":12,"healthLossPerDay":0,"archetype":"bird"},
+ "tfc:duck":{"speciesId":"duck","displayName":"アヒル","adultAgeDays":32,"eggSpecies":"duck","eggLayCooldownDays":1,"hatchDays":8,"requiredFamiliarity":30,"customBreeding":false,"feedItems":["minecraft:wheat_seeds","minecraft:beetroot_seeds"],"grazeBlocks":[],"kind":"terrestrial","domestic":true,"hungerPerDay":8,"thirstPerDay":12,"healthLossPerDay":0,"archetype":"bird"},
  "tfc:gazelle":{"speciesId":"gazelle","displayName":"ガゼル","adultAgeDays":null,"requiredFamiliarity":0,"customBreeding":false,"feedItems":["minecraft:wheat"],"grazeBlocks":["minecraft:grass_block"],"kind":"terrestrial","domestic":false,"hungerPerDay":8,"thirstPerDay":12,"healthLossPerDay":0,"archetype":"wild"},
  "tfc:grizzly_bear":{"speciesId":"grizzly_bear","displayName":"ハイイログマ","adultAgeDays":null,"requiredFamiliarity":0,"customBreeding":false,"feedItems":["minecraft:beef","minecraft:porkchop","minecraft:sweet_berries"],"grazeBlocks":[],"kind":"terrestrial","domestic":false,"hungerPerDay":8,"thirstPerDay":12,"healthLossPerDay":0,"archetype":"predator"},
  "tfc:grouse":{"speciesId":"grouse","displayName":"ライチョウ","adultAgeDays":null,"requiredFamiliarity":0,"customBreeding":false,"feedItems":["minecraft:wheat_seeds"],"grazeBlocks":[],"kind":"terrestrial","domestic":false,"hungerPerDay":8,"thirstPerDay":12,"healthLossPerDay":0,"archetype":"bird"},
@@ -116,7 +116,7 @@ const ANIMAL_PROFILES={
  "tfc:peafowl":{"speciesId":"peafowl","displayName":"クジャク","adultAgeDays":null,"requiredFamiliarity":0,"customBreeding":false,"feedItems":["minecraft:wheat_seeds"],"grazeBlocks":[],"kind":"terrestrial","domestic":false,"hungerPerDay":8,"thirstPerDay":12,"healthLossPerDay":0,"archetype":"bird"},
  "tfc:penguin":{"speciesId":"penguin","displayName":"ペンギン","adultAgeDays":null,"requiredFamiliarity":0,"customBreeding":false,"feedItems":["minecraft:cod","minecraft:salmon"],"grazeBlocks":[],"kind":"terrestrial","domestic":false,"hungerPerDay":8,"thirstPerDay":12,"healthLossPerDay":0,"archetype":"wild"},
  "tfc:pheasant":{"speciesId":"pheasant","displayName":"キジ","adultAgeDays":null,"requiredFamiliarity":0,"customBreeding":false,"feedItems":["minecraft:wheat_seeds"],"grazeBlocks":[],"kind":"terrestrial","domestic":false,"hungerPerDay":8,"thirstPerDay":12,"healthLossPerDay":0,"archetype":"bird"},
- "tfc:quail":{"speciesId":"quail","displayName":"ウズラ","adultAgeDays":22,"requiredFamiliarity":30,"customBreeding":false,"feedItems":["minecraft:wheat_seeds"],"grazeBlocks":[],"kind":"terrestrial","domestic":true,"hungerPerDay":8,"thirstPerDay":12,"healthLossPerDay":0,"archetype":"bird"},
+ "tfc:quail":{"speciesId":"quail","displayName":"ウズラ","adultAgeDays":22,"eggSpecies":"quail","eggLayCooldownDays":1,"hatchDays":8,"requiredFamiliarity":30,"customBreeding":false,"feedItems":["minecraft:wheat_seeds"],"grazeBlocks":[],"kind":"terrestrial","domestic":true,"hungerPerDay":8,"thirstPerDay":12,"healthLossPerDay":0,"archetype":"bird"},
  "tfc:rainbow_trout":{"speciesId":"rainbow_trout","displayName":"ニジマス","adultAgeDays":null,"requiredFamiliarity":0,"customBreeding":false,"feedItems":[],"grazeBlocks":[],"kind":"aquatic","domestic":false,"hungerPerDay":0,"thirstPerDay":0,"healthLossPerDay":0,"archetype":"aquatic"},
  "tfc:sabertooth":{"speciesId":"sabertooth","displayName":"サーベルタイガー","adultAgeDays":null,"requiredFamiliarity":0,"customBreeding":false,"feedItems":["minecraft:beef","minecraft:porkchop","minecraft:mutton"],"grazeBlocks":[],"kind":"terrestrial","domestic":false,"hungerPerDay":8,"thirstPerDay":12,"healthLossPerDay":0,"archetype":"predator"},
  "tfc:smallmouth_bass":{"speciesId":"smallmouth_bass","displayName":"コクチバス","adultAgeDays":null,"requiredFamiliarity":0,"customBreeding":false,"feedItems":[],"grazeBlocks":[],"kind":"aquatic","domestic":false,"hungerPerDay":0,"thirstPerDay":0,"healthLossPerDay":0,"archetype":"aquatic"},
@@ -567,31 +567,33 @@ function cropTick(block){
 }
 function fireTick(block){const key=posKey(block,"fire");const state=advanceFire(readWorldState(key,{}),20);writeWorldState(key,state);}
 function currentAnimalDay(){return world.getDay()+world.getTimeOfDay()/24000;}
-function nearbyChickenPair(block){
+function nearbyBreedingPair(block,entityType){
  let male=false,female=false;
  try{
-  const nearby=block.dimension.getEntities({type:"minecraft:chicken",location:block.location,maxDistance:6});
+  const nearby=block.dimension.getEntities({type:entityType,location:block.location,maxDistance:6}),profile=ANIMAL_PROFILES[entityType];
   for(const entity of nearby){
    let state=animalState(entity);
    if(state.sex==="unknown"){state.sex=Math.random()<0.5?"male":"female";saveAnimal(entity,state);}
-   if(state.lifeStage!=="adult"||state.ageDays<(ANIMAL_PROFILES["minecraft:chicken"].adultAgeDays??24))continue;
+   if(state.lifeStage!=="adult"||state.ageDays<(profile?.adultAgeDays??0))continue;
    if(state.sex==="male")male=true;
    if(state.sex==="female")female=true;
   }
- }catch(error){console.warn("[TFC-Bedrook] nest box nearby chicken scan failed:",error);}
+ }catch(error){console.warn("[TFC-Bedrook] nest box nearby breeding-pair scan failed:",error);}
  return male&&female;
 }
+function nearbyChickenPair(block){return nearbyBreedingPair(block,"minecraft:chicken");}
 function nestBoxTick(block){
  const key=posKey(block,"nest_box"),day=currentAnimalDay();
  const stored=readWorldState(key,{eggs:[],lastUpdateDay:day});
  const elapsed=Math.max(0,day-(Number.isFinite(Number(stored.lastUpdateDay))?Number(stored.lastUpdateDay):day));
  let state={...stored,...advanceNestBoxIncubation(stored,elapsed),lastUpdateDay:day};
  for(const egg of [...state.eggs]){
-  if(!egg.fertilized||!egg.hatchReady||egg.species!=="chicken")continue;
+  if(!egg.fertilized||!egg.hatchReady||!["chicken","duck","quail"].includes(egg.species))continue;
   try{
-   const baby=block.dimension.spawnEntity("minecraft:chicken",{x:block.location.x+0.5,y:block.location.y+0.2,z:block.location.z+0.5});
-   try{baby.triggerEvent("minecraft:ageable_set_baby");}catch(error){console.warn("[TFC-Bedrook] chicken hatch baby event unavailable:",error);}
-   saveAnimal(baby,createAnimalOffspringState({familiarity:0},"chicken","unknown"));
+   const entityType=egg.species==="chicken"?"minecraft:chicken":"tfc:"+egg.species;
+   const baby=block.dimension.spawnEntity(entityType,{x:block.location.x+0.5,y:block.location.y+0.2,z:block.location.z+0.5});
+   try{baby.triggerEvent(egg.species==="chicken"?"minecraft:ageable_set_baby":"tfc:spawn_baby");}catch(error){console.warn("[TFC-Bedrook] fauna hatch baby event unavailable:",error);}
+   saveAnimal(baby,createAnimalOffspringState({familiarity:0},egg.species,"unknown"));
    state={...state,eggs:takeNestBoxEgg(state,egg.id).state.eggs};
   }catch(error){console.warn("[TFC-Bedrook] nest box hatch deferred:",error);}
  }
@@ -660,12 +662,12 @@ function findNearbyNestBox(entity,radius=4){
  }
  return nearest;
 }
-function layChickenEgg(entity,state,profile,currentDay){
- if(entity.typeId!=="minecraft:chicken"||!canLayEgg(state,{currentDay,cooldownDays:profile.eggLayCooldownDays??1,minimumAgeDays:profile.adultAgeDays??0,minimumHealth:30,maximumHunger:70,maximumThirst:70}))return state;
+function layAnimalEgg(entity,state,profile,currentDay){
+ if(!profile.eggSpecies||!canLayEgg(state,{currentDay,cooldownDays:profile.eggLayCooldownDays??1,minimumAgeDays:profile.adultAgeDays??0,minimumHealth:30,maximumHunger:70,maximumThirst:70}))return state;
  const nest=findNearbyNestBox(entity,4);
  if(!nest)return state;
  const key=posKey(nest,"nest_box"),stored=readWorldState(key,{eggs:[],lastUpdateDay:currentDay});
- const added=addNestBoxEgg(stored,{id:"hen-"+String(entity.id).replace(/[^a-zA-Z0-9_-]/g,"").slice(-20)+"-"+Math.floor(currentDay*1000),species:"chicken",laidAtDay:currentDay,fertilized:nearbyChickenPair(nest),hatchDays:profile.hatchDays??8});
+ const added=addNestBoxEgg(stored,{id:"hen-"+String(entity.id).replace(/[^a-zA-Z0-9_-]/g,"").slice(-20)+"-"+Math.floor(currentDay*1000),species:profile.eggSpecies,laidAtDay:currentDay,fertilized:nearbyBreedingPair(nest,entity.typeId),hatchDays:profile.hatchDays??8});
  if(!added.added){if(added.reason==="duplicate_egg_id"&&stored.eggs?.some(egg=>egg.id==="hen-"+String(entity.id).replace(/[^a-zA-Z0-9_-]/g,"").slice(-20)+"-"+Math.floor(currentDay*1000)))return recordEggLaid(state,currentDay);return state;}
  const next={...stored,eggs:added.state.eggs,lastUpdateDay:currentDay};
  if(!writeWorldState(key,next))return state;
@@ -705,9 +707,9 @@ function animalTick(entity){
   }
  }catch{}
  try{const hp=entity.getComponent("minecraft:health");if(hp)hp.setCurrentValue(Math.max(0,hp.effectiveMax*state.health/100));}catch{}
- if(profile.customBreeding&&state.pregnancyDays>0){const result=advancePregnancy(state,elapsedAgeDays,profile.gestationDays);state=result.animal;if(result.birthReady){if(state.birthsRemaining===0){state.birthsRemaining=Math.max(1,Math.floor(profile.childCount??1));saveAnimal(entity,state);}while(state.birthsRemaining>0){try{const offset=Math.max(0,Math.floor(profile.childCount??1))-state.birthsRemaining;const baby=entity.dimension.spawnEntity(entity.typeId,{x:entity.location.x+1+(offset%2)*0.8,y:entity.location.y,z:entity.location.z+Math.floor(offset/2)*0.8});if(entity.typeId==="tfc:deer")baby.triggerEvent("tfc:spawn_baby");state.birthsRemaining-=1;saveAnimal(entity,state);saveAnimal(baby,createAnimalOffspringState(state,profile.speciesId,Math.random()<0.5?"male":"female"));}catch(error){console.warn("[TFC-Bedrook] animal birth deferred:",error);break;}}if(state.birthsRemaining===0){state.pregnancyDays=0;state.fertilized=false;}}}\n if(entity.typeId==="tfc:deer"&&state.lifeStage==="juvenile"&&state.ageDays>=profile.adultAgeDays){try{entity.triggerEvent("tfc:grow_up");state.lifeStage="adult";}catch(error){console.warn("[TFC-Bedrook] deer growth event failed:",error);}}
+ if(profile.customBreeding&&state.pregnancyDays>0){const result=advancePregnancy(state,elapsedAgeDays,profile.gestationDays);state=result.animal;if(result.birthReady){if(state.birthsRemaining===0){state.birthsRemaining=Math.max(1,Math.floor(profile.childCount??1));saveAnimal(entity,state);}while(state.birthsRemaining>0){try{const offset=Math.max(0,Math.floor(profile.childCount??1))-state.birthsRemaining;const baby=entity.dimension.spawnEntity(entity.typeId,{x:entity.location.x+1+(offset%2)*0.8,y:entity.location.y,z:entity.location.z+Math.floor(offset/2)*0.8});if(entity.typeId==="tfc:deer")baby.triggerEvent("tfc:spawn_baby");state.birthsRemaining-=1;saveAnimal(entity,state);saveAnimal(baby,createAnimalOffspringState(state,profile.speciesId,Math.random()<0.5?"male":"female"));}catch(error){console.warn("[TFC-Bedrook] animal birth deferred:",error);break;}}if(state.birthsRemaining===0){state.pregnancyDays=0;state.fertilized=false;}}}\n if(["tfc:deer","tfc:duck","tfc:quail"].includes(entity.typeId)&&state.lifeStage==="juvenile"&&profile.adultAgeDays!=null&&state.ageDays>=profile.adultAgeDays){try{entity.triggerEvent("tfc:grow_up");state.lifeStage="adult";}catch(error){console.warn("[TFC-Bedrook] fauna growth event failed:",error);}}
  if(state.sex==="unknown")state.sex=Math.random()<0.5?"male":"female";
- state=layChickenEgg(entity,state,profile,currentDay);
+ state=layAnimalEgg(entity,state,profile,currentDay);
  const breedingDay=world.getDay(),breedingTime=currentAnimalDay();
  if(profile.customBreeding&&state.sex==="female"&&state.ageDays>=profile.adultAgeDays&&state.familiarity>=profile.requiredFamiliarity&&state.lastFedDay>=breedingDay&&state.pregnancyDays<=0&&!state.fertilized){
   try{const nearby=entity.dimension.getEntities({type:entity.typeId,location:entity.location,maxDistance:6});for(const partner of nearby){if(partner.id===entity.id)continue;const other=animalState(partner),breedingProfile={...profile,currentDay:breedingDay,currentTime:breedingTime};if(canBreed(state,other,breedingProfile)){const started=beginPregnancy(state,other,breedingProfile);if(started.started){state=started.animal;other.lastBreedAt=breedingTime;other.lastFedDay=breedingDay-1;other.uses=(other.uses??0)+5;if(profile.maxUses>0&&other.uses>profile.maxUses&&other.oldDay<0)other.oldDay=breedingTime+1+Math.floor(Math.random()*5);saveAnimal(partner,other);break;}}}}catch{}
