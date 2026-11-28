@@ -13,7 +13,7 @@ test("prospecting tool registers block-use component and bounded scan",()=>{
  assert.ok(item.components["tfc:prospect"]);
  assert.match(runtime,/registerCustomComponent\("tfc:prospect",\{onUseOn:/);
  assert.match(runtime,/prospect\(a\.source,a\.block\)/);
- assert.match(runtime,/for\(let dx=-radius;dx<=radius;dx\)for\(let dz=-radius;dz<=radius;dz\)for\(let dy=-2;dy<=2;dy\)/);
+ assert.match(runtime,/for\(let dx=-radius;dx<=radius;dx\+\+\)for\(let dz=-radius;dz<=radius;dz\+\+\)for\(let dy=-2;dy<=2;dy\+\+\)/);
  assert.match(runtime,/summarizeOreSamples\(counts\)/);
 });
 
