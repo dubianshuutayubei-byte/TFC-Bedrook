@@ -49,7 +49,13 @@
       "rye",
       "beet",
       "cabbage",
-      "carrot"
+      "carrot",
+      "garlic",
+      "onion",
+      "squash",
+      "lentils",
+      "soybean",
+      "peanuts"
     ],
     "farming": [
       "crop_seed",
@@ -62,7 +68,13 @@
       "rye_seed",
       "beet_seed",
       "cabbage_seed",
-      "carrot_seed"
+      "carrot_seed",
+      "garlic_seed",
+      "onion_seed",
+      "squash_seed",
+      "lentils_seed",
+      "soybean_seed",
+      "peanuts_seed"
     ],
     "equipment": [
       "firepit",
@@ -152,6 +164,18 @@
     "tfc:cabbage",
     "tfc:carrot_seed",
     "tfc:carrot",
-    "tfc:water_vessel"
+    "tfc:water_vessel",
+    "tfc:garlic_seed",
+    "tfc:garlic",
+    "tfc:onion_seed",
+    "tfc:onion",
+    "tfc:squash_seed",
+    "tfc:squash",
+    "tfc:lentils_seed",
+    "tfc:lentils",
+    "tfc:soybean_seed",
+    "tfc:soybean",
+    "tfc:peanuts_seed",
+    "tfc:peanuts"
   ]
 }
