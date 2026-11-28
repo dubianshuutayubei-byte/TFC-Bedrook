@@ -20,5 +20,5 @@ test("animal inspection uses a Japanese status form with husbandry values",()=>{
   for(const label of ["性別: ","空腹: ","渇き: ","健康: ","なつき度: ","成熟目安: "]) {
     assert.ok(runtime.includes(label),`missing animal status field: ${label}`);
   }
-  assert.match(runtime,/メスの成体には空き瓶を使うと搾乳できます/);
+  assert.match(runtime,/産出: 牛乳（メスの成体・健康\/空腹\/渇き条件を満たすと空き瓶で採取、1日間隔）/);
 });
