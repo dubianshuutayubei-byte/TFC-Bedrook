@@ -1,4 +1,4 @@
-import test from"node:test";import assert from"node:assert/strict";import{createAnimalState,initializeAnimalLifeStage,canFeedAnimal,advanceAnimalFamiliarityDecay,syncAnimalHealth,advanceAnimalNeeds,feedAnimal,waterAnimal,canBreed,beginPregnancy,advancePregnancy,evaluateHabitat,evaluateFaunaSpawn,canProduce,recordProduct}from"../packs/behavior_pack/scripts/core/fauna-service.mjs";
+import test from"node:test";import assert from"node:assert/strict";import{createAnimalState,createAnimalOffspringState,initializeAnimalLifeStage,canFeedAnimal,advanceAnimalFamiliarityDecay,syncAnimalHealth,advanceAnimalNeeds,feedAnimal,waterAnimal,canBreed,beginPregnancy,advancePregnancy,evaluateHabitat,evaluateFaunaSpawn,canProduce,recordProduct}from"../packs/behavior_pack/scripts/core/fauna-service.mjs";
 test("needs and age advance",()=>{const a=advanceAnimalNeeds(createAnimalState({species:"deer"}),2);assert.equal(a.ageDays,2);assert.equal(a.hunger,16);assert.equal(a.thirst,24);});
 test("feeding and watering reduce needs",()=>{const a=feedAnimal({hunger:80,thirst:50},10);assert.equal(a.hunger,45);assert.equal(waterAnimal(a,20).thirst,25);});
 test("breeding requires healthy, fed, adult, familiar pair",()=>{const p={adultAgeDays:10,requiredFamiliarity:20,breedingCooldownDays:2};const a={species:"deer",sex:"male",ageDays:20,familiarity:30,hunger:10,thirst:10};const b={...a,sex:"female"};assert.equal(canBreed(a,b,p),true);assert.equal(canBreed({...a,hunger:90},b,p),false);assert.equal(beginPregnancy(b,a,p).started,true);});
@@ -193,4 +193,15 @@ test("TFC animal products require familiarity strictly above the configured thre
  const rules={requiredFamiliarity:15,cooldownDays:0,currentDay:1,minimumAgeDays:56};
  assert.equal(canProduce({...base,familiarity:15},rules),false);
  assert.equal(canProduce({...base,familiarity:16},rules),true);
+});
+
+test("offspring inherit the official TFC familiarity rule and begin as juveniles",()=>{
+ const half=createAnimalOffspringState({familiarity:80},"deer","female");
+ assert.equal(half.familiarity,40);assert.equal(half.ageDays,0);assert.equal(half.lifeStage,"juvenile");
+ const high=createAnimalOffspringState({familiarity:95},"deer","male");
+ assert.equal(high.familiarity,85.5);
+});
+test("animal state persists a partially delivered litter count",()=>{
+ const state=createAnimalState({pregnancyDays:210,birthsRemaining:2});
+ assert.equal(state.birthsRemaining,2);
 });
