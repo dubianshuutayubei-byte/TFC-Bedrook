@@ -13,7 +13,7 @@
   },
   "sheep": {
     "adultAgeDays": 56,
-    "requiredFamiliarity": 25,
+    "requiredFamiliarity": 30,
     "minTemperatureC": -15,
     "maxTemperatureC": 28,
     "terrain": [
@@ -24,7 +24,7 @@
   },
   "chicken": {
     "adultAgeDays": 24,
-    "requiredFamiliarity": 20,
+    "requiredFamiliarity": 30,
     "minTemperatureC": -5,
     "maxTemperatureC": 35,
     "terrain": [
@@ -34,8 +34,8 @@
   },
   "deer": {
     "adultAgeDays": 30,
-    "requiredFamiliarity": 35,
-    "breedingCooldownDays": 20,
+    "requiredFamiliarity": 30,
+    "breedingCooldownDays": 1,
     "gestationDays": 210,
     "minTemperatureC": -20,
     "maxTemperatureC": 28,
