@@ -140,7 +140,7 @@ const ANIMAL_PROFILES={
  "tfc:tilapia":{speciesId:"tilapia",displayName:"ティラピア",requiredFamiliarity:0,customBreeding:false,feedItems:[],grazeBlocks:[],kind:"aquatic",domestic:false,hungerPerDay:0,thirstPerDay:0,healthLossPerDay:0,archetype:"freshwater_fish"},
  "tfc:armadillo":{speciesId:"armadillo",displayName:"アルマジロ",requiredFamiliarity:0,customBreeding:false,feedItems:[],grazeBlocks:[],kind:"terrestrial",domestic:false,hungerPerDay:0,thirstPerDay:0,healthLossPerDay:0,archetype:"armadillo"},
  "tfc:bison":{speciesId:"bison",displayName:"バイソン",requiredFamiliarity:0,customBreeding:false,feedItems:[],grazeBlocks:[],kind:"terrestrial",domestic:false,hungerPerDay:0,thirstPerDay:0,healthLossPerDay:0,archetype:"ramming_prey"},
- "tfc:leopard_seal":{speciesId:"leopard_seal",displayName:"ヒョウアザラシ",requiredFamiliarity:0,customBreeding:false,feedItems:[],grazeBlocks:[],kind:"aquatic",domestic:false,hungerPerDay:0,thirstPerDay:0,healthLossPerDay:0,archetype:"leopard_seal"},
+ "tfc:leopard_seal":{speciesId:"leopard_seal",displayName:"ヒョウアザラシ",requiredFamiliarity:0,customBreeding:false,feedItems:[],grazeBlocks:[],kind:"aquatic",domestic:false,hungerPerDay:8,thirstPerDay:0,healthLossPerDay:0,archetype:"leopard_seal"},
  "tfc:pond_turtle":{speciesId:"pond_turtle",displayName:"池のカメ",requiredFamiliarity:0,customBreeding:false,feedItems:[],grazeBlocks:[],kind:"amphibian",domestic:false,hungerPerDay:0,thirstPerDay:0,healthLossPerDay:0,archetype:"turtle"},
 };
 const inv=p=>p.getComponent("minecraft:inventory")?.container;
