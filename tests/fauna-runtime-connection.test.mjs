@@ -166,3 +166,14 @@ test("loaded animal lifecycle uses fractional world time for decay and old-age t
  assert.match(runtime,/const currentDay=currentAnimalDay\(\);\s*state=advanceAnimalFamiliarityDecay\(state,currentDay/);
  assert.match(runtime,/currentDay>state\.oldDay/);
 });
+
+test("custom birth decrements and persists the litter before newborn setup can fail",()=>{
+ const birth=runtime.indexOf("const baby=entity.dimension.spawnEntity(entity.typeId");
+ const decrement=runtime.indexOf("state.birthsRemaining-=1;saveAnimal(entity,state);",birth);
+ const event=runtime.indexOf("baby.triggerEvent(\"tfc:spawn_baby\")",birth);
+ const offspring=runtime.indexOf("saveAnimal(baby,createAnimalOffspringState",birth);
+ assert.ok(birth>=0);
+ assert.ok(decrement>birth);
+ assert.ok(event>decrement);
+ assert.ok(offspring>event);
+});
