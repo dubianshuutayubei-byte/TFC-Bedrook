@@ -25,3 +25,15 @@ test("tin and bronze material identifiers are backed by item definitions",()=>{
   assert.equal(item["minecraft:item"].description.identifier,"tfc:"+id);
  }
 });
+
+test("crucible runtime derives melting conditions and outputs from canonical recipes",()=>{
+ const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
+ const start=runtime.indexOf("async function crucibleStation");
+ const end=runtime.indexOf("\nfunction hasActiveSmokeSource",start);
+ const body=runtime.slice(start,end);
+ assert.match(body,/getStationRecipes\("crucible"\)/);
+ assert.match(body,/recipe\.minimumTemperatureC/);
+ assert.match(body,/bronzeRecipe\.alloyComponents/);
+ assert.match(body,/Object\.entries\(recipe\.outputs\)/);
+ assert.doesNotMatch(body,/requiredTemp=copperOre\?1080:230/);
+});
