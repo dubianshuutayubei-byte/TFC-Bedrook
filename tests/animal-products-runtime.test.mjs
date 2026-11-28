@@ -17,7 +17,7 @@ test("sheep wool uses TFC product logic and oviparous animals use nest boxes",()
  assert.match(runtime,/産出: 羊毛（TFC式のハサミ操作、7日間隔）/);
  assert.match(runtime,/function shearAnimal\(player,entity\)/);
  assert.match(runtime,/give\(player,"tfc:wool",amount\)/);
- assert.match(runtime,/産出: 卵（巣箱へ産卵）/);
+ assert.match(runtime,/産出: 卵（巣箱へ自動産卵）/);
  assert.match(runtime,/function layAnimalEgg\(entity,state,profile,currentDay\)/);
  assert.match(runtime,/eggSpecies:"chicken"/);
  assert.match(runtime,/nearbyBreedingPair\(nest,entity\.typeId\)/);
