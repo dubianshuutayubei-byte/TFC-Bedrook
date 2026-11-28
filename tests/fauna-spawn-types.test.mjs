@@ -6,13 +6,15 @@ import { fileURLToPath } from "node:url";
 const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const roster=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/fauna-roster.json"),"utf8"));
 const spawn=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/fauna-spawn-types.json"),"utf8"));
-test("legacy 63 TFC spawn placements remain recorded as a subset of the 78-species target",()=>{
- assert.equal(spawn.total,63);
- assert.equal(spawn.species.length,63);
- for(const item of spawn.species)assert.ok(roster.species.some(x=>x.id===item.id),item.id+" must remain in the expanded target roster");
- assert.equal(spawn.placementCounts.in_water,20);
+test("all 78 official TFC 1.21.x fauna have source-derived spawn placements",()=>{
+ assert.equal(spawn.total,78);
+ assert.equal(spawn.species.length,78);
+ assert.equal(new Set(spawn.species.map(x=>x.id)).size,78);
+ assert.deepEqual(new Set(spawn.species.map(x=>x.id)),new Set(roster.species.map(x=>x.id)));
+ assert.equal(spawn.placementCounts.in_water,29);
  assert.equal(spawn.placementCounts.no_restrictions,1);
- assert.equal(spawn.placementCounts.on_ground,42);
+ assert.equal(spawn.placementCounts.on_ground,48);
+ for(const item of spawn.species)assert.equal(item.heightmap,"motion_blocking_no_leaves",item.id);
 });
 test("aquatic, amphibious and terrestrial spawn categories are mapped correctly",()=>{
  for(const id of ["cod","jellyfish","tropical_fish","pufferfish","bluegill","crayfish","horseshoe_crab","isopod","lobster","dolphin","orca","manatee","squid","octopoteuthis","salmon","rainbow_trout","lake_trout","largemouth_bass","smallmouth_bass","crappie"])assert.equal(spawn.species.find(x=>x.id===id).placement,"in_water",id);
@@ -23,18 +25,19 @@ test("aquatic, amphibious and terrestrial spawn categories are mapped correctly"
 import { evaluateFaunaSpawn } from "../packs/behavior_pack/scripts/core/fauna-service.mjs";
 const combined=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/official-fauna-spawn-profiles.json"),"utf8"));
 const officialProfiles=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/official-fauna-profiles.json"),"utf8"));
-test("legacy 63 official fauna spawn profiles combine exact placement and climate constraints",()=>{
- assert.equal(combined.total,63);
- assert.equal(combined.species.length,63);
+test("all 78 fauna have official placement while only 63 carry sourced climate constraints",()=>{
+ assert.equal(combined.total,78);
+ assert.equal(combined.species.length,78);
  const byId=Object.fromEntries(combined.species.map(x=>[x.id,x]));
- for(const p of combined.species){
-  assert.ok(["on_ground","in_water","no_restrictions"].includes(p.placement),p.id);
-  assert.ok(officialProfiles.species.some(x=>x.id===p.id),p.id);
- }
+ for(const p of combined.species)assert.ok(["on_ground","in_water","no_restrictions"].includes(p.placement),p.id);
+ for(const p of officialProfiles.species)assert.ok(byId[p.id],p.id+" placement missing");
+ for(const id of ["arctic_char","burbot","muksun","northern_pike","pacu","peacock_bass","red_piranha","spotted_gudgeon","tilapia"])assert.equal(byId[id].placement,"in_water",id);
+ for(const id of ["armadillo","bactrian_camel","bison","dromedary_camel","leopard_seal","pond_turtle"])assert.equal(byId[id].placement,"on_ground",id);
  assert.equal(byId.cod.placement,"in_water");
  assert.equal(byId.crocodile.placement,"no_restrictions");
  assert.equal(byId.deer.placement,"on_ground");
  assert.equal(byId.octopoteuthis.distanceBelowSeaLevel,33);
+ for(const id of ["arctic_char","armadillo","bison","pond_turtle"])assert.equal(Object.hasOwn(byId[id],"minTemperatureC"),false,id+" climate must remain unspecified");
 });
 test("official spawn profile evaluator rejects wrong placement and unknown climate samples",()=>{
  const deer=combined.species.find(x=>x.id==="deer");
