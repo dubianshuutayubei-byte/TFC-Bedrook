@@ -150,9 +150,10 @@ test("dairy production applies TFC familiarity, cooldown and use limits",()=>{
  assert.match(runtime,/recordProduct\(state,currentDay,\{maxUses:profile\.maxUses\?\?Infinity,oldDayDelay:1\+Math\.floor\(Math\.random\(\)\*5\)\}\)/);
  assert.match(runtime,/profile\.dairy&&held\.typeId==="minecraft:glass_bottle"/);
 });
-test("animal status UI reports product uses only for animals with configured production limits",()=>{
- assert.match(runtime,/const usesInfo=profile\.productCooldownDays!=null\|\|profile\.eggLayCooldownDays!=null/);
- assert.match(runtime,/産出回数: .*state\.uses.*profile\.maxUses/);
+test("animal status UI reports breeding and production uses for all configured livestock",()=>{
+ assert.match(runtime,/const usesInfo=profile\.maxUses>0/);
+ assert.match(runtime,/繁殖・産出使用回数:/);
+ assert.match(runtime,/state\.uses.*profile\.maxUses/);
 });
 
 test("animal dropped-food pickup consumes one item and preserves the remainder of a stack",()=>{
@@ -203,7 +204,7 @@ test("custom breeding uses calendar-day feeding and fractional mating cooldown",
 
 
 test("official oviparous livestock production uses TFC hatch times, laying intervals and lifetime counts",()=>{
- assert.match(runtime,/"tfc:chicken":\{[^}]*adultAgeDays:OFFICIAL_LIVESTOCK_LIFECYCLE\.chicken\.adultAgeDays[^}]*maxUses:OFFICIAL_LIVESTOCK_LIFECYCLE\.chicken\.maxUses[^}]*eggLayCooldownDays:OFFICIAL_LIVESTOCK_LIFECYCLE\.chicken\.eggLayCooldownDays[^}]*productFamiliarityMin:15[^}]*hatchDays:8/);
+ assert.match(runtime,/"tfc:chicken":\{[^}]*adultAgeDays:OFFICIAL_LIVESTOCK_LIFECYCLE\.chicken\.adultAgeDays[^}]*maxUses:OFFICIAL_LIVESTOCK_LIFECYCLE\.chicken\.maxUses[^}]*eggLayCooldownDays:OFFICIAL_LIVESTOCK_LIFECYCLE\.chicken\.eggLayCooldownDays[^}]*productFamiliarityMin:15[^}]*hatchDays:OFFICIAL_LIVESTOCK_LIFECYCLE\\.chicken\\.hatchDays/);
  assert.match(runtime,/"tfc:duck":\{[^}]*adultAgeDays":OFFICIAL_LIVESTOCK_LIFECYCLE\.duck\.adultAgeDays[^}]*eggLayCooldownDays":OFFICIAL_LIVESTOCK_LIFECYCLE\.duck\.eggLayCooldownDays[^}]*maxUses":OFFICIAL_LIVESTOCK_LIFECYCLE\.duck\.maxUses[^}]*productFamiliarityMin":15[^}]*hatchDays":8/);
  assert.match(runtime,/"tfc:quail":\{[^}]*adultAgeDays":OFFICIAL_LIVESTOCK_LIFECYCLE\.quail\.adultAgeDays[^}]*eggLayCooldownDays":OFFICIAL_LIVESTOCK_LIFECYCLE\.quail\.eggLayCooldownDays[^}]*maxUses":OFFICIAL_LIVESTOCK_LIFECYCLE\.quail\.maxUses[^}]*productFamiliarityMin":15[^}]*hatchDays":8/);
  assert.match(runtime,/state\.familiarity<30\|\|state\.lastFedDay<world\.getDay\(\)/);
