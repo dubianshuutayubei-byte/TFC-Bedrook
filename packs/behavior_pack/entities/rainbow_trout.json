@@ -13,7 +13,8 @@
           "animal",
           "mob",
           "tfc_aquatic",
-          "tfc_fauna_rainbow_trout"
+          "tfc_fauna_rainbow_trout",
+          "tfc_small_fish"
         ]
       },
       "minecraft:nameable": {},
