@@ -22,3 +22,7 @@ test("milk bottle is registered as the dairy food profile",()=>{
   assert.equal(components["tfc:consume_food"].nutrition,profiles.foods.find(x=>x.id==="milk").nutrition.dairy);
   assert.equal(components["tfc:consume_food"].hydration,profiles.foods.find(x=>x.id==="milk").hydration);
 });
+
+test("milk production imports its runtime cooldown functions",()=>{
+  assert.match(runtime,/import \{[^}]*canProduce[^}]*recordProduct[^}]*\} from "\.\/core\/fauna-service\.mjs"/);
+});
