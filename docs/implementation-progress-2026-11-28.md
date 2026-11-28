@@ -1345,3 +1345,10 @@
 - gameplay-runtime.js の自然スポーン環境サンプリングを軽量化。森林密度は公式プロファイルがminForest/maxForestを要求する種に限って走査する。従来は全対象種で最大75ブロック参照を行っていたため、森林条件を持たない種のスポーン検証コストを削減。
 - tests/fauna-coverage.test.mjs を追加。公式78種ロスター、ランタイム追跡、スポーン配置78件、地上48/水中29/制限なし1の内訳、種固有実装残数の整合性を自動検査。
 - この変更はGitHub上のコード・テスト追加。GitHub Actionsの実行結果およびMinecraft 26.60実機でのスポーン挙動は別途確認が必要。
+## 2026-11-28 淡水魚のバケツ対応
+
+- Mojang bedrock-samples の1.26.60 Entity component schemaで minecraft:bucketable が利用可能なコンポーネントとして定義されていることを確認。コンポーネント定義は空オブジェクト形式。
+- freshwater_fish archetypeのうち、独自Entityを持つ15種（arctic_char, bluegill, burbot, crappie, lake_trout, largemouth_bass, muksun, northern_pike, pacu, peacock_bass, rainbow_trout, red_piranha, smallmouth_bass, spotted_gudgeon, tilapia）へ minecraft:bucketable を追加。
+- tests/fauna-coverage.test.mjs に15種すべてのバケツ対応コンポーネントを検査するテストを追加。
+- salmonはバニラEntity adapter扱いのため、独自Entity JSONへのコンポーネント追加対象外。別のScript API操作方式を検討する必要がある。
+- コンポーネントの静的登録は追加済みだが、Minecraft 26.60実機での水入りバケツ回収・設置・個体データ保持は未検証。
