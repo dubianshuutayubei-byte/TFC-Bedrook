@@ -153,7 +153,7 @@ test("dairy production applies TFC familiarity, cooldown and use limits",()=>{
  assert.match(runtime,/profile\.dairy&&held\.typeId==="minecraft:glass_bottle"/);
 });
 test("animal status UI reports product uses only for animals with configured production limits",()=>{
- assert.match(runtime,/const usesInfo=profile\.productCooldownDays!=null/);
+ assert.match(runtime,/const usesInfo=profile\.productCooldownDays!=null\|\|profile\.eggLayCooldownDays!=null/);
  assert.match(runtime,/産出回数: .*state\.uses.*profile\.maxUses/);
 });
 
