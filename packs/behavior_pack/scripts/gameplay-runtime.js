@@ -1,7 +1,7 @@
 import { ItemStack, system, world } from "@minecraft/server";
 import { ActionFormData } from "@minecraft/server-ui";
 import { deserializePlayerState, serializePlayerState } from "./core/player-state-service.mjs";
-import { consumeFood } from "./core/food-service.mjs";
+import { consumeFood, advanceFoodDecay } from "./core/food-service.mjs";
 import { createFireState, addFuel, advanceFire, canProcessAtTemperature } from "./core/firepit-service.mjs";
 import { createSoilState, applySoilCompost, advanceSoilHydration, evaluateCropGrowth, applyNutrientUptake } from "./core/agriculture-service.mjs";
 import { createAnimalState, advanceAnimalNeeds, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal } from "./core/fauna-service.mjs";
@@ -9,7 +9,8 @@ import { getStationRecipes } from "./core/processing-recipes.mjs";
 import { isStationJobDue, getPendingStationOutputs, markStationOutputDelivered, markStationJobRecoverable } from "./core/station-job-service.mjs";
 import { normalizeDimensionId, normalizeWeather, getRainfallMm } from "./core/environment-service.mjs";
 
-const STATE_KEY="tfc:player_state",PROGRESS_KEY="tfc:knapping_progress";
+const STATE_KEY="tfc:player_state",PROGRESS_KEY="tfc:knapping_progress",FOOD_FRESHNESS_KEY="tfc:food_freshness";
+const FOOD_DECAY_PROFILES={"tfc:raw_meat":0.16,"tfc:cooked_meat":0.12,"tfc:grain":0.025,"tfc:maize":0.025,"tfc:potato":0.1,"tfc:milk_bottle":0.18};
 const CROP_PROFILES={
  wheat:{minTemperatureC:5,maxTemperatureC:30,minHydration:25,maxHydration:100,preferredNutrient:"nitrogen",minPreferredNutrient:10,optimalNutrient:60,soilTypes:["loam","silt","clay"],seed:"tfc:crop_seed",harvest:"tfc:grain"},
  maize:{minTemperatureC:12,maxTemperatureC:35,minHydration:30,maxHydration:100,preferredNutrient:"nitrogen",minPreferredNutrient:15,optimalNutrient:65,soilTypes:["loam","silt"],seed:"tfc:maize_seed",harvest:"tfc:maize"},
@@ -26,7 +27,26 @@ const inv=p=>p.getComponent("minecraft:inventory")?.container;
 function count(p,id){const c=inv(p);if(!c)return 0;let n=0;for(let i=0;i<c.size;i++){const s=c.getItem(i);if(s?.typeId===id)n+=s.amount;}return n;}
 function take(p,id,n){const c=inv(p);if(!c||count(p,id)<n)return false;for(let i=0;i<c.size&&n>0;i++){const s=c.getItem(i);if(!s||s.typeId!==id)continue;const k=Math.min(n,s.amount);if(k===s.amount)c.setItem(i,undefined);else{s.amount-=k;c.setItem(i,s);}n-=k;}return n===0;}
 function give(p,id,n=1){const c=inv(p);if(!c)return false;const rest=c.addItem(new ItemStack(id,n));if(rest)p.dimension.spawnItem(rest,p.location);return true;}
-function food(p,params){if(!p||p.typeId!=="minecraft:player")return;const s=deserializePlayerState(String(p.getDynamicProperty(STATE_KEY)??""));const nutrition=params.category?{[params.category]:Number(params.nutrition??0)}:{};const result=consumeFood(s,{freshness:100,hydration:Number(params.hydration??0),nutrition});if(!result.consumed){p.sendMessage("§cこの食品は食べられません。");return;}p.setDynamicProperty(STATE_KEY,serializePlayerState(result.playerState));p.sendMessage("§a水分・栄養状態を更新しました。");}
+function readFoodFreshness(player){try{const raw=player.getDynamicProperty(FOOD_FRESHNESS_KEY);return raw?JSON.parse(String(raw)):{};}catch{return {};}}
+function writeFoodFreshness(player,state){try{player.setDynamicProperty(FOOD_FRESHNESS_KEY,JSON.stringify(state));}catch(error){console.warn("[TFC-Bedrook] food freshness save:",error);}}
+function food(p,params){if(!p||p.typeId!=="minecraft:player")return;const s=deserializePlayerState(String(p.getDynamicProperty(STATE_KEY)??""));const freshnessState=readFoodFreshness(p);const itemId=String(params.itemId??"");const freshness=Number(freshnessState[itemId]?.freshness??100);const nutrition=params.category?{[params.category]:Number(params.nutrition??0)}:{};const result=consumeFood(s,{freshness,hydration:Number(params.hydration??0),nutrition});if(!result.consumed){p.sendMessage("§cこの食品は腐敗していて食べられません。");return;}p.setDynamicProperty(STATE_KEY,serializePlayerState(result.playerState));p.sendMessage("§a水分・栄養状態を更新しました。");}
+function tickFoodFreshness(player,nowTick){
+ const container=inv(player);if(!container)return;
+ const freshnessState=readFoodFreshness(player);
+ for(const [itemId,baseDecayPerHour] of Object.entries(FOOD_DECAY_PROFILES)){
+  const slots=[];let amount=0;
+  for(let slot=0;slot<container.size;slot++){const stack=container.getItem(slot);if(stack?.typeId===itemId){slots.push({slot,amount:stack.amount});amount+=stack.amount;}}
+  if(amount===0){delete freshnessState[itemId];continue;}
+  const previous=freshnessState[itemId]??{freshness:100,lastTick:nowTick};
+  const elapsedTicks=Math.max(0,nowTick-Number(previous.lastTick??nowTick));
+  const decayed=advanceFoodDecay({id:itemId,freshness:previous.freshness},elapsedTicks/1000,{temperatureC:20,baseDecayPerHour});
+  if(decayed.spoiled){
+   for(const entry of slots)container.setItem(entry.slot,new ItemStack("tfc:spoiled_food",entry.amount));
+   delete freshnessState[itemId];
+  }else freshnessState[itemId]={freshness:decayed.freshness,lastTick:nowTick};
+ }
+ writeFoodFreshness(player,freshnessState);
+}
 function posKey(block,kind){const l=block.location;return "tfc:"+kind+":"+block.dimension.id+":"+Math.floor(l.x)+","+Math.floor(l.y)+","+Math.floor(l.z);}
 function readWorldState(key,fallback){try{const raw=world.getDynamicProperty(key);return typeof raw==="string"?JSON.parse(raw):fallback;}catch{return fallback;}}
 function writeWorldState(key,value){try{world.setDynamicProperty(key,JSON.stringify(value));}catch(error){console.warn("[TFC-Bedrook] world state save:",error);}}
