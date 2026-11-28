@@ -94,3 +94,10 @@ test("animal status UI only advertises manual feeding for species with configure
  assert.match(runtime,/給餌可能: .*profile\.feedItems\.map/);
  assert.match(runtime,/この種への手動給餌は未対応です/);
 });
+
+test("TFC dairy production supports adult female goats as well as cows",()=>{
+ assert.match(runtime,/"minecraft:goat":\{[^}]*dairy:true/);
+ assert.match(runtime,/if\(profile\.dairy&&held\.typeId==="minecraft:glass_bottle"\)/);
+ assert.match(runtime,/entity\.hasComponent\("minecraft:is_baby"\)\|\|\(profile\.adultAgeDays!=null&&state\.ageDays<profile\.adultAgeDays\)/);
+ assert.match(runtime,/const products=profile\.dairy/);
+});
