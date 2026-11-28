@@ -3,7 +3,7 @@ import { ActionFormData } from "@minecraft/server-ui";
 import { deserializePlayerState, serializePlayerState } from "./core/player-state-service.mjs";
 import { consumeFood, advanceFoodDecay, ticksToHours } from "./core/food-service.mjs";
 import { createFireState, addFuel, advanceFire, canProcessAtTemperature } from "./core/firepit-service.mjs";
-import { createSoilState, applySoilCompost, advanceSoilHydration, evaluateCropGrowth, applyFertilizer, applyCropNutrientEffects, inferSoilTypeFromBlockId, advanceCropGrowthProgress } from "./core/agriculture-service.mjs";
+import { createSoilState, applySoilCompost, advanceSoilHydration, evaluateCropGrowth, applyFertilizer, applyCropNutrientEffects, inferSoilTypeFromBlockId, inferSoilFertilityClassFromBiomeId, advanceCropGrowthProgress } from "./core/agriculture-service.mjs";
 import { createAnimalState, advanceAnimalNeeds, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct } from "./core/fauna-service.mjs";
 import { getStationRecipes } from "./core/processing-recipes.mjs";
 import { isStationJobDue, getPendingStationOutputs, markStationOutputDelivered, markStationJobRecoverable } from "./core/station-job-service.mjs";
@@ -258,6 +258,6 @@ world.afterEvents.playerInteractWithBlock.subscribe(event=>{
  if(!held?.typeId?.endsWith("_hoe"))return;
  const block=event.block;
  if(!["minecraft:dirt","minecraft:grass_block","minecraft:coarse_dirt","minecraft:rooted_dirt","minecraft:farmland"].includes(block.typeId))return;
- try{const originalSoilType=inferSoilTypeFromBlockId(block.typeId);block.setType("tfc:farmland");const soil=createSoilState({...readSoil(block),soilType:originalSoilType});writeWorldState(soilKey(block),soil);event.player.sendMessage("§a耕作土を作りました。土質: "+({loam:"壌土",silt:"シルト",clay:"粘土質"}[soil.soilType]??soil.soilType)+"。種を持って操作すると植えられます。");}catch(error){console.warn("[TFC-Bedrook] farmland conversion failed:",error);}
+ try{const originalSoilType=inferSoilTypeFromBlockId(block.typeId);const biomeId=block.dimension.getBiome(block.location).id;const fertilityClass=inferSoilFertilityClassFromBiomeId(biomeId);block.setType("tfc:farmland");const soil=createSoilState({...readSoil(block),soilType:originalSoilType,fertilityClass});writeWorldState(soilKey(block),soil);event.player.sendMessage("§a耕作土を作りました。土質: "+({loam:"壌土",silt:"シルト",clay:"粘土質"}[soil.soilType]??soil.soilType)+"。種を持って操作すると植えられます。");}catch(error){console.warn("[TFC-Bedrook] farmland conversion failed:",error);}
 });world.afterEvents.playerSpawn.subscribe(event=>{if(event.player)recoverPlayerStationJobs(event.player);});
 }
