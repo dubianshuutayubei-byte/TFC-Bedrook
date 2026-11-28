@@ -79,6 +79,20 @@ export function evaluateFaunaSpawn(profile, environment, random = Math.random) {
   failures.push(...climate.failures);
   missing.push(...climate.missing);
 
+  // Match TFC ClimatePlacement's fuzzy probability roll after hard climate bounds pass.
+  if (profile.fuzzy === true && failures.length === 0 && missing.length === 0) {
+    const minTemp = profile.minTemperatureC ?? -Infinity;
+    const maxTemp = profile.maxTemperatureC ?? Infinity;
+    const minRainfall = profile.minRainfall ?? -Infinity;
+    const maxRainfall = profile.maxRainfall ?? Infinity;
+    const targetTemp = (minTemp + maxTemp) / 2;
+    const targetRainfall = (minRainfall + maxRainfall) / 2;
+    const normTempDelta = Math.abs(environment.temperatureC - targetTemp) / (maxTemp - minTemp);
+    const normRainfallDelta = Math.abs(environment.rainfall - targetRainfall) / (maxRainfall - minRainfall);
+    const fuzzyRoll = Number(random()) * Number(random());
+    if (!(fuzzyRoll > Math.max(normTempDelta, normRainfallDelta))) failures.push("fuzzy_climate");
+  }
+
   if (profile.solidGround === true) {
     if (environment.validSpawnGround == null) missing.push("validSpawnGround");
     else if (environment.validSpawnGround !== true) failures.push("invalid_spawn_ground");
