@@ -6,7 +6,7 @@ import { readStackFreshness, advanceStackFreshness } from "./core/food-stack-ser
 import { createFireState, addFuel, advanceFire, canProcessAtTemperature } from "./core/firepit-service.mjs";
 import { createSoilState, advanceSoilHydration, evaluateCropGrowth, calculateCropYield, applyFertilizer, applyCropNutrientEffects, inferSoilTypeFromBlockId, inferSoilFertilityClassFromBiomeId, advanceCropGrowthProgress } from "./core/agriculture-service.mjs";
 import { CROP_PROFILES } from "./core/crop-profiles.mjs";
-import { createAnimalState, createAnimalOffspringState, initializeAnimalLifeStage, syncAnimalHealth, advanceAnimalNeeds, advanceAnimalFamiliarityDecay, canFeedAnimal, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct, evaluateHabitat } from "./core/fauna-service.mjs";
+import { createAnimalState, createAnimalOffspringState, initializeAnimalLifeStage, syncAnimalHealth, advanceAnimalNeeds, advanceAnimalFamiliarityDecay, canFeedAnimal, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct, evaluateHabitat, evaluateFaunaSpawn } from "./core/fauna-service.mjs";
 import { OFFICIAL_FAUNA_PROFILES } from "./core/fauna-profiles.mjs";
 import { getStationRecipes } from "./core/processing-recipes.mjs";
 import { isStationJobDue, getPendingStationOutputs, markStationOutputDelivered, markStationJobRecoverable } from "./core/station-job-service.mjs";
@@ -764,12 +764,17 @@ function forestTypeAt(dimension,location){
 function sampleAnimalEnvironment(entity){
  const location=entity.location,dimension=entity.dimension;
  const blockLocation={x:Math.floor(location.x),y:Math.floor(location.y),z:Math.floor(location.z)};
- let biomeId="minecraft:plains",brightness=null;
+ let biomeId="minecraft:plains",brightness=null,currentBlock=null,groundBlock=null;
  try{biomeId=dimension.getBiome(blockLocation).id;}catch{}
- try{brightness=dimension.getBlock(blockLocation)?.getLightLevel()??null;}catch{}
+ try{currentBlock=dimension.getBlock(blockLocation);brightness=currentBlock?.getLightLevel()??null;}catch{}
+ try{groundBlock=dimension.getBlock({x:blockLocation.x,y:blockLocation.y-1,z:blockLocation.z});}catch{}
+ const currentId=currentBlock?.typeId??"";
+ const inWater=currentBlock?.isLiquid===true||currentId==="minecraft:water"||currentId==="minecraft:flowing_water";
+ const validSpawnGround=!!groundBlock&&!groundBlock.isAir&&!groundBlock.isLiquid;
+ const onGround=validSpawnGround&&!inWater;
  const terrain=/mountain|windswept|peaks|highlands/.test(biomeId)?"highlands":/plains|savanna/.test(biomeId)?"plains":/forest|taiga|jungle/.test(biomeId)?"forest":"other";
  const waterType=/ocean|beach/.test(biomeId)?"saltwater":"freshwater";
- return {temperatureC:currentTemperatureC(location.y-63,biomeId),rainfall:rainfallForBiome(biomeId),belowSeaLevel:Math.max(0,63-blockLocation.y),brightness,forestType:forestTypeAt(dimension,location),terrain,waterType,biomeId};
+ return {y:blockLocation.y,seaLevel:63,onGround,inWater,validSpawnGround,temperatureC:currentTemperatureC(location.y-63,biomeId),rainfall:rainfallForBiome(biomeId),belowSeaLevel:Math.max(0,63-blockLocation.y),brightness,forestType:forestTypeAt(dimension,location),terrain,waterType,biomeId};
 }
 function validateNaturalFaunaSpawn(event){
  if(event?.cause!=="Spawned")return;
@@ -780,8 +785,8 @@ function validateNaturalFaunaSpawn(event){
  system.run(()=>{
   try{
    if(!entity.isValid())return;
-   const environment=sampleAnimalEnvironment(entity),result=evaluateHabitat(official,environment);
-   if(result.missing.length){console.warn("[TFC-Bedrook] fauna spawn climate check skipped; missing:",profile.speciesId,result.missing);return;}
+   const environment=sampleAnimalEnvironment(entity),result=evaluateFaunaSpawn(official,environment);
+   if(result.missing.length){console.warn("[TFC-Bedrook] fauna spawn validation skipped; missing:",profile.speciesId,result.missing);return;}
    if(!result.suitable){entity.remove();}
   }catch(error){console.warn("[TFC-Bedrook] fauna spawn climate validation skipped:",profile.speciesId,error);}
  });
