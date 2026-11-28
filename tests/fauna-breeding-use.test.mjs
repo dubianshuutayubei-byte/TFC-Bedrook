@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import {
+  advanceAnimalFamiliarityDecay,
   canLayEgg,
   canProduce,
   recordBreedingUse,
@@ -81,4 +82,21 @@ test("invalid breeding timestamps do not mutate the animal", () => {
   const result = recordBreedingUse(original, Number.NaN, { maxUses: 60, useCost: 5 });
   assert.equal(result.uses, 12);
   assert.equal(result.oldDay, -1);
+});
+
+test("familiarity decay observes TFC's two-day grace period", () => {
+  const animal = { familiarity: 20, lastFamiliarityDecay: 0 };
+  assert.equal(advanceAnimalFamiliarityDecay(animal, 2).familiarity, 20);
+  assert.equal(advanceAnimalFamiliarityDecay(animal, 2.5).familiarity, 18);
+});
+
+test("familiarity decay advances in whole days and preserves fractional time", () => {
+  const first = advanceAnimalFamiliarityDecay(
+    { familiarity: 20, lastFamiliarityDecay: 0 }, 2.5
+  );
+  assert.equal(first.familiarity, 18);
+  assert.equal(first.lastFamiliarityDecay, 1);
+  const second = advanceAnimalFamiliarityDecay(first, 3.2);
+  assert.equal(second.familiarity, 16);
+  assert.equal(second.lastFamiliarityDecay, 2);
 });
