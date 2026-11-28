@@ -122,6 +122,70 @@
               "value": "ocelot"
             },
             "max_dist": 16
+          },
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "cow"
+            },
+            "max_dist": 16
+          },
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "sheep"
+            },
+            "max_dist": 16
+          },
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "pig"
+            },
+            "max_dist": 16
+          },
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "goat"
+            },
+            "max_dist": 16
+          },
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "horse"
+            },
+            "max_dist": 16
+          },
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "donkey"
+            },
+            "max_dist": 16
+          },
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "mule"
+            },
+            "max_dist": 16
+          },
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "chicken"
+            },
+            "max_dist": 16
           }
         ]
       },
