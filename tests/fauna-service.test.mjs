@@ -317,3 +317,14 @@ test("horse and donkey can produce a persisted mule offspring while other cross-
  assert.equal(advanced.animal.pregnancyOffspringEntityType,"minecraft:mule");
 });
 
+
+import { FAUNA_ECOLOGY, getFaunaPrey, getFaunaPredators, isFaunaPredatorOf, isFaunaThreatenedBy } from "../packs/behavior_pack/scripts/core/fauna-ecology-service.mjs";
+test("fauna ecology defines explicit predator and prey links without making every carnivore omnipotent",()=>{
+ assert.ok(getFaunaPrey("lion").includes("gazelle"));
+ assert.ok(getFaunaPrey("lion").includes("wildebeest"));
+ assert.equal(isFaunaPredatorOf("lion","rabbit"),false);
+ assert.equal(isFaunaPredatorOf("fox","rabbit"),true);
+ assert.equal(isFaunaThreatenedBy("deer","wolf"),true);
+ assert.ok(getFaunaPredators("rabbit").includes("fox"));
+ assert.ok(Object.keys(FAUNA_ECOLOGY).length>=10);
+});
