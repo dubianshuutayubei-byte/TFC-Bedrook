@@ -4,13 +4,13 @@ export function createAnimalState(i={}){return{species:i.species??"unknown",sex:
 const FOREST_RANK={none:0,edge:1,normal:2,old_growth:3};
 export function evaluateHabitat(p,e){
  const failures=[],missing=[];
- const check=(key,condition,fail)=>{if(p[key]===undefined||p[key]===null)return;if(e[key]===undefined||e[key]===null){missing.push(key);return;}if(condition(e[key]))failures.push(fail);};
- check("minTemperatureC",v=>v<p.minTemperatureC,"temperature_low");
- check("maxTemperatureC",v=>v>p.maxTemperatureC,"temperature_high");
- check("minRainfall",v=>v<p.minRainfall,"rainfall_low");
- check("maxRainfall",v=>v>p.maxRainfall,"rainfall_high");
- check("belowSeaLevel",v=>v<p.belowSeaLevel,"water_too_shallow");
- check("maxBrightness",v=>v>p.maxBrightness,"brightness_high");
+ const check=(profileKey,environmentKey,condition,fail)=>{if(p[profileKey]===undefined||p[profileKey]===null)return;if(e[environmentKey]===undefined||e[environmentKey]===null){missing.push(environmentKey);return;}if(condition(e[environmentKey]))failures.push(fail);};
+ check("minTemperatureC","temperatureC",v=>v<p.minTemperatureC,"temperature_low");
+ check("maxTemperatureC","temperatureC",v=>v>p.maxTemperatureC,"temperature_high");
+ check("minRainfall","rainfall",v=>v<p.minRainfall,"rainfall_low");
+ check("maxRainfall","rainfall",v=>v>p.maxRainfall,"rainfall_high");
+ check("belowSeaLevel","belowSeaLevel",v=>v<p.belowSeaLevel,"water_too_shallow");
+ check("maxBrightness","brightness",v=>v>p.maxBrightness,"brightness_high");
  if(p.minForest!=null||p.maxForest!=null){
   if(e.forestType==null)missing.push("forestType");
   else{
