@@ -58,6 +58,18 @@ test("duck and quail use automatic nest-box laying with eight-day incubation",()
  assert.match(runtime,/巣箱で産卵します/);
 });
 
+test("natural fauna spawning enforces official depth, chance and underwater constraints",()=>{
+ const profiles=read("packs/behavior_pack/data/official-fauna-spawn-profiles.json").species;
+ const orca=profiles.find(p=>p.id==="orca"),deep=profiles.find(p=>p.id==="octopoteuthis");
+ assert.equal(orca.distanceBelowSeaLevel,6);
+ assert.equal(orca.chance,10);
+ assert.equal(deep.distanceBelowSeaLevel,33);
+ assert.equal(deep.maxBrightness,0);
+ assert.match(runtime,/official\.distanceBelowSeaLevel>0&&environment\.belowSeaLevel<official\.distanceBelowSeaLevel/);
+ assert.match(runtime,/official\.chance>1&&Math\.random\(\)>=1\/official\.chance/);
+ assert.match(runtime,/official\.placement==="in_water"/);
+});
+
 test("aquatic fauna distinguish swimming fish from seafloor shellfish",()=>{
  const aquatic=Object.entries(CUSTOM_FAUNA_PROFILES).filter(([,p])=>p.kind==="aquatic");
  assert.ok(aquatic.length>=10);
