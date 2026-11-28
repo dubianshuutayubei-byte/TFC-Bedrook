@@ -18,11 +18,11 @@ test("camel profiles require measured groundwater and do not substitute rainfall
  assert.ok(invalid.failures.includes("groundwater_high"));
 });
 test("ignoreRivers profiles use average rainfall as the groundwater metric",()=>{
- const fish=byId.bluegill;
- const valid=evaluateOfficialFaunaHabitat(fish,{temperatureC:15,averageRainfall:250,month:"JUNE"});
+ const fish=byId.arctic_char;
+ const valid=evaluateOfficialFaunaHabitat(fish,{temperatureC:-10,averageRainfall:250,month:"JUNE"});
  assert.equal(valid.waterMetric,"averageRainfall");
  assert.equal(valid.suitable,true);
- const missing=evaluateOfficialFaunaHabitat(fish,{temperatureC:15,averageGroundwater:250,month:"JUNE"});
+ const missing=evaluateOfficialFaunaHabitat(fish,{temperatureC:-10,averageGroundwater:250,month:"JUNE"});
  assert.ok(missing.missing.includes("averageRainfall"));
 });
 test("forest density and elevation use the official numeric ranges",()=>{
