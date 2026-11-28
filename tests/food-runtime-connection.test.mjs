@@ -9,12 +9,15 @@ const profiles=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/food-
 const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
 
 test("registered edible items use the food service and match canonical nutrition profiles",()=>{
-  assert.match(runtime,/import \{ consumeFood \} from "\.\/core\/food-service\.mjs"/);
+  assert.match(runtime,/import \{ consumeFood, advanceFoodDecay \} from "\.\/core\/food-service\.mjs"/);
   assert.match(runtime,/consumeFood\(s,/);
   const expected=[
     ["raw_meat","raw_meat","protein"],
     ["cooked_meat","cooked_meat","protein"],
-    ["grain","grain","grain"]
+    ["grain","grain","grain"],
+    ["maize","maize","grain"],
+    ["potato","potato","vegetables"],
+    ["milk_bottle","milk","dairy"]
   ];
   for(const [file,id,category] of expected){
     const item=JSON.parse(readFileSync(join(root,"packs/behavior_pack/items",file+".json"),"utf8"));
