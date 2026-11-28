@@ -155,10 +155,15 @@ function loadTrackedFoodContainers(){
   }
  }catch(error){console.warn("[TFC-Bedrook] tracked food container load failed:",error);}
 }
+function getBlockInventoryContainer(block){
+ try{const component=block.getComponent("minecraft:inventory");if(component?.container)return component.container;}catch{}
+ try{const component=block.getComponent("inventory");if(component?.container)return component.container;}catch{}
+ return undefined;
+}
 function trackFoodContainer(block){
  try{
-  const component=block.getComponent("minecraft:inventory")??block.getComponent("inventory");
-  if(!component?.container)return;
+  const container=getBlockInventoryContainer(block);
+  if(!container)return;
   const location={x:Math.floor(block.location.x),y:Math.floor(block.location.y),z:Math.floor(block.location.z)};
   const dimensionId=normalizeDimensionId(block.dimension.id),key=dimensionId+":"+location.x+","+location.y+","+location.z;
   if(trackedFoodContainers.has(key))return;
@@ -173,9 +178,9 @@ function tickTrackedFoodContainers(nowTick){
   try{
    const dimension=world.getDimension(entry.dimensionId),block=dimension.getBlock(entry.location);
    if(!block){continue;}
-   const component=block.getComponent("minecraft:inventory")??block.getComponent("inventory");
-   if(!component?.container){trackedFoodContainers.delete(key);changed=true;continue;}
-   tickFoodContainerFreshness(component.container,dimension,entry.location,nowTick);
+   const container=getBlockInventoryContainer(block);
+   if(!container){trackedFoodContainers.delete(key);changed=true;continue;}
+   tickFoodContainerFreshness(container,dimension,entry.location,nowTick);
   }catch{}
  }
  if(changed)saveTrackedFoodContainers();
