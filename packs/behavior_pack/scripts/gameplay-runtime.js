@@ -553,7 +553,7 @@ function animalTick(entity){
  state=advanceAnimalLifecycle(state,0,{adultDays:profile.adultAgeDays??0}).animal;
  state=advanceAnimalFamiliarityDecay(state,currentDay,{decayLimit:30,decayPerDay:2});
  if(profile.maxUses>0&&state.uses>profile.maxUses&&state.oldDay<0)state.oldDay=currentDay+1+Math.floor(Math.random()*5);
- if(state.oldDay>=0&&currentDay>state.oldDay)state.lifeStage="old";
+ if(state.oldDay>=0&&currentDay>state.oldDay&&!state.dead)state.lifeStage="old";
  state=consumeDroppedAnimalFood(entity,profile,state);
  try{
   const base={x:Math.floor(entity.location.x),y:Math.floor(entity.location.y),z:Math.floor(entity.location.z)};
