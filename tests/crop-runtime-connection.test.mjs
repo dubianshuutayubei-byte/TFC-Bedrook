@@ -53,5 +53,5 @@ test("pumpkin and melon create harvestable fruit blocks beside mature plants",()
  assert.match(runtime,/if\(profile\.spreading\)trySpreadFruit\(block,profile\)/);
  assert.match(runtime,/brokenId==="tfc:pumpkin_fruit"/);
  assert.match(runtime,/brokenId==="tfc:melon_fruit"/);
- assert.match(runtime,/if\(profile\.spreading\)\{p\.sendMessage/);
+ assert.match(runtime,/if\(profile\.spreading\)writeWorldState\(posKey\(b,"crop_spread_used"\),false\)/);
 });
