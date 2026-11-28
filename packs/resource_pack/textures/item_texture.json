@@ -93,7 +93,7 @@
       "textures": "textures/items/tfc_stone"
     },
     "tfc_compost": {
-      "textures": "textures/items/tfc_grain"
+      "textures": "textures/items/tfc_pottery"
     },
     "tfc_composter": {
       "textures": "textures/items/tfc_pottery"
