@@ -1,0 +1,33 @@
+{
+  "resource_pack_name": "tfc_bedrook",
+  "texture_name": "atlas.items",
+  "texture_data": {
+    "tfc_stone": {
+      "textures": "textures/items/tfc_stone"
+    },
+    "tfc_firepit": {
+      "textures": "textures/items/tfc_firepit"
+    },
+    "tfc_pottery": {
+      "textures": "textures/items/tfc_pottery"
+    },
+    "tfc_ingot": {
+      "textures": "textures/items/tfc_ingot"
+    },
+    "tfc_grain": {
+      "textures": "textures/items/tfc_grain"
+    },
+    "tfc_meat_raw": {
+      "textures": "textures/items/tfc_meat_raw"
+    },
+    "tfc_meat_cooked": {
+      "textures": "textures/items/tfc_meat_cooked"
+    },
+    "tfc_seed": {
+      "textures": "textures/items/tfc_seed"
+    },
+    "tfc_deer": {
+      "textures": "textures/items/tfc_deer"
+    }
+  }
+}
