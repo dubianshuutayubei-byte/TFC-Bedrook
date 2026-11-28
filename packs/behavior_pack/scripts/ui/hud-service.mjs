@@ -7,14 +7,21 @@ const SEASON_LABELS = Object.freeze({
 
 /**
  * Builds the compact, device-friendly survival HUD line.
- * Needs that are not yet connected to live player state are intentionally omitted.
+ * Only values supplied by live player state are displayed.
  */
-export function formatSurvivalHud(calendar) {
+export function formatSurvivalHud(calendar, playerState = undefined) {
   if (!calendar || !Number.isInteger(calendar.year) ||
       !Number.isInteger(calendar.dayOfYearNumber) ||
       !Object.hasOwn(SEASON_LABELS, calendar.season)) {
     throw new TypeError("Invalid calendar data for survival HUD");
   }
 
-  return `§6TFC§r  第${calendar.year}年  §e${SEASON_LABELS[calendar.season]}§r  ${calendar.dayOfYearNumber}日目`;
+  const date = `§6TFC§r  第${calendar.year}年  §e${SEASON_LABELS[calendar.season]}§r  ${calendar.dayOfYearNumber}日目`;
+  if (!playerState) return date;
+
+  const hydration = playerState.hydration;
+  if (typeof hydration !== "number" || !Number.isFinite(hydration)) {
+    throw new TypeError("Invalid hydration value for survival HUD");
+  }
+  return `${date}  §b水分 ${Math.round(Math.max(0, Math.min(100, hydration)))}%§r`;
 }
