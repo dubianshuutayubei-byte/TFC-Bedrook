@@ -78,3 +78,17 @@ export function calculateCropGrowthPoints(profile, environment, soilInput, elaps
 
 export function advanceSoilDay(input,{rainfallMm=0,evaporation=2,nutrientLeaching=0.2}={}){const soil=createSoilState(input);soil.hydration=clamp(soil.hydration+Math.max(0,finiteOr(rainfallMm,0))-Math.max(0,finiteOr(evaporation,0)),0,100);for(const key of ["nitrogen","phosphorus","potassium"])soil[key]=clamp(soil[key]-Math.max(0,finiteOr(nutrientLeaching,0)),0,100);return soil;}
 export function applySoilCompost(input,{nitrogen=15,phosphorus=8,potassium=12}={}){return applyFertilizer(input,{nitrogen,phosphorus,potassium});}
+
+const SOIL_TYPE_BY_BLOCK = Object.freeze({
+  "minecraft:clay": "clay",
+  "minecraft:mud": "silt",
+  "minecraft:dirt": "loam",
+  "minecraft:grass_block": "loam",
+  "minecraft:coarse_dirt": "loam",
+  "minecraft:rooted_dirt": "loam",
+  "minecraft:podzol": "loam",
+});
+
+export function inferSoilTypeFromBlockId(blockId) {
+  return SOIL_TYPE_BY_BLOCK[String(blockId ?? "")] ?? "loam";
+}
