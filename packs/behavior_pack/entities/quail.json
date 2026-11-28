@@ -71,6 +71,20 @@
             "sprint_speed_multiplier": 1.6
           }
         ]
+      },
+      "minecraft:behavior.move_to_block": {
+        "priority": 5,
+        "search_range": 16,
+        "search_height": 4,
+        "speed_multiplier": 1,
+        "goal_radius": 1,
+        "stay_duration": 1600,
+        "tick_interval": 40,
+        "start_chance": 0.35,
+        "target_selection_method": "nearest",
+        "target_blocks": [
+          "tfc:nest_box"
+        ]
       }
     },
     "component_groups": {
