@@ -5,7 +5,15 @@
     "path": "src/data/java/net/dries007/tfc/data/providers/BuiltinFauna.java",
     "registryPath": "src/main/java/net/dries007/tfc/common/entities/Fauna.java",
     "placementPath": "src/main/java/net/dries007/tfc/world/placement/ClimatePlacement.java",
-    "description": "Exact source-derived fauna habitat constraints. The groundwater bounds are applied to average groundwater except when ignoreRivers=true, in which case ClimatePlacement evaluates average rainfall. chance is preserved as the source value, not converted to probability."
+    "description": "Exact source-derived fauna habitat constraints. The groundwater bounds are applied to average groundwater except when ignoreRivers=true, in which case ClimatePlacement evaluates average rainfall. chance is preserved as the source value, not converted to probability.",
+    "version": "TerraFirmaCraft 1.21.1-4.2.16",
+    "tag": "v4.2.16",
+    "commit": "tag v4.2.16; source blobs pinned below",
+    "blobs": {
+      "src/data/java/net/dries007/tfc/data/providers/BuiltinFauna.java": "5290c4ef69ff7ba768406e2ee2157052c25ee4b2",
+      "src/main/java/net/dries007/tfc/common/entities/Faunas.java": "5ac152295b832d0e6317539d9d714110f6515d76",
+      "src/main/java/net/dries007/tfc/world/placement/ClimatePlacement.java": "3f3ba3826a584040cd40bac6bbebfcc454239e45"
+    }
   },
   "units": {
     "temperature": "°C",
