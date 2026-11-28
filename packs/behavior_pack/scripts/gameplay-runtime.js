@@ -667,14 +667,15 @@ function findNearbyNestBox(entity,radius=4){
 }
 function layAnimalEgg(entity,state,profile,currentDay){
  if(!profile.eggSpecies||!canLayEgg(state,{currentDay,cooldownDays:profile.eggLayCooldownDays??1,minimumAgeDays:profile.adultAgeDays??0,minimumFamiliarity:profile.productFamiliarityMin??15,minimumHealth:30,maximumHunger:70,maximumThirst:70,maxUses:profile.maxUses??Infinity}))return state;
+ const eggUseOptions={maxUses:profile.maxUses??Infinity,oldDayDelay:1+Math.floor(Math.random()*5)};
  const nest=findNearbyNestBox(entity,4);
  if(!nest)return state;
  const key=posKey(nest,"nest_box"),stored=readWorldState(key,{eggs:[],lastUpdateDay:currentDay});
  const added=addNestBoxEgg(stored,{id:"hen-"+String(entity.id).replace(/[^a-zA-Z0-9_-]/g,"").slice(-20)+"-"+Math.floor(currentDay*1000),species:profile.eggSpecies,laidAtDay:currentDay,fertilized:nearbyBreedingPair(nest,entity.typeId),hatchDays:profile.hatchDays??8});
- if(!added.added){if(added.reason==="duplicate_egg_id"&&stored.eggs?.some(egg=>egg.id==="hen-"+String(entity.id).replace(/[^a-zA-Z0-9_-]/g,"").slice(-20)+"-"+Math.floor(currentDay*1000)))return recordEggLaid(state,currentDay);return state;}
+ if(!added.added){if(added.reason==="duplicate_egg_id"&&stored.eggs?.some(egg=>egg.id==="hen-"+String(entity.id).replace(/[^a-zA-Z0-9_-]/g,"").slice(-20)+"-"+Math.floor(currentDay*1000)))return recordEggLaid(state,currentDay,eggUseOptions);return state;}
  const next={...stored,eggs:added.state.eggs,lastUpdateDay:currentDay};
  if(!writeWorldState(key,next))return state;
- return recordEggLaid(state,currentDay);
+ return recordEggLaid(state,currentDay,eggUseOptions);
 }
 function runFaunaPredatorPreyInteraction(entity,profile,state,currentDay){
  const species=profile.speciesId??entity.typeId.replace(/^tfc:/,"");
