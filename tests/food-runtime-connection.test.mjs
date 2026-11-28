@@ -17,6 +17,8 @@ test("registered edible items use the food service and match canonical nutrition
     ["grain","grain","grain"],
     ["maize","maize","grain"],
     ["potato","potato","vegetables"],
+    ["vegetable","vegetable","vegetables"],
+    ["fruit","fruit","fruit"],
     ["milk_bottle","milk","dairy"]
   ];
   for(const [file,id,category] of expected){
