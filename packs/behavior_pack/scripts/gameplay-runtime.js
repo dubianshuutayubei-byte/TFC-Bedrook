@@ -4,7 +4,7 @@ import { deserializePlayerState, serializePlayerState } from "./core/player-stat
 import { consumeFood, advanceFoodDecay } from "./core/food-service.mjs";
 import { createFireState, addFuel, advanceFire, canProcessAtTemperature } from "./core/firepit-service.mjs";
 import { createSoilState, applySoilCompost, advanceSoilHydration, evaluateCropGrowth, applyNutrientUptake, inferSoilTypeFromBlockId, advanceCropGrowthProgress } from "./core/agriculture-service.mjs";
-import { createAnimalState, advanceAnimalNeeds, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal } from "./core/fauna-service.mjs";
+import { createAnimalState, advanceAnimalNeeds, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct } from "./core/fauna-service.mjs";
 import { getStationRecipes } from "./core/processing-recipes.mjs";
 import { isStationJobDue, getPendingStationOutputs, markStationOutputDelivered, markStationJobRecoverable } from "./core/station-job-service.mjs";
 import { normalizeDimensionId, normalizeWeather, getRainfallMm } from "./core/environment-service.mjs";
