@@ -1,0 +1,5 @@
+{
+  "wheat": { "minTemperatureC": 5, "maxTemperatureC": 30, "minHydration": 25, "maxHydration": 100, "preferredNutrient": "nitrogen", "minPreferredNutrient": 10, "optimalNutrient": 60, "soilTypes": ["loam", "silt", "clay"] },
+  "maize": { "minTemperatureC": 12, "maxTemperatureC": 35, "minHydration": 30, "maxHydration": 100, "preferredNutrient": "nitrogen", "minPreferredNutrient": 15, "optimalNutrient": 65, "soilTypes": ["loam", "silt"] },
+  "potato": { "minTemperatureC": 4, "maxTemperatureC": 25, "minHydration": 20, "maxHydration": 90, "preferredNutrient": "potassium", "minPreferredNutrient": 10, "optimalNutrient": 55, "soilTypes": ["loam", "silt"] }
+}
