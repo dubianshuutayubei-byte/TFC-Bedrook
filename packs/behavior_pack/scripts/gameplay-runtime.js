@@ -707,6 +707,8 @@ function animalTick(entity){
      const baby=entity.dimension.spawnEntity(entity.typeId,{x:entity.location.x+1+(offset%2)*0.8,y:entity.location.y,z:entity.location.z+Math.floor(offset/2)*0.8});
      if(profile.customBreeding&&entity.typeId.startsWith("tfc:")){
       try{baby.triggerEvent("tfc:spawn_baby");}catch(error){console.warn("[TFC-Bedrook] juvenile event unavailable for",profile.speciesId,error);}
+     }else{
+      try{baby.triggerEvent("minecraft:entity_born");}catch(error){console.warn("[TFC-Bedrook] vanilla juvenile event unavailable for",profile.speciesId,error);}
      }
      state.birthsRemaining-=1;saveAnimal(entity,state);
      saveAnimal(baby,createAnimalOffspringState(state,profile.speciesId,Math.random()<0.5?"male":"female"));
