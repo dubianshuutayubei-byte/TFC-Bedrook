@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { PROCESSING_RECIPES, getStationRecipes, validateProcessingRecipes } from "../packs/behavior_pack/scripts/core/processing-recipes.mjs";
 
 test("canonical station recipes are valid and unique",()=>{
-  assert.deepEqual(validateProcessingRecipes(),{count:5});
+  assert.deepEqual(validateProcessingRecipes(),{count:8});
 });
 test("pit kiln exposes both vessel and ingot-mold firing",()=>{
   const ids=getStationRecipes("pit_kiln").map(r=>r.id);
@@ -14,5 +14,20 @@ test("copper casting returns the reusable fired mold",()=>{
   assert.equal(recipe.inputs["tfc:fired_ingot_mold"],1);
   assert.equal(recipe.outputs["tfc:fired_ingot_mold"],1);
   assert.equal(recipe.outputs["tfc:heated_copper_ingot"],1);
+});
+test("tin casting and bronze alloy casting are connected",()=>{
+ const tin=getStationRecipes("crucible").find(r=>r.id==="tfc:heated_tin_ingot");
+ const bronze=getStationRecipes("crucible").find(r=>r.id==="tfc:heated_bronze_ingot");
+ assert.equal(tin.inputs["tfc:tin_ore"],2);
+ assert.equal(tin.outputs["tfc:heated_tin_ingot"],1);
+ assert.equal(bronze.inputs["tfc:copper_ingot"],9);
+ assert.equal(bronze.inputs["tfc:tin_ingot"],1);
+ assert.equal(bronze.alloyId,"bronze");
+ assert.equal(bronze.minimumTemperatureC,950);
+});
+test("bronze sheet can be formed at the anvil",()=>{
+ const recipe=getStationRecipes("anvil").find(r=>r.id==="tfc:bronze_sheet");
+ assert.equal(recipe.inputs["tfc:heated_bronze_ingot"],1);
+ assert.equal(recipe.outputs["tfc:bronze_sheet"],1);
 });
 test("unknown station has no recipes",()=>assert.deepEqual(getStationRecipes("unknown"),[]));
