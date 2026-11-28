@@ -39,3 +39,10 @@ item.tfc:spoiled_food.name=腐敗した食品
 
 item.tfc:vegetable.name=野菜
 item.tfc:fruit.name=果物
+
+item.tfc:tin_ore.name=錫鉱石
+item.tfc:heated_tin_ingot.name=加熱済み錫インゴット
+item.tfc:tin_ingot.name=錫インゴット
+item.tfc:heated_bronze_ingot.name=加熱済み青銅インゴット
+item.tfc:bronze_ingot.name=青銅インゴット
+item.tfc:bronze_sheet.name=青銅板
