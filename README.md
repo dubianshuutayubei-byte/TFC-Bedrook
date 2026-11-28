@@ -12,6 +12,10 @@ Minecraft Bedrock Edition 26.60 向けに TerraFirmaCraft（TFC）Java 1.21.1-4.
 - CEID / Iパックとは現段階で統合しない。TFC-Bedrook単体で開発し、後で連携可能な構造を保つ。
 - 外部アドオンのコード・アセットは、ライセンスと再利用許諾を確認せず流用しない。
 
+## プレイヤー向け説明書
+
+- [日本語プレイヤー完全ガイド（開発中・未実機検証の機能を明記）](docs/manual/PLAYER_MANUAL_JA.md)
+
 ## 設計・調査資料
 
 - [外部Addon・公式サンプルの高速再利用監査](docs/research/addon-reference-reuse-audit-2026-11-28.md)
