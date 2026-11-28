@@ -30,6 +30,12 @@
     },
     "tfc_trellis": {
       "textures": "textures/blocks/tfc_pottery"
+    },
+    "tfc_pumpkin_fruit": {
+      "textures": "textures/blocks/tfc_pottery"
+    },
+    "tfc_melon_fruit": {
+      "textures": "textures/blocks/tfc_pottery"
     }
   }
 }
