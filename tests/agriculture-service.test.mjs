@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { createSoilState, evaluateCropGrowth, applyNutrientUptake, applyFertilizer, advanceCropStage, advanceSoilHydration, calculateCropGrowthPoints, advanceSoilDay, applySoilCompost, inferSoilTypeFromBlockId, advanceCropGrowthProgress } from "../packs/behavior_pack/scripts/core/agriculture-service.mjs";
+import { createSoilState, evaluateCropGrowth, applyNutrientUptake, applyFertilizer, advanceCropStage, advanceSoilHydration, calculateCropGrowthPoints, advanceSoilDay, applySoilCompost, inferSoilTypeFromBlockId, advanceCropGrowthProgress, applyCropNutrientEffects, getSoilFertilityMultiplier } from "../packs/behavior_pack/scripts/core/agriculture-service.mjs";
 
-const wheat = { minTemperatureC: 5, maxTemperatureC: 30, minHydration: 25, maxHydration: 100, preferredNutrient: "nitrogen", minPreferredNutrient: 10, optimalNutrient: 60 };
+const wheat = { minTemperatureC: -7, maxTemperatureC: 22, minHydration: 15, maxHydration: 85, nutrientDemand: { nitrogen: 100 } };
 test("soil state is normalized", () => assert.equal(createSoilState({ hydration: 200 }).hydration, 100));
 test("crop growth requires climate and nutrient conditions", () => {
   assert.equal(evaluateCropGrowth(wheat, { temperatureC: 20 }, { hydration: 60, nitrogen: 60 }).suitable, true);
@@ -43,4 +43,19 @@ test("crop growth progress accumulates proportionally before advancing a stage",
   const final = advanceCropGrowthProgress(80, 1);
   assert.deepEqual(final, { progress: 5, stageAdvanced: true });
   assert.deepEqual(advanceCropGrowthProgress(20, 0), { progress: 20, stageAdvanced: false });
+});
+
+test("soil fertility classes scale fertilizer effectiveness only",()=>{
+ const poor=applyFertilizer({fertilityClass:"oxisol",nitrogen:0},{nitrogen:10});
+ const rich=applyFertilizer({fertilityClass:"mollisol",nitrogen:0},{nitrogen:10});
+ assert.equal(poor.nitrogen,8);
+ assert.equal(rich.nitrogen,12);
+ assert.equal(getSoilFertilityMultiplier({fertilityClass:"entisol"}),1);
+});
+
+test("crop nutrient effects consume and replenish NPK by crop profile",()=>{
+ const wheatSoil=applyCropNutrientEffects({nitrogen:50,phosphorus:50,potassium:50},{nitrogen:-2,phosphorus:1,potassium:1},1);
+ assert.deepEqual([wheatSoil.nitrogen,wheatSoil.phosphorus,wheatSoil.potassium],[48,51,51]);
+ const potatoSoil=applyCropNutrientEffects({nitrogen:50,phosphorus:50,potassium:50},{nitrogen:-1,phosphorus:-1,potassium:-1},1);
+ assert.deepEqual([potatoSoil.nitrogen,potatoSoil.phosphorus,potatoSoil.potassium],[49,49,49]);
 });
