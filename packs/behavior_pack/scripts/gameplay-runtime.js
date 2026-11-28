@@ -596,14 +596,17 @@ function consumeDroppedAnimalFood(entity,profile,state){
 }
 function tickPredation(entity,profile,state,currentDay){
  if(!profile.predatorDiet?.length||state.dead)return state;
- // TFC predators are neutral until they have recently made a kill.
- if(state.lastHuntAt>=0&&currentDay-state.lastHuntAt<=0.25&&currentDay-state.lastPlayerAttackAt>=0.05){
+ // A successful hunt pacifies TFC predators for half a day.
+ if(state.lastHuntAt>=0&&currentDay-state.lastHuntAt<=0.5)return state;
+ if(profile.diurnal!==undefined){const daytime=world.getTimeOfDay()>=0&&world.getTimeOfDay()<12000;if(daytime!==profile.diurnal)return state;}
+ if(state.homeX===null||state.homeY===null||state.homeZ===null){state.homeX=entity.location.x;state.homeY=entity.location.y;state.homeZ=entity.location.z;}
+ const homeDx=entity.location.x-state.homeX,homeDy=entity.location.y-state.homeY,homeDz=entity.location.z-state.homeZ;
+ if(homeDx*homeDx+homeDy*homeDy+homeDz*homeDz>6400)return state;
+ if(currentDay-state.lastPlayerAttackAt>=0.05){
   try{for(const player of entity.dimension.getEntities({type:"minecraft:player",location:entity.location,maxDistance:2.2})){
    if(typeof player.applyDamage==="function"){player.applyDamage(profile.playerAttackDamage??3);state.lastPlayerAttackAt=currentDay;break;}
-  }}catch(error){console.warn("[TFC-Bedrook] predator threat response failed:",error);}
+  }}catch(error){console.warn("[TFC-Bedrook] predator player attack failed:",error);}
  }
- if(state.hunger<55)return state;
- if(profile.diurnal!==undefined){const daytime=world.getTimeOfDay()>=0&&world.getTimeOfDay()<12000;if(daytime!==profile.diurnal)return state;}
  if(state.lastHuntAt>=0&&currentDay-state.lastHuntAt<0.15)return state;
  try{
   for(const prey of entity.dimension.getEntities({location:entity.location,maxDistance:2.2})){
@@ -613,10 +616,35 @@ function tickPredation(entity,profile,state,currentDay){
    const result=evaluatePredation(state,preyState,{predatorDiet:profile.predatorDiet,preySpecies:preyProfile.speciesId??preyState.species,herdDefense:Math.min(0.6,herd*0.12)});
    if(!result.eligible||Math.random()>result.successChance)continue;
    const hp=prey.getComponent("minecraft:health");if(!hp)continue;
-   hp.setCurrentValue(Math.max(0,hp.currentValue-(profile.predationDamage??5)));
-   state.hunger=Math.max(0,state.hunger-28);state.lastHuntAt=currentDay;break;
+   const remaining=Math.max(0,hp.currentValue-(profile.predationDamage??5));hp.setCurrentValue(remaining);
+   if(remaining<=0){state.hunger=Math.max(0,state.hunger-28);state.lastHuntAt=currentDay;}
+   break;
   }
  }catch(error){console.warn("[TFC-Bedrook] fauna predation failed:",error);}
+ return state;
+}
+function tickRamming(entity,profile,state,currentDay){
+ if(!profile.ramming||state.dead)return state;
+ if(state.nextRamAt<0){state.nextRamAt=currentDay+(state.sex==="male"?0.025:0.042);return state;}
+ if(currentDay<state.nextRamAt)return state;
+ try{
+  const targets=entity.dimension.getEntities({location:entity.location,maxDistance:9}).filter(target=>{
+   if(target.id===entity.id||target.typeId===entity.typeId||!target.getComponent("minecraft:health"))return false;
+   const dx=target.location.x-entity.location.x,dz=target.location.z-entity.location.z,d2=dx*dx+dz*dz;
+   return d2>=9&&d2<=81;
+  }).sort((a,b)=>{
+   const da=(a.location.x-entity.location.x)**2+(a.location.z-entity.location.z)**2;
+   const db=(b.location.x-entity.location.x)**2+(b.location.z-entity.location.z)**2;return da-db;
+  });
+  const target=targets[0];
+  if(target){
+   target.applyDamage(profile.ramDamage??6);
+   const dx=target.location.x-entity.location.x,dz=target.location.z-entity.location.z,len=Math.max(0.001,Math.hypot(dx,dz));
+   if(typeof target.applyKnockback==="function")target.applyKnockback(dx/len,dz/len,profile.ramKnockback??2.5,0.3);
+  }
+ }catch(error){console.warn("[TFC-Bedrook] ramming prey behavior failed:",error);}
+ const min=state.sex==="male"?0.025:0.0417,max=state.sex==="male"?0.05:0.0833;
+ state.nextRamAt=currentDay+min+Math.random()*(max-min);
  return state;
 }
 function animalTick(entity){
@@ -662,7 +690,7 @@ function animalTick(entity){
  if(profile.customBreeding&&state.sex==="female"&&state.ageDays>=profile.adultAgeDays&&state.familiarity>=profile.requiredFamiliarity&&state.lastFedDay>=breedingDay&&state.pregnancyDays<=0&&!state.fertilized){
   try{const nearby=entity.dimension.getEntities({type:entity.typeId,location:entity.location,maxDistance:6});for(const partner of nearby){if(partner.id===entity.id)continue;const other=animalState(partner),breedingProfile={...profile,currentDay:breedingDay,currentTime:breedingTime};if(canBreed(state,other,breedingProfile)){const started=beginPregnancy(state,other,breedingProfile);if(started.started){state=recordBreedingUse(started.animal,breedingTime,{maxBreedUses:profile.maxBreedUses,oldDayDelay:1+Math.floor(Math.random()*5)});other=recordBreedingUse(other,breedingTime,{maxBreedUses:profile.maxBreedUses,oldDayDelay:1+Math.floor(Math.random()*5)});other.lastBreedAt=breedingTime;other.lastFedDay=breedingDay-1;saveAnimal(partner,other);break;}}}}catch{}
  }
- saveAnimal(entity,state);
+ state=tickRamming(entity,profile,state,currentDay);saveAnimal(entity,state);
 }
 function eggNestTemperature(block){
  let biome="plains";try{biome=block.dimension.getBiome(block.location).id;}catch{}
