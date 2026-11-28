@@ -42,5 +42,95 @@
       "phosphorus": -0.2,
       "potassium": -0.6
     }
+  },
+  "barley": {
+    "minTemperatureC": -7,
+    "maxTemperatureC": 23,
+    "minHydration": 10,
+    "maxHydration": 70,
+    "nutrientDemand": {
+      "nitrogen": 75
+    },
+    "nutrientEffects": {
+      "nitrogen": -0.75,
+      "phosphorus": 0.2,
+      "potassium": 0.2
+    }
+  },
+  "oat": {
+    "minTemperatureC": -7,
+    "maxTemperatureC": 22,
+    "minHydration": 25,
+    "maxHydration": 85,
+    "nutrientDemand": {
+      "nitrogen": 100
+    },
+    "nutrientEffects": {
+      "nitrogen": -1,
+      "phosphorus": 0.4,
+      "potassium": 0.3
+    }
+  },
+  "rye": {
+    "minTemperatureC": -7,
+    "maxTemperatureC": 18,
+    "minHydration": 15,
+    "maxHydration": 80,
+    "nutrientDemand": {
+      "nitrogen": 100
+    },
+    "nutrientEffects": {
+      "nitrogen": -1,
+      "phosphorus": 0.2,
+      "potassium": 0.4
+    }
+  },
+  "beet": {
+    "minTemperatureC": -10,
+    "maxTemperatureC": 27,
+    "minHydration": 10,
+    "maxHydration": 70,
+    "nutrientDemand": {
+      "nitrogen": 40,
+      "phosphorus": 30,
+      "potassium": 50
+    },
+    "nutrientEffects": {
+      "nitrogen": -0.4,
+      "phosphorus": -0.3,
+      "potassium": -0.5
+    }
+  },
+  "cabbage": {
+    "minTemperatureC": -10,
+    "maxTemperatureC": 27,
+    "minHydration": 10,
+    "maxHydration": 65,
+    "nutrientDemand": {
+      "nitrogen": 50,
+      "phosphorus": 20,
+      "potassium": 40
+    },
+    "nutrientEffects": {
+      "nitrogen": -0.5,
+      "phosphorus": -0.2,
+      "potassium": -0.4
+    }
+  },
+  "carrot": {
+    "minTemperatureC": -10,
+    "maxTemperatureC": 27,
+    "minHydration": 15,
+    "maxHydration": 85,
+    "nutrientDemand": {
+      "nitrogen": 50,
+      "phosphorus": 30,
+      "potassium": 40
+    },
+    "nutrientEffects": {
+      "nitrogen": -0.5,
+      "phosphorus": -0.3,
+      "potassium": -0.4
+    }
   }
 }
