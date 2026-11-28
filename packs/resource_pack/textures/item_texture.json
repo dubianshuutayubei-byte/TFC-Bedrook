@@ -34,6 +34,9 @@
     },
     "tfc_farmland": {
       "textures": "textures/blocks/tfc_farmland"
+    },
+    "tfc_milk_bottle": {
+      "textures": "textures/items/tfc_pottery"
     }
   }
 }
