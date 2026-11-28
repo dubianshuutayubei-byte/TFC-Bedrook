@@ -8,7 +8,7 @@ const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
 
 test("in-world wheat growth uses crop climate and soil suitability checks",()=>{
-  assert.match(runtime,/evaluateCropGrowth\(WHEAT_PROFILE,\{temperatureC:15\},soil\)/);
-  assert.match(runtime,/applyNutrientUptake\(soil,WHEAT_PROFILE\.preferredNutrient,1\.5\)/);
+  assert.match(runtime,/evaluateCropGrowth\(profile,\{temperatureC:15\},soil\)/);
+  assert.match(runtime,/applyNutrientUptake\(soil,profile\.preferredNutrient,1\.5\)/);
   assert.match(runtime,/if\(!evaluation\.suitable\)return/);
 });
