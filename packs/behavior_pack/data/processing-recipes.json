@@ -39,8 +39,8 @@
       "stage": "copper",
       "method": "casting",
       "inputs": { "tfc:molten_copper": 100 },
-      "outputs": { "tfc:copper_ingot": 1 },
-      "minimumTemperatureC": 1080,
+      "outputs": { "tfc:heated_copper_ingot": 1 },
+      "minimumTemperatureC": 1085,
       "requiresMold": true
     },
     {
