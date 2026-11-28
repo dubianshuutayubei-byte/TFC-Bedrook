@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   advanceAnimalLifecycle,
+  initializeAnimalLifeStage,
   createAnimalState,
   createEggState,
   advanceEggIncubation,
@@ -25,6 +26,7 @@ test("dead animals do not continue aging or lose health", () => {
   const result = advanceAnimalLifecycle(dead, 20);
   assert.equal(result.died, true);
   assert.equal(result.animal.ageDays, 50);
+  assert.equal(initializeAnimalLifeStage(result.animal).lifeStage, "dead");
 });
 
 test("fertilized chicken egg incubates only in the viable temperature range", () => {
