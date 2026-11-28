@@ -1,0 +1,11 @@
+{
+  "format_version": "1.26.60",
+  "minecraft:item": {
+    "description": { "identifier": "tfc:spoiled_food", "menu_category": { "category": "items" } },
+    "components": {
+      "minecraft:icon": "tfc_spoiled_food",
+      "minecraft:display_name": { "value": "腐敗した食品" },
+      "minecraft:max_stack_size": 64
+    }
+  }
+}
