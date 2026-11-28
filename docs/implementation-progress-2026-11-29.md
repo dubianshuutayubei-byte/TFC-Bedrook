@@ -111,7 +111,7 @@
 - `tfc:cat` / `tfc:dog` のBP定義を追加。個体名、体力、移動、受動的な移動/注視/誘惑AI、幼体化・成長イベントを登録。
 - 対応するRP Client Entity定義を追加。Mojang Bedrock Samplesで確認した `geometry.cat` / `geometry.wolf` とバニラの猫・オオカミ用テクスチャ/アニメーションを参照し、共通TFC描画コントローラーへ接続。
 - カスタムTFCランタイムプロファイル59件、BP Entity 59件、RP Client Entity 59件が一致することを静的照合。欠落・余分なIDは0件。
-- 公式78種の生息条件プロファイルは、引き続き78件すべてランタイムプロファイルへ接続されている。59件は専用TFC Entity、残りはバニラEntityを利用する構成。
+- 公式78種の生息条件プロファイルは、引き続き78件すべてランタイムプロファイルへ接続されている。内訳は57種が専用TFC Entity、21種がバニラEntity。別枠のペット2種（猫・犬）を加え、カスタムTFC Entityは合計59件。
 - `tests/fauna-entity-assets.test.mjs` を追加。BP/RP IDの一対一対応、ランタイムプロファイルとの一致、Geometry参照、Render Controller、Texture指定を自動監査する。
 - カスタムGeometryは既存の56件を利用し、猫・オオカミ・ニワトリはBedrock標準Geometryを使う。独自モデルが不足していると誤判定しないよう明示的な許可リストを追加。
 
@@ -120,3 +120,12 @@
 - ランタイム59 / BP59 / RP59のID照合：一致。
 - モデル/Client Entityの完全なNodeテスト：CI実行結果未取得。成功扱いにしない。
 - Bedrock 26.60での描画・AI・繁殖・保存復元：未実機検証。
+
+
+### GitHub Actions 最終検証（2026-11-29）
+- [Static Pack Validation](https://github.com/dubianshuutayubei-byte/TFC-Bedrook/actions/runs/46166945886)：成功。
+- JSON/manifest検証：成功。
+- JavaScript構文検査：成功。
+- Node.jsユニットテスト：437件成功、失敗0件。
+- 途中の失敗は、ペットを自然スポーン対象と誤認した古い監査テスト、表示UI/孵化設定の古い期待値など。仕様に合わせてテストを修正し、最終実行で全件成功。
+- これは静的検証の成功であり、Bedrock 26.60の実機描画・AI・セーブ復元の合格を意味しない。
