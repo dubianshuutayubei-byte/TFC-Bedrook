@@ -700,10 +700,10 @@ function animalTick(entity){
  if(profile.customBreeding&&state.pregnancyDays>0){
   const result=advancePregnancy(state,elapsedAgeDays,profile.gestationDays);state=result.animal;
   if(result.birthReady){
-   if(state.birthsRemaining===0){state.birthsRemaining=Math.max(1,Math.floor(profile.childCount??1));saveAnimal(entity,state);}
+   if(state.birthsRemaining===0){state.birthsRemaining=getOffspringCount(profile);state.birthsTotal=state.birthsRemaining;saveAnimal(entity,state);}
    while(state.birthsRemaining>0){
     try{
-     const offset=Math.max(0,state.birthsTotal||Math.floor(profile.childCount??1))-state.birthsRemaining;
+     const offset=Math.max(0,state.birthsTotal||getOffspringCount(profile))-state.birthsRemaining;
      const offspringEntityType=state.pregnancyOffspringEntityType??entity.typeId;
      const offspringSpecies=state.pregnancyOffspringSpecies??profile.speciesId;
      const baby=entity.dimension.spawnEntity(offspringEntityType,{x:entity.location.x+1+(offset%2)*0.8,y:entity.location.y,z:entity.location.z+Math.floor(offset/2)*0.8});
