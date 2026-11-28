@@ -1,0 +1,395 @@
+{
+  "source": {
+    "project": "TerraFirmaCraft",
+    "version": "1.21.1-4.2.16",
+    "tag": "v4.2.16",
+    "javaSource": "src/main/java/net/dries007/tfc/common/entities/TFCEntities.java",
+    "tagPath": "src/generated/resources/data/tfc/tags/item",
+    "note": "Tag references are exact official Java source. bedrockFeedItems are explicit Bedrock-side equivalents using items actually registered in this pack; they are not a claim that Bedrock implements NeoForge item tags."
+  },
+  "diets": [
+    {
+      "species": [
+        "alpaca"
+      ],
+      "tag": "tfc:alpaca_food",
+      "values": [
+        "#c:foods/grain",
+        "#c:foods/fruit"
+      ],
+      "bedrockFeedItems": [
+        "minecraft:wheat",
+        "tfc:grain",
+        "tfc:barley",
+        "tfc:oat",
+        "tfc:rye",
+        "tfc:rice",
+        "tfc:maize",
+        "minecraft:apple",
+        "minecraft:sweet_berries",
+        "tfc:fruit",
+        "tfc:dried_fruit"
+      ]
+    },
+    {
+      "species": [
+        "bactrian_camel",
+        "dromedary_camel"
+      ],
+      "tag": "tfc:camel_food",
+      "values": [
+        "#c:foods/grain",
+        "#c:foods/fruit"
+      ],
+      "bedrockFeedItems": [
+        "minecraft:wheat",
+        "tfc:grain",
+        "tfc:barley",
+        "tfc:oat",
+        "tfc:rye",
+        "tfc:rice",
+        "tfc:maize",
+        "minecraft:apple",
+        "minecraft:sweet_berries",
+        "tfc:fruit",
+        "tfc:dried_fruit"
+      ]
+    },
+    {
+      "species": [
+        "cow"
+      ],
+      "tag": "tfc:cow_food",
+      "values": [
+        "#c:foods/grain"
+      ],
+      "bedrockFeedItems": [
+        "minecraft:wheat",
+        "tfc:grain",
+        "tfc:barley",
+        "tfc:oat",
+        "tfc:rye",
+        "tfc:rice",
+        "tfc:maize"
+      ]
+    },
+    {
+      "species": [
+        "goat"
+      ],
+      "tag": "tfc:goat_food",
+      "values": [
+        "#c:foods/grain",
+        "#c:foods/fruit",
+        "#c:foods/vegetable"
+      ],
+      "bedrockFeedItems": [
+        "minecraft:wheat",
+        "tfc:grain",
+        "tfc:barley",
+        "tfc:oat",
+        "tfc:rye",
+        "tfc:rice",
+        "tfc:maize",
+        "minecraft:apple",
+        "minecraft:sweet_berries",
+        "tfc:fruit",
+        "tfc:dried_fruit",
+        "minecraft:carrot",
+        "minecraft:potato",
+        "minecraft:beetroot",
+        "tfc:vegetable",
+        "tfc:dried_vegetables"
+      ]
+    },
+    {
+      "species": [
+        "horse"
+      ],
+      "tag": "tfc:horse_food",
+      "values": [
+        "#c:foods/grain",
+        "#c:foods/fruit"
+      ],
+      "bedrockFeedItems": [
+        "minecraft:wheat",
+        "tfc:grain",
+        "tfc:barley",
+        "tfc:oat",
+        "tfc:rye",
+        "tfc:rice",
+        "tfc:maize",
+        "minecraft:apple",
+        "minecraft:sweet_berries",
+        "tfc:fruit",
+        "tfc:dried_fruit"
+      ]
+    },
+    {
+      "species": [
+        "donkey"
+      ],
+      "tag": "tfc:donkey_food",
+      "values": [
+        "#tfc:horse_food"
+      ],
+      "bedrockFeedItems": [
+        "minecraft:wheat",
+        "tfc:grain",
+        "tfc:barley",
+        "tfc:oat",
+        "tfc:rye",
+        "tfc:rice",
+        "tfc:maize",
+        "minecraft:apple",
+        "minecraft:sweet_berries",
+        "tfc:fruit",
+        "tfc:dried_fruit"
+      ]
+    },
+    {
+      "species": [
+        "mule"
+      ],
+      "tag": "tfc:mule_food",
+      "values": [
+        "#tfc:horse_food"
+      ],
+      "bedrockFeedItems": [
+        "minecraft:wheat",
+        "tfc:grain",
+        "tfc:barley",
+        "tfc:oat",
+        "tfc:rye",
+        "tfc:rice",
+        "tfc:maize",
+        "minecraft:apple",
+        "minecraft:sweet_berries",
+        "tfc:fruit",
+        "tfc:dried_fruit"
+      ]
+    },
+    {
+      "species": [
+        "sheep"
+      ],
+      "tag": "tfc:sheep_food",
+      "values": [
+        "#c:foods/grain"
+      ],
+      "bedrockFeedItems": [
+        "minecraft:wheat",
+        "tfc:grain",
+        "tfc:barley",
+        "tfc:oat",
+        "tfc:rye",
+        "tfc:rice",
+        "tfc:maize"
+      ]
+    },
+    {
+      "species": [
+        "musk_ox"
+      ],
+      "tag": "tfc:musk_ox_food",
+      "values": [
+        "#c:foods/grain"
+      ],
+      "bedrockFeedItems": [
+        "minecraft:wheat",
+        "tfc:grain",
+        "tfc:barley",
+        "tfc:oat",
+        "tfc:rye",
+        "tfc:rice",
+        "tfc:maize"
+      ]
+    },
+    {
+      "species": [
+        "yak"
+      ],
+      "tag": "tfc:yak_food",
+      "values": [
+        "#c:foods/grain"
+      ],
+      "bedrockFeedItems": [
+        "minecraft:wheat",
+        "tfc:grain",
+        "tfc:barley",
+        "tfc:oat",
+        "tfc:rye",
+        "tfc:rice",
+        "tfc:maize"
+      ]
+    },
+    {
+      "species": [
+        "chicken",
+        "duck",
+        "quail"
+      ],
+      "tag": "tfc:chicken_food",
+      "values": [
+        "#c:foods/grain",
+        "#c:foods/fruit",
+        "#c:foods/vegetable",
+        "#c:seeds",
+        "#c:foods/bread"
+      ],
+      "bedrockFeedItems": [
+        "minecraft:wheat",
+        "tfc:grain",
+        "tfc:barley",
+        "tfc:oat",
+        "tfc:rye",
+        "tfc:rice",
+        "tfc:maize",
+        "minecraft:apple",
+        "minecraft:sweet_berries",
+        "tfc:fruit",
+        "tfc:dried_fruit",
+        "minecraft:carrot",
+        "minecraft:potato",
+        "minecraft:beetroot",
+        "tfc:vegetable",
+        "tfc:dried_vegetables",
+        "minecraft:wheat_seeds",
+        "minecraft:beetroot_seeds",
+        "minecraft:melon_seeds",
+        "minecraft:pumpkin_seeds",
+        "minecraft:bread",
+        "tfc:bread"
+      ]
+    },
+    {
+      "species": [
+        "pig"
+      ],
+      "tag": "tfc:pig_food",
+      "values": [
+        "#c:foods"
+      ],
+      "bedrockFeedItems": [
+        "minecraft:wheat",
+        "tfc:grain",
+        "tfc:barley",
+        "tfc:oat",
+        "tfc:rye",
+        "tfc:rice",
+        "tfc:maize",
+        "minecraft:apple",
+        "minecraft:sweet_berries",
+        "tfc:fruit",
+        "tfc:dried_fruit",
+        "minecraft:carrot",
+        "minecraft:potato",
+        "minecraft:beetroot",
+        "tfc:vegetable",
+        "tfc:dried_vegetables",
+        "minecraft:bread",
+        "tfc:bread",
+        "minecraft:beef",
+        "minecraft:porkchop",
+        "minecraft:chicken",
+        "minecraft:mutton",
+        "minecraft:cod",
+        "minecraft:salmon"
+      ]
+    },
+    {
+      "species": [
+        "rabbit"
+      ],
+      "tag": "tfc:rabbit_food",
+      "values": [
+        "#c:foods/grain",
+        "#c:foods/vegetable"
+      ],
+      "bedrockFeedItems": [
+        "minecraft:wheat",
+        "tfc:grain",
+        "tfc:barley",
+        "tfc:oat",
+        "tfc:rye",
+        "tfc:rice",
+        "tfc:maize",
+        "minecraft:carrot",
+        "minecraft:potato",
+        "minecraft:beetroot",
+        "tfc:vegetable",
+        "tfc:dried_vegetables"
+      ]
+    },
+    {
+      "species": [
+        "frog"
+      ],
+      "tag": "tfc:frog_food",
+      "values": [
+        "#c:foods/raw_fish",
+        "minecraft:spider_eye"
+      ],
+      "bedrockFeedItems": [
+        "minecraft:cod",
+        "minecraft:salmon",
+        "minecraft:spider_eye"
+      ]
+    },
+    {
+      "species": [
+        "ocelot"
+      ],
+      "tag": "tfc:ocelot_food",
+      "values": [
+        "#c:foods/raw_fish"
+      ],
+      "bedrockFeedItems": [
+        "minecraft:cod",
+        "minecraft:salmon"
+      ]
+    },
+    {
+      "species": [
+        "penguin"
+      ],
+      "tag": "tfc:penguin_food",
+      "values": [
+        "#c:foods/raw_fish"
+      ],
+      "bedrockFeedItems": [
+        "minecraft:cod",
+        "minecraft:salmon"
+      ]
+    },
+    {
+      "species": [
+        "leopard_seal"
+      ],
+      "tag": "tfc:seal_food",
+      "values": [
+        "#c:foods/raw_fish"
+      ],
+      "bedrockFeedItems": [
+        "minecraft:cod",
+        "minecraft:salmon"
+      ]
+    },
+    {
+      "species": [
+        "turtle",
+        "pond_turtle"
+      ],
+      "tag": "tfc:turtle_food",
+      "values": [
+        "tfc:food/dried_kelp",
+        "tfc:food/dried_seaweed"
+      ],
+      "bedrockFeedItems": [],
+      "missingBedrockItems": [
+        "tfc:food/dried_kelp",
+        "tfc:food/dried_seaweed"
+      ]
+    }
+  ]
+}
