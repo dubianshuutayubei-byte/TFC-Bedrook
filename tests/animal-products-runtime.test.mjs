@@ -14,7 +14,8 @@ test("cow milk requires an adult female meeting health and needs thresholds",()=
 });
 
 test("sheep wool uses TFC product logic and oviparous animals use nest boxes",()=>{
- assert.match(runtime,/産出: 羊毛（TFC式のハサミ操作、7日間隔）/);
+ assert.match(runtime,/profile\.wooly\?"\\n産出: 羊毛（TFC式のハサミ操作、"/);
+ assert.match(runtime,/productCooldownDays:4,productFamiliarityMin:15,familiarityCap:35/);
  assert.match(runtime,/function shearAnimal\(player,entity\)/);
  assert.match(runtime,/give\(player,"tfc:wool",amount\)/);
  assert.match(runtime,/産出: 卵（巣箱へ自動産卵）/);
@@ -42,7 +43,7 @@ test("milk and wool cooldowns use fractional world days, not animal age",()=>{
 
 test("sheep shearing uses TFC wool production familiarity, cooldown and per-animal uses",()=>{
  assert.match(runtime,/world\.beforeEvents\.playerInteractWithEntity\.subscribe/);
- assert.match(runtime,/target\?\.typeId!=="minecraft:sheep"\|\|event\.itemStack\?\.typeId!=="minecraft:shears"/);
+ assert.match(runtime,/!ANIMAL_PROFILES\[target\?\.typeId\]\?\.wooly\|\|event\.itemStack\?\.typeId!=="minecraft:shears"/);
  assert.match(runtime,/function shearAnimal\(player,entity\)/);
  assert.match(runtime,/minimumFamiliarity=profile\.productFamiliarityMin\?\?16,cooldown=profile\.productCooldownDays\?\?7/);
  assert.match(runtime,/requiredFamiliarity:minimumFamiliarity,cooldownDays:cooldown/);
