@@ -5,6 +5,7 @@ import {
   evaluateCropClimate,
   evaluateFaunaHabitat,
   getSeasonInfo,
+  getCalendarInfo,
   normalizeDayOfYear,
   normalizeHydration,
 } from "../packs/behavior_pack/scripts/core/climate-service.mjs";
@@ -93,4 +94,22 @@ test("crop climate rejects negative wiggle ranges", () => {
     minTemperatureC: 0, maxTemperatureC: 20, temperatureWiggleC: -1,
     minHydration: 0, maxHydration: 100,
   }, { temperatureC: 10, hydration: 50 }), RangeError);
+});
+
+test("world day maps to a stable year and season calendar", () => {
+  assert.deepEqual(getCalendarInfo(0), {
+    year: 1,
+    dayOfYear: 0,
+    dayOfYearNumber: 1,
+    season: "winter",
+    dayInSeason: 0,
+    seasonProgress: 0,
+    seasonIndex: 0,
+  });
+  assert.equal(getCalendarInfo(24).season, "spring");
+  assert.equal(getCalendarInfo(96).year, 2);
+  assert.equal(getCalendarInfo(96).season, "winter");
+  assert.equal(getCalendarInfo(191).year, 2);
+  assert.equal(getCalendarInfo(191).season, "autumn");
+  assert.throws(() => getCalendarInfo(-1), RangeError);
 });
