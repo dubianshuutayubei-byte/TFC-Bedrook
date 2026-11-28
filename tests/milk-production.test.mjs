@@ -10,8 +10,8 @@ const item=JSON.parse(readFileSync(join(root,"packs/behavior_pack/items/milk_bot
 const profiles=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/food-profiles.json"),"utf8"));
 
 test("adult cows produce milk bottles with a per-animal cooldown",()=>{
-  assert.match(runtime,/entity\.typeId==="minecraft:cow"&&held\?\.typeId==="minecraft:glass_bottle"/);
-  assert.match(runtime,/canProduce\(state,\{requiredFamiliarity:0,cooldownDays:0\.5,currentDay\}\)/);
+  assert.match(runtime,/entity\.typeId==="minecraft:cow"&&held\.typeId==="minecraft:glass_bottle"/);
+  assert.match(runtime,/canProduce\(state,\{requiredFamiliarity:0,cooldownDays:1,currentDay\}\)/);
   assert.match(runtime,/recordProduct\(state,currentDay\)/);
 });
 
