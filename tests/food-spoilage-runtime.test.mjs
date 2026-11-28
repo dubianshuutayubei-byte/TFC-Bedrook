@@ -1,0 +1,18 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { resolve, dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
+const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
+const ids=["raw_meat","cooked_meat","grain","maize","potato","milk_bottle"];
+test("inventory food freshness uses food decay service and persists per player",()=>{
+ assert.match(runtime,/import \{ consumeFood, advanceFoodDecay \}/);
+ assert.match(runtime,/function tickFoodFreshness\(player,nowTick\)/);
+ assert.match(runtime,/advanceFoodDecay\(\{id:itemId,freshness:previous\.freshness\},elapsedTicks\/1000/);
+ assert.match(runtime,/FOOD_FRESHNESS_KEY/);
+ assert.match(runtime,/new ItemStack\("tfc:spoiled_food",entry\.amount\)/);
+});
+test("all edible inventory items identify themselves to the freshness tracker",()=>{
+ for(const id of ids){const item=JSON.parse(readFileSync(join(root,"packs/behavior_pack/items",id+".json"),"utf8"));assert.equal(item["minecraft:item"].components["tfc:consume_food"].itemId,"tfc:"+id);}
+});
