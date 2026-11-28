@@ -7,8 +7,9 @@ import { createFireState, addFuel, advanceFire, canProcessAtTemperature } from "
 import { createSoilState, advanceSoilHydration, evaluateCropGrowth, calculateCropYield, applyFertilizer, applyCropNutrientEffects, inferSoilTypeFromBlockId, inferSoilFertilityClassFromBiomeId, advanceCropGrowthProgress } from "./core/agriculture-service.mjs";
 import { CROP_PROFILES } from "./core/crop-profiles.mjs";
 import { getFaunaPrey, getFaunaPredators } from "./core/fauna-ecology-service.mjs";
-import { createAnimalState, createAnimalOffspringState, initializeAnimalLifeStage, syncAnimalHealth, advanceAnimalNeeds, advanceAnimalFamiliarityDecay, canFeedAnimal, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct, canLayEgg, recordEggLaid, getOffspringCount, evaluateHabitat, evaluateFaunaSpawn, tfcMonthFromDay } from "./core/fauna-service.mjs";
+import { createAnimalState, createAnimalOffspringState, initializeAnimalLifeStage, syncAnimalHealth, advanceAnimalNeeds, advanceAnimalFamiliarityDecay, canFeedAnimal, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct, canLayEgg, recordEggLaid, getOffspringCount, evaluateHabitat, evaluateFaunaSpawn, evaluateOfficialFaunaHabitat, tfcMonthFromDay } from "./core/fauna-service.mjs";
 import { OFFICIAL_FAUNA_PROFILES, OFFICIAL_FAUNA_HABITAT_EXTENSIONS, OFFICIAL_LIVESTOCK_LIFECYCLE } from "./core/fauna-profiles.mjs";
+import { OFFICIAL_FAUNA_HABITATS_1_21 } from "./core/official-fauna-habitat-profiles.mjs";
 import { addNestBoxEgg, advanceNestBoxIncubation, takeNestBoxEgg } from "./core/nest-box-service.mjs";
 import { getStationRecipes } from "./core/processing-recipes.mjs";
 import { initializeArmadilloScuteClock, isArmadilloScuteDue } from "./core/armadillo-service.mjs";
@@ -971,22 +972,27 @@ function sampleAnimalEnvironment(entity,profile=null){
  const waterType=/ocean|beach/.test(biomeId)?"saltwater":"freshwater";
  // Forest density costs up to 75 block lookups. Only sample it for species
  // whose official TFC habitat profile actually constrains forest density.
- const needsForest=profile?.minForest!=null||profile?.maxForest!=null;
- return {y:blockLocation.y,seaLevel:63,month:tfcMonthFromDay(world.getDay()),onGround,inWater,validSpawnGround,temperatureC:currentTemperatureC(location.y-63,biomeId),rainfall:rainfallForBiome(biomeId),belowSeaLevel:Math.max(0,63-blockLocation.y),brightness,forestType:needsForest?forestTypeAt(dimension,location):null,terrain,waterType,biomeId};
+ // Do not synthesize groundwater, rainfall, or forest density from biome names.
+ // The 1.21 habitat evaluator reports these source-required measurements as missing.
+ return {y:blockLocation.y,seaLevel:63,month:tfcMonthFromDay(world.getDay()),onGround,inWater,validSpawnGround,temperatureC:currentTemperatureC(location.y-63,biomeId),belowSeaLevel:Math.max(0,63-blockLocation.y),brightness,terrain,waterType,biomeId};
 }
 function validateNaturalFaunaSpawn(event){
  if(event?.cause!=="Spawned")return;
  const entity=event.entity,profile=ANIMAL_PROFILES[entity?.typeId];
  if(!profile)return;
- const official=OFFICIAL_FAUNA_PROFILES[profile.speciesId]??OFFICIAL_FAUNA_HABITAT_EXTENSIONS[profile.speciesId];
+ const official=OFFICIAL_FAUNA_HABITATS_1_21[profile.speciesId];
  if(!official)return;
  system.run(()=>{
   try{
    if(!entity.isValid())return;
-   const environment=sampleAnimalEnvironment(entity,official),result=evaluateFaunaSpawn(official,environment);
-   if(result.missing.length){console.warn("[TFC-Bedrook] fauna spawn validation skipped; missing:",profile.speciesId,result.missing);return;}
-   if(!result.suitable){entity.remove();}
-  }catch(error){console.warn("[TFC-Bedrook] fauna spawn climate validation skipped:",profile.speciesId,error);}
+   const environment=sampleAnimalEnvironment(entity,official);
+   const result=evaluateOfficialFaunaHabitat(official,environment);
+   const placementFailure=(official.placement==="in_water"&&environment.inWater!==true)||(official.placement==="on_ground"&&environment.onGround!==true);
+   // A measured hard failure is conclusive even when a separate measurement is unavailable.
+   if(placementFailure||result.failures.length){entity.remove();return;}
+   if(result.missing.length){console.warn("[TFC-Bedrook] official 1.21 fauna spawn validation deferred; missing source measurements:",profile.speciesId,result.missing);return;}
+   if(official.chance>1&&Math.random()>=1/official.chance){entity.remove();}
+  }catch(error){console.warn("[TFC-Bedrook] official 1.21 fauna spawn validation skipped:",profile.speciesId,error);}
  });
 }
 world.afterEvents.entitySpawn.subscribe(validateNaturalFaunaSpawn);
