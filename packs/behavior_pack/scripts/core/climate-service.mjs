@@ -203,3 +203,14 @@ export function adjustTfcRainVarianceForHemisphere(rainVariance, isNorthernHemis
   const value = finite(rainVariance, "rainVariance");
   return absolute ? Math.abs(value) : value * (isNorthernHemisphere ? 1 : -1);
 }
+
+/** Mirrors ChunkData.modifyBaseGroundwaterPoint after terrain surface height is known. */
+export function modifyTfcBaseGroundwaterForSurface(height, startingWater, seaLevel = 63) {
+  const surface = finite(height, "height");
+  const groundwater = finite(startingWater, "startingWater");
+  const level = finite(seaLevel, "seaLevel");
+  const lower = level + 10;
+  const upper = level + 25;
+  const factor = clamp(1 - (surface - lower) / (upper - lower), 0, 1);
+  return groundwater * factor;
+}
