@@ -24,7 +24,7 @@ test("sheep wool uses TFC product logic while chicken eggs retain native laying"
 });
 
 test("livestock status displays age, needs, health and product instructions",()=>{
- for(const label of ["性別: ","年齢: ","空腹: ","渇き: ","健康: ","なつき度: ","産出: 牛乳","産出: 羊毛","産出: 卵"])assert.ok(runtime.includes(label),label);
+ for(const label of ["性別: ","年齢: ","空腹: ","渇き: ","健康: ","なつき度: ","産出: 牛乳","産出: 毛","産出: 卵"])assert.ok(runtime.includes(label),label);
 });
 
 test("milk collection uses the exact official TFC minimum familiarity of 0.15",()=>{
@@ -57,7 +57,7 @@ test("product timing uses fractional world calendar days rather than animal age"
 
 test("sheep status shows remaining wool regrowth time and specific failure reasons",()=>{
  assert.match(runtime,/再生待ち: "\+\(state\.uses>0\?Math\.max\(0,profile\.productCooldownDays-\(currentAnimalDay\(\)-state\.lastProductAt\)\)/);
- assert.match(runtime,/このヒツジはまだ成熟していません/);
+ assert.match(runtime,/この動物はまだ成熟していません/);
  assert.match(runtime,/なつき度を.*以上にしてください/);
  assert.match(runtime,/羊毛が再生するまであと/);
 });
