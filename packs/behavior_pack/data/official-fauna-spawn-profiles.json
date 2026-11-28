@@ -1,8 +1,13 @@
 {
   "source": {
     "profileSource": "TerraFirmaCraft v3.2.26 fauna JSON",
-    "placementSource": "TerraFirmaCraft Java 1.21.x Faunas.java + aquatic/Fish.java",
-    "note": "Climate constraints are available only for the 63 species in the v3.2.26 fauna JSON baseline. All 78 species have source-derived spawn placement from the 1.21.x registry. The 15 placement-only entries intentionally have no invented climate limits. Bedrock world sampling is not yet connected."
+    "placementSource": "TerraFirmaCraft v4.2.16 Faunas.java + aquatic/Fish.java",
+    "note": "Climate constraints are available for 63 species from the v3.2.26 fauna JSON baseline. All 78 species have source-derived spawn placement from the pinned TFC 4.2.16 registry. The 15 placement-only entries intentionally have no invented climate limits. Bedrock world sampling is not yet connected.",
+    "placementSourceTag": "v4.2.16",
+    "placementSourceBlobs": {
+      "src/main/java/net/dries007/tfc/common/entities/Faunas.java": "5ac152295b832d0e6317539d9d714110f6515d76",
+      "src/main/java/net/dries007/tfc/common/entities/aquatic/Fish.java": "a3765670f52f68abed08c6057b68e248c8f0fbf9"
+    }
   },
   "total": 78,
   "placementCounts": {
@@ -528,5 +533,11 @@
       "maxTemperatureC": -11,
       "minRainfall": 100
     }
-  ]
+  ],
+  "officialSourceVersion": "TerraFirmaCraft 1.21.1-4.2.16",
+  "officialSourceTag": "v4.2.16",
+  "officialSourceBlobs": {
+    "src/main/java/net/dries007/tfc/common/entities/Faunas.java": "5ac152295b832d0e6317539d9d714110f6515d76",
+    "src/main/java/net/dries007/tfc/common/entities/aquatic/Fish.java": "a3765670f52f68abed08c6057b68e248c8f0fbf9"
+  }
 }
