@@ -14,7 +14,7 @@ import { classifyTemperature, coolItemTemperature } from "./core/heat-service.mj
 import { summarizeOreSamples } from "./core/geology-service.mjs";
 
 const STATE_KEY="tfc:player_state",PROGRESS_KEY="tfc:knapping_progress",FOOD_FRESHNESS_KEY="tfc:food_freshness";
-const FOOD_DECAY_PROFILES={"tfc:raw_meat":0.16,"tfc:cooked_meat":0.12,"tfc:grain":0.025,"tfc:maize":0.025,"tfc:potato":0.1,"tfc:vegetable":0.1,"tfc:fruit":0.11,"tfc:milk_bottle":0.18,"tfc:dried_meat":0.04,"tfc:dried_fruit":0.03,"tfc:dried_vegetables":0.03,"tfc:bread":0.05,"tfc:barley":0.025,"tfc:oat":0.025,"tfc:rye":0.025,"tfc:beet":0.1,"tfc:cabbage":0.1,"tfc:carrot":0.1,"tfc:garlic":0.1,"tfc:onion":0.1,"tfc:squash":0.1,"tfc:lentils":0.08,"tfc:soybean":0.08,"tfc:peanuts":0.08,"tfc:bread":0.05};
+const FOOD_DECAY_PROFILES={"tfc:raw_meat":0.16,"tfc:cooked_meat":0.12,"tfc:grain":0.025,"tfc:maize":0.025,"tfc:potato":0.1,"tfc:vegetable":0.1,"tfc:fruit":0.11,"tfc:milk_bottle":0.18,"tfc:dried_meat":0.04,"tfc:dried_fruit":0.03,"tfc:dried_vegetables":0.03,"tfc:bread":0.05,"tfc:barley":0.025,"tfc:oat":0.025,"tfc:rye":0.025,"tfc:beet":0.1,"tfc:cabbage":0.1,"tfc:carrot":0.1,"tfc:garlic":0.1,"tfc:onion":0.1,"tfc:squash":0.1,"tfc:lentils":0.08,"tfc:soybean":0.08,"tfc:peanuts":0.08};
 const CROP_PROFILES={
  wheat:{minTemperatureC:-7,maxTemperatureC:22,minHydration:15,maxHydration:85,nutrientDemand:{nitrogen:100},nutrientEffects:{nitrogen:-1,phosphorus:0.3,potassium:0.3},seed:"tfc:crop_seed",harvest:"tfc:grain"},
  maize:{minTemperatureC:-7,maxTemperatureC:27,minHydration:50,maxHydration:100,nutrientDemand:{nitrogen:90},nutrientEffects:{nitrogen:-0.9,phosphorus:0.25,potassium:0.25},seed:"tfc:maize_seed",harvest:"tfc:maize"},
