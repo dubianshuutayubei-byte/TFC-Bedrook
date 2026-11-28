@@ -682,7 +682,7 @@ function animalTick(entity){
    for(const y of [base.y,base.y-1]){
     const b=entity.dimension.getBlock({x:base.x+x,y,z:base.z+z});if(!b)continue;
     if(b.typeId==="minecraft:water"||b.typeId==="minecraft:flowing_water")waterNearby=true;
-    if(profile.grazeBlocks.includes(b.typeId))forageCandidates.push(b);
+    if(profile.grazeBlocks.includes(b.typeId)){if(b.typeId==="minecraft:sweet_berry_bush"&&Number(b.permutation.getState("age")??0)<2)continue;forageCandidates.push(b);}
    }
   }
   if(waterNearby)state=waterAnimal(state,1.5);
@@ -691,7 +691,8 @@ function animalTick(entity){
    const forage=forageCandidates[Math.floor(Math.random()*forageCandidates.length)];
    try{
     if(forage.typeId==="minecraft:grass_block")forage.setType("minecraft:dirt");
-    else if(["minecraft:tallgrass","minecraft:short_grass","minecraft:tall_grass","minecraft:fern","minecraft:large_fern","minecraft:seagrass","minecraft:tall_seagrass"].includes(forage.typeId))forage.setType("minecraft:air");
+    else if(forage.typeId==="minecraft:sweet_berry_bush")forage.setPermutation(forage.permutation.withState("age",1));
+    else if(["minecraft:tallgrass","minecraft:short_grass","minecraft:tall_grass","minecraft:fern","minecraft:large_fern","minecraft:seagrass","minecraft:tall_seagrass","minecraft:bamboo","minecraft:carrots","minecraft:dandelion"].includes(forage.typeId))forage.setType("minecraft:air");
     state=grazeAnimal(state,{hungerReduction:15,currentDay:world.getDay()});
    }catch(error){console.warn("[TFC-Bedrook] animal grazing failed:",error);}
   }
