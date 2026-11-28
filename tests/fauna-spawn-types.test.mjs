@@ -19,3 +19,28 @@ test("aquatic, amphibious and terrestrial spawn categories are mapped correctly"
  assert.equal(spawn.species.find(x=>x.id==="crocodile").placement,"no_restrictions");
  for(const id of ["deer","cow","sheep","chicken","wolf","fox","horse","penguin","frog"])assert.equal(spawn.species.find(x=>x.id===id).placement,"on_ground",id);
 });
+
+import { evaluateFaunaSpawn } from "../packs/behavior_pack/scripts/core/fauna-service.mjs";
+const combined=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/official-fauna-spawn-profiles.json"),"utf8"));
+test("all 63 official fauna spawn profiles combine exact placement and climate constraints",()=>{
+ assert.equal(combined.total,63);
+ assert.equal(combined.species.length,63);
+ const byId=Object.fromEntries(combined.species.map(x=>[x.id,x]));
+ for(const p of combined.species){
+  assert.ok(["on_ground","in_water","no_restrictions"].includes(p.placement),p.id);
+  assert.ok(fauna.species?.some?.(x=>x.id===p.id)??true);
+ }
+ assert.equal(byId.cod.placement,"in_water");
+ assert.equal(byId.crocodile.placement,"no_restrictions");
+ assert.equal(byId.deer.placement,"on_ground");
+ assert.equal(byId.octopoteuthis.distanceBelowSeaLevel,33);
+});
+test("official spawn profile evaluator rejects wrong placement and unknown climate samples",()=>{
+ const deer=combined.species.find(x=>x.id==="deer");
+ const wrong=evaluateFaunaSpawn(deer,{onGround:false,temperatureC:10,rainfall:250,forestType:"normal",y:64,seaLevel:63,validSpawnGround:true});
+ assert.equal(wrong.suitable,false);
+ assert.ok(wrong.failures.includes("not_on_ground"));
+ const missing=evaluateFaunaSpawn(deer,{onGround:true});
+ assert.equal(missing.suitable,false);
+ assert.ok(missing.missing.includes("temperatureC"));
+});
