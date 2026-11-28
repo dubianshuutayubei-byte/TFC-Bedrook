@@ -105,7 +105,9 @@
       "sugarcane_seed",
       "jute_seed",
       "papyrus_seed",
-      "trellis"
+      "trellis",
+      "pumpkin_fruit",
+      "melon_fruit"
     ],
     "equipment": [
       "firepit",
@@ -243,6 +245,8 @@
     "tfc:jute",
     "tfc:papyrus_seed",
     "tfc:papyrus",
-    "tfc:trellis"
+    "tfc:trellis",
+    "tfc:pumpkin_fruit",
+    "tfc:melon_fruit"
   ]
 }
