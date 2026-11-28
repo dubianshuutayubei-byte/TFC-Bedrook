@@ -53,7 +53,8 @@
     "専用アイテム・ブロック定義の初期セットをBehavior Packへ登録済み。",
     "石片成形UI、食品摂取時の栄養反映、設備加工UI、作物植え付け・成長・収穫を接続。",
     "地形生成と高度な動物生態は未接続。",
-    "銅鋳型の未焼成/焼成アイテムを追加。全TFCアイテム・全ブロック登録の完了を意味しない。"
+    "銅鋳型の未焼成/焼成アイテムを追加。全TFCアイテム・全ブロック登録の完了を意味しない。",
+    "登録IDは実ファイルから自動監査するテスト対象。カタログ内の構想アイテム全てが登録済みという意味ではない。"
   ],
   "registeredIdentifiers": [
     "tfc:flint",
@@ -65,7 +66,6 @@
     "tfc:clay_vessel",
     "tfc:fired_vessel",
     "tfc:copper_ore",
-    "tfc:clay_vessel",
     "tfc:copper_ingot",
     "tfc:heated_copper_ingot",
     "tfc:copper_sheet",
