@@ -60,3 +60,5 @@ item.tfc:prospecting_tool.name=地質調査具
 item.tfc:compost.name=堆肥
 item.tfc:composter.name=コンポスター
 tile.tfc:composter.name=コンポスター
+
+item.tfc:wood_ash.name=木灰
