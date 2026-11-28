@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "recipes": [
+    {
+      "id": "tfc:stone_shard",
+      "stage": "stone_age",
+      "method": "knapping",
+      "inputs": { "minecraft:stone": 2 },
+      "outputs": { "tfc:stone_shard": 2 },
+      "requiresUi": true
+    },
+    {
+      "id": "tfc:stone_knife_head",
+      "stage": "stone_age",
+      "method": "knapping",
+      "inputs": { "tfc:stone_shard": 1 },
+      "outputs": { "tfc:stone_knife_head": 1 },
+      "requiresUi": true
+    },
+    {
+      "id": "tfc:unfired_vessel",
+      "stage": "stone_age",
+      "method": "clay_forming",
+      "inputs": { "minecraft:clay_ball": 5 },
+      "outputs": { "tfc:unfired_vessel": 1 },
+      "requiresUi": true
+    },
+    {
+      "id": "tfc:fired_vessel",
+      "stage": "stone_age",
+      "method": "pit_kiln",
+      "inputs": { "tfc:unfired_vessel": 1, "minecraft:stick": 8 },
+      "outputs": { "tfc:fired_vessel": 1 },
+      "durationSeconds": 600,
+      "requiresHeat": true
+    },
+    {
+      "id": "tfc:copper_ingot",
+      "stage": "copper",
+      "method": "casting",
+      "inputs": { "tfc:molten_copper": 100 },
+      "outputs": { "tfc:copper_ingot": 1 },
+      "minimumTemperatureC": 1080,
+      "requiresMold": true
+    },
+    {
+      "id": "tfc:cooked_meat",
+      "stage": "survival",
+      "method": "cooking",
+      "inputs": { "tfc:raw_meat": 1 },
+      "outputs": { "tfc:cooked_meat": 1 },
+      "minimumTemperatureC": 100,
+      "durationSeconds": 30
+    }
+  ],
+  "notes": [
+    "Prototype recipe registry; quantities and times are balance placeholders unless explicitly sourced from TFC data.",
+    "Knapping patterns, heat transfer, and actual inventory consumption are not connected to the runtime yet."
+  ]
+}
