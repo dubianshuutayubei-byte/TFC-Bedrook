@@ -14,7 +14,7 @@ test("cow milk requires an adult female meeting health and needs thresholds",()=
 });
 
 test("sheep wool uses TFC product logic while chicken eggs retain native laying",()=>{
- assert.match(runtime,/産出: 羊毛（TFC式のハサミ操作、7日間隔）/);
+ assert.match(runtime,/産出: 毛（TFC式のハサミ操作/);
  assert.match(runtime,/function shearAnimal\(player,entity\)/);
  assert.match(runtime,/!profile\.wooly&&entity\.typeId!=="minecraft:sheep"/);
  assert.match(runtime,/give\(player,"tfc:wool",amount\)/);
@@ -28,8 +28,8 @@ test("livestock status displays age, needs, health and product instructions",()=
 });
 
 test("milk collection uses the exact official TFC minimum familiarity of 0.15",()=>{
- assert.ok(runtime.includes('"minecraft:cow":{adultAgeDays:192,speciesId:"cow",displayName:"ウシ",gestationDays:58,childCount:2,maxUses:128,productCooldownDays:1,productFamiliarityMin:15'));
- assert.ok(runtime.includes('"minecraft:goat":{speciesId:"goat",displayName:"ヤギ",adultAgeDays:96,gestationDays:32,childCount:2,maxUses:60,productCooldownDays:3,productFamiliarityMin:15'));
+ assert.ok(runtime.includes('"minecraft:cow":{adultAgeDays:192,speciesId:"cow",displayName:"ウシ",gestationDays:58,childCount:2,childCountMin:1,childCountMax:2,maxBreedUses:13,maxUses:128,productCooldownDays:1,productFamiliarityMin:15'));
+ assert.ok(runtime.includes('"minecraft:goat":{speciesId:"goat",displayName:"ヤギ",adultAgeDays:96,gestationDays:32,childCount:2,childCountMin:1,childCountMax:2,maxBreedUses:6,maxUses:60,productCooldownDays:3,productFamiliarityMin:15'));
 });
 
 
