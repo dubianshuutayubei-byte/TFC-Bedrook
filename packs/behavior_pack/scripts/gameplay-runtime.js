@@ -1,7 +1,7 @@
 import { ItemStack, system, world } from "@minecraft/server";
 import { ActionFormData } from "@minecraft/server-ui";
 import { deserializePlayerState, serializePlayerState } from "./core/player-state-service.mjs";
-import { consumeFood, advanceFoodDecay } from "./core/food-service.mjs";
+import { consumeFood, advanceFoodDecay, ticksToHours } from "./core/food-service.mjs";
 import { createFireState, addFuel, advanceFire, canProcessAtTemperature } from "./core/firepit-service.mjs";
 import { createSoilState, applySoilCompost, advanceSoilHydration, evaluateCropGrowth, applyNutrientUptake, inferSoilTypeFromBlockId, advanceCropGrowthProgress } from "./core/agriculture-service.mjs";
 import { createAnimalState, advanceAnimalNeeds, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct } from "./core/fauna-service.mjs";
@@ -42,7 +42,7 @@ function tickFoodFreshness(player,nowTick){
   if(amount===0){delete freshnessState[itemId];continue;}
   const previous=freshnessState[itemId]??{freshness:100,lastTick:nowTick};
   const elapsedTicks=Math.max(0,nowTick-Number(previous.lastTick??nowTick));
-  const decayed=advanceFoodDecay({id:itemId,freshness:previous.freshness},elapsedTicks/72000,{temperatureC:currentTemperatureC(player.location.y-63),baseDecayPerHour});
+  const decayed=advanceFoodDecay({id:itemId,freshness:previous.freshness},ticksToHours(elapsedTicks),{temperatureC:currentTemperatureC(player.location.y-63),baseDecayPerHour});
   if(decayed.spoiled){
    for(const entry of slots)container.setItem(entry.slot,new ItemStack("tfc:spoiled_food",entry.amount));
    delete freshnessState[itemId];
