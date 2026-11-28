@@ -11,7 +11,7 @@ const entityFiles=readdirSync(entityDir).filter(name=>name.endsWith(".json")).so
 const spawnFiles=readdirSync(spawnDir).filter(name=>name.endsWith(".json")).sort();
 
 test("all custom fauna entities have exactly one matching natural spawn rule",()=>{
- assert.equal(entityFiles.length,42,"custom fauna entity count changed; update the coverage audit");
+ assert.equal(entityFiles.length,57,"custom fauna entity count changed; update the coverage audit");
  assert.deepEqual(spawnFiles,entityFiles,"every custom fauna entity must have a matching spawn rule and vice versa");
  for(const file of entityFiles){
   const entity=JSON.parse(readFileSync(join(entityDir,file),"utf8"))["minecraft:entity"];
