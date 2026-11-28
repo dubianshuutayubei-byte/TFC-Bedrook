@@ -6,7 +6,7 @@ import { deserializePlayerState } from "../core/player-state-service.mjs";
 const UI_TITLE = "TerraFirmaCraft: Bedrook";
 const PLAYER_STATE_KEY = "tfc:player_state";
 const FOOD_FRESHNESS_KEY = "tfc:food_freshness";
-const FOOD_LABELS = Object.freeze({ "tfc:raw_meat":"生肉", "tfc:cooked_meat":"焼いた肉", "tfc:grain":"穀物", "tfc:maize":"トウモロコシ", "tfc:potato":"ジャガイモ", "tfc:vegetable":"野菜", "tfc:fruit":"果物", "tfc:milk_bottle":"牛乳瓶", "tfc:dried_meat":"干し肉", "tfc:dried_fruit":"干し果物", "tfc:dried_vegetables":"干し野菜", "tfc:barley":"大麦", "tfc:oat":"オーツ麦", "tfc:rye":"ライ麦", "tfc:beet":"ビーツ", "tfc:cabbage":"キャベツ", "tfc:carrot":"ニンジン","tfc:garlic":"ニンニク","tfc:onion":"タマネギ","tfc:squash":"カボチャ","tfc:lentils":"レンズ豆","tfc:soybean":"大豆","tfc:peanuts":"落花生" });
+const FOOD_LABELS = Object.freeze({ "tfc:raw_meat":"生肉", "tfc:cooked_meat":"焼いた肉", "tfc:grain":"穀物", "tfc:maize":"トウモロコシ", "tfc:potato":"ジャガイモ", "tfc:vegetable":"野菜", "tfc:fruit":"果物", "tfc:milk_bottle":"牛乳瓶", "tfc:dried_meat":"干し肉", "tfc:dried_fruit":"干し果物", "tfc:dried_vegetables":"干し野菜", "tfc:barley":"大麦", "tfc:oat":"オーツ麦", "tfc:rye":"ライ麦", "tfc:beet":"ビーツ", "tfc:cabbage":"キャベツ", "tfc:carrot":"ニンジン","tfc:garlic":"ニンニク","tfc:onion":"タマネギ","tfc:squash":"カボチャ","tfc:lentils":"レンズ豆","tfc:soybean":"大豆","tfc:peanuts":"落花生","tfc:bread":"パン" });
 const NUTRITION_LABELS = Object.freeze({
   grain: "穀物", fruit: "果物", vegetables: "野菜", protein: "タンパク質", dairy: "乳製品"
 });
