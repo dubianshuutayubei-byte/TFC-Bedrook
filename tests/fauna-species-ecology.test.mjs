@@ -89,6 +89,9 @@ test("aquatic fauna distinguish swimming fish from seafloor shellfish",()=>{
  }
  const manatee=read("packs/behavior_pack/entities/manatee.json")["minecraft:entity"].components["minecraft:breathable"];
  assert.equal(manatee.breathes_water,true);
+ const manateeAi=read("packs/behavior_pack/entities/manatee.json")["minecraft:entity"].components;
+ assert.ok(manateeAi["minecraft:behavior.panic"]);
+ assert.ok(manateeAi["minecraft:behavior.avoid_mob_type"].entity_types.some(t=>t.filters?.value==="player"));
 });
 
 test("predators follow TFC day/night schedules, territory and post-kill pacification",()=>{
