@@ -456,3 +456,15 @@ test("Java 1.21 TFC camel cat and dog lifecycle profiles are connected to Bedroc
   assert.match(entry,/"feedItems":\[/);
  }
 });
+
+
+test("camel cat and dog lifecycle values are centralized and Bactrian camel is wool-producing",()=>{
+ const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
+ const lifecycle=readFileSync(join(root,"packs/behavior_pack/scripts/core/fauna-profiles.mjs"),"utf8");
+ const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
+ for(const id of ["dromedary_camel","bactrian_camel","cat","dog"])assert.ok(lifecycle.includes(id+": Object.freeze("),id+" lifecycle defaults missing");
+ for(const id of ["dromedary_camel","bactrian_camel","cat","dog"])assert.ok(runtime.includes("OFFICIAL_LIVESTOCK_LIFECYCLE."+id+".adultAgeDays"),id+" adult age must use official defaults");
+ const bactrian=runtime.slice(runtime.indexOf('"tfc:bactrian_camel":'),runtime.indexOf("\n",runtime.indexOf('"tfc:bactrian_camel":')));
+ assert.match(bactrian,/"wooly":true/);
+ assert.match(bactrian,/"productCooldownDays":OFFICIAL_LIVESTOCK_LIFECYCLE\.bactrian_camel\.productCooldownDays/);
+});
