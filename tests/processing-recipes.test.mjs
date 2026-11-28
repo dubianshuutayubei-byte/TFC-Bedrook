@@ -31,3 +31,16 @@ test("bronze sheet can be formed at the anvil",()=>{
  assert.equal(recipe.outputs["tfc:bronze_sheet"],1);
 });
 test("unknown station has no recipes",()=>assert.deepEqual(getStationRecipes("unknown"),[]));
+
+test("tin and bronze alloy stages are available",()=>{
+ const crucible=getStationRecipes("crucible");
+ const tin=crucible.find(r=>r.id==="tfc:heated_tin_ingot");
+ const bronze=crucible.find(r=>r.id==="tfc:heated_bronze_ingot");
+ assert.ok(tin);
+ assert.equal(tin.inputs["tfc:tin_ore"],2);
+ assert.ok(bronze);
+ assert.equal(bronze.inputs["tfc:copper_ingot"],9);
+ assert.equal(bronze.inputs["tfc:tin_ingot"],1);
+ assert.equal(bronze.outputs["tfc:heated_bronze_ingot"],1);
+ assert.equal(getStationRecipes("anvil").some(r=>r.id==="tfc:bronze_sheet"),true);
+});
