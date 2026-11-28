@@ -26,3 +26,9 @@ test("additional single-block crops have matching profiles, seeds and harvest fo
   assert.ok(catalog.registeredIdentifiers.includes("tfc:"+id));
  }
 });
+
+test("breaking either maize plant half removes its paired half",()=>{
+ assert.match(runtime,/brokenId==="tfc:crop"&&event\.brokenBlockPermutation\?\.getState\("tfc:crop_type"\)==="maize"/);
+ assert.match(runtime,/part==="upper"\?-1:1/);
+ assert.match(runtime,/other\.setType\("minecraft:air"\)/);
+});
