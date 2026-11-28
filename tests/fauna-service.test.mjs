@@ -446,8 +446,8 @@ test("Java 1.21 TFC camel cat and dog lifecycle profiles are connected to Bedroc
  }
  assert.match(profiles,/"tfc:dromedary_camel":\{[^}]*"adultAgeDays":OFFICIAL_LIVESTOCK_LIFECYCLE\.dromedary_camel\.adultAgeDays/);
  assert.match(profiles,/"tfc:bactrian_camel":\{[^}]*"adultAgeDays":OFFICIAL_LIVESTOCK_LIFECYCLE\.bactrian_camel\.adultAgeDays/);
- assert.match(profiles,/"tfc:cat":\{[^}]*"gestationDays":19,"childCount":6,"maxUses":60/);
- assert.match(profiles,/"tfc:dog":\{[^}]*"gestationDays":19,"childCount":2,"maxUses":60/);
+ assert.match(profiles,/"tfc:cat":\{[^}]*"gestationDays":OFFICIAL_LIVESTOCK_LIFECYCLE\.cat\.gestationDays,"childCount":OFFICIAL_LIVESTOCK_LIFECYCLE\.cat\.childCount,"maxUses":OFFICIAL_LIVESTOCK_LIFECYCLE\.cat\.maxUses/);
+ assert.match(profiles,/"tfc:dog":\{[^}]*"gestationDays":OFFICIAL_LIVESTOCK_LIFECYCLE\.dog\.gestationDays,"childCount":OFFICIAL_LIVESTOCK_LIFECYCLE\.dog\.childCount,"maxUses":OFFICIAL_LIVESTOCK_LIFECYCLE\.dog\.maxUses/);
  for(const id of ["tfc:dromedary_camel","tfc:bactrian_camel","tfc:cat","tfc:dog"]){
   const i=profiles.indexOf('"'+id+'":');
   const end=profiles.indexOf("\n",i);
