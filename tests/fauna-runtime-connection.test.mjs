@@ -177,9 +177,11 @@ test("animal runtime applies daily familiarity decay and capped TFC feeding gain
 
 test("custom births trigger juvenile state and persist remaining litter count",()=>{
  assert.match(runtime,/spawnEntity\(offspringEntityType,\{x:entity\.location\.x\+1/);
- assert.match(runtime,/baby\.triggerEvent\(birthEvent\)/);\n assert.doesNotMatch(runtime,/if\(!baby\.triggerEvent\(birthEvent\)\)/);
+ assert.match(runtime,/baby\.triggerEvent\(birthEvent\)/);
+ assert.doesNotMatch(runtime,/if\(!baby\.triggerEvent\(birthEvent\)\)/);
  assert.match(runtime,/createAnimalOffspringState\(state,profile\.speciesId/);
- assert.match(runtime,/started\.animal\.birthsTotal=started\.animal\.birthsRemaining/);\n assert.match(runtime,/state\.birthsTotal\|\|Math\.floor\(profile\.childCount\?\?1\)/);
+ assert.match(runtime,/started\.animal\.birthsTotal=started\.animal\.birthsRemaining/);
+ assert.match(runtime,/state\.birthsTotal\|\|Math\.floor\(profile\.childCount\?\?1\)/);
  assert.match(runtime,/state\.birthsRemaining-=1/);
 });
 
@@ -222,5 +224,6 @@ test("horse and donkey crossbreeding persists mule entity and species through bi
  assert.match(runtime,/isMulePair=\(state\.species==="horse"&&other\.species==="donkey"\)\|\|\(state\.species==="donkey"&&other\.species==="horse"\)/);
  assert.match(runtime,/compatibleSpeciesPairs:\[\["horse","donkey"\]\],offspringSpecies:"mule",offspringEntityType:"minecraft:mule"/);
  assert.match(runtime,/state\.pregnancyOffspringEntityType\?\?entity\.typeId/);
- assert.match(runtime,/state\.pregnancyOffspringSpecies\?\?profile\.speciesId/);\n assert.match(runtime,/offspringSpecies==="mule"\?"male"/);
+ assert.match(runtime,/state\.pregnancyOffspringSpecies\?\?profile\.speciesId/);
+ assert.match(runtime,/offspringSpecies==="mule"\?"male"/);
 });
