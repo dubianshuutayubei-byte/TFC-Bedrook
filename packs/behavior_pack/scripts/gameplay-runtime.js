@@ -169,7 +169,7 @@ function animalTick(entity){
  try{
   const base={x:Math.floor(entity.location.x),y:Math.floor(entity.location.y),z:Math.floor(entity.location.z)};
   let waterNearby=false,forageNearby=false;
-  for(let x=-2;x<=2;x++)for(let z=-2;z<=2;z++){
+  for(let x=-1;x<=1;x++)for(let z=-1;z<=1;z++){
    for(const y of [base.y,base.y-1]){
     const b=entity.dimension.getBlock({x:base.x+x,y,z:base.z+z});if(!b)continue;
     if(b.typeId==="minecraft:water"||b.typeId==="minecraft:flowing_water")waterNearby=true;
