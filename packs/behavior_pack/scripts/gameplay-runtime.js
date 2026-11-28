@@ -590,11 +590,11 @@ function currentAnimalDay(){return world.getDay()+world.getTimeOfDay()/24000;}
 function nearbyBreedingPair(block,entityType){
  let male=false,female=false;
  try{
-  const nearby=block.dimension.getEntities({type:entityType,location:block.location,maxDistance:6}),profile=ANIMAL_PROFILES[entityType];
+  const nearby=block.dimension.getEntities({type:entityType,location:block.location,maxDistance:6}),profile=ANIMAL_PROFILES[entityType],currentTime=currentAnimalDay();
   for(const entity of nearby){
    let state=animalState(entity);
    if(state.sex==="unknown"){state.sex=profile.fixedSex??(Math.random()<0.5?"male":"female");saveAnimal(entity,state);}
-   if(state.lifeStage!=="adult"||state.ageDays<(profile?.adultAgeDays??0)||state.familiarity<30||state.lastFedDay<world.getDay())continue;
+   const lastFedAt=state.lastFedAt>=0?state.lastFedAt:state.lastFedDay;if(state.lifeStage!=="adult"||state.ageDays<(profile?.adultAgeDays??0)||state.familiarity<30||lastFedAt<0||currentTime-lastFedAt>1)continue;
    if(state.sex==="male")male=true;
    if(state.sex==="female")female=true;
   }
@@ -638,7 +638,7 @@ async function nestBoxInteract(player,block){
  const fertilized=eggs.filter(egg=>egg.fertilized);
  const unfertilized=eggs.filter(egg=>!egg.fertilized);
  const progress=fertilized.map(egg=>egg.species+" "+Math.floor(Math.min(100,egg.incubationDays/egg.hatchDays*100))+"%");
- const body="保管中の卵: "+eggs.length+"個\n受精卵: "+fertilized.length+"個\n未受精卵: "+unfertilized.length+"個\n孵化進行度: "+(progress.join(" / ")||"なし")+"\n\n成体のメスが巣箱を見つけると自動で産卵します。近くに成体のオスとメスがいて、両方が十分になつき、当日給餌されていると受精卵になります。";
+ const body="保管中の卵: "+eggs.length+"個\n受精卵: "+fertilized.length+"個\n未受精卵: "+unfertilized.length+"個\n孵化進行度: "+(progress.join(" / ")||"なし")+"\n\n成体のメスが巣箱を見つけると自動で産卵します。近くに成体のオスとメスがいて、両方が十分になつき、前回の給餌から24時間以内なら受精卵になります。";
  const form=new ActionFormData().title("巣箱").body(body).button("未受精卵を1個回収").button("閉じる");
  try{
   const response=await form.show(player);
@@ -787,7 +787,7 @@ function animalTick(entity){
    try{
     if(forage.typeId==="minecraft:grass_block")forage.setType("minecraft:dirt");
     else if(forage.typeId==="minecraft:tallgrass"||forage.typeId==="minecraft:short_grass"||forage.typeId==="minecraft:tall_grass")forage.setType("minecraft:air");
-    state=grazeAnimal(state,{hungerReduction:15,currentDay:world.getDay()});
+    state=grazeAnimal(state,{hungerReduction:15,currentTime:currentDay});
    }catch(error){console.warn("[TFC-Bedrook] animal grazing failed:",error);}
   }
  }catch{}
@@ -817,7 +817,7 @@ function animalTick(entity){
  state=layAnimalEgg(entity,state,profile,currentDay);
  const breedingDay=world.getDay(),breedingTime=currentAnimalDay();
  if(profile.customBreeding&&state.sex==="female"&&state.ageDays>=profile.adultAgeDays&&state.familiarity>=profile.requiredFamiliarity&&state.lastFedDay>=breedingDay&&state.pregnancyDays<=0&&!state.fertilized){
-  try{const nearby=[...entity.dimension.getEntities({type:entity.typeId,location:entity.location,maxDistance:6})];if(entity.typeId==="minecraft:horse")nearby.push(...entity.dimension.getEntities({type:"minecraft:donkey",location:entity.location,maxDistance:6}));else if(entity.typeId==="minecraft:donkey")nearby.push(...entity.dimension.getEntities({type:"minecraft:horse",location:entity.location,maxDistance:6}));for(const partner of nearby){if(partner.id===entity.id)continue;const other=animalState(partner),isMulePair=(state.species==="horse"&&other.species==="donkey")||(state.species==="donkey"&&other.species==="horse"),breedingProfile={...profile,currentDay:breedingDay,currentTime:breedingTime,...(isMulePair?{compatibleSpeciesPairs:[["horse","donkey"]],offspringSpecies:"mule",offspringEntityType:"minecraft:mule"}:{})};if(canBreed(state,other,breedingProfile)){const started=beginPregnancy(state,other,breedingProfile);if(started.started){started.animal.birthsRemaining=getOffspringCount(profile);started.animal.birthsTotal=started.animal.birthsRemaining;const oldAgeDelay=1+Math.floor(Math.random()*5);state=started.animal;other.lastBreedAt=breedingTime;other.lastFedDay=breedingDay-1;const partnerProfile=ANIMAL_PROFILES[partner.typeId];const updatedPartner=recordBreedingUse(other,breedingTime,{maxUses:partnerProfile?.maxUses??Infinity,useCost:5,oldDayDelay:oldAgeDelay});saveAnimal(partner,updatedPartner);break;}}}}catch{}
+  try{const nearby=[...entity.dimension.getEntities({type:entity.typeId,location:entity.location,maxDistance:6})];if(entity.typeId==="minecraft:horse")nearby.push(...entity.dimension.getEntities({type:"minecraft:donkey",location:entity.location,maxDistance:6}));else if(entity.typeId==="minecraft:donkey")nearby.push(...entity.dimension.getEntities({type:"minecraft:horse",location:entity.location,maxDistance:6}));for(const partner of nearby){if(partner.id===entity.id)continue;const other=animalState(partner),isMulePair=(state.species==="horse"&&other.species==="donkey")||(state.species==="donkey"&&other.species==="horse"),breedingProfile={...profile,currentDay:breedingDay,currentTime:breedingTime,...(isMulePair?{compatibleSpeciesPairs:[["horse","donkey"]],offspringSpecies:"mule",offspringEntityType:"minecraft:mule"}:{})};if(canBreed(state,other,breedingProfile)){const started=beginPregnancy(state,other,breedingProfile);if(started.started){started.animal.birthsRemaining=getOffspringCount(profile);started.animal.birthsTotal=started.animal.birthsRemaining;const oldAgeDelay=1+Math.floor(Math.random()*5);state=started.animal;other.lastBreedAt=breedingTime;other.lastFedDay=breedingDay-1;other.lastFedAt=breedingTime-1;const partnerProfile=ANIMAL_PROFILES[partner.typeId];const updatedPartner=recordBreedingUse(other,breedingTime,{maxUses:partnerProfile?.maxUses??Infinity,useCost:5,oldDayDelay:oldAgeDelay});saveAnimal(partner,updatedPartner);break;}}}}catch{}
  }
  saveAnimal(entity,state);
 }
@@ -890,11 +890,11 @@ async function animalInteract(player,entity){
   return;
  }
  if(!profile.feedItems.includes(held.typeId))return;
- const currentDay=world.getDay(),firstFeedToday=canFeedAnimal(state,currentDay);
- if(!firstFeedToday){player.sendMessage("§eこの動物には今日はもう餌を与えています。");return;}
+ const currentDay=world.getDay(),currentTime=currentAnimalDay(),isHungry=canFeedAnimal(state,currentTime);
+ if(!isHungry){player.sendMessage("§e前回の給餌から24時間が経過していません。");return;}
  if(!take(player,held.typeId,1))return;
  let healPercent=0;try{const hp=entity.getComponent("minecraft:health");if(hp&&hp.effectiveMax>0)healPercent=100/hp.effectiveMax;}catch{}
- state=feedAnimal(state,firstFeedToday?6:0,healPercent,{currentDay,adultFamiliarityCap:profile.familiarityCap??100});saveAnimal(entity,state);
+ state=feedAnimal(state,6,healPercent,{currentDay,currentTime,adultFamiliarityCap:profile.familiarityCap??100});saveAnimal(entity,state);
  player.sendMessage("§a餌を与えました。なつき度: "+Math.floor(state.familiarity));
 }
 
