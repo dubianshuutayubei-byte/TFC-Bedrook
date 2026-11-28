@@ -266,7 +266,7 @@ test("all 63 official fauna profiles can be evaluated with a complete matching h
   const temperature=p.minTemperatureC!=null&&p.maxTemperatureC!=null?(p.minTemperatureC+p.maxTemperatureC)/2:p.minTemperatureC??p.maxTemperatureC??10;
   const rainfall=p.minRainfall!=null&&p.maxRainfall!=null?(p.minRainfall+p.maxRainfall)/2:p.minRainfall??p.maxRainfall??200;
   const environment={temperatureC:temperature,rainfall,belowSeaLevel:(p.belowSeaLevel??0)+1,brightness:p.maxBrightness??0,forestType:forest,waterType:p.waterType??"freshwater",terrain:"plains",inWater:p.placement==="in_water",onGround:p.placement==="on_ground",validSpawnGround:true,y:40,seaLevel:63};
-  const result=evaluateFaunaSpawn(p,environment,()=>0);
+  let rollIndex=0;const rolls=[0,0.99,0.99];const result=evaluateFaunaSpawn(p,environment,()=>rolls[Math.min(rollIndex++,rolls.length-1)]);
   assert.equal(result.suitable,true,id+": "+JSON.stringify(result));
  }
 });
