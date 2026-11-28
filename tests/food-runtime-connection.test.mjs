@@ -21,7 +21,9 @@ test("registered edible items use the food service and match canonical nutrition
     ["potato","potato","vegetables"],
     ["vegetable","vegetable","vegetables"],
     ["fruit","fruit","fruit"],
-    ["milk_bottle","milk","dairy"]
+    ["milk_bottle","milk","dairy"],
+    ["salted_meat","salted_meat","protein"],
+    ["smoked_meat","smoked_meat","protein"]
   ];
   for(const [file,id,category] of expected){
     const item=JSON.parse(readFileSync(join(root,"packs/behavior_pack/items",file+".json"),"utf8"));
