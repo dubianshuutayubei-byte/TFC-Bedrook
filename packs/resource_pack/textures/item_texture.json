@@ -304,6 +304,9 @@
     },
     "tfc_wool": {
       "textures": "textures/items/tfc_wool"
+    },
+    "tfc_egg": {
+      "textures": "textures/items/tfc_seed"
     }
   }
 }

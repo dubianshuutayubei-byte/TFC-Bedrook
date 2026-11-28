@@ -2,7 +2,7 @@
   "source": {
     "profileSource": "TerraFirmaCraft v3.2.26 fauna JSON",
     "placementSource": "TerraFirmaCraft v3.2.26 Faunas.java",
-    "note": "Combined spawn condition profiles; placement and climate data remain source-derived. Bedrock world sampling is not yet connected."
+    "note": "40種の専用エンティティには自然スポーン規則を登録済み。出現後のランタイムでは公式TFCプロファイルを参照して温度・降雨・森林条件を近似判定する。地形/気候生成が完成するまではBedrockバイオーム由来の近似値であり、正確なTFC気候・個体密度との一致は未検証。"
   },
   "total": 63,
   "placementCounts": {
