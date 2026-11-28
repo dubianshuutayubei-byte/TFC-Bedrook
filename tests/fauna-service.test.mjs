@@ -349,3 +349,18 @@ test("all ecology prey references resolve to one of the 63 supported fauna speci
   for(const prey of profile.prey)assert.ok(supported.has(prey),predator+" references missing prey "+prey);
  }
 });
+
+test("official fauna belowSeaLevel requirements reject shallow water and accept sufficient depth",()=>{
+ const profile={belowSeaLevel:5,placement:"in_water"};
+ const shallow=evaluateFaunaSpawn(profile,{inWater:true,belowSeaLevel:4,temperatureC:10,rainfall:200},()=>0);
+ assert.equal(shallow.suitable,false);
+ assert.ok(shallow.failures.includes("too_shallow_below_sea_level"));
+ const deep=evaluateFaunaSpawn(profile,{inWater:true,belowSeaLevel:5,temperatureC:10,rainfall:200},()=>0);
+ assert.equal(deep.suitable,true);
+ const missing=evaluateFaunaSpawn(profile,{inWater:true,temperatureC:10,rainfall:200},()=>0);
+ assert.ok(missing.missing.includes("belowSeaLevel"));
+});
+test("legacy distanceBelowSeaLevel profiles remain backward compatible",()=>{
+ const result=evaluateFaunaSpawn({distanceBelowSeaLevel:5,placement:"in_water"},{inWater:true,y:60,seaLevel:63,temperatureC:10,rainfall:200},()=>0);
+ assert.ok(result.failures.includes("too_high_above_depth_limit"));
+});
