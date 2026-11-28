@@ -129,7 +129,6 @@ test("runtime uses official TFC maturity, gestation and production limits for su
 test("dairy production applies TFC familiarity, cooldown and use limits",()=>{
  assert.match(runtime,/minimumFamiliarity=profile\.productFamiliarityMin\?\?0,cooldown=profile\.productCooldownDays\?\?1/);
  assert.match(runtime,/requiredFamiliarity:minimumFamiliarity,cooldownDays:cooldown/);
- assert.match(runtime,/cooldownDays:profile\.productCooldownDays\?\?1/);
  assert.match(runtime,/maxUses:profile\.maxUses\?\?Infinity/);
  assert.match(runtime,/recordProduct\(state,currentDay,\{maxUses:profile\.maxUses\?\?Infinity,oldDayDelay:1\+Math\.floor\(Math\.random\(\)\*5\)\}\)/);
  assert.match(runtime,/profile\.dairy&&held\.typeId==="minecraft:glass_bottle"/);
