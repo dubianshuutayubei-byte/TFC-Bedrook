@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createFoodState, createFoodFromProfile, validateFoodDatabase, classifyFoodFreshness, advanceFoodDecay, preserveFood, consumeFood } from "../packs/behavior_pack/scripts/core/food-service.mjs";
