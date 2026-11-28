@@ -273,7 +273,8 @@
       "maxTemperatureC": 28,
       "minRainfall": 300,
       "maxRainfall": 500,
-      "minForest": "normal"
+      "minForest": "normal",
+      "fuzzy": true
     },
     {
       "id": "panther",
