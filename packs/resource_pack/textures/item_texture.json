@@ -187,6 +187,9 @@
     },
     "tfc_bread": {
       "textures": "textures/items/tfc_grain"
+    },
+    "tfc_quern": {
+      "textures": "textures/items/tfc_pottery"
     }
   }
 }
