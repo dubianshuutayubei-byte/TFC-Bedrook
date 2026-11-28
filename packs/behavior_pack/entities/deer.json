@@ -60,14 +60,7 @@
         "interactions": [
           {
             "interact_text": "action.interact.feed",
-            "use_item": false,
-            "on_interact": {
-              "filters": {
-                "test": "is_family",
-                "subject": "other",
-                "value": "player"
-              }
-            }
+            "use_item": false
           }
         ]
       },
