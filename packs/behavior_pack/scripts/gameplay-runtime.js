@@ -6,7 +6,7 @@ import { readStackFreshness, advanceStackFreshness } from "./core/food-stack-ser
 import { createFireState, addFuel, advanceFire, canProcessAtTemperature } from "./core/firepit-service.mjs";
 import { createSoilState, advanceSoilHydration, evaluateCropGrowth, calculateCropYield, applyFertilizer, applyCropNutrientEffects, inferSoilTypeFromBlockId, inferSoilFertilityClassFromBiomeId, advanceCropGrowthProgress } from "./core/agriculture-service.mjs";
 import { CROP_PROFILES } from "./core/crop-profiles.mjs";
-import { createAnimalState, initializeAnimalLifeStage, syncAnimalHealth, advanceAnimalNeeds, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct } from "./core/fauna-service.mjs";
+import { createAnimalState, initializeAnimalLifeStage, syncAnimalHealth, advanceAnimalNeeds, advanceAnimalFamiliarityDecay, canFeedAnimal, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct } from "./core/fauna-service.mjs";
 import { getStationRecipes } from "./core/processing-recipes.mjs";
 import { isStationJobDue, getPendingStationOutputs, markStationOutputDelivered, markStationJobRecoverable } from "./core/station-job-service.mjs";
 import { normalizeDimensionId, normalizeWeather, getRainfallMm, inferBiomeRainfallMultiplierFromBiomeId } from "./core/environment-service.mjs";
@@ -60,15 +60,15 @@ const FERTILIZER_PROFILES=Object.freeze({
 const WEATHER_BY_DIMENSION=new Map([["overworld","clear"]]);
 const ANIMAL_PROFILES={
  "tfc:deer":{speciesId:"deer",displayName:"シカ",adultAgeDays:30,requiredFamiliarity:35,breedingCooldownDays:20,gestationDays:210,customBreeding:true,feedItems:["minecraft:wheat","minecraft:wheat_seeds"],grazeBlocks:["minecraft:grass_block","minecraft:tallgrass"],kind:"terrestrial",domestic:false},
- "minecraft:cow":{adultAgeDays:192,speciesId:"cow",displayName:"ウシ",gestationDays:58,childCount:2,maxUses:128,productCooldownDays:1,productFamiliarityMin:15,requiredFamiliarity:30,customBreeding:false,dairy:true,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
- "minecraft:sheep":{adultAgeDays:56,speciesId:"sheep",displayName:"ヒツジ",gestationDays:32,childCount:2,maxUses:60,productCooldownDays:7,productFamiliarityMin:16,requiredFamiliarity:25,customBreeding:false,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
- "minecraft:chicken":{adultAgeDays:24,speciesId:"chicken",displayName:"ニワトリ",maxUses:100,productCooldownDays:1.25,productFamiliarityMin:16,hatchDays:8,requiredFamiliarity:20,customBreeding:false,feedItems:["minecraft:wheat_seeds","minecraft:beetroot_seeds","minecraft:melon_seeds","minecraft:pumpkin_seeds"],grazeBlocks:[],kind:"terrestrial",domestic:true},
- "minecraft:pig":{speciesId:"pig",displayName:"ブタ",adultAgeDays:80,gestationDays:19,childCount:10,maxUses:60,requiredFamiliarity:20,customBreeding:false,feedItems:["minecraft:carrot","minecraft:potato","minecraft:beetroot"],grazeBlocks:[],kind:"terrestrial",domestic:true},
+ "minecraft:cow":{adultAgeDays:192,speciesId:"cow",displayName:"ウシ",gestationDays:58,childCount:2,maxUses:128,productCooldownDays:1,productFamiliarityMin:15,familiarityCap:35,requiredFamiliarity:30,customBreeding:false,dairy:true,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
+ "minecraft:sheep":{adultAgeDays:56,speciesId:"sheep",displayName:"ヒツジ",gestationDays:32,childCount:2,maxUses:60,productCooldownDays:7,productFamiliarityMin:16,familiarityCap:35,requiredFamiliarity:25,customBreeding:false,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
+ "minecraft:chicken":{adultAgeDays:24,speciesId:"chicken",displayName:"ニワトリ",maxUses:100,productCooldownDays:1.25,productFamiliarityMin:16,familiarityCap:35,hatchDays:8,requiredFamiliarity:20,customBreeding:false,feedItems:["minecraft:wheat_seeds","minecraft:beetroot_seeds","minecraft:melon_seeds","minecraft:pumpkin_seeds"],grazeBlocks:[],kind:"terrestrial",domestic:true},
+ "minecraft:pig":{speciesId:"pig",displayName:"ブタ",adultAgeDays:80,gestationDays:19,childCount:10,maxUses:60,familiarityCap:35,requiredFamiliarity:20,customBreeding:false,feedItems:["minecraft:carrot","minecraft:potato","minecraft:beetroot"],grazeBlocks:[],kind:"terrestrial",domestic:true},
  "minecraft:goat":{speciesId:"goat",displayName:"ヤギ",adultAgeDays:96,gestationDays:32,childCount:2,maxUses:60,productCooldownDays:3,productFamiliarityMin:16,requiredFamiliarity:25,customBreeding:false,dairy:true,feedItems:["minecraft:wheat"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
- "minecraft:horse":{speciesId:"horse",displayName:"ウマ",adultAgeDays:80,gestationDays:19,childCount:1,maxUses:60,requiredFamiliarity:25,customBreeding:false,feedItems:["minecraft:wheat","minecraft:apple","minecraft:golden_carrot","minecraft:golden_apple"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
+ "minecraft:horse":{speciesId:"horse",displayName:"ウマ",adultAgeDays:80,gestationDays:19,childCount:1,maxUses:60,familiarityCap:35,requiredFamiliarity:25,customBreeding:false,feedItems:["minecraft:wheat","minecraft:apple","minecraft:golden_carrot","minecraft:golden_apple"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
  "minecraft:donkey":{speciesId:"donkey",displayName:"ロバ",adultAgeDays:80,gestationDays:19,childCount:1,maxUses:60,requiredFamiliarity:25,customBreeding:false,feedItems:["minecraft:wheat","minecraft:apple","minecraft:golden_carrot","minecraft:golden_apple"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
  "minecraft:mule":{speciesId:"mule",displayName:"ラバ",adultAgeDays:80,gestationDays:19,childCount:1,maxUses:60,requiredFamiliarity:25,customBreeding:false,feedItems:["minecraft:wheat","minecraft:apple","minecraft:golden_carrot","minecraft:golden_apple"],grazeBlocks:["minecraft:grass_block"],kind:"terrestrial",domestic:true},
- "minecraft:rabbit":{speciesId:"rabbit",displayName:"ウサギ",adultAgeDays:80,gestationDays:19,childCount:6,maxUses:40,requiredFamiliarity:15,customBreeding:false,feedItems:["minecraft:carrot","minecraft:golden_carrot","minecraft:dandelion"],grazeBlocks:[],kind:"terrestrial",domestic:false},
+ "minecraft:rabbit":{speciesId:"rabbit",displayName:"ウサギ",adultAgeDays:80,gestationDays:19,childCount:6,maxUses:40,familiarityCap:35,requiredFamiliarity:15,customBreeding:false,feedItems:["minecraft:carrot","minecraft:golden_carrot","minecraft:dandelion"],grazeBlocks:[],kind:"terrestrial",domestic:false},
  "minecraft:wolf":{speciesId:"wolf",displayName:"オオカミ",adultAgeDays:null,requiredFamiliarity:20,customBreeding:false,feedItems:["minecraft:beef","minecraft:porkchop","minecraft:chicken","minecraft:mutton","minecraft:rabbit"],grazeBlocks:[],kind:"terrestrial",domestic:false},
  "minecraft:fox":{speciesId:"fox",displayName:"キツネ",adultAgeDays:null,requiredFamiliarity:10,customBreeding:false,feedItems:["minecraft:sweet_berries","minecraft:glow_berries"],grazeBlocks:[],kind:"terrestrial",domestic:false},
  "minecraft:polar_bear":{speciesId:"polar_bear",displayName:"ホッキョクグマ",adultAgeDays:null,requiredFamiliarity:0,customBreeding:false,feedItems:["minecraft:cod","minecraft:salmon"],grazeBlocks:[],kind:"terrestrial",domestic:false},
@@ -537,7 +537,7 @@ function consumeDroppedAnimalFood(entity,profile,state){
     try{entity.dimension.spawnItem(new ItemStack(stack.typeId,stack.amount-1),dropped.location);}catch(error){console.warn("[TFC-Bedrook] animal feed remainder restore failed:",error);continue;}
    }
    dropped.kill();
-   return grazeAnimal(state,{hungerReduction:35,thirstReduction:3});
+   return grazeAnimal(state,{hungerReduction:35,thirstReduction:3,currentDay:world.getDay()});
   }
  }catch(error){console.warn("[TFC-Bedrook] animal food pickup failed:",error);}
  return state;
@@ -547,6 +547,7 @@ function animalTick(entity){
  let state=animalState(entity);
   try{const health=entity.getComponent("minecraft:health");if(health)state=syncAnimalHealth(state,health.currentValue,health.effectiveMax);}catch{}
   state=advanceAnimalNeeds(state,0.05,{hungerPerDay:profile.hungerPerDay??8,thirstPerDay:profile.thirstPerDay??(profile.kind==="aquatic"?0:12),healthLossPerDay:2});
+ state=advanceAnimalFamiliarityDecay(state,world.getDay(),{decayLimit:30,decayPerDay:2});
  state=consumeDroppedAnimalFood(entity,profile,state);
  try{
   const base={x:Math.floor(entity.location.x),y:Math.floor(entity.location.y),z:Math.floor(entity.location.z)};
@@ -565,7 +566,7 @@ function animalTick(entity){
    try{
     if(forage.typeId==="minecraft:grass_block")forage.setType("minecraft:dirt");
     else if(forage.typeId==="minecraft:tallgrass"||forage.typeId==="minecraft:short_grass"||forage.typeId==="minecraft:tall_grass")forage.setType("minecraft:air");
-    state=grazeAnimal(state,{hungerReduction:15});
+    state=grazeAnimal(state,{hungerReduction:15,currentDay:world.getDay()});
    }catch(error){console.warn("[TFC-Bedrook] animal grazing failed:",error);}
   }
  }catch{}
@@ -613,10 +614,11 @@ async function animalInteract(player,entity){
   return;
  }
  if(!profile.feedItems.includes(held.typeId))return;
- // Vanilla livestock already consumes its breeding feed during the interaction event.
- // Only the custom deer entity needs a manual inventory deduction.
- if(entity.typeId==="tfc:deer"&&!take(player,held.typeId,1))return;
- state=feedAnimal(state,15,0);saveAnimal(entity,state);
+ const currentDay=world.getDay();
+ if(!canFeedAnimal(state,currentDay)){player.sendMessage("§eこの動物には今日はもう餌を与えています。");return;}
+ if(!take(player,held.typeId,1))return;
+ let healPercent=0;try{const hp=entity.getComponent("minecraft:health");if(hp&&hp.effectiveMax>0)healPercent=100/hp.effectiveMax;}catch{}
+ state=feedAnimal(state,6,healPercent,{currentDay,adultFamiliarityCap:profile.familiarityCap??100});saveAnimal(entity,state);
  player.sendMessage("§a餌を与えました。なつき度: "+Math.floor(state.familiarity));
 }
 
