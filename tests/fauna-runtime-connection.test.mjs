@@ -8,7 +8,7 @@ const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runti
 test("vanilla livestock relies on vanilla breeding while TFC chicken uses custom husbandry",()=>{
  assert.match(runtime,/"minecraft:cow":\{[^}]*customBreeding:false/);
  assert.match(runtime,/"minecraft:sheep":\{[^}]*customBreeding:false/);
- assert.match(runtime,/"minecraft:chicken":\{[^}]*customBreeding:false/);
+ assert.match(runtime,/"tfc:chicken":\{[^}]*customBreeding:false/);
  assert.ok(runtime.includes('if(!entity.typeId.startsWith("minecraft:")&&!take(player,held.typeId,1))return;'));
  assert.match(runtime,/if\(profile\.customBreeding&&state\.sex==="female"/);
 });
@@ -153,7 +153,8 @@ test("animal runtime applies daily familiarity decay and capped TFC feeding gain
  assert.ok(runtime.includes("state=advanceAnimalFamiliarityDecay(state,currentDay,{decayLimit:30,decayPerDay:2});"));
  assert.match(runtime,/canFeedAnimal\(state,currentDay\)/);
  assert.match(runtime,/feedAnimal\(state,firstFeedToday\?6:0,healPercent,\{currentDay,adultFamiliarityCap:profile\.familiarityCap\?\?100\}\)/);
- for(const id of ["cow","goat","sheep","chicken","pig","horse","donkey","mule","rabbit"])assert.match(runtime,new RegExp('"minecraft:'+id+'":\\{[^}]*familiarityCap:35'));
+ for(const id of ["cow","goat","sheep","pig","horse","donkey","mule","rabbit"])assert.match(runtime,new RegExp('"minecraft:'+id+'":\\{[^}]*familiarityCap:35'));
+ assert.match(runtime,/"tfc:chicken":\{[^}]*familiarityCap:35/);
 });
 
 test("custom births trigger juvenile state and persist remaining litter count",()=>{
@@ -184,7 +185,7 @@ test("custom breeding uses calendar-day feeding and fractional mating cooldown",
 
 
 test("official oviparous livestock production uses TFC hatch times, laying intervals and lifetime counts",()=>{
- assert.match(runtime,/"minecraft:chicken":\{[^}]*adultAgeDays:24[^}]*maxUses:100[^}]*eggLayCooldownDays:1\.25[^}]*productFamiliarityMin:15[^}]*hatchDays:8/);
+ assert.match(runtime,/"tfc:chicken":\{[^}]*adultAgeDays:24[^}]*maxUses:100[^}]*eggLayCooldownDays:1\.25[^}]*productFamiliarityMin:15[^}]*hatchDays:8/);
  assert.match(runtime,/"tfc:duck":\{[^}]*adultAgeDays":32[^}]*eggLayCooldownDays":1\.3333333333[^}]*maxUses":72[^}]*productFamiliarityMin":15[^}]*hatchDays":8/);
  assert.match(runtime,/"tfc:quail":\{[^}]*adultAgeDays":22[^}]*eggLayCooldownDays":1\.1666666667[^}]*maxUses":48[^}]*productFamiliarityMin":15[^}]*hatchDays":8/);
  assert.match(runtime,/state\.familiarity<30\|\|state\.lastFedDay<world\.getDay\(\)/);
