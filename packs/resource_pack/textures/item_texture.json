@@ -91,6 +91,12 @@
     },
     "tfc_prospecting_tool": {
       "textures": "textures/items/tfc_stone"
+    },
+    "tfc_compost": {
+      "textures": "textures/items/tfc_grain"
+    },
+    "tfc_composter": {
+      "textures": "textures/items/tfc_pottery"
     }
   }
 }
