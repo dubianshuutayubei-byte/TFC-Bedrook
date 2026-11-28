@@ -1,0 +1,31 @@
+{
+  "format_version": "1.26.60",
+  "minecraft:block": {
+    "description": {
+      "identifier": "tfc:nest_box",
+      "menu_category": {
+        "category": "construction"
+      }
+    },
+    "components": {
+      "minecraft:geometry": "minecraft:geometry.full_block",
+      "minecraft:material_instances": {
+        "*": {
+          "texture": "tfc_nest_box",
+          "render_method": "opaque"
+        }
+      },
+      "minecraft:destructible_by_mining": {
+        "seconds_to_destroy": 1
+      },
+      "minecraft:collision_box": true,
+      "minecraft:selection_box": true,
+      "tfc:nest_box_interaction": {},
+      "minecraft:display_name": "tile.tfc:nest_box.name",
+      "minecraft:tick": {
+        "interval_range": [1200, 1200],
+        "looping": true
+      }
+    }
+  }
+}
