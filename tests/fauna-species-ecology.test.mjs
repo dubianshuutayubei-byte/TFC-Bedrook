@@ -57,6 +57,16 @@ test("official livestock values are represented for alpaca, musk ox and yak",()=
  assert.equal(yak.dairy,true);
 });
 
+test("birds, herbivores and manatees have natural forage sources",()=>{
+ for(const id of ["alpaca","musk_ox","yak","boar","bongo","caribou","gazelle","moose","wildebeest","duck","quail","grouse","peafowl","pheasant","turkey"]){
+  assert.ok(CUSTOM_FAUNA_PROFILES["tfc:"+id].grazeBlocks.includes("minecraft:grass_block"),id+" missing grass forage");
+ }
+ assert.deepEqual(CUSTOM_FAUNA_PROFILES["tfc:manatee"].grazeBlocks,["minecraft:seagrass"]);
+ assert.deepEqual(CUSTOM_FAUNA_PROFILES["tfc:penguin"].fishForageItems,["minecraft:cod","minecraft:salmon","minecraft:tropical_fish"]);
+ assert.match(runtime,/function tickFishForage\(entity,profile,state\)/);
+ assert.match(runtime,/state=tickFishForage\(entity,profile,state\)/);
+});
+
 test("duck and quail use automatic nest-box laying with eight-day incubation",()=>{
  for(const id of ["tfc:duck","tfc:quail"]){
   const p=CUSTOM_FAUNA_PROFILES[id];
