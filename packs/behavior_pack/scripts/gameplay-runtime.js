@@ -614,11 +614,12 @@ async function animalInteract(player,entity){
   return;
  }
  if(!profile.feedItems.includes(held.typeId))return;
- const currentDay=world.getDay();
- if(!canFeedAnimal(state,currentDay)){player.sendMessage("§eこの動物には今日はもう餌を与えています。");return;}
- if(!take(player,held.typeId,1))return;
+ const currentDay=world.getDay(),firstFeedToday=canFeedAnimal(state,currentDay);
+ // Native Bedrock livestock consumes feed before the after-event callback; custom deer is handled entirely here.
+ if(entity.typeId==="tfc:deer"&&!firstFeedToday){player.sendMessage("§eこの動物には今日はもう餌を与えています。");return;}
+ if(entity.typeId==="tfc:deer"&&!take(player,held.typeId,1))return;
  let healPercent=0;try{const hp=entity.getComponent("minecraft:health");if(hp&&hp.effectiveMax>0)healPercent=100/hp.effectiveMax;}catch{}
- state=feedAnimal(state,6,healPercent,{currentDay,adultFamiliarityCap:profile.familiarityCap??100});saveAnimal(entity,state);
+ state=feedAnimal(state,firstFeedToday?6:0,healPercent,{currentDay,adultFamiliarityCap:profile.familiarityCap??100});saveAnimal(entity,state);
  player.sendMessage("§a餌を与えました。なつき度: "+Math.floor(state.familiarity));
 }
 
