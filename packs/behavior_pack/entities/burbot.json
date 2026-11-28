@@ -13,7 +13,8 @@
           "animal",
           "mob",
           "tfc_aquatic",
-          "tfc_fauna_burbot"
+          "tfc_fauna_burbot",
+          "tfc_small_fish"
         ]
       },
       "minecraft:nameable": {},
