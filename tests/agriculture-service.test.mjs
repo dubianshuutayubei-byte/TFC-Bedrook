@@ -101,3 +101,9 @@ test("soil fertility boosts nutrient replenishment but not crop nutrient consump
  const poor=applyCropNutrientEffects({fertilityClass:"oxisol",potassium:50},{potassium:1},1);
  assert.equal(poor.potassium,50.8);
 });
+
+test("soil state preserves a bounded regional rainfall multiplier",()=>{
+ assert.equal(createSoilState({rainfallMultiplier:1.45}).rainfallMultiplier,1.45);
+ assert.equal(createSoilState({rainfallMultiplier:9}).rainfallMultiplier,2);
+ assert.equal(createSoilState({rainfallMultiplier:-1}).rainfallMultiplier,0);
+});
