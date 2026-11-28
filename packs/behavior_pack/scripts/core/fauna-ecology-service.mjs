@@ -1,20 +1,20 @@
 /** Lightweight species-level predator/prey relationships for TFC fauna. */
 export const FAUNA_ECOLOGY = Object.freeze({
-  cougar: { prey: ["deer", "rabbit", "boar", "sheep", "goat"], predators: ["wolf", "direwolf", "grizzly_bear"] },
-  black_bear: { prey: ["salmon", "cod", "rabbit", "deer"], predators: ["grizzly_bear"] },
-  grizzly_bear: { prey: ["salmon", "cod", "rabbit", "deer", "boar"], predators: [] },
-  direwolf: { prey: ["deer", "caribou", "boar", "sheep", "goat", "rabbit"], predators: ["sabertooth", "tiger"] },
-  wolf: { prey: ["deer", "caribou", "boar", "sheep", "goat", "rabbit"], predators: ["direwolf", "sabertooth", "tiger"] },
-  fox: { prey: ["rabbit", "chicken", "duck", "quail", "grouse", "pheasant"], predators: ["wolf", "cougar", "tiger"] },
-  polar_bear: { prey: ["salmon", "cod", "lake_trout", "seal"], predators: [] },
-  hyena: { prey: ["gazelle", "wildebeest", "deer", "boar"], predators: ["lion"] },
-  lion: { prey: ["gazelle", "wildebeest", "boar", "deer"], predators: [] },
-  panther: { prey: ["deer", "boar", "rabbit", "peafowl"], predators: ["tiger"] },
-  tiger: { prey: ["deer", "boar", "moose", "caribou", "gazelle"], predators: [] },
-  sabertooth: { prey: ["deer", "caribou", "moose", "boar"], predators: [] },
-  crocodile: { prey: ["cod", "salmon", "tropical_fish", "turtle"], predators: [] },
-  ocelot: { prey: ["rabbit", "chicken", "quail", "pheasant"], predators: ["cougar", "panther", "tiger"] },
-  orca: { prey: ["cod", "salmon", "tropical_fish", "squid", "dolphin"], predators: [] }
+  cougar: { prey: ["deer", "rabbit", "boar", "sheep", "goat"] },
+  black_bear: { prey: ["salmon", "cod", "rabbit", "deer"] },
+  grizzly_bear: { prey: ["salmon", "cod", "rabbit", "deer", "boar"] },
+  direwolf: { prey: ["deer", "caribou", "boar", "sheep", "goat", "rabbit"] },
+  wolf: { prey: ["deer", "caribou", "boar", "sheep", "goat", "rabbit"] },
+  fox: { prey: ["rabbit", "chicken", "duck", "quail", "grouse", "pheasant"] },
+  polar_bear: { prey: ["salmon", "cod", "lake_trout"] },
+  hyena: { prey: ["gazelle", "wildebeest", "deer", "boar"] },
+  lion: { prey: ["gazelle", "wildebeest", "boar", "deer"] },
+  panther: { prey: ["deer", "boar", "rabbit", "peafowl"] },
+  tiger: { prey: ["deer", "boar", "moose", "caribou", "gazelle"] },
+  sabertooth: { prey: ["deer", "caribou", "moose", "boar"] },
+  crocodile: { prey: ["cod", "salmon", "tropical_fish", "turtle"] },
+  ocelot: { prey: ["rabbit", "chicken", "quail", "pheasant"] },
+  orca: { prey: ["cod", "salmon", "tropical_fish", "squid", "dolphin"] }
 });
 
 export function getFaunaPrey(species) {
