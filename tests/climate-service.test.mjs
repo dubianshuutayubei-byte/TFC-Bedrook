@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   calculateTemperatureC,
+  calculateAmbientTemperatureC,
   evaluateCropClimate,
   evaluateFaunaHabitat,
   normalizeHydration,
@@ -52,4 +53,22 @@ test("hydration is clamped to the normalized range", () => {
   assert.equal(normalizeHydration(-5), 0);
   assert.equal(normalizeHydration(45), 45);
   assert.equal(normalizeHydration(120), 100);
+});
+
+test("ambient temperature follows both season and day-night cycle", () => {
+  const winterNight = calculateAmbientTemperatureC({
+    meanAnnualTempC: 12, seasonalAmplitudeC: 14, dayOfYear: 0, timeOfDay: 0,
+  });
+  const winterNoon = calculateAmbientTemperatureC({
+    meanAnnualTempC: 12, seasonalAmplitudeC: 14, dayOfYear: 0, timeOfDay: 12000,
+  });
+  const summerNoon = calculateAmbientTemperatureC({
+    meanAnnualTempC: 12, seasonalAmplitudeC: 14, dayOfYear: 48, timeOfDay: 12000,
+  });
+  assert.equal(winterNight, -5);
+  assert.equal(winterNoon, 1);
+  assert.equal(summerNoon, 29);
+  assert.throws(() => calculateAmbientTemperatureC({
+    meanAnnualTempC: 12, dayOfYear: 0, timeOfDay: 25000,
+  }), RangeError);
 });
