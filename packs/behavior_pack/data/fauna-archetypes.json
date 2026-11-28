@@ -1,31 +1,43 @@
 {
-  "source": "TerraFirmaCraft v3.2.26 src/main/java/net/dries007/tfc/common/entities/Faunas.java",
-  "total": 63,
+  "source": "TerraFirmaCraft Java 1.21.x src/main/java/net/dries007/tfc/common/entities/Faunas.java + aquatic/Fish.java",
+  "total": 78,
   "archetypeCount": 29,
   "species": [
     {
-      "id": "cod",
-      "archetype": "fish_cod",
-      "officialJavaClass": "TFCCod",
-      "bedrockStatus": "native_adapter_or_custom_deer"
-    },
-    {
-      "id": "jellyfish",
-      "archetype": "fish_jellyfish",
-      "officialJavaClass": "Jellyfish",
+      "id": "alpaca",
+      "archetype": "wool_livestock",
+      "officialJavaClass": "WoolyAnimal",
       "bedrockStatus": "custom_entity_scaffold"
     },
     {
-      "id": "tropical_fish",
-      "archetype": "fish_tropical",
-      "officialJavaClass": "TFCTropicalFish",
-      "bedrockStatus": "native_adapter_or_custom_deer"
+      "id": "arctic_char",
+      "archetype": "freshwater_fish",
+      "officialJavaClass": "FreshwaterFish",
+      "bedrockStatus": "not_implemented"
     },
     {
-      "id": "pufferfish",
-      "archetype": "fish_puffer",
-      "officialJavaClass": "TFCPufferfish",
-      "bedrockStatus": "native_adapter_or_custom_deer"
+      "id": "armadillo",
+      "archetype": "armadillo",
+      "officialJavaClass": "TFCArmadillo",
+      "bedrockStatus": "not_implemented"
+    },
+    {
+      "id": "bactrian_camel",
+      "archetype": "camel",
+      "officialJavaClass": "BactrianCamel",
+      "bedrockStatus": "not_implemented"
+    },
+    {
+      "id": "bison",
+      "archetype": "ramming_prey",
+      "officialJavaClass": "RammingPrey",
+      "bedrockStatus": "not_implemented"
+    },
+    {
+      "id": "black_bear",
+      "archetype": "bear_predator",
+      "officialJavaClass": "Predator",
+      "bedrockStatus": "custom_entity_scaffold"
     },
     {
       "id": "bluegill",
@@ -34,9 +46,171 @@
       "bedrockStatus": "custom_entity_scaffold"
     },
     {
+      "id": "boar",
+      "archetype": "ramming_prey",
+      "officialJavaClass": "RammingPrey",
+      "bedrockStatus": "custom_entity_scaffold"
+    },
+    {
+      "id": "bongo",
+      "archetype": "prey",
+      "officialJavaClass": "Prey",
+      "bedrockStatus": "custom_entity_scaffold"
+    },
+    {
+      "id": "burbot",
+      "archetype": "freshwater_fish",
+      "officialJavaClass": "FreshwaterFish",
+      "bedrockStatus": "not_implemented"
+    },
+    {
+      "id": "caribou",
+      "archetype": "prey",
+      "officialJavaClass": "Prey",
+      "bedrockStatus": "custom_entity_scaffold"
+    },
+    {
+      "id": "chicken",
+      "archetype": "oviparous_livestock",
+      "officialJavaClass": "OviparousAnimal",
+      "bedrockStatus": "native_adapter_or_custom_deer"
+    },
+    {
+      "id": "cod",
+      "archetype": "fish_cod",
+      "officialJavaClass": "TFCCod",
+      "bedrockStatus": "native_adapter_or_custom_deer"
+    },
+    {
+      "id": "cougar",
+      "archetype": "feline_predator",
+      "officialJavaClass": "FelinePredator",
+      "bedrockStatus": "custom_entity_scaffold"
+    },
+    {
+      "id": "cow",
+      "archetype": "dairy_livestock",
+      "officialJavaClass": "DairyAnimal",
+      "bedrockStatus": "native_adapter_or_custom_deer"
+    },
+    {
       "id": "crappie",
       "archetype": "freshwater_fish",
       "officialJavaClass": "FreshwaterFish",
+      "bedrockStatus": "custom_entity_scaffold"
+    },
+    {
+      "id": "crayfish",
+      "archetype": "aquatic_critter",
+      "officialJavaClass": "AquaticCritter",
+      "bedrockStatus": "custom_entity_scaffold"
+    },
+    {
+      "id": "crocodile",
+      "archetype": "amphibious_predator",
+      "officialJavaClass": "AmphibiousPredator",
+      "bedrockStatus": "custom_entity_scaffold"
+    },
+    {
+      "id": "deer",
+      "archetype": "prey",
+      "officialJavaClass": "Prey",
+      "bedrockStatus": "native_adapter_or_custom_deer"
+    },
+    {
+      "id": "direwolf",
+      "archetype": "pack_predator",
+      "officialJavaClass": "PackPredator",
+      "bedrockStatus": "custom_entity_scaffold"
+    },
+    {
+      "id": "dolphin",
+      "archetype": "dolphin_family",
+      "officialJavaClass": "TFCDolphin",
+      "bedrockStatus": "native_adapter_or_custom_deer"
+    },
+    {
+      "id": "donkey",
+      "archetype": "horse_family",
+      "officialJavaClass": "TFCHorse/TFCDonkey/TFCMule",
+      "bedrockStatus": "native_adapter_or_custom_deer"
+    },
+    {
+      "id": "dromedary_camel",
+      "archetype": "camel",
+      "officialJavaClass": "DromedaryCamel",
+      "bedrockStatus": "not_implemented"
+    },
+    {
+      "id": "duck",
+      "archetype": "oviparous_livestock",
+      "officialJavaClass": "OviparousAnimal",
+      "bedrockStatus": "custom_entity_scaffold"
+    },
+    {
+      "id": "fox",
+      "archetype": "fox",
+      "officialJavaClass": "TFCFox",
+      "bedrockStatus": "native_adapter_or_custom_deer"
+    },
+    {
+      "id": "frog",
+      "archetype": "frog",
+      "officialJavaClass": "TFCFrog",
+      "bedrockStatus": "native_adapter_or_custom_deer"
+    },
+    {
+      "id": "gazelle",
+      "archetype": "prey",
+      "officialJavaClass": "Prey",
+      "bedrockStatus": "custom_entity_scaffold"
+    },
+    {
+      "id": "goat",
+      "archetype": "dairy_livestock",
+      "officialJavaClass": "DairyAnimal",
+      "bedrockStatus": "native_adapter_or_custom_deer"
+    },
+    {
+      "id": "grizzly_bear",
+      "archetype": "bear_predator",
+      "officialJavaClass": "Predator",
+      "bedrockStatus": "custom_entity_scaffold"
+    },
+    {
+      "id": "grouse",
+      "archetype": "winged_prey",
+      "officialJavaClass": "WingedPrey",
+      "bedrockStatus": "custom_entity_scaffold"
+    },
+    {
+      "id": "horse",
+      "archetype": "horse_family",
+      "officialJavaClass": "TFCHorse/TFCDonkey/TFCMule",
+      "bedrockStatus": "native_adapter_or_custom_deer"
+    },
+    {
+      "id": "horseshoe_crab",
+      "archetype": "aquatic_critter",
+      "officialJavaClass": "AquaticCritter",
+      "bedrockStatus": "custom_entity_scaffold"
+    },
+    {
+      "id": "hyena",
+      "archetype": "pack_predator",
+      "officialJavaClass": "PackPredator",
+      "bedrockStatus": "custom_entity_scaffold"
+    },
+    {
+      "id": "isopod",
+      "archetype": "aquatic_critter",
+      "officialJavaClass": "AquaticCritter",
+      "bedrockStatus": "custom_entity_scaffold"
+    },
+    {
+      "id": "jellyfish",
+      "archetype": "fish_jellyfish",
+      "officialJavaClass": "Jellyfish",
       "bedrockStatus": "custom_entity_scaffold"
     },
     {
@@ -52,21 +226,15 @@
       "bedrockStatus": "custom_entity_scaffold"
     },
     {
-      "id": "rainbow_trout",
-      "archetype": "freshwater_fish",
-      "officialJavaClass": "FreshwaterFish",
-      "bedrockStatus": "custom_entity_scaffold"
+      "id": "leopard_seal",
+      "archetype": "leopard_seal",
+      "officialJavaClass": "LeopardSeal",
+      "bedrockStatus": "not_implemented"
     },
     {
-      "id": "salmon",
-      "archetype": "freshwater_fish",
-      "officialJavaClass": "FreshwaterFish",
-      "bedrockStatus": "native_adapter_or_custom_deer"
-    },
-    {
-      "id": "smallmouth_bass",
-      "archetype": "freshwater_fish",
-      "officialJavaClass": "FreshwaterFish",
+      "id": "lion",
+      "archetype": "feline_predator",
+      "officialJavaClass": "FelinePredator",
       "bedrockStatus": "custom_entity_scaffold"
     },
     {
@@ -76,177 +244,27 @@
       "bedrockStatus": "custom_entity_scaffold"
     },
     {
-      "id": "crayfish",
-      "archetype": "aquatic_critter",
-      "officialJavaClass": "AquaticCritter",
-      "bedrockStatus": "custom_entity_scaffold"
-    },
-    {
-      "id": "isopod",
-      "archetype": "aquatic_critter",
-      "officialJavaClass": "AquaticCritter",
-      "bedrockStatus": "custom_entity_scaffold"
-    },
-    {
-      "id": "horseshoe_crab",
-      "archetype": "aquatic_critter",
-      "officialJavaClass": "AquaticCritter",
-      "bedrockStatus": "custom_entity_scaffold"
-    },
-    {
-      "id": "dolphin",
-      "archetype": "dolphin_family",
-      "officialJavaClass": "TFCDolphin",
-      "bedrockStatus": "native_adapter_or_custom_deer"
-    },
-    {
-      "id": "orca",
-      "archetype": "dolphin_family",
-      "officialJavaClass": "TFCDolphin",
-      "bedrockStatus": "custom_entity_scaffold"
-    },
-    {
       "id": "manatee",
       "archetype": "manatee",
       "officialJavaClass": "Manatee",
       "bedrockStatus": "custom_entity_scaffold"
     },
     {
-      "id": "turtle",
-      "archetype": "turtle",
-      "officialJavaClass": "TFCTurtle",
-      "bedrockStatus": "native_adapter_or_custom_deer"
-    },
-    {
-      "id": "penguin",
-      "archetype": "penguin",
-      "officialJavaClass": "Penguin",
+      "id": "moose",
+      "archetype": "ramming_prey",
+      "officialJavaClass": "RammingPrey",
       "bedrockStatus": "custom_entity_scaffold"
     },
     {
-      "id": "frog",
-      "archetype": "frog",
-      "officialJavaClass": "TFCFrog",
-      "bedrockStatus": "native_adapter_or_custom_deer"
+      "id": "muksun",
+      "archetype": "freshwater_fish",
+      "officialJavaClass": "FreshwaterFish",
+      "bedrockStatus": "not_implemented"
     },
     {
-      "id": "polar_bear",
-      "archetype": "bear_predator",
-      "officialJavaClass": "Predator",
-      "bedrockStatus": "native_adapter_or_custom_deer"
-    },
-    {
-      "id": "grizzly_bear",
-      "archetype": "bear_predator",
-      "officialJavaClass": "Predator",
-      "bedrockStatus": "custom_entity_scaffold"
-    },
-    {
-      "id": "black_bear",
-      "archetype": "bear_predator",
-      "officialJavaClass": "Predator",
-      "bedrockStatus": "custom_entity_scaffold"
-    },
-    {
-      "id": "cougar",
-      "archetype": "feline_predator",
-      "officialJavaClass": "FelinePredator",
-      "bedrockStatus": "custom_entity_scaffold"
-    },
-    {
-      "id": "panther",
-      "archetype": "feline_predator",
-      "officialJavaClass": "FelinePredator",
-      "bedrockStatus": "custom_entity_scaffold"
-    },
-    {
-      "id": "lion",
-      "archetype": "feline_predator",
-      "officialJavaClass": "FelinePredator",
-      "bedrockStatus": "custom_entity_scaffold"
-    },
-    {
-      "id": "sabertooth",
-      "archetype": "feline_predator",
-      "officialJavaClass": "FelinePredator",
-      "bedrockStatus": "custom_entity_scaffold"
-    },
-    {
-      "id": "tiger",
-      "archetype": "feline_predator",
-      "officialJavaClass": "FelinePredator",
-      "bedrockStatus": "custom_entity_scaffold"
-    },
-    {
-      "id": "crocodile",
-      "archetype": "amphibious_predator",
-      "officialJavaClass": "AmphibiousPredator",
-      "bedrockStatus": "custom_entity_scaffold"
-    },
-    {
-      "id": "wolf",
-      "archetype": "pack_predator",
-      "officialJavaClass": "PackPredator",
-      "bedrockStatus": "native_adapter_or_custom_deer"
-    },
-    {
-      "id": "hyena",
-      "archetype": "pack_predator",
-      "officialJavaClass": "PackPredator",
-      "bedrockStatus": "custom_entity_scaffold"
-    },
-    {
-      "id": "direwolf",
-      "archetype": "pack_predator",
-      "officialJavaClass": "PackPredator",
-      "bedrockStatus": "custom_entity_scaffold"
-    },
-    {
-      "id": "squid",
-      "archetype": "squid",
-      "officialJavaClass": "TFCSquid",
-      "bedrockStatus": "native_adapter_or_custom_deer"
-    },
-    {
-      "id": "octopoteuthis",
-      "archetype": "deep_sea_cephalopod",
-      "officialJavaClass": "Octopoteuthis",
-      "bedrockStatus": "custom_entity_scaffold"
-    },
-    {
-      "id": "pig",
-      "archetype": "mammal_livestock",
-      "officialJavaClass": "Mammal",
-      "bedrockStatus": "native_adapter_or_custom_deer"
-    },
-    {
-      "id": "cow",
-      "archetype": "dairy_livestock",
-      "officialJavaClass": "DairyAnimal",
-      "bedrockStatus": "native_adapter_or_custom_deer"
-    },
-    {
-      "id": "goat",
-      "archetype": "dairy_livestock",
-      "officialJavaClass": "DairyAnimal",
-      "bedrockStatus": "native_adapter_or_custom_deer"
-    },
-    {
-      "id": "yak",
-      "archetype": "dairy_livestock",
-      "officialJavaClass": "DairyAnimal",
-      "bedrockStatus": "custom_entity_scaffold"
-    },
-    {
-      "id": "alpaca",
-      "archetype": "wool_livestock",
-      "officialJavaClass": "WoolyAnimal",
-      "bedrockStatus": "custom_entity_scaffold"
-    },
-    {
-      "id": "sheep",
-      "archetype": "wool_livestock",
-      "officialJavaClass": "WoolyAnimal",
+      "id": "mule",
+      "archetype": "horse_family",
+      "officialJavaClass": "TFCHorse/TFCDonkey/TFCMule",
       "bedrockStatus": "native_adapter_or_custom_deer"
     },
     {
@@ -256,16 +274,94 @@
       "bedrockStatus": "custom_entity_scaffold"
     },
     {
-      "id": "chicken",
-      "archetype": "oviparous_livestock",
-      "officialJavaClass": "OviparousAnimal",
+      "id": "northern_pike",
+      "archetype": "freshwater_fish",
+      "officialJavaClass": "FreshwaterFish",
+      "bedrockStatus": "not_implemented"
+    },
+    {
+      "id": "ocelot",
+      "archetype": "ocelot",
+      "officialJavaClass": "TFCOcelot",
       "bedrockStatus": "native_adapter_or_custom_deer"
     },
     {
-      "id": "duck",
-      "archetype": "oviparous_livestock",
-      "officialJavaClass": "OviparousAnimal",
+      "id": "octopoteuthis",
+      "archetype": "deep_sea_cephalopod",
+      "officialJavaClass": "Octopoteuthis",
       "bedrockStatus": "custom_entity_scaffold"
+    },
+    {
+      "id": "orca",
+      "archetype": "dolphin_family",
+      "officialJavaClass": "TFCDolphin",
+      "bedrockStatus": "custom_entity_scaffold"
+    },
+    {
+      "id": "pacu",
+      "archetype": "freshwater_fish",
+      "officialJavaClass": "FreshwaterFish",
+      "bedrockStatus": "not_implemented"
+    },
+    {
+      "id": "panda",
+      "archetype": "panda",
+      "officialJavaClass": "TFCPanda",
+      "bedrockStatus": "native_adapter_or_custom_deer"
+    },
+    {
+      "id": "panther",
+      "archetype": "feline_predator",
+      "officialJavaClass": "FelinePredator",
+      "bedrockStatus": "custom_entity_scaffold"
+    },
+    {
+      "id": "peacock_bass",
+      "archetype": "freshwater_fish",
+      "officialJavaClass": "FreshwaterFish",
+      "bedrockStatus": "not_implemented"
+    },
+    {
+      "id": "peafowl",
+      "archetype": "winged_prey",
+      "officialJavaClass": "WingedPrey",
+      "bedrockStatus": "custom_entity_scaffold"
+    },
+    {
+      "id": "penguin",
+      "archetype": "penguin",
+      "officialJavaClass": "Penguin",
+      "bedrockStatus": "custom_entity_scaffold"
+    },
+    {
+      "id": "pheasant",
+      "archetype": "winged_prey",
+      "officialJavaClass": "WingedPrey",
+      "bedrockStatus": "custom_entity_scaffold"
+    },
+    {
+      "id": "pig",
+      "archetype": "mammal_livestock",
+      "officialJavaClass": "Mammal",
+      "bedrockStatus": "native_adapter_or_custom_deer"
+    },
+    {
+      "id": "polar_bear",
+      "archetype": "bear_predator",
+      "officialJavaClass": "Predator",
+      "bedrockStatus": "native_adapter_or_custom_deer"
+    },
+    {
+      "id": "pond_turtle",
+      "archetype": "turtle",
+      "officialJavaClass": "TFCTurtle",
+      "bedrockStatus": "not_implemented"
+    },
+    {
+      "id": "pufferfish",
+      "archetype": "fish_puffer",
+      "officialJavaClass": "TFCPufferfish",
+      "bedrockStatus": "native_adapter_or_custom_deer"
     },
     {
       "id": "quail",
@@ -280,76 +376,70 @@
       "bedrockStatus": "native_adapter_or_custom_deer"
     },
     {
-      "id": "fox",
-      "archetype": "fox",
-      "officialJavaClass": "TFCFox",
+      "id": "rainbow_trout",
+      "archetype": "freshwater_fish",
+      "officialJavaClass": "FreshwaterFish",
+      "bedrockStatus": "custom_entity_scaffold"
+    },
+    {
+      "id": "red_piranha",
+      "archetype": "freshwater_fish",
+      "officialJavaClass": "FreshwaterFish",
+      "bedrockStatus": "not_implemented"
+    },
+    {
+      "id": "sabertooth",
+      "archetype": "feline_predator",
+      "officialJavaClass": "FelinePredator",
+      "bedrockStatus": "custom_entity_scaffold"
+    },
+    {
+      "id": "salmon",
+      "archetype": "freshwater_fish",
+      "officialJavaClass": "FreshwaterFish",
       "bedrockStatus": "native_adapter_or_custom_deer"
     },
     {
-      "id": "panda",
-      "archetype": "panda",
-      "officialJavaClass": "TFCPanda",
+      "id": "sheep",
+      "archetype": "wool_livestock",
+      "officialJavaClass": "WoolyAnimal",
       "bedrockStatus": "native_adapter_or_custom_deer"
     },
     {
-      "id": "ocelot",
-      "archetype": "ocelot",
-      "officialJavaClass": "TFCOcelot",
+      "id": "smallmouth_bass",
+      "archetype": "freshwater_fish",
+      "officialJavaClass": "FreshwaterFish",
+      "bedrockStatus": "custom_entity_scaffold"
+    },
+    {
+      "id": "spotted_gudgeon",
+      "archetype": "freshwater_fish",
+      "officialJavaClass": "FreshwaterFish",
+      "bedrockStatus": "not_implemented"
+    },
+    {
+      "id": "squid",
+      "archetype": "squid",
+      "officialJavaClass": "TFCSquid",
       "bedrockStatus": "native_adapter_or_custom_deer"
     },
     {
-      "id": "boar",
-      "archetype": "ramming_prey",
-      "officialJavaClass": "RammingPrey",
+      "id": "tiger",
+      "archetype": "feline_predator",
+      "officialJavaClass": "FelinePredator",
       "bedrockStatus": "custom_entity_scaffold"
     },
     {
-      "id": "wildebeest",
-      "archetype": "ramming_prey",
-      "officialJavaClass": "RammingPrey",
-      "bedrockStatus": "custom_entity_scaffold"
+      "id": "tilapia",
+      "archetype": "freshwater_fish",
+      "officialJavaClass": "FreshwaterFish",
+      "bedrockStatus": "not_implemented"
     },
     {
-      "id": "moose",
-      "archetype": "ramming_prey",
-      "officialJavaClass": "RammingPrey",
-      "bedrockStatus": "custom_entity_scaffold"
-    },
-    {
-      "id": "bongo",
-      "archetype": "prey",
-      "officialJavaClass": "Prey",
-      "bedrockStatus": "custom_entity_scaffold"
-    },
-    {
-      "id": "caribou",
-      "archetype": "prey",
-      "officialJavaClass": "Prey",
-      "bedrockStatus": "custom_entity_scaffold"
-    },
-    {
-      "id": "deer",
-      "archetype": "prey",
-      "officialJavaClass": "Prey",
+      "id": "tropical_fish",
+      "archetype": "fish_tropical",
+      "officialJavaClass": "TFCTropicalFish",
       "bedrockStatus": "native_adapter_or_custom_deer"
-    },
-    {
-      "id": "gazelle",
-      "archetype": "prey",
-      "officialJavaClass": "Prey",
-      "bedrockStatus": "custom_entity_scaffold"
-    },
-    {
-      "id": "grouse",
-      "archetype": "winged_prey",
-      "officialJavaClass": "WingedPrey",
-      "bedrockStatus": "custom_entity_scaffold"
-    },
-    {
-      "id": "pheasant",
-      "archetype": "winged_prey",
-      "officialJavaClass": "WingedPrey",
-      "bedrockStatus": "custom_entity_scaffold"
     },
     {
       "id": "turkey",
@@ -358,29 +448,29 @@
       "bedrockStatus": "custom_entity_scaffold"
     },
     {
-      "id": "peafowl",
-      "archetype": "winged_prey",
-      "officialJavaClass": "WingedPrey",
+      "id": "turtle",
+      "archetype": "turtle",
+      "officialJavaClass": "TFCTurtle",
+      "bedrockStatus": "native_adapter_or_custom_deer"
+    },
+    {
+      "id": "wildebeest",
+      "archetype": "ramming_prey",
+      "officialJavaClass": "RammingPrey",
       "bedrockStatus": "custom_entity_scaffold"
     },
     {
-      "id": "donkey",
-      "archetype": "horse_family",
-      "officialJavaClass": "TFCHorse/TFCDonkey/TFCMule",
+      "id": "wolf",
+      "archetype": "pack_predator",
+      "officialJavaClass": "PackPredator",
       "bedrockStatus": "native_adapter_or_custom_deer"
     },
     {
-      "id": "mule",
-      "archetype": "horse_family",
-      "officialJavaClass": "TFCHorse/TFCDonkey/TFCMule",
-      "bedrockStatus": "native_adapter_or_custom_deer"
-    },
-    {
-      "id": "horse",
-      "archetype": "horse_family",
-      "officialJavaClass": "TFCHorse/TFCDonkey/TFCMule",
-      "bedrockStatus": "native_adapter_or_custom_deer"
+      "id": "yak",
+      "archetype": "dairy_livestock",
+      "officialJavaClass": "DairyAnimal",
+      "bedrockStatus": "custom_entity_scaffold"
     }
   ],
-  "caveat": "Official Java class/archetype mapping only. Bedrock entity models, AI, spawn rules, interactions, lifecycle and products remain to be implemented per species."
+  "caveat": "Official Java registry and class/archetype mapping. Bedrock implementation status is tracked separately. The 15 newly audited entries are not yet implemented as Bedrock entities."
 }
