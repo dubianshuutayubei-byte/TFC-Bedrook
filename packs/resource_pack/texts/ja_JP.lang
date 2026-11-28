@@ -96,3 +96,6 @@ item.tfc:flour.name=小麦粉
 item.tfc:dough.name=生地
 item.tfc:bread.name=パン
 tile.tfc:quern.name=石臼
+
+item.tfc:quern.name=石臼
+tile.tfc:quern.name=石臼
