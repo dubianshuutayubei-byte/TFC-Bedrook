@@ -292,3 +292,11 @@ test("recording an egg laid preserves the last laying day",()=>{
  assert.equal(hen.uses,1);
  assert.equal(recordEggLaid(hen,"invalid").lastEggAt,7.25);
 });
+
+
+test("offspring count supports fixed litters and bounded randomized litters",()=>{
+ assert.equal(getOffspringCount({childCount:2},()=>0.5),2);
+ assert.equal(getOffspringCount({childCountMin:1,childCountMax:10,childCount:6},()=>0),1);
+ assert.equal(getOffspringCount({childCountMin:1,childCountMax:10,childCount:6},()=>0.999),10);
+ assert.throws(()=>getOffspringCount({childCountMin:1,childCountMax:10},()=>1),RangeError);
+});
