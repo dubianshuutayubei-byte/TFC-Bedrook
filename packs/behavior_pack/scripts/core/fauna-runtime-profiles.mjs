@@ -6,9 +6,9 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
     "gestationDays": 36,
     "childCount": 2,
     "maxUses": 128,
-    "productCooldownDays": 5,
+    "productCooldownDays": 6,
     "productFamiliarityMin": 15,
-    "requiredFamiliarity": 25,
+    "requiredFamiliarity": 31,
     "familiarityCap": 35,
     "customBreeding": true,
     "eggProduct": false,
@@ -19,15 +19,18 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
     "hungerPerDay": 8,
     "thirstPerDay": 12,
     "feedItems": [
+      "tfc:grain",
       "minecraft:wheat",
-      "minecraft:carrot",
-      "minecraft:beetroot"
+      "tfc:fruit",
+      "minecraft:apple"
     ],
     "grazeBlocks": [
       "minecraft:grass_block"
     ],
     "predatorDiet": [],
-    "predationDamage": 0
+    "predationDamage": 0,
+    "childCountMin": 1,
+    "childCountMax": 2
   },
   "tfc:black_bear": {
     "speciesId": "black_bear",
@@ -468,7 +471,7 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
     "maxUses": 72,
     "productCooldownDays": 1.3333333333333333,
     "productFamiliarityMin": 15,
-    "requiredFamiliarity": 25,
+    "requiredFamiliarity": 31,
     "familiarityCap": 35,
     "customBreeding": false,
     "eggProduct": true,
@@ -479,14 +482,25 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
     "hungerPerDay": 8,
     "thirstPerDay": 12,
     "feedItems": [
+      "tfc:grain",
+      "minecraft:wheat",
+      "tfc:fruit",
+      "minecraft:apple",
+      "tfc:vegetable",
+      "minecraft:carrot",
+      "minecraft:beetroot",
+      "minecraft:bread",
       "minecraft:wheat_seeds",
-      "minecraft:beetroot_seeds"
+      "minecraft:beetroot_seeds",
+      "minecraft:melon_seeds",
+      "minecraft:pumpkin_seeds"
     ],
     "grazeBlocks": [
       "minecraft:grass_block"
     ],
     "predatorDiet": [],
-    "predationDamage": 0
+    "predationDamage": 0,
+    "hatchDays": 8
   },
   "tfc:gazelle": {
     "speciesId": "gazelle",
@@ -967,7 +981,7 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
     "maxUses": 160,
     "productCooldownDays": 4,
     "productFamiliarityMin": 15,
-    "requiredFamiliarity": 25,
+    "requiredFamiliarity": 31,
     "familiarityCap": 35,
     "customBreeding": true,
     "eggProduct": false,
@@ -978,15 +992,16 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
     "hungerPerDay": 8,
     "thirstPerDay": 12,
     "feedItems": [
-      "minecraft:wheat",
-      "minecraft:carrot",
-      "minecraft:beetroot"
+      "tfc:grain",
+      "minecraft:wheat"
     ],
     "grazeBlocks": [
       "minecraft:grass_block"
     ],
     "predatorDiet": [],
-    "predationDamage": 0
+    "predationDamage": 0,
+    "childCountMin": 1,
+    "childCountMax": 1
   },
   "tfc:octopoteuthis": {
     "speciesId": "octopoteuthis",
@@ -1210,7 +1225,7 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
     "maxUses": 48,
     "productCooldownDays": 1.1666666666666667,
     "productFamiliarityMin": 15,
-    "requiredFamiliarity": 25,
+    "requiredFamiliarity": 31,
     "familiarityCap": 35,
     "customBreeding": false,
     "eggProduct": true,
@@ -1221,14 +1236,24 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
     "hungerPerDay": 8,
     "thirstPerDay": 12,
     "feedItems": [
+      "tfc:grain",
+      "minecraft:wheat",
+      "tfc:fruit",
+      "minecraft:apple",
+      "tfc:vegetable",
+      "minecraft:carrot",
+      "minecraft:beetroot",
       "minecraft:wheat_seeds",
-      "minecraft:beetroot_seeds"
+      "minecraft:beetroot_seeds",
+      "minecraft:melon_seeds",
+      "minecraft:pumpkin_seeds"
     ],
     "grazeBlocks": [
       "minecraft:grass_block"
     ],
     "predatorDiet": [],
-    "predationDamage": 0
+    "predationDamage": 0,
+    "hatchDays": 8
   },
   "tfc:rainbow_trout": {
     "speciesId": "rainbow_trout",
@@ -1473,9 +1498,9 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
     "gestationDays": 64,
     "childCount": 1,
     "maxUses": 230,
-    "productCooldownDays": 0.9791666666666666,
+    "productCooldownDays": 1,
     "productFamiliarityMin": 15,
-    "requiredFamiliarity": 25,
+    "requiredFamiliarity": 31,
     "familiarityCap": 35,
     "customBreeding": true,
     "eggProduct": false,
@@ -1486,14 +1511,15 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
     "hungerPerDay": 8,
     "thirstPerDay": 12,
     "feedItems": [
-      "minecraft:wheat",
-      "minecraft:carrot",
-      "minecraft:beetroot"
+      "tfc:grain",
+      "minecraft:wheat"
     ],
     "grazeBlocks": [
       "minecraft:grass_block"
     ],
     "predatorDiet": [],
-    "predationDamage": 0
+    "predationDamage": 0,
+    "childCountMin": 1,
+    "childCountMax": 1
   }
 });
