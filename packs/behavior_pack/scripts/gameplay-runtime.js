@@ -150,7 +150,7 @@ function soilTick(block){const soil=readSoil(block);let nearbyWater=false;for(le
 async function farmlandInteract(player,block){if(!player||!block)return;const held=inv(player)?.getItem(player.selectedSlotIndex);const soil=readSoil(block);
 const seedProfile=Object.values(CROP_PROFILES).find(profile=>profile.seed===held?.typeId);
 if(seedProfile){const top=block.above();if(!top?.isAir){player.sendMessage("§c耕作土の上に空間が必要です。");return;}if(take(player,seedProfile.seed,1)){writeWorldState(soilKey(block),soil);top.setType("tfc:crop");top.setPermutation(top.permutation.withState("tfc:crop_type",Object.keys(CROP_PROFILES).find(key=>CROP_PROFILES[key]===seedProfile)));writeWorldState(posKey(top,"crop_progress"),0);player.sendMessage("§a"+(seedProfile.harvest==="tfc:grain"?"小麦":seedProfile.harvest==="tfc:maize"?"トウモロコシ":"ジャガイモ")+"を植えました。");}return;}
-if(held?.typeId==="minecraft:bone_meal"){if(take(player,"minecraft:bone_meal",1)){writeWorldState(soilKey(block),applySoilCompost(soil));player.sendMessage("§a堆肥を混ぜました。土壌養分が回復しました。");}return;}
+if(held?.typeId==="minecraft:bone_meal"){if(take(player,"minecraft:bone_meal",1)){writeWorldState(soilKey(block),applySoilCompost(soil));player.sendMessage("§a骨粉肥料を混ぜました。土壌養分が回復しました。");}return;}
 const form=new ActionFormData().title("土壌状態").body("水分: "+Math.floor(soil.hydration)+"%\n窒素: "+Math.floor(soil.nitrogen)+"\nリン: "+Math.floor(soil.phosphorus)+"\nカリウム: "+Math.floor(soil.potassium)+"\n\n骨粉を持って操作すると堆肥として使えます。").button("閉じる");try{await form.show(player);}catch{}
 }
 function currentTemperatureC(elevationM=0){return calculateAmbientTemperatureC({meanAnnualTempC:12,seasonalAmplitudeC:14,dayOfYear:((world.getDay()%96)+96)%96,timeOfDay:world.getTimeOfDay(),elevationM:Math.max(0,elevationM),diurnalAmplitudeC:3});}
