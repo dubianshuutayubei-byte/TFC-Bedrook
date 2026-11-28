@@ -1,0 +1,23 @@
+{
+  "resource_pack_name": "tfc_bedrook",
+  "texture_name": "atlas.terrain",
+  "padding": 8,
+  "num_mip_levels": 4,
+  "texture_data": {
+    "tfc_firepit": {
+      "textures": "textures/blocks/tfc_firepit"
+    },
+    "tfc_pottery": {
+      "textures": "textures/blocks/tfc_pottery"
+    },
+    "tfc_ingot": {
+      "textures": "textures/blocks/tfc_ingot"
+    },
+    "tfc_farmland": {
+      "textures": "textures/blocks/tfc_farmland"
+    },
+    "tfc_crop": {
+      "textures": "textures/blocks/tfc_crop"
+    }
+  }
+}
