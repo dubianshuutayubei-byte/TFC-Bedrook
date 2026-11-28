@@ -22,7 +22,9 @@ test("custom pregnancy uses shared TFC birth and juvenile events for vanilla and
  assert.match(runtime,/if\(profile\.customBreeding&&state\.sex==="female"/);
  assert.match(runtime,/other\.lastBreedAt=breedingTime/);
  assert.match(runtime,/entity\.dimension\.spawnEntity\(entity\.typeId,\{x:entity\.location\.x\+1/);
- assert.match(runtime,/birthEvent=entity\.typeId\.startsWith\("tfc:"\)\?"tfc:spawn_baby":"minecraft:entity_born"/);\n assert.match(runtime,/growthEvent=entity\.typeId\.startsWith\("tfc:"\)\?"tfc:grow_up":"minecraft:ageable_grow_up"/);\n assert.match(runtime,/getOffspringCount\(profile\)/);
+ assert.match(runtime,/birthEvent=entity\.typeId\.startsWith\("tfc:"\)\?"tfc:spawn_baby":"minecraft:entity_born"/);
+ assert.match(runtime,/growthEvent=entity\.typeId\.startsWith\("tfc:"\)\?"tfc:grow_up":"minecraft:ageable_grow_up"/);
+ assert.match(runtime,/getOffspringCount\(profile\)/);
 });
 test("animal needs and age update on the periodic loaded-entity tick",()=>{
  assert.match(runtime,/advanceAnimalNeeds\(state,0\.05,/);
