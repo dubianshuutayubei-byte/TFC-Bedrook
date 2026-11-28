@@ -6,7 +6,7 @@ import { deserializePlayerState } from "../core/player-state-service.mjs";
 const UI_TITLE = "TerraFirmaCraft: Bedrook";
 const PLAYER_STATE_KEY = "tfc:player_state";
 const FOOD_FRESHNESS_KEY = "tfc:food_freshness";
-const FOOD_LABELS = Object.freeze({ "tfc:raw_meat":"生肉", "tfc:cooked_meat":"焼いた肉", "tfc:grain":"穀物", "tfc:maize":"トウモロコシ", "tfc:potato":"ジャガイモ", "tfc:vegetable":"野菜", "tfc:fruit":"果物", "tfc:milk_bottle":"牛乳瓶" });
+const FOOD_LABELS = Object.freeze({ "tfc:raw_meat":"生肉", "tfc:cooked_meat":"焼いた肉", "tfc:grain":"穀物", "tfc:maize":"トウモロコシ", "tfc:potato":"ジャガイモ", "tfc:vegetable":"野菜", "tfc:fruit":"果物", "tfc:milk_bottle":"牛乳瓶", "tfc:dried_meat":"干し肉", "tfc:dried_fruit":"干し果物", "tfc:dried_vegetables":"干し野菜" });
 const NUTRITION_LABELS = Object.freeze({
   grain: "穀物", fruit: "果物", vegetables: "野菜", protein: "タンパク質", dairy: "乳製品"
 });
@@ -93,9 +93,9 @@ async function showSystemOverview(player) {
     "・動物: シカとバニラ牛/羊/ニワトリの状態・給餌・採食・繁殖処理あり。成体の牛から瓶でミルク採取",
     "・地質 / 地形分類: 基礎モデルあり",
     "・専用アイテム: 石片・食品・土器・銅素材・設備を登録",
-    "・設備: 焚き火 / Pit Kiln / るつぼ / 金床。加工レシピ統一、ジョブ保存/再参加復旧、鋳型焼成、銅/錫鋳造、青銅合金鋳造あり",
+    "・設備: 焚き火 / Pit Kiln / るつぼ / 金床 / 乾燥棚。加工レシピ統一、ジョブ保存/再参加復旧、鋳型焼成、銅/錫/青銅鋳造、肉/果物/野菜の乾燥保存あり",
     "",
-    "農業は降雨と96日季節/昼夜気温を反映。気温は全地域共通の暫定値で、地形・標高・地域気候は未接続。動物の採食は近傍草ブロックによる簡易モデルです。食品鮮度はプレイヤー単位・食品種類単位で、72000 ticksを実時間1時間として換算し、季節/昼夜/標高の推定気温を使用。食品の受け渡し時の鮮度継承、保存食、完全な金属熱伝達、26.60実機互換性は引き続き確認が必要です。"
+    "農業は降雨と96日季節/昼夜気温を反映。気温は全地域共通の暫定値で、地形・標高・地域気候は未接続。動物の採食は近傍草ブロックによる簡易モデルです。食品鮮度はプレイヤー単位・食品種類単位で、72000 ticksを実時間1時間として換算し、季節/昼夜/標高の推定気温を使用。食品の受け渡し時の鮮度継承、保存食、完全な金属熱伝達、乾燥棚の温湿度による乾燥速度調整、26.60実機互換性は引き続き確認が必要です。"
   ].join("\n");
   await showInfo(player, "システム一覧", body);
 }
