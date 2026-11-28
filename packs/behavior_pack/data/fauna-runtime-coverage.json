@@ -5,6 +5,7 @@
     "alpaca",
     "arctic_char",
     "armadillo",
+    "bactrian_camel",
     "bison",
     "black_bear",
     "bluegill",
@@ -23,6 +24,7 @@
     "direwolf",
     "dolphin",
     "donkey",
+    "dromedary_camel",
     "duck",
     "fox",
     "frog",
@@ -79,7 +81,7 @@
     "wolf",
     "yak"
   ],
-  "runtimeTrackedCount": 76,
+  "runtimeTrackedCount": 78,
   "requiresSpeciesImplementation": [
     "alpaca",
     "arctic_char",
@@ -138,7 +140,7 @@
     "yak"
   ],
   "remainingCount": 55,
-  "caveat": "All official species now have Bedrock entity registry scaffolding, client entity and spawn rule entries. The 15 new entities reuse related-species archetype geometry and coarse spawn rules; species-authentic geometry/textures, exact Java climate placement, AI, diet, interactions, breeding/products, and in-game validation remain incomplete. Newly scaffolded fauna now receive periodic state/interactions through ANIMAL_PROFILES. Their diets, life cycles and breeding remain intentionally disabled until species-specific Java evidence is audited; neutral hunger/thirst rates prevent unverified starvation behavior.",
+  "caveat": "All official species now have Bedrock entity registry scaffolding, client entity and spawn rule entries. The 15 new entities reuse related-species archetype geometry and coarse spawn rules; species-authentic geometry/textures, exact Java climate placement, AI, diet, interactions, breeding/products, and in-game validation remain incomplete. Newly scaffolded fauna now receive periodic state/interactions through ANIMAL_PROFILES. Their diets, life cycles and breeding remain intentionally disabled until species-specific Java evidence is audited; neutral hunger/thirst rates prevent unverified starvation behavior. The two camel profiles were already present in runtime but were omitted from the tracked-species coverage list; the coverage list now reflects all 78 official roster IDs with runtime profile entries. This is state-tick integration only, not species-specific completion.",
   "customEntitySpecies": [
     "alpaca",
     "arctic_char",
