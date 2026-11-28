@@ -618,7 +618,7 @@ function animalTick(entity){
  state=advanceAnimalFamiliarityDecay(state,currentDay,{decayLimit:30,decayPerDay:2});
  if(profile.maxUses>0&&state.uses>profile.maxUses&&state.oldDay<0)state.oldDay=currentDay+1+Math.floor(Math.random()*5);
  if(state.oldDay>=0&&currentDay>state.oldDay&&!state.dead)state.lifeStage="old";
- state=advanceAnimalLifecycle(state,currentDay,{adultAgeDays:profile.adultAgeDays??null});
+ state=advanceAnimalLifecycle(state,currentDay,{adultAgeDays:profile.adultAgeDays??null,elapsedDays:elapsedAgeDays,oldAgeHealthLossPerDay:profile.oldAgeHealthLossPerDay??0.15});
  if(state.dead){saveAnimal(entity,state);try{const hp=entity.getComponent("minecraft:health");if(hp)hp.setCurrentValue(0);}catch{}return;}
  state=consumeDroppedAnimalFood(entity,profile,state);
  state=tickPredation(entity,profile,state,currentDay);
