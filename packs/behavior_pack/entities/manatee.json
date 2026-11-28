@@ -58,6 +58,25 @@
         "suffocate_time": 0,
         "breathes_air": false,
         "breathes_water": true
+      },
+      "minecraft:behavior.panic": {
+        "priority": 1,
+        "speed_multiplier": 1.2
+      },
+      "minecraft:behavior.avoid_mob_type": {
+        "priority": 2,
+        "entity_types": [
+          {
+            "filters": {
+              "test": "is_family",
+              "subject": "other",
+              "value": "player"
+            },
+            "max_dist": 8,
+            "walk_speed_multiplier": 1.25,
+            "sprint_speed_multiplier": 1.5
+          }
+        ]
       }
     },
     "component_groups": {
