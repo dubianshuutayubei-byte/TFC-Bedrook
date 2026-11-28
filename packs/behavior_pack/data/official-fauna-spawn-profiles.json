@@ -2,7 +2,7 @@
   "source": {
     "profileSource": "TerraFirmaCraft v3.2.26 fauna JSON",
     "placementSource": "TerraFirmaCraft v3.2.26 Faunas.java",
-    "note": "Combined spawn condition profiles; placement and climate data remain source-derived. Bedrock world sampling is not yet connected."
+    "note": "All 40 custom species have Bedrock spawn rules using broad vanilla biome tags as an interim habitat filter. These rules do not reproduce exact TFC climate/rainfall sampling; 23 native-adapter species retain vanilla natural spawning. Exact habitat parity awaits TFC terrain/climate integration and in-game validation."
   },
   "total": 63,
   "placementCounts": {

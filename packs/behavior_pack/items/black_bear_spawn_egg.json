@@ -1,0 +1,21 @@
+{
+  "format_version": "1.26.60",
+  "minecraft:item": {
+    "description": {
+      "identifier": "tfc:black_bear_spawn_egg",
+      "menu_category": {
+        "category": "items"
+      }
+    },
+    "components": {
+      "minecraft:icon": "tfc_deer",
+      "minecraft:display_name": {
+        "value": "クロクマの召喚アイテム"
+      },
+      "minecraft:max_stack_size": 64,
+      "minecraft:entity_placer": {
+        "entity": "tfc:black_bear"
+      }
+    }
+  }
+}
