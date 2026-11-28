@@ -354,7 +354,7 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
     "eggProduct": false,
     "dairy": false,
     "wooly": false,
-    "kind": "terrestrial",
+    "kind": "amphibian",
     "domestic": false,
     "hungerPerDay": 8,
     "thirstPerDay": 12,
@@ -1029,12 +1029,23 @@ export const CUSTOM_FAUNA_PROFILES = Object.freeze({
     "wooly": false,
     "kind": "aquatic",
     "domestic": false,
-    "hungerPerDay": 0,
+    "hungerPerDay": 8,
     "thirstPerDay": 0,
     "feedItems": [],
     "grazeBlocks": [],
-    "predatorDiet": [],
-    "predationDamage": 0
+    "predatorDiet": [
+      "cod",
+      "salmon",
+      "bluegill",
+      "crappie",
+      "lake_trout",
+      "largemouth_bass",
+      "rainbow_trout",
+      "smallmouth_bass",
+      "tropical_fish",
+      "pufferfish"
+    ],
+    "predationDamage": 9
   },
   "tfc:panther": {
     "speciesId": "panther",
