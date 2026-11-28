@@ -23,6 +23,7 @@
       "tfc:station_ui": {
         "station": "pit_kiln"
       },
+      "tfc:heated_station_tick": {},
       "minecraft:display_name": "tile.tfc:pit_kiln.name",
       "minecraft:tick": {
         "interval_range": [
