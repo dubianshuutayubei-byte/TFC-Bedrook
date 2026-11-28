@@ -363,3 +363,11 @@ test("legacy distanceBelowSeaLevel profiles remain backward compatible",()=>{
  const result=evaluateFaunaSpawn({distanceBelowSeaLevel:5,placement:"in_water"},{inWater:true,y:60,seaLevel:63,temperatureC:10,rainfall:200},()=>0);
  assert.ok(result.failures.includes("too_high_above_depth_limit"));
 });
+
+test("animal production rejects individuals that reached their lifetime use limit",()=>{
+ const rules={requiredFamiliarity:0,cooldownDays:0,currentDay:20,minimumAgeDays:1,maxUses:3};
+ const eligible={species:"cow",lifeStage:"adult",ageDays:200,health:100,hunger:0,thirst:0,familiarity:50,uses:2,lastProductAt:20};
+ assert.equal(canProduce(eligible,rules),true);
+ assert.equal(canProduce({...eligible,uses:3},rules),false);
+ assert.equal(canProduce({...eligible,uses:4},rules),false);
+});
