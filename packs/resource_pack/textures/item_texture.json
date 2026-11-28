@@ -304,6 +304,12 @@
     },
     "tfc_wool": {
       "textures": "textures/items/tfc_wool"
+    },
+    "tfc_food_dried_kelp": {
+      "textures": "textures/items/tfc_grain"
+    },
+    "tfc_food_dried_seaweed": {
+      "textures": "textures/items/tfc_grain"
     }
   }
 }
