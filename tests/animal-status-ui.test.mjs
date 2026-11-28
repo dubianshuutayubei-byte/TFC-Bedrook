@@ -13,3 +13,7 @@ test("empty-hand animal interaction shows husbandry state",()=>{
  assert.match(runtime,/健康: /);
  assert.match(runtime,/なつき度: /);
 });
+
+test("livestock forage scan is bounded to a 3x3 area",()=>{
+ assert.match(runtime,/for\(let x=-1;x<=1;x\+\+\)for\(let z=-1;z<=1;z\+\+\)/);
+});
