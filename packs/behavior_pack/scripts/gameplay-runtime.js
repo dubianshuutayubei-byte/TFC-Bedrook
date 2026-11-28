@@ -495,20 +495,41 @@ async function station(player,id,block){
  scheduleStationJob(key,block.dimension,block.location,recipe.durationTicks);
 }
 async function knap(player){
- let selected=[];try{selected=JSON.parse(String(player.getDynamicProperty(PROGRESS_KEY)??"[]"));}catch{selected=[];}
- if(!Array.isArray(selected))selected=[];
- // 5x5 is the standard TFC knapping work area. Discard stale positions outside the grid.
- selected=[...new Set(selected.filter(v=>Number.isInteger(v)&&v>=0&&v<25))];
+ let progress=null;try{progress=JSON.parse(String(player.getDynamicProperty(PROGRESS_KEY)??"null"));}catch{progress=null;}
+ if(Array.isArray(progress))progress={recipe:"stone_shard",selected:progress};
+ if(!progress||!["stone_shard","clay_vessel"].includes(progress.recipe))progress=null;
+ if(!progress){
+  const choose=new ActionFormData().title("ナッピング").body("作るものを選んでください。\n\n粘土容器は4か所、石片は3か所を削ります。");
+  choose.button("粘土容器（粘土玉×4）");choose.button("石片（火打石×1）");choose.button("閉じる");
+  let choice;try{choice=await choose.show(player);}catch{return;}
+  if(choice.canceled||choice.selection>=2)return;
+  progress={recipe:choice.selection===0?"clay_vessel":"stone_shard",selected:[]};
+ }
+ const recipe=progress.recipe,target=recipe==="clay_vessel"?[0,4,20,24]:[0,12,24];
+ let selected=[...new Set((Array.isArray(progress.selected)?progress.selected:[]).filter(v=>Number.isInteger(v)&&v>=0&&v<25))];
  const grid=Array.from({length:5},(_,row)=>Array.from({length:5},(_,col)=>{const n=row*5+col;return selected.includes(n)?"[●]":"[ ]";}).join(" ")).join("\n");
- const form=new ActionFormData().title("石器成形").body("5×5の打撃位置を選択してください。\n"+grid+"\n\n選択済み: "+selected.length+"/3\n同じ位置を再選択すると解除できます。");
+ const material=recipe==="clay_vessel"?"粘土容器":"石片";
+ const form=new ActionFormData().title(material+"のナッピング").body("5×5の枠から不要なマスを選んでください。\n"+grid+"\n\n選択済み: "+selected.length+"/"+target.length+"\n同じ位置を再選択すると解除できます。");
  for(let i=0;i<25;i++)form.button((selected.includes(i)?"§a● ":"§7○ ")+"位置 "+(i+1));
- let response;try{response=await form.show(player);}catch{return;}if(response.canceled||response.selection===undefined)return;
- const index=response.selection;if(selected.includes(index))selected=selected.filter(v=>v!==index);else if(selected.length<3)selected.push(index);
- if(selected.length<3){player.setDynamicProperty(PROGRESS_KEY,JSON.stringify(selected));player.sendMessage("§e打撃位置を記録しました。");return;}
- // Temporary prototype pattern; recipe-specific TFC knapping patterns remain a separate implementation task.
- const correct=[0,12,24].every(v=>selected.includes(v));player.setDynamicProperty(PROGRESS_KEY,"[]");
- if(!correct){player.sendMessage("§c形が合いません。");return;}
- if(take(player,"tfc:flint",1)){give(player,"tfc:stone_shard",2);player.sendMessage("§a石片を2個作成しました。");}else player.sendMessage("§c火打石がありません。");
+ form.button("成形するものを変更");form.button("閉じる");
+ let response;try{response=await form.show(player);}catch{return;}
+ if(response.canceled||response.selection===26)return;
+ if(response.selection===25){player.setDynamicProperty(PROGRESS_KEY,"null");player.sendMessage("§e成形するものを選び直してください。");return;}
+ const index=response.selection;
+ if(selected.includes(index))selected=selected.filter(v=>v!==index);else if(selected.length<target.length)selected.push(index);
+ player.setDynamicProperty(PROGRESS_KEY,JSON.stringify({recipe,selected}));
+ if(selected.length<target.length){player.sendMessage("§e削る位置を記録しました。");return;}
+ const correct=selected.length===target.length&&target.every(v=>selected.includes(v));
+ player.setDynamicProperty(PROGRESS_KEY,"null");
+ if(!correct){player.sendMessage("§c形が合いません。もう一度最初から成形してください。");return;}
+ if(recipe==="clay_vessel"){
+  if(count(player,"minecraft:clay_ball")<4){player.sendMessage("§c粘土玉が不足しています。必要数: 4");return;}
+  if(!take(player,"minecraft:clay_ball",4)){player.sendMessage("§c粘土玉を取り出せませんでした。");return;}
+  give(player,"tfc:clay_vessel",1);player.sendMessage("§a未焼成の粘土容器を成形しました。Pit Kilnで焼成してください。");
+ }else{
+  if(take(player,"tfc:flint",1)){give(player,"tfc:stone_shard",2);player.sendMessage("§a石片を2個作成しました。");}
+  else player.sendMessage("§c火打石がありません。");
+ }
 }
 function soilKey(block){return posKey(block,"soil");}
 function readSoil(block){const saved=readWorldState(soilKey(block),{});let substrate;try{substrate=block.below()?.typeId;}catch{}return createSoilState({...saved,soilType:saved.soilType??inferSoilTypeFromBlockId(substrate)});}
