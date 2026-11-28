@@ -15,3 +15,15 @@ test("vegetable and fruit food profiles have craftable game items",()=>{
   assert.equal(data["minecraft:recipe_shapeless"].result.item,"tfc:"+id);
  }
 });
+
+test("dried food items match preservation profiles",()=>{
+ const profiles=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/food-profiles.json"),"utf8"));
+ for(const id of ["dried_meat","dried_fruit","dried_vegetables"]){
+  const item=JSON.parse(readFileSync(join(root,"packs/behavior_pack/items",id+".json"),"utf8"))["minecraft:item"];
+  const food=item.components["tfc:consume_food"];
+  const profile=profiles.foods.find(x=>x.id===id);
+  assert.equal(food.itemId,"tfc:"+id);
+  assert.equal(food.nutrition,profile.nutrition[food.category]);
+  assert.equal(food.hydration,profile.hydration);
+ }
+});
