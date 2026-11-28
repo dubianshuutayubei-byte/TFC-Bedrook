@@ -84,3 +84,11 @@ test("official fauna habitat does not treat missing climate measurements as suit
  assert.equal(result.suitable,false);
  assert.deepEqual(result.missing,["temperatureC","rainfall"]);
 });
+
+test("forest density ordering matches the official TFC ForestType enum",()=>{
+ const profile={minForest:"edge",maxForest:"normal"};
+ assert.equal(evaluateHabitat(profile,{forestType:"sparse"}).suitable,false);
+ assert.equal(evaluateHabitat(profile,{forestType:"edge"}).suitable,true);
+ assert.equal(evaluateHabitat(profile,{forestType:"normal"}).suitable,true);
+ assert.equal(evaluateHabitat(profile,{forestType:"old_growth"}).suitable,false);
+});
