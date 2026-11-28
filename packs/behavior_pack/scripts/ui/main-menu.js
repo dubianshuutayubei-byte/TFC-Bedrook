@@ -3,6 +3,8 @@ import { deserializePlayerState } from "../core/player-state-service.mjs";
 
 const UI_TITLE = "TerraFirmaCraft: Bedrook";
 const PLAYER_STATE_KEY = "tfc:player_state";
+const FOOD_FRESHNESS_KEY = "tfc:food_freshness";
+const FOOD_LABELS = Object.freeze({ "tfc:raw_meat":"生肉", "tfc:cooked_meat":"焼いた肉", "tfc:grain":"穀物", "tfc:maize":"トウモロコシ", "tfc:potato":"ジャガイモ", "tfc:milk_bottle":"牛乳瓶" });
 const NUTRITION_LABELS = Object.freeze({
   grain: "穀物", fruit: "果物", vegetables: "野菜", protein: "タンパク質", dairy: "乳製品"
 });
@@ -53,14 +55,23 @@ async function showPlayerStatus(player) {
   const nutrition = Object.entries(state.nutrition)
     .map(([key, value]) => `${NUTRITION_LABELS[key] ?? key}: ${Math.round(value)} / 100`)
     .join("\n");
+  let freshness = {};
+  try { freshness = JSON.parse(String(player.getDynamicProperty(FOOD_FRESHNESS_KEY) ?? "{}")); } catch {}
+  const freshnessLines = Object.entries(freshness)
+    .filter(([id]) => FOOD_LABELS[id])
+    .map(([id, value]) => `${FOOD_LABELS[id]}: ${Math.round(value.freshness ?? 100)}%`)
+    .join("\\n");
   await showInfo(player, "プレイヤー情報", [
     `水分: ${Math.round(state.hydration)} / 100`,
     "",
     "栄養状態:",
     nutrition,
     "",
-    "※水分・栄養はプレイ中に時間経過で減少します。登録済み食品を食べると、栄養・水分が反映されます。"
-  ].join("\n"));
+    "インベントリ食品の鮮度:",
+    freshnessLines || "鮮度計測中 / 対象食品なし",
+    "",
+    "※食品は時間経過で鮮度が低下し、腐敗すると腐敗食品へ変換されます。鮮度は食品種類ごとにプレイヤー単位で管理する簡易方式です。"
+  ].join("\\n"));
 }
 
 async function showSystemOverview(player) {
