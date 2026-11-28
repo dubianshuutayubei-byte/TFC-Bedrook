@@ -14,7 +14,8 @@
           "mob",
           "tfc_aquatic",
           "tfc_fauna_orca",
-          "tfc_predator"
+          "tfc_predator",
+          "tfc_ocean_predator"
         ]
       },
       "minecraft:nameable": {},
