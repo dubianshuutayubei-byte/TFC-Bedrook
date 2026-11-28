@@ -1,6 +1,6 @@
 const clamp=(v,min,max)=>Math.min(max,Math.max(min,v));
 const finiteOr=(v,f)=>Number.isFinite(Number(v))?Number(v):f;
-export function createAnimalState(i={}){return{species:i.species??"unknown",sex:i.sex??"unknown",ageDays:Math.max(0,finiteOr(i.ageDays,0)),familiarity:clamp(finiteOr(i.familiarity,0),0,100),pregnancyDays:Math.max(0,finiteOr(i.pregnancyDays,0)),health:clamp(finiteOr(i.health,100),0,100),hunger:clamp(finiteOr(i.hunger,0),0,100),thirst:clamp(finiteOr(i.thirst,0),0,100),lastProductAt:Math.max(0,finiteOr(i.lastProductAt,0)),lastBreedAt:Math.max(0,finiteOr(i.lastBreedAt,0)),lifeStage:i.lifeStage??"unknown",uses:Math.max(0,Math.floor(finiteOr(i.uses,0))),fertilized:Boolean(i.fertilized),lastFedDay:finiteOr(i.lastFedDay,-1),lastFamiliarityDecay:finiteOr(i.lastFamiliarityDecay,-1),oldDay:finiteOr(i.oldDay,-1),birthsRemaining:Math.max(0,Math.floor(finiteOr(i.birthsRemaining,0)))};}
+export function createAnimalState(i={}){return{species:i.species??"unknown",sex:i.sex??"unknown",ageDays:Math.max(0,finiteOr(i.ageDays,0)),familiarity:clamp(finiteOr(i.familiarity,0),0,100),pregnancyDays:Math.max(0,finiteOr(i.pregnancyDays,0)),health:clamp(finiteOr(i.health,100),0,100),hunger:clamp(finiteOr(i.hunger,0),0,100),thirst:clamp(finiteOr(i.thirst,0),0,100),lastProductAt:Math.max(0,finiteOr(i.lastProductAt,0)),lastBreedAt:Math.max(0,finiteOr(i.lastBreedAt,0)),lifeStage:i.lifeStage??"unknown",uses:Math.max(0,Math.floor(finiteOr(i.uses,0))),fertilized:Boolean(i.fertilized),lastFedDay:finiteOr(i.lastFedDay,-1),lastFamiliarityDecay:finiteOr(i.lastFamiliarityDecay,-1),oldDay:finiteOr(i.oldDay,-1),birthsRemaining:Math.max(0,Math.floor(finiteOr(i.birthsRemaining,0))),dead:Boolean(i.dead),deathCause:i.deathCause??null,lastLifecycleDay:finiteOr(i.lastLifecycleDay,-1)};}
 export function initializeAnimalLifeStage(input={}, {isBaby=false,adultAgeDays=null,maxUses=Infinity,currentDay=null}={}){const hasSavedAge=input.ageDays!==undefined&&input.ageDays!==null&&Number.isFinite(Number(input.ageDays));const state=createAnimalState(input);const maturity=Number(adultAgeDays);const hasMaturity=Number.isFinite(maturity)&&maturity>=0;if(!hasSavedAge){state.ageDays=isBaby?0:(hasMaturity?maturity:0);state.lifeStage=isBaby?"juvenile":"adult";}else if(input.lifeStage==="juvenile"&&!isBaby){if(hasMaturity)state.ageDays=Math.max(state.ageDays,maturity);state.lifeStage="adult";}else if(input.lifeStage==="unknown"||input.lifeStage==null){state.lifeStage=isBaby?"juvenile":"adult";if(!isBaby&&state.ageDays===0&&hasMaturity)state.ageDays=maturity;}if(state.oldDay>=0&&currentDay!==null&&currentDay!==undefined&&Number(currentDay)>state.oldDay)state.lifeStage="old";return state;}
 const FOREST_RANK={none:0,sparse:1,edge:2,normal:3,old_growth:4};
 export function evaluateHabitat(p,e){
@@ -124,4 +124,89 @@ export function advanceAnimalFamiliarityDecay(input,currentDay,{decayLimit=30,de
   a.lastFamiliarityDecay=day;
  }
  return a;
+}
+
+
+/** Shared TFC-style life-stage, senescence and death progression. */
+export function advanceAnimalLifecycle(input, elapsedDays, {
+  adultDays = 0,
+  oldAgeDays = Infinity,
+  lifespanDays = Infinity,
+  oldAgeHealthLossPerDay = 0.15
+} = {}) {
+  const animal = createAnimalState(input);
+  const days = Math.max(0, finiteOr(elapsedDays, 0));
+  if (animal.dead) return { animal, stageChanged: false, died: true };
+  animal.ageDays += days;
+  const previousStage = animal.lifeStage;
+  if (animal.ageDays < adultDays) animal.lifeStage = "juvenile";
+  else if (animal.ageDays < oldAgeDays) animal.lifeStage = "adult";
+  else animal.lifeStage = "old";
+  if (animal.ageDays >= oldAgeDays && Number.isFinite(oldAgeHealthLossPerDay)) {
+    const daysInOldAge = Math.max(0, animal.ageDays - Math.max(oldAgeDays, animal.ageDays - days));
+    animal.health = clamp(animal.health - daysInOldAge * Math.max(0, oldAgeHealthLossPerDay), 0, 100);
+  }
+  if (animal.ageDays >= lifespanDays || animal.health <= 0) {
+    animal.dead = true;
+    animal.deathCause = animal.ageDays >= lifespanDays ? "old_age" : "illness_or_starvation";
+    animal.lifeStage = "dead";
+  }
+  animal.lastLifecycleDay = Math.max(animal.lastLifecycleDay, animal.ageDays);
+  return { animal, stageChanged: previousStage !== animal.lifeStage, died: animal.dead };
+}
+
+/** Persistent egg state. Incubation advances only while environmental conditions are valid. */
+export function createEggState(input = {}) {
+  return {
+    species: input.species ?? "chicken",
+    fertilized: Boolean(input.fertilized),
+    incubationDays: Math.max(0, finiteOr(input.incubationDays, 0)),
+    requiredDays: Math.max(0.001, finiteOr(input.requiredDays, 8)),
+    temperatureC: finiteOr(input.temperatureC, 20),
+    viability: clamp(finiteOr(input.viability, 100), 0, 100),
+    hatched: Boolean(input.hatched),
+    spoiled: Boolean(input.spoiled)
+  };
+}
+export function advanceEggIncubation(input, elapsedDays, {
+  minimumTemperatureC = 32,
+  maximumTemperatureC = 40,
+  viabilityLossPerDay = 8
+} = {}) {
+  const egg = createEggState(input);
+  if (egg.hatched || egg.spoiled) return { egg, ready: false, progress: Math.min(1, egg.incubationDays / egg.requiredDays) };
+  if (!egg.fertilized) return { egg, ready: false, progress: 0 };
+  const days = Math.max(0, finiteOr(elapsedDays, 0));
+  if (egg.temperatureC < minimumTemperatureC || egg.temperatureC > maximumTemperatureC) {
+    egg.viability = clamp(egg.viability - days * Math.max(0, viabilityLossPerDay), 0, 100);
+    if (egg.viability <= 0) egg.spoiled = true;
+  } else {
+    egg.incubationDays += days;
+  }
+  const ready = !egg.spoiled && egg.viability > 0 && egg.incubationDays >= egg.requiredDays;
+  if (ready) egg.hatched = true;
+  return { egg, ready, progress: clamp(egg.incubationDays / egg.requiredDays, 0, 1) };
+}
+
+/** Conservative predator/prey decision; caller owns entity targeting and damage. */
+export function evaluatePredation(predatorInput, preyInput, {
+  predatorDiet = [],
+  preySpecies = "unknown",
+  predatorHungerThreshold = 55,
+  minimumPreyHealth = 1,
+  herdDefense = 0
+} = {}) {
+  const predator = createAnimalState(predatorInput);
+  const prey = createAnimalState(preyInput);
+  const eligible = !predator.dead && !prey.dead &&
+    predatorHungerThreshold <= predator.hunger &&
+    predatorDiet.includes(preySpecies) &&
+    prey.health >= minimumPreyHealth &&
+    prey.lifeStage !== "dead";
+  const protection = clamp(finiteOr(herdDefense, 0), 0, 1);
+  return {
+    eligible: eligible && protection < 1,
+    successChance: eligible ? clamp(0.75 * (1 - protection), 0, 1) : 0,
+    reason: !eligible ? "conditions_not_met" : protection >= 1 ? "herd_defense" : "hunt_possible"
+  };
 }
