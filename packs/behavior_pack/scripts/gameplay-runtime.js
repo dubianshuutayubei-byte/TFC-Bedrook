@@ -653,6 +653,39 @@ function animalTick(entity){
  }
  saveAnimal(entity,state);
 }
+function eggNestTemperature(block){
+ let biome="plains";try{biome=block.dimension.getBiome(block.location).id;}catch{}
+ const climate=getBiomeClimateProfile(biome),day=world.getDay()%96;
+ let temperature=calculateAmbientTemperatureC({meanAnnualTempC:climate.meanAnnualTempC,seasonalAmplitudeC:climate.seasonalAmplitudeC,dayOfYear:day,timeOfDay:world.getTimeOfDay(),elevationM:block.location.y});
+ try{for(let x=-1;x<=1;x++)for(let y=-1;y<=1;y++)for(let z=-1;z<=1;z++){const b=block.dimension.getBlock({x:block.location.x+x,y:block.location.y+y,z:block.location.z+z});if(["tfc:firepit","minecraft:campfire","minecraft:soul_campfire","minecraft:fire"].includes(b?.typeId))temperature+=18;}}catch{}
+ return temperature;
+}
+function eggNestInteract(player,block){
+ if(!player||!block)return;
+ const key=posKey(block,"egg_nest"),stored=readWorldState(key,{egg:null});
+ const stack=inv(player)?.getItem(player.selectedSlotIndex),valid=["tfc:chicken_egg","tfc:duck_egg","tfc:quail_egg"];
+ if(!stack||!valid.includes(stack.typeId)){player.sendMessage(stored?.egg?("§e孵化進捗: "+Math.floor(stored.egg.incubationDays/stored.egg.requiredDays*100)+"% / 生存率: "+Math.floor(stored.egg.viability)+"%"):"§eニワトリ・アヒル・ウズラの卵を手に持って巣を操作してください。");return;}
+ if(stored?.egg){player.sendMessage("§eこの巣にはすでに卵があります。");return;}
+ const species=stack.typeId.split(":")[1].replace("_egg","");if(!take(player,stack.typeId,1))return;
+ const fertilized=Boolean(stack.getDynamicProperty("tfc:egg_fertilized"));
+ writeWorldState(key,{egg:createEggState({species,fertilized,requiredDays:8,temperatureC:eggNestTemperature(block)}),lastDay:currentAnimalDay()});
+ player.sendMessage(fertilized?"§a有精卵を巣に置きました。火の近くで温めてください。":"§e無精卵を巣に置きました。孵化しません。");
+}
+function eggNestTick(block){
+ const key=posKey(block,"egg_nest"),stored=readWorldState(key,{egg:null});if(!stored?.egg)return;
+ const day=currentAnimalDay(),elapsed=Math.max(0,day-(stored.lastDay??day));
+ const egg=createEggState({...stored.egg,temperatureC:eggNestTemperature(block)});
+ const result=advanceEggIncubation(egg,elapsed,{minimumTemperatureC:32,maximumTemperatureC:40,viabilityLossPerDay:8});
+ if(result.ready){
+  try{
+   const type=egg.species==="chicken"?"minecraft:chicken":"tfc:"+egg.species;
+   const child=block.dimension.spawnEntity(type,{x:block.location.x+0.5,y:block.location.y+1,z:block.location.z+0.5});
+   try{child.triggerEvent(type.startsWith("tfc:")?"tfc:spawn_baby":"minecraft:entity_born");}catch{}
+   saveAnimal(child,createAnimalOffspringState({familiarity:0},egg.species,Math.random()<0.5?"male":"female"));
+   writeWorldState(key,{egg:null,lastDay:day});
+  }catch(error){console.warn("[TFC-Bedrook] egg hatching deferred:",error);writeWorldState(key,{egg:result.egg,lastDay:day});}
+ }else writeWorldState(key,{egg:result.egg,lastDay:day});
+}
 function damageSelectedTool(player){
  const container=inv(player),slot=player.selectedSlotIndex,stack=container?.getItem(slot);
  if(stack?.typeId!=="minecraft:shears")return false;
@@ -686,6 +719,16 @@ async function animalInteract(player,entity){
  let state=animalState(entity);
  if(state.sex==="unknown"){state.sex=Math.random()<0.5?"male":"female";saveAnimal(entity,state);}
  const held=inv(player)?.getItem(player.selectedSlotIndex);
+ if(profile.eggProduct&&player.isSneaking&&!held){
+  const day=currentAnimalDay(),minimum=profile.productFamiliarityMin??15,cooldown=profile.productCooldownDays??1.25;
+  if(state.sex!=="female"||state.ageDays<(profile.adultAgeDays??0)||state.lifeStage==="old"||state.uses>=(profile.maxUses??Infinity)){player.sendMessage("§eこの鳥は卵を産める状態ではありません。");return;}
+  if(state.familiarity<=minimum||state.health<40||state.hunger>60||state.thirst>60||(state.uses>0&&day-state.lastProductAt<cooldown)){player.sendMessage("§e成熟度・なつき度・健康状態・産卵間隔を確認してください。");return;}
+  const egg=new ItemStack("tfc:"+profile.speciesId+"_egg",1);
+  try{egg.setDynamicProperties({"tfc:egg_fertilized":Boolean(state.eggFertilized&&day<=state.eggFertilizedUntil)});}catch{}
+  const rest=inv(player)?.addItem(egg);if(rest)player.dimension.spawnItem(rest,player.location);
+  state=recordProduct(state,day,{maxUses:profile.maxUses??Infinity,oldDayDelay:1+Math.floor(Math.random()*5)});
+  state.eggFertilized=false;saveAnimal(entity,state);player.sendMessage("§a卵を採取しました。巣に置いて温めると孵化します。");return;
+ }
  if(!held){
   const names=Object.fromEntries(Object.entries(ANIMAL_PROFILES).map(([id,p])=>[id,p.displayName]));
   const products=profile.dairy?(entity.typeId==="minecraft:goat"?"\n産出: 山羊乳（メスの成体・健康/空腹/渇き条件を満たすと空き瓶で採取、1日間隔）":"\n産出: 牛乳（メスの成体・健康/空腹/渇き条件を満たすと空き瓶で採取、1日間隔）"):entity.typeId==="minecraft:sheep"?"\n産出: 羊毛（TFC式のハサミ操作、7日間隔）\n再生待ち: "+(state.uses>0?Math.max(0,profile.productCooldownDays-(currentAnimalDay()-state.lastProductAt)).toFixed(1)+"日":"なし"):entity.typeId==="minecraft:chicken"?"\n産出: 卵（バニラの産卵AI）":"";
@@ -754,6 +797,7 @@ event.itemComponentRegistry.registerCustomComponent("tfc:fill_water_vessel",{onU
 event.itemComponentRegistry.registerCustomComponent("tfc:drink_water",{onUse:a=>{if(a.source?.typeId==="minecraft:player")drinkWaterVessel(a.source);}});
 event.itemComponentRegistry.registerCustomComponent("tfc:mix_dough",{onUse:a=>{if(a.source?.typeId==="minecraft:player")mixDough(a.source);}});
 event.blockComponentRegistry.registerCustomComponent("tfc:station_ui",{onPlayerInteract:a=>{if(a.player)void station(a.player,a.block.typeId.split(":")[1],a.block);}});event.blockComponentRegistry.registerCustomComponent("tfc:heated_station_tick",{onTick:a=>fireTick(a.block)});
+event.blockComponentRegistry.registerCustomComponent("tfc:egg_nest",{onPlayerInteract:a=>eggNestInteract(a.player,a.block),onTick:a=>eggNestTick(a.block)});
 event.blockComponentRegistry.registerCustomComponent("tfc:farmland_interaction",{onPlayerInteract:a=>void farmlandInteract(a.player,a.block),onTick:a=>soilTick(a.block)});
 event.blockComponentRegistry.registerCustomComponent("tfc:crop_growth",{onTick:a=>cropTick(a.block),onPlayerInteract:a=>{const p=a.player,clicked=a.block;if(!p||!clicked)return;const b=clicked.permutation.getState("tfc:part")==="upper"?clicked.below():clicked;if(!b||b.typeId!=="tfc:crop")return;if(b.permutation.getState("tfc:part")==="upper")return;const cropType=b.permutation.getState("tfc:crop_type")??"wheat";const profile=CROP_PROFILES[cropType]??CROP_PROFILES.wheat;const age=b.permutation.getState("tfc:age");const quality=Number(readWorldState(posKey(b,"crop_quality"),1));if(profile.pickable){if(typeof age!=="number"||age<2){p.sendMessage("§e収穫できる状態まで成長していません。");return;}const yieldCount=calculateCropYield(1,quality);give(p,profile.harvest,yieldCount);b.setPermutation(b.permutation.withState("tfc:age",1));writeWorldState(posKey(b,"crop_progress"),0);writeWorldState(posKey(b,"crop_quality"),1);p.sendMessage("§a実を収穫しました。株は残り、再び成長します。");return;}if(profile.spreading){p.sendMessage("§e実は周囲の果実ブロックに実っています。果実ブロックを壊して収穫してください。");return;}if(age!==3){p.sendMessage("§e成長中: "+Math.floor(Number(readWorldState(posKey(b,"crop_progress"),0)))+"%");return;}const yieldCount=calculateCropYield(cropType==="potato"?2:3,quality);give(p,profile.harvest,yieldCount);give(p,profile.seed,1);if(profile.twoBlock){const upper=b.above();if(upper?.typeId==="tfc:crop"&&upper.permutation.getState("tfc:part")==="upper")upper.setType("minecraft:air");}b.setPermutation(b.permutation.withState("tfc:age",0));writeWorldState(posKey(b,"crop_progress"),0);writeWorldState(posKey(b,"crop_quality"),1);if(profile.spreading)writeWorldState(posKey(b,"crop_spread_used"),false);p.sendMessage("§a収穫しました。収穫量補正: "+Math.floor(quality*100)+"% / "+yieldCount+"個");}});
 system.runInterval(()=>{for(const dimensionId of ["overworld","nether","the_end"]){try{const dimension=world.getDimension(dimensionId);for(const type of Object.keys(ANIMAL_PROFILES))for(const entity of dimension.getEntities({type}))animalTick(entity);}catch(error){}}},1200);
