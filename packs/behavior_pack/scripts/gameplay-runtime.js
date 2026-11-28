@@ -679,10 +679,8 @@ function runFaunaPredatorPreyInteraction(entity,profile,state,currentDay){
    const target=candidates.find(candidate=>candidate.id!==entity.id);
    if(!target)continue;
    try{
-    const before=target.getComponent("minecraft:health")?.currentValue;
-    target.applyDamage(3);
-    const after=target.getComponent("minecraft:health")?.currentValue;
-    if(Number.isFinite(before)&&Number.isFinite(after)&&after<before){
+    const damaged=target.applyDamage(3);
+    if(damaged){
      state.hunger=Math.max(0,state.hunger-18);
      entity.setDynamicProperty("tfc:ecology_action_at",now);
      saveAnimal(entity,state);
