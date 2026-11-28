@@ -8,7 +8,7 @@ import { createSoilState, advanceSoilHydration, evaluateCropGrowth, calculateCro
 import { CROP_PROFILES } from "./core/crop-profiles.mjs";
 import { getFaunaPrey, getFaunaPredators } from "./core/fauna-ecology-service.mjs";
 import { createAnimalState, createAnimalOffspringState, initializeAnimalLifeStage, syncAnimalHealth, advanceAnimalNeeds, advanceAnimalFamiliarityDecay, canFeedAnimal, feedAnimal, waterAnimal, canBreed, beginPregnancy, advancePregnancy, grazeAnimal, canProduce, recordProduct, canLayEgg, recordEggLaid, getOffspringCount, evaluateHabitat, evaluateFaunaSpawn, tfcMonthFromDay } from "./core/fauna-service.mjs";
-import { OFFICIAL_FAUNA_PROFILES, OFFICIAL_LIVESTOCK_LIFECYCLE } from "./core/fauna-profiles.mjs";
+import { OFFICIAL_FAUNA_PROFILES, OFFICIAL_FAUNA_HABITAT_EXTENSIONS, OFFICIAL_LIVESTOCK_LIFECYCLE } from "./core/fauna-profiles.mjs";
 import { addNestBoxEgg, advanceNestBoxIncubation, takeNestBoxEgg } from "./core/nest-box-service.mjs";
 import { getStationRecipes } from "./core/processing-recipes.mjs";
 import { isStationJobDue, getPendingStationOutputs, markStationOutputDelivered, markStationJobRecoverable } from "./core/station-job-service.mjs";
@@ -945,7 +945,7 @@ function validateNaturalFaunaSpawn(event){
  if(event?.cause!=="Spawned")return;
  const entity=event.entity,profile=ANIMAL_PROFILES[entity?.typeId];
  if(!profile)return;
- const official=OFFICIAL_FAUNA_PROFILES[profile.speciesId];
+ const official=OFFICIAL_FAUNA_PROFILES[profile.speciesId]??OFFICIAL_FAUNA_HABITAT_EXTENSIONS[profile.speciesId];
  if(!official)return;
  system.run(()=>{
   try{
