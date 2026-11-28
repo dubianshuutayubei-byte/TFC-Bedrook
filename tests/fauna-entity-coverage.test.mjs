@@ -22,7 +22,7 @@ test("all 78 TFC fauna have shared runtime profiles and entity coverage",()=>{
  assert.equal(coverage.runtimeTrackedSpecies.length,78);
  for(const id of coverage.runtimeTrackedSpecies){const species=roster.species.find(x=>x.id===id);assert.ok(species,"runtime species must exist in official roster: "+id);assert.ok(runtime.includes('"speciesId":"'+species.id+'"')||runtime.includes('speciesId:"'+species.id+'"'),species.id+" runtime profile missing");}
 });
-test("all 40 missing species now have behavior, client and spawn definitions",()=>{
+test("all 55 custom-scaffold species have behavior, client and spawn definitions",()=>{
  assert.equal(coverage.customEntityDefinitionCount,55);
  for(const id of coverage.customEntitySpecies){
   const bp=JSON.parse(readFileSync(join(root,"packs/behavior_pack/entities",id+".json"),"utf8"));
