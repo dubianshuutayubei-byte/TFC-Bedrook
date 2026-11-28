@@ -12,7 +12,10 @@
     "blobs": {
       "src/data/java/net/dries007/tfc/data/providers/BuiltinFauna.java": "5290c4ef69ff7ba768406e2ee2157052c25ee4b2",
       "src/main/java/net/dries007/tfc/common/entities/Faunas.java": "5ac152295b832d0e6317539d9d714110f6515d76",
-      "src/main/java/net/dries007/tfc/world/placement/ClimatePlacement.java": "3f3ba3826a584040cd40bac6bbebfcc454239e45"
+      "src/main/java/net/dries007/tfc/world/placement/ClimatePlacement.java": "3f3ba3826a584040cd40bac6bbebfcc454239e45",
+      "src/main/java/net/dries007/tfc/world/chunkdata/ChunkData.java": "0420d41f6c9155cc2c2f7dda553997bc713937be",
+      "src/main/java/net/dries007/tfc/util/climate/OverworldClimateModel.java": "ed0c53f52b87be990269476e333184db00d474eb",
+      "src/main/java/net/dries007/tfc/util/climate/ClimateModel.java": "200efb9bb06e47eeb901dad0dec8eed2175a96cf"
     }
   },
   "units": {
