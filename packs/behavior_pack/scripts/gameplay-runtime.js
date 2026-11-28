@@ -128,11 +128,11 @@ const ANIMAL_PROFILES={
 for(const [id,profile] of Object.entries(CUSTOM_FAUNA_PROFILES))ANIMAL_PROFILES[id]={...ANIMAL_PROFILES[id],...profile};
 for(const id of ["minecraft:cow","minecraft:sheep","minecraft:pig","minecraft:goat","minecraft:horse","minecraft:donkey"])if(ANIMAL_PROFILES[id]?.gestationDays)ANIMAL_PROFILES[id].customBreeding=true;
 for(const [id,override] of Object.entries({
- "minecraft:wolf":{predatorDiet:["deer","rabbit","sheep","pig","duck","quail","boar","caribou","gazelle","musk_ox","moose","wildebeest"],predationDamage:5},
- "minecraft:fox":{predatorDiet:["chicken","rabbit","duck","quail","grouse","pheasant"],predationDamage:3},
- "minecraft:polar_bear":{predatorDiet:["cod","salmon","bluegill","lake_trout","rainbow_trout"],predationDamage:8},
- "minecraft:ocelot":{predatorDiet:["chicken","rabbit","quail","grouse","pheasant","bluegill"],predationDamage:3},
- "tfc:orca":{predatorDiet:["cod","salmon","bluegill","crappie","lake_trout","largemouth_bass","rainbow_trout","smallmouth_bass","tropical_fish","pufferfish"],predationDamage:9}
+ "minecraft:wolf":{predatorDiet:["rabbit","fox","turtle","penguin","frog","deer","bongo","panda","grouse","pheasant","turkey","ocelot","caribou","gazelle","peafowl","pig","cow","goat","yak","alpaca","sheep","musk_ox","chicken","duck","quail","horse","mule","donkey"],predationDamage:5},
+ "minecraft:polar_bear":{predatorDiet:["rabbit","fox","turtle","penguin","frog","deer","bongo","panda","grouse","pheasant","turkey","ocelot","caribou","gazelle","peafowl","pig","cow","goat","yak","alpaca","sheep","musk_ox","chicken","duck","quail","horse","mule","donkey"],predationDamage:8},
+ "minecraft:ocelot":{predatorDiet:["rabbit","fox","turtle","penguin","frog","deer","bongo","panda","grouse","pheasant","turkey","ocelot","caribou","gazelle","peafowl","pig","cow","goat","yak","alpaca","sheep","musk_ox","chicken","duck","quail","horse","mule","donkey"],predationDamage:3},
+ "minecraft:dolphin":{predatorDiet:["isopod","lobster","crayfish","cod","tropical_fish","horseshoe_crab","bluegill","crappie","lake_trout","largemouth_bass","rainbow_trout","salmon","smallmouth_bass"],predationDamage:7},
+ "tfc:orca":{predatorDiet:["isopod","lobster","crayfish","cod","tropical_fish","horseshoe_crab","bluegill","crappie","lake_trout","largemouth_bass","rainbow_trout","salmon","smallmouth_bass"],predationDamage:9}
 }))ANIMAL_PROFILES[id]={...ANIMAL_PROFILES[id],...override};
 const inv=p=>p.getComponent("minecraft:inventory")?.container;
 function count(p,id){const c=inv(p);if(!c)return 0;let n=0;for(let i=0;i<c.size;i++){const s=c.getItem(i);if(s?.typeId===id)n+=s.amount;}return n;}
