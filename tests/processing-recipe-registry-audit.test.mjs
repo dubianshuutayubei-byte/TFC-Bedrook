@@ -21,3 +21,24 @@ test("every processing recipe input and output has a registered item definition"
  }
  assert.deepEqual(missing,[]);
 });
+
+test("crafting recipe JSON inputs and outputs reference registered TFC items",()=>{
+ const recipeDir=join(root,"packs/behavior_pack/recipes");
+ const missing=[];
+ const recipeIds=new Set();
+ for(const file of readdirSync(recipeDir).filter(name=>name.endsWith(".json"))){
+  const data=JSON.parse(readFileSync(join(recipeDir,file),"utf8"));
+  const recipe=Object.values(data).find(value=>value&&typeof value==="object"&&value.description?.identifier&&value.result);
+  if(!recipe)continue;
+  const recipeId=recipe.description.identifier;
+  if(recipeIds.has(recipeId))missing.push("duplicate recipe "+recipeId);
+  recipeIds.add(recipeId);
+  const inputs=[];
+  for(const entry of Object.values(recipe.key??{}))if(entry?.item)inputs.push(entry.item);
+  for(const entry of recipe.ingredients??[])if(entry?.item)inputs.push(entry.item);
+  for(const id of [...inputs,recipe.result.item].filter(Boolean)){
+   if(id.startsWith("tfc:")&&!itemIds.has(id))missing.push(file+": "+id);
+  }
+ }
+ assert.deepEqual(missing,[]);
+});
