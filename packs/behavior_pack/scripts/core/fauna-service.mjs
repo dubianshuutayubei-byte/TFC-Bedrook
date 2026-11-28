@@ -129,8 +129,7 @@ export function advanceAnimalFamiliarityDecay(input,currentDay,{decayLimit=30,de
 
 /** Shared TFC-style life-stage, senescence and death progression. */
 export function advanceAnimalLifecycle(input, elapsedDays, {
-  juvenileDays = 0,
-  adultDays = Infinity,
+  adultDays = 0,
   oldAgeDays = Infinity,
   lifespanDays = Infinity,
   oldAgeHealthLossPerDay = 0.15
@@ -140,11 +139,12 @@ export function advanceAnimalLifecycle(input, elapsedDays, {
   if (animal.dead) return { animal, stageChanged: false, died: true };
   animal.ageDays += days;
   const previousStage = animal.lifeStage;
-  if (animal.ageDays < juvenileDays) animal.lifeStage = "juvenile";
+  if (animal.ageDays < adultDays) animal.lifeStage = "juvenile";
   else if (animal.ageDays < oldAgeDays) animal.lifeStage = "adult";
   else animal.lifeStage = "old";
   if (animal.ageDays >= oldAgeDays && Number.isFinite(oldAgeHealthLossPerDay)) {
-    animal.health = clamp(animal.health - days * Math.max(0, oldAgeHealthLossPerDay), 0, 100);
+    const daysInOldAge = Math.max(0, animal.ageDays - Math.max(oldAgeDays, animal.ageDays - days));
+    animal.health = clamp(animal.health - daysInOldAge * Math.max(0, oldAgeHealthLossPerDay), 0, 100);
   }
   if (animal.ageDays >= lifespanDays || animal.health <= 0) {
     animal.dead = true;
