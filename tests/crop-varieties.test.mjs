@@ -43,3 +43,23 @@ test("new crop profiles expose water, support, multi-block and repeat-harvest re
  assert.match(runtime,/yellow_bell_pepper:\{[^}]*pickable:true/);
  assert.match(runtime,/profile\.spreading:true|spreading:true/);
 });
+
+test("remaining TFC 1.21 crops have registered seeds and harvest outputs",()=>{
+ const crops={
+  rice:"tfc:rice",cassava:"tfc:cassava",green_beans:"tfc:green_beans",
+  pumpkin:"tfc:pumpkin",melon:"tfc:melon",tomato:"tfc:tomato",
+  red_bell_pepper:"tfc:green_bell_pepper",yellow_bell_pepper:"tfc:green_bell_pepper",
+  alfalfa:"tfc:alfalfa",canola:"tfc:canola",radish:"tfc:radish",
+  sugarcane:"tfc:sugarcane",jute:"tfc:jute",papyrus:"tfc:papyrus"
+ };
+ for(const [id,harvest] of Object.entries(crops)){
+  assert.match(runtime,new RegExp(id+":\\{minTemperatureC:"));
+  assert.ok(catalog.registeredIdentifiers.includes("tfc:"+id+"_seed"),"missing seed "+id);
+  assert.ok(catalog.registeredIdentifiers.includes(harvest),"missing harvest "+harvest);
+ }
+ assert.match(runtime,/rice:\{[^}]*requiresWater:true/);
+ assert.match(runtime,/green_beans:\{[^}]*supportRequired:true/);
+ assert.match(runtime,/tomato:\{[^}]*supportRequired:true/);
+ assert.match(runtime,/red_bell_pepper:\{[^}]*pickable:true/);
+ assert.match(runtime,/yellow_bell_pepper:\{[^}]*pickable:true/);
+});
