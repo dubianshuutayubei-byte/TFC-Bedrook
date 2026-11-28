@@ -24,10 +24,11 @@ test("crucible stores metal additions, validates bronze ratio, temperature and f
  assert.match(runtime,/tfc:heated_bronze_ingot/);
 });
 
-test("food detail UI can be opened by sneak-using a food stack and reports freshness",()=>{
- assert.match(runtime,/function openFoodDetail\(player,stack\)/);
- assert.match(runtime,/鮮度:/);
- assert.match(runtime,/player\.isSneaking&&\(FOOD_DECAY_PROFILES\[stack\.typeId\]!==undefined/);
+test("food freshness UI lists each inventory stack without consuming it",()=>{
+ assert.match(menu,/async function showFoodInventory\(player\)/);
+ assert.match(menu,/スロット /);
+ assert.match(menu,/鮮度 /);
+ assert.match(menu,/button\("食品鮮度一覧"\)/);
 });
 
 test("drying rack exposes crop-specific preservation recipes",()=>{
