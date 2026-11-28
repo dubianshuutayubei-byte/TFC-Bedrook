@@ -33,6 +33,9 @@ test("each of the 40 custom species has behavior, client geometry, spawn rule an
   const spawn=read("packs/behavior_pack/spawn_rules/"+id+".json")["minecraft:spawn_rules"];
   const egg=read("packs/behavior_pack/items/"+id+"_spawn_egg.json")["minecraft:item"];
   assert.equal(entity.description.identifier,"tfc:"+id,id);
+  assert.ok(entity.events["tfc:spawn_baby"],id+" missing baby spawn event");
+  assert.ok(entity.events["tfc:grow_up"],id+" missing grow-up event");
+  assert.ok(entity.component_groups["tfc:baby"],id+" missing juvenile component group");
   assert.equal(client.identifier,"tfc:"+id,id);
   assert.equal(client.geometry.default,geo.identifier,id);
   assert.equal(spawn.description.identifier,"tfc:"+id,id);
@@ -119,4 +122,12 @@ test("egg nest block, item and three bird egg items are registered",()=>{
  assert.ok(block.components["tfc:egg_nest"]);
  assert.equal(read("packs/behavior_pack/items/egg_nest.json")["minecraft:item"].components["minecraft:block_placer"].block,"tfc:egg_nest");
  for(const id of ["chicken","duck","quail"])assert.equal(read("packs/behavior_pack/items/"+id+"_egg.json")["minecraft:item"].description.identifier,"tfc:"+id+"_egg");
+});
+
+test("official domestic life-cycle profiles use the shared breeding and egg systems",()=>{
+ for(const id of ["tfc:alpaca","tfc:musk_ox","tfc:yak"])assert.equal(CUSTOM_FAUNA_PROFILES[id].customBreeding,true,id);
+ for(const id of ["tfc:duck","tfc:quail"])assert.equal(CUSTOM_FAUNA_PROFILES[id].eggProduct,true,id);
+ const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
+ assert.match(runtime,/for\(const id of \["minecraft:cow","minecraft:sheep","minecraft:pig","minecraft:goat","minecraft:horse","minecraft:donkey","minecraft:mule","minecraft:rabbit"\]\)if\(ANIMAL_PROFILES\[id\]\?\.gestationDays\)ANIMAL_PROFILES\[id\]\.customBreeding=true/);
+ assert.match(runtime,/baby\.triggerEvent\("minecraft:entity_born"\)/);
 });
