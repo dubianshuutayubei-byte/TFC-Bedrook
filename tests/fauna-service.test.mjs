@@ -82,5 +82,5 @@ test("official fauna habitat checks rainfall, forest density and water depth",()
 test("official fauna habitat does not treat missing climate measurements as suitable",()=>{
  const result=evaluateHabitat({minTemperatureC:0,minRainfall:100},{});
  assert.equal(result.suitable,false);
- assert.deepEqual(result.missing,["minTemperatureC","minRainfall"]);
+ assert.deepEqual(result.missing,["temperatureC","rainfall"]);
 });
