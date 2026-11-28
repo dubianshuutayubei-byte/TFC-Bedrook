@@ -1,4 +1,5 @@
 import test from "node:test";
+import { CROP_PROFILES } from "../packs/behavior_pack/scripts/core/crop-profiles.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
@@ -15,9 +16,18 @@ test("in-world wheat growth uses crop climate and soil suitability checks",()=>{
 });
 
 test("crop profiles use TFC Field Guide temperature and hydration ranges",()=>{
- assert.match(runtime,/wheat:\{minTemperatureC:-7,maxTemperatureC:22,minHydration:15,maxHydration:85/);
- assert.match(runtime,/maize:\{minTemperatureC:-7,maxTemperatureC:27,minHydration:50,maxHydration:100/);
- assert.match(runtime,/potato:\{minTemperatureC:-7,maxTemperatureC:22,minHydration:35,maxHydration:90/);
+ assert.equal(CROP_PROFILES.wheat.minTemperatureC,-7);
+ assert.equal(CROP_PROFILES.wheat.maxTemperatureC,22);
+ assert.equal(CROP_PROFILES.wheat.minHydration,15);
+ assert.equal(CROP_PROFILES.wheat.maxHydration,85);
+ assert.equal(CROP_PROFILES.maize.minTemperatureC,-7);
+ assert.equal(CROP_PROFILES.maize.maxTemperatureC,27);
+ assert.equal(CROP_PROFILES.maize.minHydration,50);
+ assert.equal(CROP_PROFILES.maize.maxHydration,100);
+ assert.equal(CROP_PROFILES.potato.minTemperatureC,-7);
+ assert.equal(CROP_PROFILES.potato.maxTemperatureC,22);
+ assert.equal(CROP_PROFILES.potato.minHydration,35);
+ assert.equal(CROP_PROFILES.potato.maxHydration,90);
 });
 
 test("crop harvest yield is based on accumulated nutrient quality",()=>{
