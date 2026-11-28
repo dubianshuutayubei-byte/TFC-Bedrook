@@ -179,7 +179,7 @@ test("custom births trigger juvenile state and persist remaining litter count",(
  assert.match(runtime,/spawnEntity\(entity\.typeId,\{x:entity\.location\.x\+1/);
  assert.match(runtime,/baby\.triggerEvent\(birthEvent\)/);
  assert.match(runtime,/createAnimalOffspringState\(state,profile\.speciesId/);
- assert.match(runtime,/state\.birthsRemaining=Math\.max\(1,Math\.floor\(profile\.childCount\?\?1\)\)/);
+ assert.match(runtime,/started\.animal\.birthsTotal=started\.animal\.birthsRemaining/);\n assert.match(runtime,/state\.birthsTotal\|\|Math\.floor\(profile\.childCount\?\?1\)/);
  assert.match(runtime,/state\.birthsRemaining-=1/);
 });
 
@@ -222,5 +222,5 @@ test("horse and donkey crossbreeding persists mule entity and species through bi
  assert.match(runtime,/isMulePair=\(state\.species==="horse"&&other\.species==="donkey"\)\|\|\(state\.species==="donkey"&&other\.species==="horse"\)/);
  assert.match(runtime,/compatibleSpeciesPairs:\[\["horse","donkey"\]\],offspringSpecies:"mule",offspringEntityType:"minecraft:mule"/);
  assert.match(runtime,/state\.pregnancyOffspringEntityType\?\?entity\.typeId/);
- assert.match(runtime,/state\.pregnancyOffspringSpecies\?\?profile\.speciesId/);
+ assert.match(runtime,/state\.pregnancyOffspringSpecies\?\?profile\.speciesId/);\n assert.match(runtime,/offspringSpecies==="mule"\?"male"/);
 });
