@@ -20,7 +20,9 @@
       "minecraft:material_instances": {
         "*": {
           "texture": "tfc_crop",
-          "render_method": "alpha_test"
+          "render_method": "alpha_test_single_sided",
+          "ambient_occlusion": false,
+          "face_dimming": false
         }
       },
       "minecraft:destructible_by_mining": {
