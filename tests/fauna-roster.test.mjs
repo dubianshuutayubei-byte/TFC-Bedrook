@@ -18,10 +18,10 @@ test("current Bedrock animal profiles are explicitly distinguished from planned 
  for(const id of Object.keys(implemented)) assert.ok(roster.species.some(x=>x.id===id),id+" missing from full roster");
  for(const id of ["deer","cow","sheep","chicken"]) assert.ok(["custom_entity_state_adapter","native_entity_state_adapter"].includes(roster.species.find(x=>x.id===id).status));
 });
-test("runtime coverage distinguishes 76 state-profile species from the 78-species target",()=>{
+test("runtime coverage distinguishes 78 state-profile species from the 78-species target",()=>{
  assert.equal(coverage.total,78);
- assert.equal(coverage.runtimeTrackedCount,76);
- assert.equal(coverage.runtimeTrackedSpecies.length,76);
+ assert.equal(coverage.runtimeTrackedCount,78);
+ assert.equal(coverage.runtimeTrackedSpecies.length,78);
  assert.equal(coverage.requiresSpeciesImplementation.length,55);
  for(const id of coverage.runtimeTrackedSpecies)assert.ok(roster.species.some(x=>x.id===id));
  for(const id of coverage.requiresSpeciesImplementation)assert.ok(roster.species.some(x=>x.id===id));
