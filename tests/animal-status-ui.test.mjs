@@ -5,13 +5,10 @@ import { resolve, dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 const root=resolve(dirname(fileURLToPath(import.meta.url)),"..");
 const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
+
 test("empty-hand animal interaction shows husbandry state",()=>{
  assert.match(runtime,/if\s*\(!held\)\s*\{/);
- assert.match(runtime,/年齢: /);
- assert.match(runtime,/空腹: /);
- assert.match(runtime,/渇き: /);
- assert.match(runtime,/健康: /);
- assert.match(runtime,/なつき度: /);\n assert.match(runtime,/性別: /);
+ for(const label of ["性別: ","年齢: ","空腹: ","渇き: ","健康: ","なつき度: "])assert.ok(runtime.includes(label));
 });
 
 test("livestock forage scan is bounded to a 3x3 area",()=>{
