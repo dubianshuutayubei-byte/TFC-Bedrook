@@ -228,3 +228,20 @@ test("horse and donkey crossbreeding persists mule entity and species through bi
  assert.match(runtime,/state\.pregnancyOffspringSpecies\?\?profile\.speciesId/);
  assert.match(runtime,/offspringSpecies==="mule"\?"male"/);
 });
+
+test("all 13 fauna entity scaffolds missing from the prior runtime now receive safe state-tick profiles",()=>{
+ const expected={
+  arctic_char:"aquatic",burbot:"aquatic",muksun:"aquatic",northern_pike:"aquatic",pacu:"aquatic",peacock_bass:"aquatic",red_piranha:"aquatic",spotted_gudgeon:"aquatic",tilapia:"aquatic",
+  armadillo:"terrestrial",bison:"terrestrial",leopard_seal:"aquatic",pond_turtle:"amphibian"
+ };
+ for(const [id,kind] of Object.entries(expected)){
+  const entry=runtime.match(new RegExp('"tfc:'+id+'":\\{[^}]*\\}'))?.[0]??"";
+  assert.ok(entry,"missing runtime profile: "+id);
+  assert.match(entry,new RegExp('speciesId:"'+id+'"'));
+  assert.match(entry,new RegExp('kind:"'+kind+'"'));
+  assert.match(entry,/customBreeding:false/);
+  assert.match(entry,/hungerPerDay:0/);
+  assert.match(entry,/thirstPerDay:0/);
+  assert.match(entry,/feedItems:\[\]/);
+ }
+});
