@@ -147,3 +147,10 @@ test("animal dropped-food pickup consumes one item and preserves the remainder o
  assert.match(pickup,/entity\.dimension\.spawnItem\(new ItemStack\(stack\.typeId,stack\.amount-1\),dropped\.location\)/);
  assert.match(pickup,/dropped\.kill\(\)/);
 });
+
+test("animal runtime applies daily familiarity decay and capped TFC feeding gains",()=>{
+ assert.match(runtime,/advanceAnimalFamiliarityDecay\(state,world\.getDay\(\),\{decayLimit:30,decayPerDay:2\}\)/);
+ assert.match(runtime,/canFeedAnimal\(state,currentDay\)/);
+ assert.match(runtime,/feedAnimal\(state,firstFeedToday\?6:0,healPercent,\{currentDay,adultFamiliarityCap:profile\.familiarityCap\?\?100\}\)/);
+ for(const id of ["cow","goat","sheep","chicken","pig","horse","donkey","mule","rabbit"])assert.match(runtime,new RegExp('"minecraft:'+id+'":\\{[^}]*familiarityCap:35'));
+});
