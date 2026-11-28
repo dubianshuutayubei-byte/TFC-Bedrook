@@ -5,7 +5,7 @@ import { deserializePlayerState } from "../core/player-state-service.mjs";
 
 const UI_TITLE = "TerraFirmaCraft: Bedrook";
 const PLAYER_STATE_KEY = "tfc:player_state";
-const FOOD_FRESHNESS_KEY = "tfc:food_freshness";
+import { readStackFreshness } from "../core/food-stack-service.mjs";
 const FOOD_LABELS = Object.freeze({ "tfc:raw_meat":"生肉", "tfc:cooked_meat":"焼いた肉", "tfc:grain":"穀物", "tfc:maize":"トウモロコシ", "tfc:potato":"ジャガイモ", "tfc:vegetable":"野菜", "tfc:fruit":"果物", "tfc:milk_bottle":"牛乳瓶", "tfc:dried_meat":"干し肉", "tfc:dried_fruit":"干し果物", "tfc:dried_vegetables":"干し野菜", "tfc:barley":"大麦", "tfc:oat":"オーツ麦", "tfc:rye":"ライ麦", "tfc:beet":"ビーツ", "tfc:cabbage":"キャベツ", "tfc:carrot":"ニンジン","tfc:garlic":"ニンニク","tfc:onion":"タマネギ","tfc:squash":"カボチャ","tfc:lentils":"レンズ豆","tfc:soybean":"大豆","tfc:peanuts":"落花生","tfc:bread":"パン" });
 const NUTRITION_LABELS = Object.freeze({
   grain: "穀物", fruit: "果物", vegetables: "野菜", protein: "タンパク質", dairy: "乳製品"
@@ -68,11 +68,17 @@ async function showPlayerStatus(player) {
   const nutrition = Object.entries(state.nutrition)
     .map(([key, value]) => `${NUTRITION_LABELS[key] ?? key}: ${Math.round(value)} / 100`)
     .join("\n");
-  let freshness = {};
-  try { freshness = JSON.parse(String(player.getDynamicProperty(FOOD_FRESHNESS_KEY) ?? "{}")); } catch {}
-  const freshnessLines = Object.entries(freshness)
-    .filter(([id]) => FOOD_LABELS[id])
-    .map(([id, value]) => `${FOOD_LABELS[id]}: ${Math.round(value.freshness ?? 100)}%`)
+  const inventory = player.getComponent("minecraft:inventory")?.container;
+  const freshnessByFood = {};
+  if (inventory) for (let slot = 0; slot < inventory.size; slot++) {
+    const stack = inventory.getItem(slot);
+    if (!stack || !FOOD_LABELS[stack.typeId]) continue;
+    const freshness = readStackFreshness(stack.getLore()).freshness;
+    if (!freshnessByFood[stack.typeId]) freshnessByFood[stack.typeId] = [];
+    freshnessByFood[stack.typeId].push(freshness);
+  }
+  const freshnessLines = Object.entries(freshnessByFood)
+    .map(([id, values]) => `${FOOD_LABELS[id]}: ${Math.round(Math.min(...values))}%（${values.length}スタック）`)
     .join("\n");
   await showInfo(player, "プレイヤー情報", [
     `季節: ${season}（${dayOfYear + 1} / 96日）`,
@@ -86,7 +92,7 @@ async function showPlayerStatus(player) {
     "インベントリ食品の鮮度:",
     freshnessLines || "鮮度計測中 / 対象食品なし",
     "",
-    "※食品は時間経過で鮮度が低下し、腐敗すると腐敗食品へ変換されます。鮮度は食品種類ごとにプレイヤー単位で管理する簡易方式です。"
+    "※食品は時間経過で鮮度が低下し、腐敗すると腐敗食品へ変換されます。鮮度は食品スタックごとに保存され、インベントリ移動後も引き継がれます。同じスタック内の食品は同じ鮮度です。"
   ].join("\n"));
 }
 
