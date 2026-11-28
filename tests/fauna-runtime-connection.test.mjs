@@ -200,7 +200,7 @@ test("custom breeding uses calendar-day feeding and fractional mating cooldown",
  assert.match(runtime,/const breedingDay=world\.getDay\(\),breedingTime=currentAnimalDay\(\)/);
  assert.match(runtime,/canBreed\(state,other,breedingProfile\)/);
  assert.match(runtime,/beginPregnancy\(state,other,breedingProfile\)/);
- assert.match(runtime,/other\.lastBreedAt=breedingTime;other\.lastFedDay=breedingDay-1/);
+ assert.match(runtime,/other\.lastBreedAt=breedingTime;other\.lastFedDay=breedingDay-1;other\.lastFedAt=breedingTime-1/);
 });
 
 
@@ -214,7 +214,8 @@ test("official oviparous livestock production uses TFC hatch times, laying inter
   assert.ok(profile.includes("OFFICIAL_LIVESTOCK_LIFECYCLE."+species+".hatchDays"),species+" incubation must use the lifecycle table");
   assert.match(profile,/["\']?productFamiliarityMin["\']?:15/,species+" egg production familiarity requirement");
  }
- assert.match(runtime,/state\.familiarity<30\|\|state\.lastFedDay<world\.getDay\(\)/);
+ assert.match(runtime,/lastFedAt=state\.lastFedAt>=0\?state\.lastFedAt:state\.lastFedDay/);
+ assert.match(runtime,/currentTime-lastFedAt>1/);
 });
 
 
