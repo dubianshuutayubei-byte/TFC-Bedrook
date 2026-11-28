@@ -71,6 +71,12 @@
             "sprint_speed_multiplier": 1.6
           }
         ]
+      },
+      "minecraft:breathable": {
+        "total_supply": 15,
+        "suffocate_time": 0,
+        "breathes_air": true,
+        "breathes_water": true
       }
     }
   }
