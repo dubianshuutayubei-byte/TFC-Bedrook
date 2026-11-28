@@ -1,0 +1,18 @@
+{
+  "format_version": "1.26.60",
+  "minecraft:item": {
+    "description": {
+      "identifier": "tfc:unfired_ingot_mold",
+      "menu_category": {
+        "category": "items"
+      }
+    },
+    "components": {
+      "minecraft:icon": "tfc_pottery",
+      "minecraft:display_name": {
+        "value": "未焼成インゴット鋳型"
+      },
+      "minecraft:max_stack_size": 64
+    }
+  }
+}
