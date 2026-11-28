@@ -16,3 +16,15 @@ test("custom deer retains its own pregnancy and birth cycle",()=>{
  assert.match(runtime,/"tfc:deer":\{[^}]*customBreeding:true/);
  assert.match(runtime,/advancePregnancy\(state,0\.05,profile\.gestationDays\)/);
 });
+
+test("custom pregnancy is confined to deer; vanilla livestock uses native breeding",()=>{
+ assert.match(runtime,/if\(profile\.customBreeding&&state\.pregnancyDays>0\)/);
+ assert.match(runtime,/if\(profile\.customBreeding&&state\.sex==="female"/);
+ assert.match(runtime,/other\.lastBreedAt=other\.ageDays/);
+ assert.match(runtime,/entity\.dimension\.spawnEntity\(entity\.typeId/);
+});
+test("animal needs and age update on the periodic loaded-entity tick",()=>{
+ assert.match(runtime,/advanceAnimalNeeds\(state,0\.05\)/);
+ assert.match(runtime,/system\.runInterval\(\(\)=>\{for\(const dimensionId of \["overworld","nether","the_end"\]\)/);
+ assert.match(runtime,/\},1200\)/);
+});
