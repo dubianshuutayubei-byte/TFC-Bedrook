@@ -22,6 +22,9 @@ test("crucible stores metal additions, validates bronze ratio, temperature and f
  assert.match(runtime,/canProcessAtTemperature\(state,950\)/);
  assert.match(runtime,/tfc:fired_ingot_mold/);
  assert.match(runtime,/tfc:heated_bronze_ingot/);
+ assert.match(runtime,/tfc:copper_ore/);
+ assert.match(runtime,/tfc:tin_ore/);
+ assert.match(runtime,/鋳型を使う鉱石鋳造/);
 });
 
 test("food freshness UI lists each inventory stack without consuming it",()=>{
