@@ -31,6 +31,8 @@ The extracted data is stored in `packs/behavior_pack/data/official-fauna-habitat
 ## Climate-layer formulas required by the habitat evaluator
 
 The pinned 4.2.16 source also confirms why biome-name estimates are not sufficient:
+- `RegionChunkDataGenerator` derives `baseGroundwater` from nearby sufficiently wide rivers: river segments below width 12 are ignored; width influence is scaled from 0 to 1; distance influence falls from 1 to 0 over `Units.blockToGridExact(40)`; each river contributes up to 300 and overlapping rivers use the maximum influence.
+- After surface height is generated, `ChunkData.modifyBaseGroundwaterPoint` attenuates that river contribution: full strength through sea level +10, linearly reduced to zero by sea level +25.
 - `ChunkData.getAverageGroundwater(x,z)` is `min(baseGroundwater + averageRainfall, 500)`.
 - `baseGroundwater` represents local freshwater-body influence (the source comment identifies rivers as its current use); it is not the same as rainfall.
 - `averageRainfall` is a time-invariant annual value in mm/year, in the documented 0–500 range.
