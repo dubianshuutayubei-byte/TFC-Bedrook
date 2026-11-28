@@ -211,7 +211,7 @@ test("official oviparous livestock production uses TFC hatch times, laying inter
   assert.ok(profile.includes("OFFICIAL_LIVESTOCK_LIFECYCLE."+species+".eggLayCooldownDays"),species+" laying interval must use the lifecycle table");
   assert.ok(profile.includes("OFFICIAL_LIVESTOCK_LIFECYCLE."+species+".maxUses"),species+" use limit must use the lifecycle table");
   assert.ok(profile.includes("OFFICIAL_LIVESTOCK_LIFECYCLE."+species+".hatchDays"),species+" incubation must use the lifecycle table");
-  assert.ok(profile.includes("productFamiliarityMin:15"),species+" egg production familiarity requirement");
+  assert.match(profile,/["\']?productFamiliarityMin["\']?:15/,species+" egg production familiarity requirement");
  }
  assert.match(runtime,/state\.familiarity<30\|\|state\.lastFedDay<world\.getDay\(\)/);
 });
