@@ -1,6 +1,6 @@
 {
   "cow": {
-    "adultAgeDays": 30,
+    "adultAgeDays": 192,
     "requiredFamiliarity": 30,
     "minTemperatureC": -10,
     "maxTemperatureC": 30,
@@ -12,7 +12,7 @@
     ]
   },
   "sheep": {
-    "adultAgeDays": 24,
+    "adultAgeDays": 56,
     "requiredFamiliarity": 25,
     "minTemperatureC": -15,
     "maxTemperatureC": 28,
@@ -23,7 +23,7 @@
     ]
   },
   "chicken": {
-    "adultAgeDays": 12,
+    "adultAgeDays": 24,
     "requiredFamiliarity": 20,
     "minTemperatureC": -5,
     "maxTemperatureC": 35,
