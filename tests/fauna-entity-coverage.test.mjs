@@ -9,7 +9,7 @@ const coverage=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/fauna
 const archetypes=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/fauna-archetypes.json"),"utf8"));
 const geometry=JSON.parse(readFileSync(join(root,"packs/resource_pack/models/entity/fauna-archetypes.geo.json"),"utf8"));
 const runtime=readFileSync(join(root,"packs/behavior_pack/scripts/gameplay-runtime.js"),"utf8");
-test("all 76 TFC fauna have shared runtime profiles and entity coverage",()=>{
+test("all 78 TFC fauna have shared runtime profiles and entity coverage",()=>{
  assert.equal(coverage.officialSourceVersion,"TerraFirmaCraft 1.21.1-4.2.16");
  assert.equal(coverage.officialSourceTag,"v4.2.16");
  assert.equal(coverage.total,78);
@@ -18,8 +18,8 @@ test("all 76 TFC fauna have shared runtime profiles and entity coverage",()=>{
  assert.equal(coverage.officialClimateProfileCount,78);
  assert.equal(coverage.officialHabitatProfileCount,78);
  assert.equal(coverage.legacyClimateJsonProfileCount,63);
- assert.equal(coverage.runtimeTrackedCount,76);
- assert.equal(coverage.runtimeTrackedSpecies.length,76);
+ assert.equal(coverage.runtimeTrackedCount,78);
+ assert.equal(coverage.runtimeTrackedSpecies.length,78);
  for(const id of coverage.runtimeTrackedSpecies){const species=roster.species.find(x=>x.id===id);assert.ok(species,"runtime species must exist in official roster: "+id);assert.ok(runtime.includes('"speciesId":"'+species.id+'"')||runtime.includes('speciesId:"'+species.id+'"'),species.id+" runtime profile missing");}
 });
 test("all 40 missing species now have behavior, client and spawn definitions",()=>{
