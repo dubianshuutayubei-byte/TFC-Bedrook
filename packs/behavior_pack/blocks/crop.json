@@ -12,6 +12,11 @@
           1,
           2,
           3
+        ],
+        "tfc:crop_type": [
+          "wheat",
+          "maize",
+          "potato"
         ]
       }
     },
