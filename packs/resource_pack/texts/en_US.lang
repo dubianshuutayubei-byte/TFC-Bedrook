@@ -34,3 +34,5 @@ item.tfc:maize_seed.name=Maize Seeds
 item.tfc:potato_seed.name=Potato Seeds
 item.tfc:maize.name=Maize
 item.tfc:potato.name=Potato
+
+item.tfc:spoiled_food.name=Spoiled Food
