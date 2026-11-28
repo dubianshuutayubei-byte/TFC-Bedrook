@@ -280,7 +280,8 @@ function animalInteract(player,entity){
  player.sendMessage("§a餌を与えました。なつき度: "+Math.floor(state.familiarity));
 }
 
-export function initializeGameplay(){world.afterEvents.weatherChange.subscribe(event=>{const key=normalizeDimensionId(event.dimension?.id);if(key)WEATHER_BY_DIMENSION.set(key,normalizeWeather(event.newWeather));});system.beforeEvents.startup.subscribe(event=>{
+export function initializeGameplay(){world.afterEvents.weatherChange.subscribe(event=>{const key=normalizeDimensionId(event.dimension?.id);if(key)WEATHER_BY_DIMENSION.set(key,normalizeWeather(event.newWeather));});
+world.afterEvents.playerBreakBlock.subscribe(event=>{try{if(event.brokenBlockPermutation.type.id!=="tfc:firepit")return;event.dimension.spawnItem(new ItemStack("tfc:wood_ash",1),event.block.location);}catch(error){console.warn("[TFC-Bedrook] firepit ash drop failed:",error);}});system.beforeEvents.startup.subscribe(event=>{
 event.itemComponentRegistry.registerCustomComponent("tfc:open_knapping",{onUse:a=>{if(a.source?.typeId==="minecraft:player")void knap(a.source);}});
 event.itemComponentRegistry.registerCustomComponent("tfc:prospect",{onUseOn:a=>{if(a.source?.typeId==="minecraft:player")prospect(a.source,a.block);}});
 event.itemComponentRegistry.registerCustomComponent("tfc:consume_food",{onConsume:(a,p)=>food(a.source,p.params??{})}});
