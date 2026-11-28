@@ -11,7 +11,7 @@ const profiles=JSON.parse(readFileSync(join(root,"packs/behavior_pack/data/food-
 
 test("adult female cows produce milk bottles with a per-animal cooldown",()=>{
   assert.match(runtime,/entity\.typeId==="minecraft:cow"&&held\.typeId==="minecraft:glass_bottle"/);
-  assert.match(runtime,/canProduce\(state,\{requiredFamiliarity:0,cooldownDays:1,currentDay\}\)/);
+  assert.match(runtime,/canProduce\(state,\{requiredFamiliarity:0,cooldownDays:1,currentDay,requiredSex:"female",minimumAgeDays:profile\.adultAgeDays,minimumHealth:40,maximumHunger:60,maximumThirst:60\}\)/);
   assert.match(runtime,/state\.sex!=="female"/);
   assert.match(runtime,/recordProduct\(state,currentDay\)/);
 });
