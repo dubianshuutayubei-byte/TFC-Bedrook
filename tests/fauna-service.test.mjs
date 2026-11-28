@@ -273,7 +273,7 @@ test("all 63 official fauna profiles can be evaluated with a complete matching h
 
 
 test("egg laying requires a healthy mature adult female and respects cooldown",()=>{
- const hen={species:"chicken",sex:"female",lifeStage:"adult",ageDays:24,health:90,hunger:20,thirst:20,lastEggAt:10};
+ const hen={species:"chicken",sex:"female",lifeStage:"adult",ageDays:24,familiarity:20,health:90,hunger:20,thirst:20,lastEggAt:10};
  const rules={currentDay:11,cooldownDays:1,minimumAgeDays:24,minimumFamiliarity:15,minimumHealth:30,maximumHunger:70,maximumThirst:70,maxUses:100};
  assert.equal(canLayEgg(hen,rules),true);
  assert.equal(canLayEgg({...hen,sex:"male"},rules),false);
