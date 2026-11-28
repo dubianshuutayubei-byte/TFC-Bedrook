@@ -134,3 +134,13 @@ tile.tfc:pumpkin_fruit.name=カボチャの実
 tile.tfc:melon_fruit.name=メロンの実
 
 item.tfc:clay_seal.name=粘土の封印具
+
+item.tfc:brine_vessel.name=海水入り土器
+item.tfc:salt.name=塩
+item.tfc:salted_meat.name=塩漬け肉
+item.tfc:smoked_meat.name=燻製肉
+item.tfc:unfired_crucible.name=未焼成るつぼ
+item.tfc:fired_crucible.name=焼成済みるつぼ
+item.tfc:tin_sheet.name=錫板
+item.tfc:smokehouse.name=燻製設備
+tile.tfc:smokehouse.name=燻製設備
