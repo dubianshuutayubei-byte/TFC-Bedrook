@@ -9,7 +9,7 @@ const ui=readFileSync(join(root,"packs/behavior_pack/scripts/ui/main-menu.js"),"
 test("runtime decays each food stack and persists freshness in its lore",()=>{
  assert.match(runtime,/import \{ readStackFreshness, advanceStackFreshness \}/);
  assert.match(runtime,/function tickFoodFreshness\(player,nowTick\)/);
- assert.match(runtime,/advanceStackFreshness\(lore,nowTick,\{temperatureC,baseDecayPerHour\}\)/);
+ assert.match(runtime,/advanceStackFreshness\(lore,nowTick,\{temperatureC,baseDecayPerHour:baseDecayPerHour\*\(sealed\?0\.5:1\)\}\)/);
  assert.match(runtime,/stack\.setLore\(result\.lore\);container\.setItem\(slot,stack\)/);
  assert.match(runtime,/new ItemStack\("tfc:spoiled_food",stack\.amount\)/);
 });
