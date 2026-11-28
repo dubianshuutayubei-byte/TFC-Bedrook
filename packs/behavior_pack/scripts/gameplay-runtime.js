@@ -188,7 +188,9 @@ function prospect(player,centerBlock){
  }
  const summary=summarizeOreSamples(counts);
  const lines=summary.slice(0,5).map(entry=>entry.ore+": "+entry.count+"ブロック（"+PROSPECTING_ABUNDANCE[entry.abundance]+"）");
- player.sendMessage("§6地質調査結果§r\n基準岩石: "+hostRock+"\n調査範囲: 水平"+radius+"ブロック / 上下2ブロック\n調査ブロック数: "+samples+"\n"+(lines.length?lines.join("\n"):"鉱石は検出されませんでした。"));
+ const body="基準岩石: "+hostRock+"\n調査範囲: 水平"+radius+"ブロック / 上下2ブロック\n調査ブロック数: "+samples+"\n\n"+(lines.length?lines.join("\n"):"鉱石は検出されませんでした。")+"\n\nこれは周辺ブロックの簡易調査結果です。鉱脈の正確な形状・深度分布は地形/鉱脈生成の接続後に拡張します。";
+ const form=new ActionFormData().title("地質調査結果").body(body).button("閉じる");
+ void form.show(player).catch(()=>player.sendMessage("§6地質調査結果§r\n"+body));
 }
 
 const FUELS={
